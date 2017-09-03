@@ -1,6 +1,6 @@
 {
     "name": "aryelgois/cnab240",
-    "description": "Create Shipping and read Return Files to interact with banks",
+    "description": "Create Shipping Files and read Return Files to interact with banks",
     "keywords": ["bank", "cnab", "febraban"],
     "license": "MIT",
     "authors": [
