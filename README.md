@@ -37,7 +37,7 @@ of Return Files in a website:
 # Example
 
 There is an example simulating an e-Comerce. It's a good example, but badly
-implemented.. I am stil learning about MVC and the Twig template engine.
+implemented.. I am still learning about MVC and the Twig template engine.
 
 By the way, twig is under require-dev because it's only used in the example, it
 is not used in the actual scripts for this package.
