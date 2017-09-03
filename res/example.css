@@ -1,0 +1,14 @@
+table, table tr, table td, table th {
+    border-collapse: collapse;
+}
+table tr:nth-child(odd) {
+    background: #eee;
+}
+table td, table th {
+    border: 1px solid #d4d4d4;
+    padding: 0.2em;
+}
+table th {
+    background: #79b;
+    color: #fff;
+}

@@ -1,0 +1,16 @@
+{% extends "skeleton.html" %}
+{% block body %}
+    <h2>New product</h2>
+    <form method="post">
+        <label>Description: <input name="desc" type="text" required /></label>
+        <br />
+        <br />
+        <label>Value: <input name="value" type="number" min="0" step="0.01" required /></label>
+        <br />
+        <br />
+        <label>Initial stock: <input name="stock" type="number" min="0" /></label>
+        <br />
+        <br />
+        <button name="submit" value="add_product">Submit</button>
+    </form>
+{% endblock %}

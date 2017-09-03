@@ -1,0 +1,27 @@
+{
+    "name": "aryelgois/cnab240",
+    "description": "Create Shipping and read Return Files to interact with banks",
+    "keywords": ["bank", "cnab", "febraban"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aryel Mota Góis",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "aryelgois/utils": "dev-master",
+        "aryelgois/objects": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "aryelgois\\cnab240\\": "src/",
+            "aryelgois\\cnab240\\objects\\": "lib/objects/",
+            "aryelgois\\cnab240\\example\\": "lib/example/"
+        }
+    },
+    "require-dev": {
+        "twig/twig": "^2.4"
+    }
+}

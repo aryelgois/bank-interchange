@@ -1,0 +1,17 @@
+[
+    {
+        "desc": "Product A",
+        "value": 20,
+        "stock": 5
+    },
+    {
+        "desc": "Product B",
+        "value": 50,
+        "stock": 7
+    },
+    {
+        "desc": "Product C",
+        "value": 30,
+        "stock": 4
+    }
+]

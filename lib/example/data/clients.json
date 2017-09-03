@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Bob",
+        "document": "00000000191",
+        "address": {
+            "street": "Main Street",
+            "number": 200,
+            "neighborhood": "Nice place",
+            "zipcode": "00000-000",
+            "state": "AA",
+            "county": "Local City"
+        }
+    },
+    {
+        "name": "William",
+        "document": "00000000272",
+        "address": {
+            "street": "Avenue Dr. Who",
+            "number": 1963,
+            "neighborhood": "Bbc",
+            "zipcode": "00000-000",
+            "state": "BB",
+            "county": "Tv Series"
+        }
+    }
+]
