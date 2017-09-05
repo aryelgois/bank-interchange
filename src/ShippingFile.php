@@ -16,24 +16,38 @@ use aryelgois\objects;
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.2
+ * @version 0.2.1
  */
 class ShippingFile extends namespace\Cnab240File
 {
     /**
+     * Total registries in the file
+     *
+     * integer
+     */
+    protected $registries = 0;
+    
+    /**
+     * Current Lot
+     *
+     * @var integer
+     */
+    protected $lot = 0;
+    
+    /**
+     * Contais lot's data
+     *
+     * array[]
+     */
+    protected $lots;
+    
+    /**
      * Creates a new Shipping File object
      *
      * @param Bank $bank ..
-     * @param string[] $assignor As follows.
-     *     [
-     *         'document'   => string (14) Brazilian CNPJ|CPF
-     *         'covenant'   => string (20) Informed by Bank
-     *         'agency'     => string (5)  Bank's agency
-     *         'agency_cd'  => string (1)  Bank's agency check digit
-     *         'account'    => string (12) Bank's account
-     *         'account_cd' => string (1)  Bank's account check digit
-     *         'name'       => string (30) Name
-     *     ]
+     * @param Assignor $assignor ..
+     * @param integer $file_id Sequential file number, max 6 digits
+     *
      * @param integer  $header_sequence    Max 6 digits. Increase for each File Header
      * @param integer  $shippping_sequence Max 8 digits. Increase for each Shipping File
      *
@@ -42,93 +56,191 @@ class ShippingFile extends namespace\Cnab240File
      * @param Assignor $assignor Contains Assignor's information
      */
     public function __construct(
-        //integer $sequence,
         namespace\objects\Bank $bank,
-        namespace\objects\Assignor $assignor
+        namespace\objects\Assignor $assignor,
+        $file_id
     ) {
         $this->bank = $bank;
         $this->assignor = $assignor;
-        //$this->addHeaders();
+        $this->file_id = $file_id;
+        
+        $this->open();
     }
     
     /**
-     * Adds a File Header and a Lot Header
-     *
-     * @throws LogicException If file is not empty
+     * Adds a File Header
      */
-    public function addHeaders()
+    protected function open()
     {
-        if (!empty($this->file)) {
-            throw new \LogicException('File is not empty');
-        }
         $this->registerFileHeader();
+        $this->addLot();
+    }
+    
+    /**
+     * Starts a new Lot
+     *
+     * @param mixed[] $data Data to be added
+     *
+     * @throws new OverflowException If the file has too many Lots
+     */
+    public function addLot()
+    {
+        if ($this->lot >= 9998) {
+            throw new \OverflowException('The File got too many Lots');
+        } elseif ($this->lot > 0) {
+            $this->closeLot();
+        }
+        $this->lots[++$this->lot] = [
+            'registries' => 0,
+            'titles' => 0,
+            'total' => 0.0,
+            'closed' => false
+        ];
         $this->registerLotHeader();
     }
     
-    /**
-     * Adds Lot Details
-     *
-     * @param mixed[] $data Data to be added
-     */
-    public function addLot($data)
-    {
+    public function addEntry(
+        namespace\objects\Payer $payer,
+        namespace\objects\Service $service
+    ) {
+        
         $this->registerLotDetail('P', $data);
         $this->registerLotDetail('Q', $data);
     }
     
     /**
-     * Adds a Lot Trailer and a File Trailer
-     *
-     * @throws LogicException If file is empty
+     * Adds a Lot Trailer if the current lot is open
      */
-    public function addTrailers()
+    protected function closeLot()
     {
-        if (empty($this->file)) {
-            throw new \LogicException('File is empty');
+        if (!$this->closed || !$this->lots[$this->lot]['closed']) {
+            $this->registerLotTrailer();
+            $this->lots[$this->lot]['closed'] = true;
         }
-        $this->registerLotTrailer();
-        $this->registerFileTrailer();
     }
     
     /**
-     * Adds a File Header
-     *
-     * @param integer  $operation 1|2. Means Shipping|Return File
-     * @param integer  $sequence  File sequence (Max 6 digits)
+     * Adds a File Trailer
      */
-    protected function registerFileHeader(integer $operation, integer $sequence)
+    protected function close()
+    {
+        if (!$this->closed) {
+            $this->closeLot();
+            $this->lot = 9999;
+            $this->registerFileTrailer();
+            $this->closed = true;
+        }
+    }
+    
+    /**
+     * Outputs the contents in a multiline string
+     *
+     * NOTES:
+     * - Closes the current Lot and the File
+     *
+     * @return string A long, long string. Each line with 240 bytes.
+     */
+    final public function output()
+    {
+        $this->close();
+        return implode("\n", $this->file);
+    }
+    
+    
+    /*
+     * Formatting
+     * =========================================================================
+     */
+    
+    
+    /**
+     * [desc]
+     *
+     * @param integer $len Document length to be padded
+     *
+     * @return string
+     */
+    public function assignorDocument($len)
+    {
+        $a = $this->assignor;
+        return $a->document['type'] . self::padNumber($a->document['number'], $len);
+    }
+    
+    /**
+     * [desc]
+     *
+     * @return string
+     */
+    public function assignorAgencyAccount()
+    {
+        $a = $this->assignor;
+        $result = self::padNumber($a->agency['number'], 5) . $a->agency['cd']
+                . self::padNumber($a->account['number'], 12) . $a->account['cd'];
+        $result .= self::assignorAgencyAccountCheck($result);
+        return $result;
+    }
+    
+    /**
+     * [desc]
+     *
+     * @param string $agency_account ..
+     *
+     * @return string
+     */
+    protected static function assignorAgencyAccountCheck($agency_account)
+    {
+        $cd = utils\Validation::mod10($agency_account);
+        
+        return $cd;
+    }
+    
+    
+    /*
+     * Internals
+     * =========================================================================
+     */
+    
+    
+    /**
+     * Adds a File Header
+     */
+    protected function registerFileHeader()
     {
         $this->file[] = self::fieldControl(0)
                       . str_repeat(' ', 9)
-                      . $this->assignor->getAll()
-                      . $this->bank->name
+                      . $this->assignorDocument(14)
+                      . self::padNumber($this->assignor->covenant, 20)
+                      . $this->assignorAgencyAccount()
+                      . self::padAlfa($this->assignor->name, 30)
+                      . self::padAlfa($this->bank->name, 30)
                       . str_repeat(' ', 10)
-                      . $operation . date('dmYHis') . self::padNumber($sequence, 6) . self::VERSION_FILE_LAYOUT . '00000'
+                      . '1' . date('dmYHis') . self::padNumber($this->file_id, 6) . self::VERSION_FILE_LAYOUT . '00000'
                       . str_repeat(' ', 20)
                       . str_repeat(' ', 20)
                       . str_repeat(' ', 29);
-        $this->lot++;
+        $this->registries++;
     }
     
     /**
      * Adds a Lot Header
-     *
-     * @param string  $operation 'R'|'T'. Means Shipping|Return File
-     * @param integer $id        ...
      */
-    protected function registerLotHeader(string $operation/*, integer $id,*/)
+    protected function registerLotHeader()
     {
         $this->file[] = self::fieldControl(1)
-                      . $operation . '01' . '  ' . self::VERSION_LOT_LAYOUT
+                      . 'R' . '01' . '  ' . self::VERSION_LOT_LAYOUT
                       . ' '
-                      . $this->assignor->getAll()
+                      . $this->assignorDocument(15)
+                      . self::padNumber($this->assignor->covenant, 20)
+                      . $this->assignorAgencyAccount()
+                      . self::padAlfa($this->assignor->name, 30)
                       . str_repeat(' ', 40) // message 1
                       . str_repeat(' ', 40) // message 2
-                      . '00000000'          // $id => database File sequence
-                      . '00000000'          // date('dmY')
-                      . '00000000'          // Credit date
+                      . '00000000'          // number shipping/return
+                      . '00000000'          // recording date
+                      . '00000000'          // credit date
                       . str_repeat(' ', 33);
-        $this->lot++;
+        $this->incrementLotRegistry();
+        $this->registries++;
     }
     
     /**
@@ -180,7 +292,7 @@ class ShippingFile extends namespace\Cnab240File
                               
                               . $data['bill']['doc_number']
                               . $data['bill']['date_due']
-                              . $data['bill']['value'] // 13 digits, 2 are floating point
+                              . $data['bill']['value'] // 15 digits and 2 floating point
                               . '00000'
                               . ' '
                               . $data['bill']['charging_mode'] // 2 digits
@@ -237,7 +349,8 @@ class ShippingFile extends namespace\Cnab240File
                 throw new \UnexpectedValueException('Wrong segment');
         }
         
-        $this->lot++;
+        $this->incrementLotRegistry();
+        $this->registries++;
         return true;
     }
     
@@ -248,15 +361,15 @@ class ShippingFile extends namespace\Cnab240File
     {
         $this->file[] = self::fieldControl(5)
                       . '         '
-                      . self::padNumber($this->len, 6)
-                      . $data['titles']['amount']    // 6 digits
-                      . $data['titles']['value_sum'] // 15 digits, 2 are floating point
-                      . '000000' . '000000000000000'
-                      . '000000' . '000000000000000'
-                      . '000000' . '000000000000000'
+                      . self::padNumber($this->incrementLotRegistry(), 6)
+                      . self::padNumber($this->lots[$this->lot]['titles'], 6)
+                      . self::padNumber(number_format($this->lots[$this->lot]['total'], 2, '', ''), 17)
+                      . '000000' . '00000000000000000'
+                      . '000000' . '00000000000000000'
+                      . '000000' . '00000000000000000'
                       . '        '
                       . str_repeat(' ', 117);
-        $this->lot++;
+        $this->registries++;
     }
     
     /**
@@ -266,10 +379,23 @@ class ShippingFile extends namespace\Cnab240File
     {
         $this->file[] = self::fieldControl(9)
                       . '         '
-                      . '000001' // count type 1 // 6 digits
-                      . self::padNumber($this->len + 1, 6) // count file registries // 6 digits
+                      . self::padNumber(count($this->lots), 6)
+                      . self::padNumber(++$this->registries, 6)
                       . '000000'
                       . str_repeat(' ', 205);
-        $this->closed = true;
+    }
+    
+    /**
+     * Adds a File Trailer
+     *
+     * @throws OverflowException If there are too many lot registries
+     */
+    protected function incrementLotRegistry()
+    {
+        $count = ++$this->lots[$this->lot]['registries'];
+        if ($count > 999999) {
+            throw new \OverflowException('Too many lot registries');
+        }
+        return $count;
     }
 }

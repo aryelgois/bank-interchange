@@ -17,12 +17,12 @@ use aryelgois\cnab240\Cnab240File as Cnab240;
  * Actually, whoever has the covenant with the Bank.
  *
  * NOTES:
- * - $document is string[]
+ * - $document is string[] with keys 'type' and 'number'
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.2
+ * @version 0.2.1
  */
 class Assignor extends Person
 {
@@ -46,7 +46,7 @@ class Assignor extends Person
     public $covenant;
     
     /**
-     * Must contains:
+     * Contains:
      *
      * 'number' => 5 digits,  // bank agency
      * 'cd' => 1 digit        // check digit
@@ -56,7 +56,7 @@ class Assignor extends Person
     public $agency;
     
     /**
-     * Must contains:
+     * Contains:
      *
      * 'number' => 12 digits, // bank account
      * 'cd' => 1 digit        // check digit
@@ -64,6 +64,13 @@ class Assignor extends Person
      * @var string[]
      */
     public $account;
+    
+    /**
+     * EDI7 code informed by the Bank
+     *
+     * @var string
+     */
+    public $edi7;
     
     /**
      * Creates a new Person object
@@ -79,6 +86,8 @@ class Assignor extends Person
         $result = utils\Database::fetch($database->query(self::SELECT_QUERY . $id))[0]; // @todo Change to getFirst
         
         parent::__construct($result['name'], $result['document']);
+        $this->validateDocument();
+        
         $this->bank = $result['bank'];
         $this->covenant = $result['covenant'];
         $this->agency = [
@@ -89,49 +98,25 @@ class Assignor extends Person
             'number' => $result['account'],
             'cd' => $result['account_cd']
         ];
-    }
-    
-    /**
-     * Validates $this data
-     *
-     * NOTES:
-     * - May throws exceptions from called methods
-     */
-    protected function validate()
-    {
-        $this->name = Cnab240::padAlfa($this->name, 30);
-        
-        $this->document = self::validateDocument($this->document);
-        
-        $this->covenant = Cnab240::padNumber($this->covenant, 20);
-        
-        $this->agency['number'] = Cnab240::padNumber($this->agency['number'], 5);
-        $this->agency['cd'] = Cnab240::padNumber($this->agency['cd'], 1);
-        
-        $this->account['number'] = Cnab240::padNumber($this->account['number'], 12);
-        $this->account['cd'] = Cnab240::padNumber($this->account['cd'], 1);
+        $this->edi7 = $result['edi7'];
     }
     
     /**
      * Validates $this document as CNPJ or CPF
      *
-     * @param string $doc Brazilian CNPJ or CPF
-     *
-     * @return string[] with keys ['type', 'number']
-     *
      * @throws UnexpectedValueException If is invalid
      */
-    protected static function validateDocument($doc)
+    protected function validateDocument()
     {
         $type = 1;
-        $number = utils\Validation::cpf($doc);
+        $number = utils\Validation::cpf($this->document);
         if ($number == false) {
             $type = 2;
-            $number = utils\Validation::cnpj($doc);
+            $number = utils\Validation::cnpj($this->document);
         }
         if ($number == false) {
             throw new \UnexpectedValueException('Not a valid document');
         }
-        return ['type' => $type, 'number' => $number];
+        $this->document = ['type' => $type, 'number' => $number];
     }
 }

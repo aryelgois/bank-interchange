@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "75d0d3e8d624713db2dc51146a09316e",
+    "content-hash": "4c904474eef2d1bb00e7ce370779c0c3",
     "packages": [
         {
             "name": "aryelgois/objects",
@@ -48,12 +48,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/utils.git",
-                "reference": "e41760b73a6ad97ba70f35fc60732d8ba9cd5bb4"
+                "reference": "7bf5f2d44bafe3dc55858f2f91b92ba1d4aefd6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/utils/zipball/e41760b73a6ad97ba70f35fc60732d8ba9cd5bb4",
-                "reference": "e41760b73a6ad97ba70f35fc60732d8ba9cd5bb4",
+                "url": "https://api.github.com/repos/aryelgois/utils/zipball/7bf5f2d44bafe3dc55858f2f91b92ba1d4aefd6c",
+                "reference": "7bf5f2d44bafe3dc55858f2f91b92ba1d4aefd6c",
                 "shasum": ""
             },
             "require": {
@@ -79,7 +79,55 @@
             "keywords": [
                 "utils"
             ],
-            "time": "2017-09-01T01:00:19+00:00"
+            "time": "2017-09-05T21:13:00+00:00"
+        },
+        {
+            "name": "vria/nodiacritic",
+            "version": "0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vria/nodiacritic.git",
+                "reference": "3efeb60fb2586fe3ce8ff0f3c122d380717b8b07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vria/nodiacritic/zipball/3efeb60fb2586fe3ce8ff0f3c122d380717b8b07",
+                "reference": "3efeb60fb2586fe3ce8ff0f3c122d380717b8b07",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "VRia\\Utils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Riabchenko Vlad",
+                    "email": "contact@vria.eu",
+                    "homepage": "http://vria.eu"
+                }
+            ],
+            "description": "Tiny helper function that removes all diacritical signs from characters",
+            "homepage": "https://github.com/vria/nodiacritic",
+            "keywords": [
+                "accent",
+                "diacritic",
+                "filter",
+                "string",
+                "text"
+            ],
+            "time": "2016-09-17T22:03:11+00:00"
         }
     ],
     "packages-dev": [

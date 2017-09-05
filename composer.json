@@ -12,7 +12,8 @@
     "require": {
         "php": "^7.0",
         "aryelgois/utils": "dev-master",
-        "aryelgois/objects": "dev-master"
+        "aryelgois/objects": "dev-master",
+        "vria/nodiacritic": "0.*"
     },
     "autoload": {
         "psr-4": {

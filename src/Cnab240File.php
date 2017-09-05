@@ -7,11 +7,7 @@
 
 namespace aryelgois\cnab240;
 
-use aryelgois\utils\Validation;
-use aryelgois\objects\Address;
-use aryelgois\objects\Person;
-//use aryelgois\cnab240\objects\Assignor;
-//use aryelgois\cnab240\objects\Bank;
+use VRia\Utils\NoDiacritic;
 
 /**
  * Base class for Shipping and Return Files
@@ -19,7 +15,7 @@ use aryelgois\objects\Person;
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.1.1
+ * @version 0.1.2
  */
 abstract class Cnab240File
 {
@@ -65,30 +61,6 @@ abstract class Cnab240File
      */
     protected $closed = false;
     
-    /**
-     * Lot sequence
-     *
-     * @var integer
-     */
-    protected $lot = 0;
-    
-    /**
-     * Outputs the Shipping File contents in a multiline string
-     *
-     * NOTES:
-     * - Closes the current Lot
-     *
-     * @return string A long, long string. Each line with 240 bytes.
-     */
-    final public function output()
-    {
-        if (!$this->closed) {
-            $this->addLotTrailer();
-            $this->addFileTrailer();
-        }
-        return implode("\n", $this->file);
-    }
-    
     
     /*
      * Validation
@@ -103,7 +75,7 @@ abstract class Cnab240File
      *
      * @return string
      */
-    protected function fieldControl(integer $type)
+    protected function fieldControl($type)
     {
         return $this->bank->code . ($type == 9 ? '9999' : self::padNumber($this->lot, 4)) . $type;
     }
@@ -125,24 +97,29 @@ abstract class Cnab240File
      */
     public static function padAlfa($val, $len)
     {
-        return substr(str_pad($val, $len), 0, $len);
+        return substr(str_pad(NoDiacritic::filter($val), $len), 0, $len);
     }
     
     /**
      * Adds leading zeroes to a value
      *
-     * @param string  $val Value to be formatted
-     * @param integer $len Maximum digits length allowed
+     * @param string  $val  Value to be formatted
+     * @param integer $len  Maximum digits length allowed
+     * @param boolean $trim If left digits should be trimmed (disable throw)
      *
      * @return string
      *
      * @throws LengthException If $val overflows
      */
-    public static function padNumber($val, $len)
+    public static function padNumber($val, $len, $trim = false)
     {
         $result = str_pad($val, $len, '0', STR_PAD_LEFT);
         if (strlen($result) > $len) {
-            throw new \LengthException('Value overflows maximum length');
+            if ($trim) {
+                return substr($result, - $len);
+            } else {
+                throw new \LengthException('Value overflows maximum length');
+            }
         }
         return $result;
     }

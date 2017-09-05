@@ -20,7 +20,7 @@ use aryelgois\cnab240;
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.1
+ * @version 0.1.1
  */
 class Controller
 {
@@ -48,9 +48,12 @@ class Controller
     {
         $query_transactions = "SELECT * FROM `transactions` WHERE `status` = 0 ORDER BY `stamp` LIMIT 9997";
         while (!empty($rows = Database::fetch($this->database_cnab240->query($query_transactions)))) {
+            // @todo Get id for new row in databse -> table `shipping_files`
+            $file_id = 1;
+            
             // generate shipping file and cache data
             $transactions = [];
-            $shipping_file = new cnab240\ShippingFile($this->bank, $this->assignor);
+            $shipping_file = new cnab240\ShippingFile($this->bank, $this->assignor, $file_id);
             foreach ($rows as $row) {
                 $transactions[] = $row['id'];
                 
@@ -73,10 +76,11 @@ class Controller
             
             // save file
             $filename = 'COB.240.'
-                      . 'EEEEEE' . '.'
+                      . cnab240\Cnab240File::padNumber($this->assignor->edi7, 6) . '.'
                       . date('Ymd') . '.'
-                      . 'RRRRR' . '.'
-                      . 'CCCCC' . '.REM';
+                      . cnab240\Cnab240File::padNumber($file_id, 5) . '.'
+                      . cnab240\Cnab240File::padNumber($this->assignor->covenant, 5, true) // @todo verify if covenant is actually small and the Headers exagerates the covenant lenght
+                      . '.REM';
             
             //$file = fopen($filename, 'w');
             //fwrite($file, $shipping_file->output());
@@ -99,7 +103,8 @@ class Controller
             
             // DONE
             echo '<h2>' . $filename . "</h2>\n";
-            //echo '<pre>' . $shipping_file->output() . "</pre>\n\n\n";
+            //echo '<pre>', var_dump(explode("\n", $shipping_file->output())), "</pre>\n\n\n";
+            echo '<pre>' . $shipping_file->output() . "</pre>\n\n\n";
             //echo '<pre>' . file_get_contents($filename) . "</pre>\n\n\n";
             
             break;
