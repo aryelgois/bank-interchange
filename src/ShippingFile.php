@@ -7,8 +7,8 @@
 
 namespace aryelgois\cnab240;
 
-use aryelgois\objects\Address;
-use aryelgois\objects\Person;
+use aryelgois\utils;
+use aryelgois\objects;
 
 /**
  * Generates Shipping Files to be sent to banks
@@ -16,18 +16,14 @@ use aryelgois\objects\Person;
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.1
+ * @version 0.2
  */
 class ShippingFile extends namespace\Cnab240File
 {
     /**
      * Creates a new Shipping File object
      *
-     * @param string[] $bank     As follows.
-     *     [
-     *         'code'       => string (3)  Bank's code provided by Banco Central
-     *         'name'       => string (30) Bank's name provided by Banco Central
-     *     ]
+     * @param Bank $bank ..
      * @param string[] $assignor As follows.
      *     [
      *         'document'   => string (14) Brazilian CNPJ|CPF
@@ -50,8 +46,6 @@ class ShippingFile extends namespace\Cnab240File
         namespace\objects\Bank $bank,
         namespace\objects\Assignor $assignor
     ) {
-        $assignor = self::validateAssignor($assignor);
-        
         $this->bank = $bank;
         $this->assignor = $assignor;
         //$this->addHeaders();

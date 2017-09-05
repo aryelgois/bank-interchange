@@ -7,39 +7,52 @@
 
 namespace aryelgois\cnab240\objects;
 
+use aryelgois\utils\Database;
+use aryelgois\cnab240\Cnab240File;
+
 /**
- * A Person object defines someone in the real world
+ * A Bank has to keep our money safe!
  *
  * @author Aryel Mota Góis
  * @license MIT
- * @link https://www.github.com/aryelgois/objects
- * @version 0.1
+ * @link https://www.github.com/aryelgois/cnab240
+ * @version 0.2
  */
 class Bank
 {
     /**
-     * Defined by a government entity
+     * Defined by a government entity, 3 digits
      *
      * @var string
      */
     public $code;
     
     /**
-     * Bank's name
+     * Bank's name, 30 characters, left-padded with spaces
      *
      * @var string
      */
     public $name;
     
     /**
+     * Bank's tax for billets
+     *
+     * @var float
+     */
+    public $tax;
+    
+    /**
      * Creates a new Bank object
      *
-     * @param string $code Bank's code
-     * @param string $name Bank's name
+     * @param string $database ..
+     * @param string $id       Bank's id
      */
-    public function __construct(string $code, string $name)
+    public function __construct(Database $database, $id)
     {
-        $this->code = $code;
-        $this->name = $name;
+        $result = Database::fetch($database->query("SELECT * FROM `banks` WHERE `id` = " . $id))[0]; // @todo Change to getFirst
+        
+        $this->code = $result['code'];
+        $this->name = $result['name'];
+        $this->tax = $result['tax'];
     }
 }
