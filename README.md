@@ -50,7 +50,7 @@ I know, the script is not working yet.. It's under development.
 - [ ] Finish Shipping Files class
   - [ ] `registerLotDetail()` requires some data about the product and the payer
     (the client). It also has differents segments which have the same lot index.
-  - [x] Test if the others "low level" methods are working.
+  - [x] Test if the other "low level" methods are working.
   - [ ] Make the "high level" methods work.
 - [ ] Write the Return File interpreter.
   - [ ] It should receive the data somehow.. fetch from the bank's site or
