@@ -9,27 +9,23 @@ namespace aryelgois\cnab240\objects;
 
 use aryelgois\utils;
 use aryelgois\objects\Person;
-use aryelgois\cnab240\Cnab240File as Cnab240;
 
 /**
- * It is You. or, the website's owner.
- *
- * Actually, whoever has the covenant with the Bank.
- *
- * NOTES:
- * - $document is string[] with keys 'type' and 'number'
+ * It's who made a covenant with the Bank and has to emit bank billets.
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.2.1
+ * @version 0.2.2
  */
 class Assignor extends Person
 {
     /**
+     * Assignor id
      *
+     * @var integer
      */
-    const SELECT_QUERY = "SELECT * FROM `assignors` INNER JOIN `people` ON `assignors`.`id`=`people`.`id` WHERE `assignors`.`id` = ";
+    public $id;
     
     /**
      * Bank id
@@ -83,11 +79,11 @@ class Assignor extends Person
      */
     public function __construct(utils\Database $database, $id)
     {
-        $result = utils\Database::fetch($database->query(self::SELECT_QUERY . $id))[0]; // @todo Change to getFirst
+        $result = utils\Database::fetch($database->query("SELECT * FROM `assignors` WHERE `id` = " . $id))[0]; // @todo Change to getFirst
         
         parent::__construct($result['name'], $result['document']);
-        $this->validateDocument();
         
+        $this->id = $id;
         $this->bank = $result['bank'];
         $this->covenant = $result['covenant'];
         $this->agency = [
@@ -99,24 +95,5 @@ class Assignor extends Person
             'cd' => $result['account_cd']
         ];
         $this->edi7 = $result['edi7'];
-    }
-    
-    /**
-     * Validates $this document as CNPJ or CPF
-     *
-     * @throws UnexpectedValueException If is invalid
-     */
-    protected function validateDocument()
-    {
-        $type = 1;
-        $number = utils\Validation::cpf($this->document);
-        if ($number == false) {
-            $type = 2;
-            $number = utils\Validation::cnpj($this->document);
-        }
-        if ($number == false) {
-            throw new \UnexpectedValueException('Not a valid document');
-        }
-        $this->document = ['type' => $type, 'number' => $number];
     }
 }

@@ -7,6 +7,7 @@
 
 namespace aryelgois\cnab240;
 
+use aryelgois\objects;
 use VRia\Utils\NoDiacritic;
 
 /**
@@ -15,7 +16,7 @@ use VRia\Utils\NoDiacritic;
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.1.2
+ * @version 0.1.3
  */
 abstract class Cnab240File
 {
@@ -77,7 +78,7 @@ abstract class Cnab240File
      */
     protected function fieldControl($type)
     {
-        return $this->bank->code . ($type == 9 ? '9999' : self::padNumber($this->lot, 4)) . $type;
+        return $this->bank->code . self::padNumber($this->lot, 4) . $type;
     }
     
     
@@ -97,7 +98,7 @@ abstract class Cnab240File
      */
     public static function padAlfa($val, $len)
     {
-        return substr(str_pad(NoDiacritic::filter($val), $len), 0, $len);
+        return strtoupper(substr(str_pad(NoDiacritic::filter($val), $len), 0, $len));
     }
     
     /**
@@ -122,5 +123,18 @@ abstract class Cnab240File
             }
         }
         return $result;
+    }
+    
+    /**
+     * Formats a Person Document
+     *
+     * @param Person  $person Person object whose document will be formatted
+     * @param integer $len    Document length to be padded (not returned length)
+     *
+     * @return string
+     */
+    public static function formatDocument(objects\Person $person, $len = 14)
+    {
+        return $person->document['type'] . self::padNumber($person->document['number'], $len);
     }
 }

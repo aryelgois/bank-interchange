@@ -9,6 +9,7 @@ namespace aryelgois\cnab240\objects;
 
 use aryelgois\utils\Database;
 use aryelgois\objects;
+use aryelgois\cnab240\Cnab240File;
 
 /**
  * A Payer object loaded from a database
@@ -16,7 +17,7 @@ use aryelgois\objects;
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.1
+ * @version 0.2
  */
 class Payer extends objects\Person
 {
@@ -45,15 +46,15 @@ class Payer extends objects\Person
      */
     public function __construct(Database $db_cnab240, Database $db_address, $id)
     {
-        $payer = Database::fetch($db_cnab240->query("SELECT * FROM `payers` INNER JOIN `people` ON `payers`.`id`=`people`.`id` WHERE `payers`.`id` = " . $id));
+        $payer = Database::fetch($db_cnab240->query("SELECT * FROM `payers` WHERE `id` = " . $id));
         if (empty($payer)) {
             throw new \RuntimeException('Could not load payer from database');
         }
         $payer = $payer[0];
         
-        $address_data = Database::fetch($db_cnab240->query("SELECT * FROM `fulladdress` WHERE `person` = " . $id));
+        $address_data = Database::fetch($db_cnab240->query("SELECT * FROM `fulladdress` WHERE `id` = " . $payer['address']));
         if (empty($address_data)) {
-            throw new RuntimeException('Could not load payer\'s address from database');
+            throw new \RuntimeException('Could not load payer\'s address from database');
         }
         $address_data = $address_data[0];
         
@@ -61,7 +62,7 @@ class Payer extends objects\Person
             $db_address,
             $address_data['county'],
             $address_data['neighborhood'],
-            $address_data['street'],
+            $address_data['place'],
             $address_data['number'],
             $address_data['zipcode'],
             $address_data['detail']
@@ -79,7 +80,14 @@ class Payer extends objects\Person
      */
     protected function formatCnab240()
     {
-        $result = '';
+        $a = $this->address[0];
+        $result = Cnab240File::formatDocument($this, 15)
+                . Cnab240File::padAlfa($this->name, 40)
+                . Cnab240File::padAlfa($a->place . ', ' . $a->number . ($a->detail != '' ? ', ' . $a->detail : ''), 40)
+                . Cnab240File::padAlfa($a->neighborhood, 15)
+                . $a->zipcode // 8 digits
+                . Cnab240File::padAlfa($a->county['name'], 15)
+                . $a->state['code'];
         
         $this->cnab240_string = $result;
     }

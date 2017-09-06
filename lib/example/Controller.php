@@ -26,7 +26,6 @@ class Controller
 {
     protected $database_address;
     protected $database_cnab240;
-    protected $cache;
     protected $assignor;
     protected $bank;
     
@@ -34,10 +33,6 @@ class Controller
     {
         $this->database_address = new Database($db_path, 'address');
         $this->database_cnab240 = new Database($db_path, 'cnab240');
-        $this->cache = [
-            'payers' => [],
-            'services' => []
-        ];
         
         $this->assignor = new cnab240\objects\Assignor($this->database_cnab240, $assignor);
         
@@ -46,53 +41,46 @@ class Controller
     
     public function execute()
     {
-        $query_transactions = "SELECT * FROM `transactions` WHERE `status` = 0 ORDER BY `stamp` LIMIT 9997";
-        while (!empty($rows = Database::fetch($this->database_cnab240->query($query_transactions)))) {
+        $query = "SELECT `id` FROM `titles` WHERE `assignor` = " . $this->assignor->id . " AND `status` = 0 ORDER BY `stamp`";
+        $titles = array_column(Database::fetch($this->database_cnab240->query($query)), 'id');
+        if (!empty($titles)) {
             // @todo Get id for new row in databse -> table `shipping_files`
             $file_id = 1;
+            $shipping_file = new cnab240\ShippingFile(
+                $this->bank,
+                $this->assignor,
+                $file_id
+            );
             
-            // generate shipping file and cache data
-            $transactions = [];
-            $shipping_file = new cnab240\ShippingFile($this->bank, $this->assignor, $file_id);
-            foreach ($rows as $row) {
-                $transactions[] = $row['id'];
-                
-                if (!array_key_exists($row['payer'], $this->cache['payers'])) {
-                    $this->cache['payers'][$row['payer']] = new cnab240\objects\Payer($this->database_cnab240, $this->database_address, $row['payer']);
-                }
-                $payer = $this->cache['payers'][$row['payer']];
-                
-                $items = Database::fetch($this->database_cnab240->query("SELECT `service` FROM `transaction_items` WHERE `transaction` = " . $row['id']));
-                foreach ($items as $item) {
-                    if (!array_key_exists($item['service'], $this->cache['services'])) {
-                        $this->cache['services'][$item['service']] = new cnab240\objects\Service($this->database_cnab240, $item['service']);
-                    }
-                    $service = $this->cache['services'][$item['service']];
-                    
-                    //$shipping_file->addDetail($payer, $service);
-                }
+            $cache = [];
+            foreach ($titles as $id) {
+                $title = new cnab240\objects\Title(
+                    $this->database_cnab240,
+                    $this->database_address,
+                    $id,
+                    $cache
+                );
+                $shipping_file->addEntry(1, $title);
             }
-            //$shipping_file->close();
             
             // save file
             $filename = 'COB.240.'
                       . cnab240\Cnab240File::padNumber($this->assignor->edi7, 6) . '.'
                       . date('Ymd') . '.'
                       . cnab240\Cnab240File::padNumber($file_id, 5) . '.'
-                      . cnab240\Cnab240File::padNumber($this->assignor->covenant, 5, true) // @todo verify if covenant is actually small and the Headers exagerates the covenant lenght
+                      . cnab240\Cnab240File::padNumber($this->assignor->covenant, 5, true) // @todo verify if covenant is actually small and the Headers exagerate the covenant lenght
                       . '.REM';
             
             //$file = fopen($filename, 'w');
             //fwrite($file, $shipping_file->output());
             //fclose($file);
             
-            // update status
-            $id = 0;
+            // update rows
             $err = [];
-            $stmt = $this->database_cnab240->connect->prepare("UPDATE `transactions` SET `status` = 1 WHERE `id` = ?");
+            $stmt = $this->database_cnab240->connect->prepare("UPDATE `titles` SET `status` = 1, `update` = CURRENT_TIMESTAMP WHERE `id` = ?");
             $stmt->bind_param('i', $id);
-            foreach ($transactions as $id) {
-                //$stmt->execute();
+            foreach ($titles as $id) {
+                $stmt->execute();
                 if ($stmt->error !== '') {
                     $err[] = $stmt->error;
                 }
@@ -106,8 +94,6 @@ class Controller
             //echo '<pre>', var_dump(explode("\n", $shipping_file->output())), "</pre>\n\n\n";
             echo '<pre>' . $shipping_file->output() . "</pre>\n\n\n";
             //echo '<pre>' . file_get_contents($filename) . "</pre>\n\n\n";
-            
-            break;
         }
     }
 }
