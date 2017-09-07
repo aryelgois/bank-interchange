@@ -1,7 +1,7 @@
 {
-    "name": "aryelgois/cnab240",
-    "description": "Create Shipping Files and read Return Files to interact with banks",
-    "keywords": ["bank", "cnab", "febraban"],
+    "name": "aryelgois/bank-interchange",
+    "description": "Generate Bank Billets and Shipping Files, and read Return Files to interact with Banks",
+    "keywords": ["febraban", "bank", "cnab", "billet"],
     "license": "MIT",
     "authors": [
         {
@@ -17,9 +17,8 @@
     },
     "autoload": {
         "psr-4": {
-            "aryelgois\\cnab240\\": "src/",
-            "aryelgois\\cnab240\\objects\\": "lib/objects/",
-            "aryelgois\\cnab240\\example\\": "lib/example/"
+            "aryelgois\\BankInterchange\\": "src/",
+            "aryelgois\\BankInterchange\\example\\": "lib/example/"
         }
     },
     "require-dev": {
