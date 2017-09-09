@@ -1,10 +1,10 @@
 <?php
 
-namespace aryelgois\cnab240\example;
+namespace aryelgois\BankInterchange\example;
 
-use aryelgois\utils;
+use aryelgois\Utils;
 
-class Database extends utils\Database
+class Database extends Utils\Database
 {
     /**
      * Simply output the error message like a FATAL

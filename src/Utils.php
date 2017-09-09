@@ -5,89 +5,20 @@
  * @see LICENSE
  */
 
-namespace aryelgois\cnab240;
+namespace aryelgois\BankInterchange;
 
 use aryelgois\objects;
 use VRia\Utils\NoDiacritic;
 
 /**
- * Base class for Shipping and Return Files
+ * Useful methods for this package
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.1.3
  */
-abstract class Cnab240File
+abstract class Utils
 {
-    /**
-     * FEBRABAN's version of file layout
-     *
-     * @const string
-     */
-    const VERSION_FILE_LAYOUT = '101';
-    
-    /**
-     * FEBRABAN's version of lot layout
-     *
-     * @const string
-     */
-    const VERSION_LOT_LAYOUT = '060';
-    
-    /**
-     * Bank data
-     *
-     * @var Bank
-     */
-    protected $bank;
-    
-    /**
-     * Assignor data
-     *
-     * @var Assignor
-     */
-    protected $assignor;
-    
-    /**
-     * Every entry of the file
-     *
-     * @var string[]
-     */
-    protected $file = [];
-    
-    /**
-     * Controls if it's allowed to add more registries
-     *
-     * @var boolean
-     */
-    protected $closed = false;
-    
-    
-    /*
-     * Validation
-     * =========================================================================
-     */
-    
-    
-    /**
-     * Formats Control field
-     *
-     * @param integer $type Code adopted by FEBRABAN to identify the registry type
-     *
-     * @return string
-     */
-    protected function fieldControl($type)
-    {
-        return $this->bank->code . self::padNumber($this->lot, 4) . $type;
-    }
-    
-    
-    /*
-     * Helper
-     * =========================================================================
-     */
-    
-    
     /**
      * Adds trailing spaces to a value and trims overflow
      *

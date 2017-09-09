@@ -5,16 +5,15 @@
  * @see LICENSE
  */
 
-namespace aryelgois\cnab240;
+namespace aryelgois\BankInterchange;
 
 /**
  * Interprets Return Files sent by banks
  *
  * @link https://www.github.com/aryelgois/cnab240
  * @author Aryel Mota Góis
- * @version 0.1
  */
-class ReturnFile extends namespace\Cnab240File
+class ReturnFile
 {
     public function __construct()
     {

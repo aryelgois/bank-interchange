@@ -5,11 +5,11 @@
  * @see LICENSE
  */
 
-namespace aryelgois\cnab240\objects;
+namespace aryelgois\BankInterchange\Objects;
 
-use aryelgois\utils\Database;
-use aryelgois\objects;
-use aryelgois\cnab240\Cnab240File;
+use aryelgois\Utils;
+use aryelgois\Objects;
+use aryelgois\BankInterchange as BankI;
 
 /**
  * A Payer object loaded from a database
@@ -17,17 +17,9 @@ use aryelgois\cnab240\Cnab240File;
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.2
  */
-class Payer extends objects\Person
+class Payer extends Objects\Person
 {
-    /**
-     * [desc]
-     *
-     * @var float
-     */
-    //public $balance;
-    
     /**
      * Contains a string ready to be inserted into the Shipping File
      *
@@ -36,29 +28,35 @@ class Payer extends objects\Person
     public $cnab240_string;
     
     /**
-     * Creates a new Payer object
+     * Creates a new Payer object from data in a Database
      *
-     * @param Database $db_cnab240 ..
-     * @param Database $db_address ..
-     * @param integer  $id         ..
+     * @see data/database.sql
+     *
+     * @param Database $db_cnab240 Database with an `payers` table
+     * @param Database $db_address Address Database from aryelgois\databases
+     * @param integer  $id         Payer's id in the table
      *
      * @throws RuntimeException If it can not load from database
      */
-    public function __construct(Database $db_cnab240, Database $db_address, $id)
-    {
-        $payer = Database::fetch($db_cnab240->query("SELECT * FROM `payers` WHERE `id` = " . $id));
+    public function __construct(
+        Utils\Database $db_cnab240,
+        Utils\Database $db_address,
+        $id
+    ) {
+        // load from database
+        $payer = Utils\Database::fetch($db_cnab240->query("SELECT * FROM `payers` WHERE `id` = " . $id . " LIMIT 1"));
         if (empty($payer)) {
             throw new \RuntimeException('Could not load payer from database');
         }
         $payer = $payer[0];
         
-        $address_data = Database::fetch($db_cnab240->query("SELECT * FROM `fulladdress` WHERE `id` = " . $payer['address']));
+        $address_data = Utils\Database::fetch($db_cnab240->query("SELECT * FROM `fulladdress` WHERE `id` = " . $payer['address']));
         if (empty($address_data)) {
             throw new \RuntimeException('Could not load payer\'s address from database');
         }
         $address_data = $address_data[0];
         
-        $address = new objects\FullAddress(
+        $address = new Objects\FullAddress(
             $db_address,
             $address_data['county'],
             $address_data['neighborhood'],
@@ -70,24 +68,23 @@ class Payer extends objects\Person
         
         parent::__construct($payer['name'], $payer['document']);
         $this->address = [$address];
-        //$this->balance = $payer['balance'];
         
         $this->formatCnab240();
     }
     
     /**
-     * Formats $this data to be CNAB240 compliant
+     * Formats Payer's data to be CNAB240 compliant
      */
     protected function formatCnab240()
     {
         $a = $this->address[0];
-        $result = Cnab240File::formatDocument($this, 15)
-                . Cnab240File::padAlfa($this->name, 40)
-                . Cnab240File::padAlfa($a->place . ', ' . $a->number . ($a->detail != '' ? ', ' . $a->detail : ''), 40)
-                . Cnab240File::padAlfa($a->neighborhood, 15)
-                . $a->zipcode // 8 digits
-                . Cnab240File::padAlfa($a->county['name'], 15)
-                . $a->state['code'];
+        $result = BankI\Utils::formatDocument($this, 15)
+                . BankI\Utils::padAlfa($this->name, 40)
+                . BankI\Utils::padAlfa($a->place . ', ' . $a->number . ($a->detail != '' ? ', ' . $a->detail : ''), 40)
+                . BankI\Utils::padAlfa($a->neighborhood, 15)
+                . BankI\Utils::padNumber($a->zipcode, 8)
+                . BankI\Utils::padAlfa($a->county['name'], 15)
+                . BankI\Utils::padAlfa($a->state['code'], 2);
         
         $this->cnab240_string = $result;
     }

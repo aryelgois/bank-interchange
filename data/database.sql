@@ -18,6 +18,7 @@ CREATE TABLE `banks` (
     `code`          char(3)         NOT NULL,
     `name`          varchar(30)     NOT NULL,
     `tax`           decimal(6,4)    NOT NULL, -- used in the bank billet
+    `logo`          varchar(30),              -- ^
     PRIMARY KEY (`id`)
 );
 

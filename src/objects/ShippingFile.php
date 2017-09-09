@@ -5,10 +5,11 @@
  * @see LICENSE
  */
 
-namespace aryelgois\cnab240;
+namespace aryelgois\BankInterchange\Objects;
 
-use aryelgois\utils;
-use aryelgois\objects;
+use aryelgois\Utils;
+use aryelgois\Objects;
+use aryelgois\BankInterchange as BankI;
 
 /**
  * Generates Shipping Files to be sent to banks
@@ -16,10 +17,51 @@ use aryelgois\objects;
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.3
  */
-class ShippingFile extends namespace\Cnab240File
+class ShippingFile
 {
+    /**
+     * FEBRABAN's version of file layout
+     *
+     * @const string
+     */
+    const VERSION_FILE_LAYOUT = '101';
+    
+    /**
+     * FEBRABAN's version of lot layout
+     *
+     * @const string
+     */
+    const VERSION_LOT_LAYOUT = '060';
+    
+    /**
+     * Bank data
+     *
+     * @var Bank
+     */
+    protected $bank;
+    
+    /**
+     * Assignor data
+     *
+     * @var Assignor
+     */
+    protected $assignor;
+    
+    /**
+     * Every entry of the file
+     *
+     * @var string[]
+     */
+    protected $file = [];
+    
+    /**
+     * Controls if it's allowed to add more registries
+     *
+     * @var boolean
+     */
+    protected $closed = false;
+    
     /**
      * Total registries in the file
      *
@@ -49,8 +91,8 @@ class ShippingFile extends namespace\Cnab240File
      * @param integer  $file_id  Sequential file number, max 6 digits
      */
     public function __construct(
-        namespace\objects\Bank $bank,
-        namespace\objects\Assignor $assignor,
+        namespace\Bank $bank,
+        namespace\Assignor $assignor,
         $file_id
     ) {
         $this->bank = $bank;
@@ -102,7 +144,7 @@ class ShippingFile extends namespace\Cnab240File
      *
      * @throws OverflowException If there are too many lot registries
      */
-    public function addEntry($movement, namespace\objects\Title $title)
+    public function addEntry($movement, namespace\Title $title)
     {
         // Check if the file or the current log is closed
         if ($this->closed || $this->lots[$this->lot]['closed']) {
@@ -182,8 +224,8 @@ class ShippingFile extends namespace\Cnab240File
     protected function assignorAgencyAccount()
     {
         $a = $this->assignor;
-        $result = self::padNumber($a->agency['number'], 5) . $a->agency['cd']
-                . self::padNumber($a->account['number'], 12) . $a->account['cd'];
+        $result = BankI\Utils::padNumber($a->agency['number'], 5) . $a->agency['cd']
+                . BankI\Utils::padNumber($a->account['number'], 12) . $a->account['cd'];
         $result .= self::assignorAgencyAccountCheck($result);
         return $result;
     }
@@ -197,7 +239,7 @@ class ShippingFile extends namespace\Cnab240File
      */
     protected static function assignorAgencyAccountCheck($agency_account)
     {
-        $cd = utils\Validation::mod10($agency_account);
+        $cd = Utils\Validation::mod10($agency_account);
         
         return $cd;
     }
@@ -216,13 +258,13 @@ class ShippingFile extends namespace\Cnab240File
     {
         $this->file[] = self::fieldControl(0)
                       . str_repeat(' ', 9)
-                      . $this->formatDocument($this->assignor)
-                      . self::padNumber($this->assignor->covenant, 20)
+                      . BankI\Utils::formatDocument($this->assignor)
+                      . BankI\Utils::padNumber($this->assignor->covenant, 20)
                       . $this->assignorAgencyAccount()
-                      . self::padAlfa($this->assignor->name, 30)
-                      . self::padAlfa($this->bank->name, 30)
+                      . BankI\Utils::padAlfa($this->assignor->name, 30)
+                      . BankI\Utils::padAlfa($this->bank->name, 30)
                       . str_repeat(' ', 10)
-                      . '1' . date('dmYHis') . self::padNumber($this->file_id, 6) . self::VERSION_FILE_LAYOUT . '00000'
+                      . '1' . date('dmYHis') . BankI\Utils::padNumber($this->file_id, 6) . self::VERSION_FILE_LAYOUT . '00000'
                       . str_repeat(' ', 20)
                       . str_repeat(' ', 20)
                       . str_repeat(' ', 29);
@@ -236,10 +278,10 @@ class ShippingFile extends namespace\Cnab240File
         $this->file[] = self::fieldControl(1)
                       . 'R' . '01' . '  ' . self::VERSION_LOT_LAYOUT
                       . ' '
-                      . $this->formatDocument($this->assignor, 15)
-                      . self::padNumber($this->assignor->covenant, 20)
+                      . BankI\Utils::formatDocument($this->assignor, 15)
+                      . BankI\Utils::padNumber($this->assignor->covenant, 20)
                       . $this->assignorAgencyAccount()
-                      . self::padAlfa($this->assignor->name, 30)
+                      . BankI\Utils::padAlfa($this->assignor->name, 30)
                       . str_repeat(' ', 40) // message 1
                       . str_repeat(' ', 40) // message 2
                       . '00000000'          // number shipping/return
@@ -254,14 +296,14 @@ class ShippingFile extends namespace\Cnab240File
      * @param integer $movement ...
      * @param Title   $title    ...
      */
-    protected function registerLotDetail($movement, namespace\objects\Title $title)
+    protected function registerLotDetail($movement, namespace\Title $title)
     {
         $control = self::fieldControl(3);
         $service = [
-            self::padNumber($this->lots[$this->lot]['registries'], 5),
+            BankI\Utils::padNumber($this->lots[$this->lot]['registries'], 5),
             null, // changed later
             ' ',
-            self::padNumber($movement, 2)
+            BankI\Utils::padNumber($movement, 2)
         ];
         $payer = $title->payer;
         
@@ -270,37 +312,37 @@ class ShippingFile extends namespace\Cnab240File
                       . implode('', $service)
                       . $this->assignorAgencyAccount()
                       
-                      . self::padNumber($title->onum, 20)
+                      . BankI\Utils::padNumber($title->onum, 20)
                       . $title->wallet
                       . '1'                     // Title's Registration
                       . $title->doc_type
                       . '2'                     // Emission identifier
                       . '2'                     // Distribuition identifier
-                      . self::padNumber($title->id, 15)
+                      . BankI\Utils::padNumber($title->id, 15)
                       . date('dmY', strtotime($title->due))
-                      . self::padNumber(number_format($title->value, 2, '', ''), 15)
+                      . BankI\Utils::padNumber(number_format($title->value, 2, '', ''), 15)
                       . '00000'                 // Collection agency
                       . ' '                     // Collection agency Check Digit
-                      . self::padNumber($title->kind, 2)
+                      . BankI\Utils::padNumber($title->kind, 2)
                       . 'A'                     // Identifies title acceptance by payer
                       . date('dmY', strtotime($title->stamp))
                       
                       . $title->fine['type']
                       . ($title->fine['date'] != '' ? date('dmY', strtotime($title->fine['date'])) : '00000000')
-                      . self::padNumber(number_format($title->fine['value'], 2, '', ''), 15)
+                      . BankI\Utils::padNumber(number_format($title->fine['value'], 2, '', ''), 15)
                       
                       . $title->discount['type']
                       . ($title->discount['date'] != '' ? date('dmY', strtotime($title->discount['date'])) : '00000000')
-                      . self::padNumber(number_format($title->discount['value'], 2, '', ''), 15)
+                      . BankI\Utils::padNumber(number_format($title->discount['value'], 2, '', ''), 15)
                       
-                      . self::padNumber(number_format($title->iof, 2, '', ''), 15)
-                      . self::padNumber(number_format($title->rebate, 2, '', ''), 15)
-                      . self::padAlfa($title->description, 25)
+                      . BankI\Utils::padNumber(number_format($title->iof, 2, '', ''), 15)
+                      . BankI\Utils::padNumber(number_format($title->rebate, 2, '', ''), 15)
+                      . BankI\Utils::padAlfa($title->description, 25)
                       . '3'                     // Protest code
                       . '00'                    // Protest deadline
                       . '1'                     // low/return code
                       . '000'                   // low/return deadline
-                      . self::padNumber($title->specie, 2)
+                      . BankI\Utils::padNumber($title->specie, 2)
                       . '0000000000'            // Contract number
                       . '1';                    // Free use: it's defining partial payment isn't allowed
         
@@ -311,7 +353,7 @@ class ShippingFile extends namespace\Cnab240File
                       
                       . (($title->guarantor === null)
                           ? str_repeat('0', 16) . str_repeat(' ', 40)
-                          : self::formatDocument($title->guarantor, 15) . self::padAlfa($title->guarantor->name, 40))
+                          : BankI\Utils::formatDocument($title->guarantor, 15) . BankI\Utils::padAlfa($title->guarantor->name, 40))
                       
                       . '000'                   // Corresponding bank
                       . '00000000000000000000'  // "Our number" at corresponding bank
@@ -325,9 +367,9 @@ class ShippingFile extends namespace\Cnab240File
     {
         $this->file[] = self::fieldControl(5)
                       . '         '
-                      . self::padNumber($this->lots[$this->lot]['registries'], 6)
-                      . self::padNumber($this->lots[$this->lot]['titles'], 6)
-                      . self::padNumber(number_format($this->lots[$this->lot]['total'], 2, '', ''), 17)
+                      . BankI\Utils::padNumber($this->lots[$this->lot]['registries'], 6)
+                      . BankI\Utils::padNumber($this->lots[$this->lot]['titles'], 6)
+                      . BankI\Utils::padNumber(number_format($this->lots[$this->lot]['total'], 2, '', ''), 17)
                       . '000000' . '00000000000000000'
                       . '000000' . '00000000000000000'
                       . '000000' . '00000000000000000'
@@ -342,9 +384,28 @@ class ShippingFile extends namespace\Cnab240File
     {
         $this->file[] = self::fieldControl(9)
                       . '         '
-                      . self::padNumber(count($this->lots), 6)
-                      . self::padNumber($this->registries, 6)
+                      . BankI\Utils::padNumber(count($this->lots), 6)
+                      . BankI\Utils::padNumber($this->registries, 6)
                       . '000000'
                       . str_repeat(' ', 205);
+    }
+    
+    
+    /*
+     * Helper
+     * =========================================================================
+     */
+    
+    
+    /**
+     * Formats Control field
+     *
+     * @param integer $type Code adopted by FEBRABAN to identify the registry type
+     *
+     * @return string
+     */
+    protected function fieldControl($type)
+    {
+        return $this->bank->code . BankI\Utils::padNumber($this->lot, 4) . $type;
     }
 }

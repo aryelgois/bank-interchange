@@ -5,22 +5,17 @@
  * @see LICENSE
  */
 
-namespace aryelgois\cnab240\example;
+namespace aryelgois\BankInterchange;
 
-use aryelgois\utils;
-use aryelgois\objects;
-use aryelgois\cnab240;
+use aryelgois\Utils;
+use aryelgois\Objects;
 
 /**
  * A basic controller to create the shipping file
  *
- * NOTES:
- * - May be moved to src/
- *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.1.1
  */
 class Controller
 {
@@ -31,22 +26,22 @@ class Controller
     
     public function __construct($db_path, $assignor)
     {
-        $this->database_address = new Database($db_path, 'address');
-        $this->database_cnab240 = new Database($db_path, 'cnab240');
+        $this->database_address = new namespace\example\Database($db_path, 'address');
+        $this->database_cnab240 = new namespace\example\Database($db_path, 'cnab240');
         
-        $this->assignor = new cnab240\objects\Assignor($this->database_cnab240, $assignor);
+        $this->assignor = new namespace\Objects\Assignor($this->database_cnab240, $assignor);
         
-        $this->bank = new cnab240\objects\Bank($this->database_cnab240, $this->assignor->bank);
+        $this->bank = new namespace\Objects\Bank($this->database_cnab240, $this->assignor->bank);
     }
     
     public function execute()
     {
         $query = "SELECT `id` FROM `titles` WHERE `assignor` = " . $this->assignor->id . " AND `status` = 0 ORDER BY `stamp`";
-        $titles = array_column(Database::fetch($this->database_cnab240->query($query)), 'id');
+        $titles = array_column(Utils\Database::fetch($this->database_cnab240->query($query)), 'id');
         if (!empty($titles)) {
             // @todo Get id for new row in databse -> table `shipping_files`
             $file_id = 1;
-            $shipping_file = new cnab240\ShippingFile(
+            $shipping_file = new namespace\Objects\ShippingFile(
                 $this->bank,
                 $this->assignor,
                 $file_id
@@ -54,7 +49,7 @@ class Controller
             
             $cache = [];
             foreach ($titles as $id) {
-                $title = new cnab240\objects\Title(
+                $title = new namespace\Objects\Title(
                     $this->database_cnab240,
                     $this->database_address,
                     $id,
@@ -65,10 +60,10 @@ class Controller
             
             // save file
             $filename = 'COB.240.'
-                      . cnab240\Cnab240File::padNumber($this->assignor->edi7, 6) . '.'
+                      . namespace\Utils::padNumber($this->assignor->edi7, 6) . '.'
                       . date('Ymd') . '.'
-                      . cnab240\Cnab240File::padNumber($file_id, 5) . '.'
-                      . cnab240\Cnab240File::padNumber($this->assignor->covenant, 5, true) // @todo verify if covenant is actually small and the Headers exagerate the covenant lenght
+                      . namespace\Utils::padNumber($file_id, 5) . '.'
+                      . namespace\Utils::padNumber($this->assignor->covenant, 5, true) // @todo verify if covenant is actually small and the Headers exagerate the covenant lenght
                       . '.REM';
             
             //$file = fopen($filename, 'w');
@@ -80,7 +75,7 @@ class Controller
             $stmt = $this->database_cnab240->connect->prepare("UPDATE `titles` SET `status` = 1, `update` = CURRENT_TIMESTAMP WHERE `id` = ?");
             $stmt->bind_param('i', $id);
             foreach ($titles as $id) {
-                $stmt->execute();
+                //$stmt->execute();
                 if ($stmt->error !== '') {
                     $err[] = $stmt->error;
                 }

@@ -5,10 +5,9 @@
  * @see LICENSE
  */
 
-namespace aryelgois\cnab240\objects;
+namespace aryelgois\BankInterchange\Objects;
 
-use aryelgois\utils\Database;
-use aryelgois\cnab240\Cnab240File;
+use aryelgois\Utils;
 
 /**
  * A Bank has to keep our money safe!
@@ -16,7 +15,6 @@ use aryelgois\cnab240\Cnab240File;
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.2
  */
 class Bank
 {
@@ -42,17 +40,34 @@ class Bank
     public $tax;
     
     /**
-     * Creates a new Bank object
+     * Filename to Bank's logo, inside res/
      *
-     * @param string $database ..
-     * @param string $id       Bank's id
+     * @var string
      */
-    public function __construct(Database $database, $id)
+    public $logo;
+    
+    /**
+     * Creates a new Bank object from data in a Database
+     *
+     * @see data/database.sql
+     *
+     * @param Database $database Database with an `banks` table
+     * @param integer  $id       Bank's id in the table
+     *
+     * @throws RuntimeException If it can not load from database
+     */
+    public function __construct(Utils\Database $database, $id)
     {
-        $result = Database::fetch($database->query("SELECT * FROM `banks` WHERE `id` = " . $id))[0]; // @todo Change to getFirst
+        // load from database
+        $result = Utils\Database::fetch($database->query("SELECT * FROM `banks` WHERE `id` = " . $id . " LIMIT 1"));
+        if (empty($result)) {
+            throw new \RuntimeException('Could not load bank from database');
+        }
+        $result = $result[0];
         
         $this->code = $result['code'];
         $this->name = $result['name'];
-        $this->tax = $result['tax'];
+        $this->tax  = $result['tax'];
+        //$this->logo = $result['logo'];
     }
 }

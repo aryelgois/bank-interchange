@@ -5,10 +5,10 @@
  * @see LICENSE
  */
 
-namespace aryelgois\cnab240\objects;
+namespace aryelgois\BankInterchange\Objects;
 
-use aryelgois\utils;
-use aryelgois\objects\Person;
+use aryelgois\Utils;
+use aryelgois\Objects;
 
 /**
  * It's who made a covenant with the Bank and has to emit bank billets.
@@ -16,35 +16,34 @@ use aryelgois\objects\Person;
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.2.2
  */
-class Assignor extends Person
+class Assignor extends Objects\Person
 {
     /**
-     * Assignor id
+     * Assignor's id
      *
      * @var integer
      */
     public $id;
     
     /**
-     * Bank id
+     * Bank's id
      *
      * @var integer
      */
     public $bank;
     
     /**
-     * Covenant provided by the Bank, 20 digits
+     * Covenant provided by the Bank. Max 20 digits, but should have up to 6
      *
      * @var string
      */
     public $covenant;
     
     /**
-     * Contains:
+     * Bank Agency. Contains:
      *
-     * 'number' => 5 digits,  // bank agency
+     * 'number' => 5 digits,
      * 'cd' => 1 digit        // check digit
      *
      * @var string[]
@@ -52,9 +51,9 @@ class Assignor extends Person
     public $agency;
     
     /**
-     * Contains:
+     * Bank Account. Contains:
      *
-     * 'number' => 12 digits, // bank account
+     * 'number' => 12 digits,
      * 'cd' => 1 digit        // check digit
      *
      * @var string[]
@@ -69,17 +68,23 @@ class Assignor extends Person
     public $edi7;
     
     /**
-     * Creates a new Person object
+     * Creates a new Assignor object from data in a Database
      *
-     * @param string   $name     Person's name
-     * @param string   $document Person's document
-     * @param string   $covenant Assignor's covenant with the Bank
-     * @param string[] $agency   Assignor's agency in the Bank
-     * @param string[] $account  Agency's account in the Bank
+     * @see data/database.sql
+     *
+     * @param Database $database Database with an `assignors` table
+     * @param integer  $id       Assignor's id in the table
+     *
+     * @throws RuntimeException If it can not load from database
      */
-    public function __construct(utils\Database $database, $id)
+    public function __construct(Utils\Database $database, $id)
     {
-        $result = utils\Database::fetch($database->query("SELECT * FROM `assignors` WHERE `id` = " . $id))[0]; // @todo Change to getFirst
+        // load from database
+        $result = Utils\Database::fetch($database->query("SELECT * FROM `assignors` WHERE `id` = " . $id . " LIMIT 1"));
+        if (empty($result)) {
+            throw new \RuntimeException('Could not load assignor from database');
+        }
+        $result = $result[0];
         
         parent::__construct($result['name'], $result['document']);
         

@@ -5,152 +5,153 @@
  * @see LICENSE
  */
 
-namespace aryelgois\cnab240\objects;
+namespace aryelgois\BankInterchange\Objects;
 
-use aryelgois\utils\Database;
+use aryelgois\Utils;
 
 /**
- * A Title defines that a Payer got something from an Assignor.
+ * A Title represents something a Payer got from an Assignor.
  *
- * It might be one or products or something the latter does
+ * It might be one or products/services
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/cnab240
- * @version 0.1
  */
 class Title
 {
     /**
-     * [desc]
+     * Title's id
      *
      * @var integer
      */
     public $id;
     
     /**
-     * [desc]
+     * Title's "our number"
      *
      * @var integer
      */
     public $onum;
     
     /**
-     * [desc]
+     * Title's wallet
      *
      * @var integer
      */
     public $wallet;
     
     /**
-     * [desc]
+     * Title's type of document
      *
      * @var string
      */
     public $doc_type;
     
     /**
-     * [desc]
+     * Title's kind
      *
      * @var integer
      */
     public $kind;
     
     /**
-     * [desc]
+     * Specie used in the Title
      *
      * @var integer
      */
     public $specie;
     
     /**
-     * [desc]
+     * Title's value
      *
      * @var float
      */
     public $value;
     
     /**
-     * [desc]
+     * Title's IOF (Brazilian tax)
      *
      * @var float
      */
     public $iof;
     
     /**
-     * [desc]
+     * Title's rebate
      *
      * @var float
      */
     public $rebate;
     
     /**
-     * [desc]
+     * Title's description
      *
      * @var string
      */
     public $description;
     
     /**
-     * [desc]
+     * Title's due
      *
      * @var string
      */
     public $due;
     
     /**
-     * [desc]
+     * When Title was generated
      *
      * @var string
      */
     public $stamp;
     
     /**
-     * [desc]
+     * Fine details
      *
      * @var mixed[]
      */
     public $fine;
     
     /**
-     * [desc]
+     * Discount details
      *
      * @var mixed[]
      */
     public $discount;
     
     /**
-     * [desc]
+     * Who the Title is destined
      *
      * @var Payer
      */
     public $payer;
     
     /**
-     * [desc]
+     * Someone that would be charged if the Payer could not pay
      *
      * @var Payer
      */
     public $guarantor;
     
     /**
-     * Creates a new Title object
+     * Creates a new Title object from data in a Database
      *
-     * @param Database $db_cnab240 ..
-     * @param Database $db_address ..
-     * @param integer  $id         ..
-     * @param Payer[]  &$cache     ..
+     * @see data/database.sql
+     *
+     * @param Database $db_cnab240 Database with an `titles` table
+     * @param Database $db_address Address Database from aryelgois\databases
+     * @param integer  $id         Title's id in the table
+     * @param Payer[]  &$cache     For reuse of Payer objects, optional
      *
      * @throws RuntimeException If it can not load title from database
      */
     public function __construct(
-        Database $db_cnab240,
-        Database $db_address,
+        Utils\Database $db_cnab240,
+        Utils\Database $db_address,
         $id,
         &$cache = null
     ) {
-        // load title
-        $title = Database::fetch($db_cnab240->query("SELECT * FROM `titles` WHERE `id` = " . $id));
+        // load from database
+        $title = Utils\Database::fetch($db_cnab240->query("SELECT * FROM `titles` WHERE `id` = " . $id));
         if (empty($title)) {
             throw new \RuntimeException('Could not load title from database');
         }
@@ -198,26 +199,27 @@ class Title
     }
     
     /**
-     * Creates a new Payer object or use from cache
+     * Creates a new Payer object from data in a Database or reuse from cache
      *
-     * @param
+     * @see data/database.sql
+     *
+     * @param Database $db_cnab240 Database with an `payers` table
+     * @param Database $db_address Address Database from aryelgois\databases
+     * @param integer  $id         Payer's id in the table
+     * @param Payer[]  &$cache     For reuse of Payer objects, optional
      *
      * @return Payer
      */
     protected static function newPayer(
-        Database $db_cnab240,
-        Database $db_address,
+        Utils\Database $db_cnab240,
+        Utils\Database $db_address,
         $id,
         &$cache = null
     ) {
         if (is_array($cache) && array_key_exists($id, $cache)) {
             $payer = $cache[$id];
         } else {
-            $payer = new namespace\Payer(
-                $db_cnab240,
-                $db_address,
-                $id
-            );
+            $payer = new namespace\Payer($db_cnab240, $db_address, $id);
             if (is_array($cache)) {
                 $cache[$id] = $payer;
             }
