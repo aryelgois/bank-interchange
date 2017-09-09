@@ -1,5 +1,5 @@
-CREATE DATABASE cnab240 CHARSET = UTF8 COLLATE = utf8_general_ci;
-USE cnab240;
+CREATE DATABASE bank_interchange CHARSET = UTF8 COLLATE = utf8_general_ci;
+USE bank_interchange;
 
 CREATE TABLE `fulladdress` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -76,9 +76,11 @@ CREATE TABLE `titles` (
     FOREIGN KEY (`guarantor`) REFERENCES `payers` (`id`)
 );
 
--- @TODO
--- CREATE TABLE `shipping_files` (
---     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
---     `description`   varchar(40)     NOT NULL,
---     PRIMARY KEY (`transaction`, `title`)
--- );
+CREATE TABLE `shipping_files` (
+    `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
+    `status`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 0,
+    `filename`      char(39),
+    `stamp`         timestamp       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `update`        datetime,
+    PRIMARY KEY (`id`)
+);

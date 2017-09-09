@@ -1,14 +1,11 @@
-table, table tr, table td, table th {
-    border-collapse: collapse;
+.todo {
+    color: #888;
+    font-style: italic;
 }
-table tr:nth-child(odd) {
-    background: #eee;
+.todo:before {
+    color: #444;
+    content: '@todo ';
 }
-table td, table th {
-    border: 1px solid #d4d4d4;
-    padding: 0.2em;
-}
-table th {
-    background: #79b;
-    color: #fff;
+.todo * {
+    opacity: 0.4;
 }

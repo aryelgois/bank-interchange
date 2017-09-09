@@ -1,6 +1,6 @@
 <?php
 /**
- * This Software is part of aryelgois\cnab240 and is provided "as is".
+ * This Software is part of aryelgois\BankInterchange and is provided "as is".
  *
  * @see LICENSE
  */
@@ -15,7 +15,7 @@ use aryelgois\Objects;
  *
  * @author Aryel Mota Góis
  * @license MIT
- * @link https://www.github.com/aryelgois/cnab240
+ * @link https://www.github.com/aryelgois/BankInterchange
  */
 class Assignor extends Objects\Person
 {

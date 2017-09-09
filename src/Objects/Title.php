@@ -1,6 +1,6 @@
 <?php
 /**
- * This Software is part of aryelgois\cnab240 and is provided "as is".
+ * This Software is part of aryelgois\BankInterchange and is provided "as is".
  *
  * @see LICENSE
  */
@@ -16,7 +16,7 @@ use aryelgois\Utils;
  *
  * @author Aryel Mota Góis
  * @license MIT
- * @link https://www.github.com/aryelgois/cnab240
+ * @link https://www.github.com/aryelgois/BankInterchange
  */
 class Title
 {
@@ -137,21 +137,21 @@ class Title
      *
      * @see data/database.sql
      *
-     * @param Database $db_cnab240 Database with an `titles` table
      * @param Database $db_address Address Database from aryelgois\databases
+     * @param Database $db_banki   Database with an `titles` table
      * @param integer  $id         Title's id in the table
      * @param Payer[]  &$cache     For reuse of Payer objects, optional
      *
      * @throws RuntimeException If it can not load title from database
      */
     public function __construct(
-        Utils\Database $db_cnab240,
         Utils\Database $db_address,
+        Utils\Database $db_banki,
         $id,
         &$cache = null
     ) {
         // load from database
-        $title = Utils\Database::fetch($db_cnab240->query("SELECT * FROM `titles` WHERE `id` = " . $id));
+        $title = Utils\Database::fetch($db_banki->query("SELECT * FROM `titles` WHERE `id` = " . $id));
         if (empty($title)) {
             throw new \RuntimeException('Could not load title from database');
         }
@@ -192,9 +192,9 @@ class Title
             ];
         }
         
-        $this->payer = self::newPayer($db_cnab240, $db_address, $title['payer'], $cache);
+        $this->payer = self::newPayer($db_address, $db_banki, $title['payer'], $cache);
         $this->guarantor = ($title['guarantor'] !== null)
-            ? self::newPayer($db_cnab240, $db_address, $title['guarantor'], $cache)
+            ? self::newPayer($db_address, $db_banki, $title['guarantor'], $cache)
             : null;
     }
     
@@ -203,23 +203,23 @@ class Title
      *
      * @see data/database.sql
      *
-     * @param Database $db_cnab240 Database with an `payers` table
      * @param Database $db_address Address Database from aryelgois\databases
+     * @param Database $db_banki   Database with an `payers` table
      * @param integer  $id         Payer's id in the table
      * @param Payer[]  &$cache     For reuse of Payer objects, optional
      *
      * @return Payer
      */
     protected static function newPayer(
-        Utils\Database $db_cnab240,
         Utils\Database $db_address,
+        Utils\Database $db_banki,
         $id,
         &$cache = null
     ) {
         if (is_array($cache) && array_key_exists($id, $cache)) {
             $payer = $cache[$id];
         } else {
-            $payer = new namespace\Payer($db_cnab240, $db_address, $id);
+            $payer = new namespace\Payer($db_address, $db_banki, $id);
             if (is_array($cache)) {
                 $cache[$id] = $payer;
             }

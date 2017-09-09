@@ -17,11 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "aryelgois\\BankInterchange\\": "src/",
-            "aryelgois\\BankInterchange\\example\\": "lib/example/"
+            "aryelgois\\BankInterchange\\": "src/"
         }
-    },
-    "require-dev": {
-        "twig/twig": "^2.4"
     }
 }

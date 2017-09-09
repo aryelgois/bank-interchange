@@ -47,11 +47,11 @@ is not used in the actual scripts for this package.
 
 I know, the script is not working yet.. It's under development.
 
-- [ ] Finish Shipping Files class
+- [x] Finish Shipping Files class
   - [x] `registerLotDetail()` requires some data about the product and the payer
     (the client). It also has differents segments which have the same lot index.
   - [x] Test if the other "low level" methods are working.
-  - [ ] Make the "high level" methods work.
+  - [x] Make the "high level" methods work.
 - [ ] Write the Return File interpreter.
   - [ ] It should receive the data somehow.. fetch from the bank's site or
     provide as local files?

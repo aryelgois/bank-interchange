@@ -1,14 +1,13 @@
 <?php
 /**
- * This Software is part of aryelgois\cnab240 and is provided "as is".
+ * This Software is part of aryelgois\BankInterchange and is provided "as is".
  *
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Objects;
+namespace aryelgois\BankInterchange\Views;
 
 use aryelgois\Utils;
-use aryelgois\Objects;
 use aryelgois\BankInterchange as BankI;
 
 /**
@@ -16,9 +15,9 @@ use aryelgois\BankInterchange as BankI;
  *
  * @author Aryel Mota Góis
  * @license MIT
- * @link https://www.github.com/aryelgois/cnab240
+ * @link https://www.github.com/aryelgois/BankInterchange
  */
-class ShippingFile
+class View
 {
     /**
      * FEBRABAN's version of file layout
@@ -35,32 +34,11 @@ class ShippingFile
     const VERSION_LOT_LAYOUT = '060';
     
     /**
-     * Bank data
+     * Holds data from database and manipulates some tables
      *
-     * @var Bank
+     * @var Model
      */
-    protected $bank;
-    
-    /**
-     * Assignor data
-     *
-     * @var Assignor
-     */
-    protected $assignor;
-    
-    /**
-     * Every entry of the file
-     *
-     * @var string[]
-     */
-    protected $file = [];
-    
-    /**
-     * Controls if it's allowed to add more registries
-     *
-     * @var boolean
-     */
-    protected $closed = false;
+    protected $model;
     
     /**
      * Total registries in the file
@@ -68,6 +46,13 @@ class ShippingFile
      * integer
      */
     protected $registries = 0;
+    
+    /**
+     * Every entry of the file
+     *
+     * @var string[]
+     */
+    protected $file = [];
     
     /**
      * Current Lot
@@ -84,19 +69,20 @@ class ShippingFile
     protected $lots;
     
     /**
+     * Controls if it's allowed to add more registries
+     *
+     * @var boolean
+     */
+    protected $closed = false;
+    
+    /**
      * Creates a new Shipping File object
      *
-     * @param Bank     $bank     Contains Bank's information
-     * @param Assignor $assignor Contains Assignor's information
+     * @param Model    $model    Contains data fetched from database
      * @param integer  $file_id  Sequential file number, max 6 digits
      */
-    public function __construct(
-        namespace\Bank $bank,
-        namespace\Assignor $assignor,
-        $file_id
-    ) {
-        $this->bank = $bank;
-        $this->assignor = $assignor;
+    public function __construct(BankI\Models\Model $model, $file_id) {
+        $this->model = $model;
         $this->file_id = $file_id;
         
         $this->open();
@@ -125,7 +111,7 @@ class ShippingFile
             $this->closeLot();
         }
         $this->lots[++$this->lot] = [
-            'registries' => 1, // already counting this LotHeader
+            'registries' => 1, // already counting the following LotHeader
             'titles' => 0,
             'total' => 0.0,
             'closed' => false
@@ -138,13 +124,13 @@ class ShippingFile
      * Adds a new Title entry
      *
      * @param integer $movement ...
-     * @param Title   $title What the entry is about
+     * @param Title   $title    What the entry is about
      *
      * @return boolean For success or failure
      *
      * @throws OverflowException If there are too many lot registries
      */
-    public function addEntry($movement, namespace\Title $title)
+    public function addEntry($movement, BankI\Objects\Title $title)
     {
         // Check if the file or the current log is closed
         if ($this->closed || $this->lots[$this->lot]['closed']) {
@@ -217,13 +203,13 @@ class ShippingFile
     
     
     /**
-     * [desc]
+     * Formats Assignor's Agency and Account with check digits
      *
      * @return string
      */
     protected function assignorAgencyAccount()
     {
-        $a = $this->assignor;
+        $a = $this->model->assignor;
         $result = BankI\Utils::padNumber($a->agency['number'], 5) . $a->agency['cd']
                 . BankI\Utils::padNumber($a->account['number'], 12) . $a->account['cd'];
         $result .= self::assignorAgencyAccountCheck($result);
@@ -231,9 +217,9 @@ class ShippingFile
     }
     
     /**
-     * [desc]
+     * Calculates Agency/Account check digit
      *
-     * @param string $agency_account ..
+     * @param string $agency_account String whose check digit will be calculated
      *
      * @return string
      */
@@ -258,11 +244,11 @@ class ShippingFile
     {
         $this->file[] = self::fieldControl(0)
                       . str_repeat(' ', 9)
-                      . BankI\Utils::formatDocument($this->assignor)
-                      . BankI\Utils::padNumber($this->assignor->covenant, 20)
+                      . BankI\Utils::formatDocument($this->model->assignor)
+                      . BankI\Utils::padNumber($this->model->assignor->covenant, 20)
                       . $this->assignorAgencyAccount()
-                      . BankI\Utils::padAlfa($this->assignor->name, 30)
-                      . BankI\Utils::padAlfa($this->bank->name, 30)
+                      . BankI\Utils::padAlfa($this->model->assignor->name, 30)
+                      . BankI\Utils::padAlfa($this->model->bank->name, 30)
                       . str_repeat(' ', 10)
                       . '1' . date('dmYHis') . BankI\Utils::padNumber($this->file_id, 6) . self::VERSION_FILE_LAYOUT . '00000'
                       . str_repeat(' ', 20)
@@ -278,10 +264,10 @@ class ShippingFile
         $this->file[] = self::fieldControl(1)
                       . 'R' . '01' . '  ' . self::VERSION_LOT_LAYOUT
                       . ' '
-                      . BankI\Utils::formatDocument($this->assignor, 15)
-                      . BankI\Utils::padNumber($this->assignor->covenant, 20)
+                      . BankI\Utils::formatDocument($this->model->assignor, 15)
+                      . BankI\Utils::padNumber($this->model->assignor->covenant, 20)
                       . $this->assignorAgencyAccount()
-                      . BankI\Utils::padAlfa($this->assignor->name, 30)
+                      . BankI\Utils::padAlfa($this->model->assignor->name, 30)
                       . str_repeat(' ', 40) // message 1
                       . str_repeat(' ', 40) // message 2
                       . '00000000'          // number shipping/return
@@ -294,9 +280,9 @@ class ShippingFile
      * Adds a Lot Detail
      *
      * @param integer $movement ...
-     * @param Title   $title    ...
+     * @param Title   $title    Holds data about the title and the related payer
      */
-    protected function registerLotDetail($movement, namespace\Title $title)
+    protected function registerLotDetail($movement, BankI\Objects\Title $title)
     {
         $control = self::fieldControl(3);
         $service = [
@@ -406,6 +392,6 @@ class ShippingFile
      */
     protected function fieldControl($type)
     {
-        return $this->bank->code . BankI\Utils::padNumber($this->lot, 4) . $type;
+        return $this->model->bank->code . BankI\Utils::padNumber($this->lot, 4) . $type;
     }
 }

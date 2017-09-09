@@ -1,6 +1,6 @@
 <?php
 /**
- * This Software is part of aryelgois\cnab240 and is provided "as is".
+ * This Software is part of aryelgois\BankInterchange and is provided "as is".
  *
  * @see LICENSE
  */
@@ -16,7 +16,7 @@ use aryelgois\BankInterchange as BankI;
  *
  * @author Aryel Mota Góis
  * @license MIT
- * @link https://www.github.com/aryelgois/cnab240
+ * @link https://www.github.com/aryelgois/BankInterchange
  */
 class Payer extends Objects\Person
 {
@@ -32,25 +32,25 @@ class Payer extends Objects\Person
      *
      * @see data/database.sql
      *
-     * @param Database $db_cnab240 Database with an `payers` table
      * @param Database $db_address Address Database from aryelgois\databases
+     * @param Database $db_banki   Database with an `payers` table
      * @param integer  $id         Payer's id in the table
      *
      * @throws RuntimeException If it can not load from database
      */
     public function __construct(
-        Utils\Database $db_cnab240,
         Utils\Database $db_address,
+        Utils\Database $db_banki,
         $id
     ) {
         // load from database
-        $payer = Utils\Database::fetch($db_cnab240->query("SELECT * FROM `payers` WHERE `id` = " . $id . " LIMIT 1"));
+        $payer = Utils\Database::fetch($db_banki->query("SELECT * FROM `payers` WHERE `id` = " . $id . " LIMIT 1"));
         if (empty($payer)) {
             throw new \RuntimeException('Could not load payer from database');
         }
         $payer = $payer[0];
         
-        $address_data = Utils\Database::fetch($db_cnab240->query("SELECT * FROM `fulladdress` WHERE `id` = " . $payer['address']));
+        $address_data = Utils\Database::fetch($db_banki->query("SELECT * FROM `fulladdress` WHERE `id` = " . $payer['address']));
         if (empty($address_data)) {
             throw new \RuntimeException('Could not load payer\'s address from database');
         }
