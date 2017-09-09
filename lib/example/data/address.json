@@ -1,8 +1,0 @@
-{
-    "states": {
-        "AA": "State 1",
-        "AB": "State 2",
-        "BA": "State 3",
-        "BB": "State 4"
-    }
-}
