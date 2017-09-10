@@ -17,14 +17,15 @@ CREATE TABLE `banks` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
     `code`          char(3)         NOT NULL,
     `name`          varchar(30)     NOT NULL,
-    `tax`           decimal(6,4)    NOT NULL, -- used in the bank billet
-    `logo`          varchar(30),              -- ^
+    `tax`           decimal(6,4)    NOT NULL,
+    `logo`          varchar(30),
     PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `assignors` (
     `id`            int(10)         UNSIGNED NOT NULL,
     `bank`          int(10)         UNSIGNED NOT NULL,
+    `address`       int(10)         UNSIGNED NOT NULL,
     `document`      varchar(14)     NOT NULL,
     `name`          varchar(30)     NOT NULL,
     `covenant`      char(20)        NOT NULL,
@@ -33,8 +34,11 @@ CREATE TABLE `assignors` (
     `account`       char(12)        NOT NULL,
     `account_cd`    char(1)         NOT NULL,
     `edi7`          char(6)         NOT NULL,
+    `logo`          varchar(30),
+    `url`           varchar(30),
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`bank`) REFERENCES `banks` (`id`)
+    FOREIGN KEY (`bank`) REFERENCES `banks` (`id`),
+    FOREIGN KEY (`address`) REFERENCES `fulladdress` (`id`)
 );
 
 CREATE TABLE `payers` (

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Example - BankInterchange</title>
-    <link rel="stylesheet" type="text/css" href="../res/example.css" />
+    <link rel="stylesheet" type="text/css" href="../res/css/example.css" />
 </head>
 <body>
     <h2>Intro</h2>
@@ -20,8 +20,8 @@
     </p>
     
     <h2>Scripts</h2>
-    <p class="todo">
-        <a href="client_buy.php">Click here</a> to make the client buy a product.<br />
+    <p>
+        <a href="bank_billet.php">Click here</a> to make the client buy a product.<br />
         It will produce an entry in the database and return the bank billet to the browser
     </p>
     <p>

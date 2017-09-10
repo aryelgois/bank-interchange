@@ -1,7 +1,7 @@
 {
     "name": "aryelgois/bank-interchange",
     "description": "Generate Bank Billets and Shipping Files, and read Return Files to interact with Banks",
-    "keywords": ["febraban", "bank", "cnab", "billet"],
+    "keywords": ["febraban", "bank", "cnab", "billet", "ticket"],
     "license": "MIT",
     "authors": [
         {
@@ -13,7 +13,8 @@
         "php": "^7.0",
         "aryelgois/utils": "dev-master",
         "aryelgois/objects": "dev-master",
-        "vria/nodiacritic": "0.*"
+        "vria/nodiacritic": "0.*",
+        "setasign/fpdf": "^1.8"
     },
     "autoload": {
         "psr-4": {

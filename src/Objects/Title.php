@@ -133,30 +133,26 @@ class Title
     public $guarantor;
     
     /**
-     * Creates a new Title object from data in a Database
+     * Creates a new Title object from data in an array
+     *
+     * The Database connections are used to load the payer
+     *
+     * NOTES:
+     * - $title keys should be the same as `titles` columns
      *
      * @see data/database.sql
      *
      * @param Database $db_address Address Database from aryelgois\databases
-     * @param Database $db_banki   Database with an `titles` table
-     * @param integer  $id         Title's id in the table
+     * @param Database $db_banki   Database with an `payers` table
+     * @param mixed[   $title      Title's data
      * @param Payer[]  &$cache     For reuse of Payer objects, optional
-     *
-     * @throws RuntimeException If it can not load title from database
      */
     public function __construct(
         Utils\Database $db_address,
         Utils\Database $db_banki,
-        $id,
+        $title,
         &$cache = null
     ) {
-        // load from database
-        $title = Utils\Database::fetch($db_banki->query("SELECT * FROM `titles` WHERE `id` = " . $id));
-        if (empty($title)) {
-            throw new \RuntimeException('Could not load title from database');
-        }
-        $title = $title[0];
-        
         // is there an easier way?
         $this->id = $title['id'];
         $this->onum = $title['onum'];
@@ -196,6 +192,32 @@ class Title
         $this->guarantor = ($title['guarantor'] !== null)
             ? self::newPayer($db_address, $db_banki, $title['guarantor'], $cache)
             : null;
+    }
+    
+    /**
+     * Creates a new Title object from data in a Database
+     *
+     * @see data/database.sql
+     *
+     * @param Database $db_address Address Database from aryelgois\databases
+     * @param Database $db_banki   Database with tables `titles` and `payers`
+     * @param integer  $id         Title's id in the table
+     * @param Payer[]  &$cache     For reuse of Payer objects, optional
+     *
+     * @throws RuntimeException If it can not load title from database
+     */
+    public static function fromDatabase(
+        Utils\Database $db_address,
+        Utils\Database $db_banki,
+        $id,
+        &$cache = null
+    ) {
+        $title = Utils\Database::fetch($db_banki->query("SELECT * FROM `titles` WHERE `id` = " . $id));
+        if (empty($title)) {
+            throw new \RuntimeException('Could not load title from database');
+        }
+        
+        return new self($db_address, $db_banki, $title[0], $cache);
     }
     
     /**

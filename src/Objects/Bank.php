@@ -40,7 +40,7 @@ class Bank
     public $tax;
     
     /**
-     * Filename to Bank's logo, inside res/
+     * Filename to Bank's logo, inside res/logos/banks
      *
      * @var string
      */
@@ -68,6 +68,6 @@ class Bank
         $this->code = $result['code'];
         $this->name = $result['name'];
         $this->tax  = $result['tax'];
-        //$this->logo = $result['logo'];
+        $this->logo = $result['logo'];
     }
 }

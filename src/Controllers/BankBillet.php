@@ -11,51 +11,27 @@ use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
 
 /**
- * A basic abstract controller
+ * Controller class for Bank Billet
+ *
+ * A Bank Billet is a printable representation of a Title
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/BankInterchange
  */
-abstract class Controller
+class BankBillet extends namespace\Controller
 {
     /**
      * List of required $config keys
      *
+     * 'assignor': assignor id who will generate the Shipping File
+     *
      * @const string[]
      */
-    const CONFIG_KEYS = [];
+    const CONFIG_KEYS = ['assignor', 'payer', 'title'];
     
     /**
-     * Holds user configurations
-     *
-     * @var mixed[]
-     */
-    protected $config;
-    
-    /**
-     * Holds data from database and manipulates some tables
-     *
-     * @var Model
-     */
-    protected $model;
-    
-    /**
-     * Controller result after execute()
-     *
-     * @var string
-     */
-    public $result = '';
-    
-    /**
-     * New entry id in the database after execute()
-     *
-     * @var integer
-     */
-    public $id = 0;
-    
-    /**
-     * Creates a new Controller object
+     * Creates a new BankBillet Controller object
      *
      * @param Database $db_address An interface to `address` database
      * @param Database $db_banki   An interface to `bank_interchange` database
@@ -68,16 +44,18 @@ abstract class Controller
         Utils\Database $db_banki,
         $config
     ) {
-        if (!empty(array_diff(static::CONFIG_KEYS, array_keys($config)))) {
-            throw new \InvalidArgumentException('There are missing configurations');
-        }
-        $this->config = $config;
+        parent::__construct(...func_get_args());
+        
+        $this->model = new BankI\Models\BankBillet($db_address, $db_banki, $config['assignor']);
     }
     
     /**
-     * Generates a view output from data in the model
+     * Generates the Bank Billet from data in the model
      *
      * @return boolean for success or failure
      */
-    public abstract function execute();
+    public function execute()
+    {
+        
+    }
 }

@@ -17,7 +17,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/BankInterchange
  */
-class View
+class ShippingFile
 {
     /**
      * FEBRABAN's version of file layout
