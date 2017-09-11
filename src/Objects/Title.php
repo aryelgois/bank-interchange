@@ -167,10 +167,10 @@ class Title
         $this->rebate = (float)($title['rebate'] ?? 0);
         $this->description = $title['description'] ?? '';
         $this->due = $title['due'];
-        $this->stamp = $title['stamp'] ?? date('Y-m-d');
+        $this->stamp = $title['stamp'] ?? date('Y-m-d H:i:s');
         
         // fine and discount
-        $default = ['type' => 3, 'date' => '', 'value' => 0];
+        $default = ['type' => 3, 'date' => null, 'value' => null];
         if ($title['fine_type'] == 3) {
             $this->fine = $default;
         } else {

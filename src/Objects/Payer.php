@@ -21,6 +21,13 @@ use aryelgois\BankInterchange as BankI;
 class Payer extends Objects\Person
 {
     /**
+     * Payer's id
+     *
+     * @var integer
+     */
+    public $id;
+    
+    /**
      * Contains a string ready to be inserted into the Shipping File
      *
      * @var string
@@ -52,6 +59,7 @@ class Payer extends Objects\Person
         
         parent::__construct($payer['name'], $payer['document']);
         
+        $this->id = $id;
         $this->address[] = new namespace\Address($db_address, $db_banki, $payer['address']);
         
         $this->formatCnab240();

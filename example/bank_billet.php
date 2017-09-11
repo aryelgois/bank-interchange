@@ -32,7 +32,13 @@ $controller = new BankI\Controllers\BankBillet($db_address, $db_banki, $config);
 
 //output result
 if ($controller->execute()) {
-    $controller->output();
+    $path = __DIR__ . '/data/bank_billets';
+    $filename = $controller->saveFile($path);
+    if ($filename !== false) {
+        $controller->output();
+    } else {
+        echo '<p>Error saving file. Remember to give write permission to apache at data/*</p>';
+    }
 } else {
     echo '<p>Error: could not generate the bank billet</p>';
 }

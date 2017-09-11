@@ -65,4 +65,24 @@ class ShippingFile extends namespace\Model
     {
         return parent::getNextId($table);
     }
+    
+    /**
+     * Inserts the record of the Shipping File
+     *
+     * @param string $data Shipping File name
+     *
+     * @return true For success or string[] of errors for failure
+     */
+    public function insertEntry($data = null)
+    {
+        $query = "INSERT INTO `shipping_files` (`filename`) VALUES (?)";
+        $stmt = $this->db_banki->connect->prepare($query);
+        $stmt->bind_param('s', $data);
+        $stmt->execute();
+        if ($stmt->error !== '') {
+            return $stmt->error;
+        }
+        $this->db_banki->query("UNLOCK TABLES `shipping_files` WRITE");
+        return true;
+    }
 }

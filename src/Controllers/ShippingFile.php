@@ -68,13 +68,11 @@ class ShippingFile extends namespace\Controller
     }
     
     /**
-     * Creates a new ShippingFile Controller object
+     * Writes the Shipping File to a local file and updates the Database
      *
-     * @param string $path Path to where the file will be saved
+     * @param string $path Path to directory where the file will be saved
      *
      * @return string Filename or false on failure
-     *
-     * @throws InvalidArgumentException If there are missing configurations
      */
     public function saveFile($path)
     {
@@ -92,7 +90,7 @@ class ShippingFile extends namespace\Controller
         fwrite($file, $this->result);
         fclose($file);
         
-        $this->model->insertFile($filename);
+        $this->model->insertEntry($filename);
         $this->model->updateStatus('titles', array_column($this->model->titles, 'id'), 1);
         
         return $filename;

@@ -82,24 +82,15 @@ abstract class Model
     }
     
     /**
-     * Inserts a record of a previously generated Shipping File
+     * Inserts a record in a table
      *
-     * @param string $filename Shipping File name
+     * Dont forget to unlock the locked table in getNextId()
      *
-     * @return true For success or string[] of errors for failure
+     * @param mixed $data Depends on implementation
+     *
+     * @return mixed Depends on implementation
      */
-    public function insertFile($filename)
-    {
-        $query = "INSERT INTO `shipping_files` (`filename`) VALUES (?)";
-        $stmt = $this->db_banki->connect->prepare($query);
-        $stmt->bind_param('s', $filename);
-        $stmt->execute();
-        if ($stmt->error !== '') {
-            return $stmt->error;
-        }
-        $this->db_banki->query("UNLOCK TABLES `shipping_files` WRITE");
-        return true;
-    }
+    public abstract function insertEntry($data = null);
     
     /**
      * Update table's rows to a given status

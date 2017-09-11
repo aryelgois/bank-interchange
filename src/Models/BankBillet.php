@@ -58,11 +58,13 @@ class BankBillet extends namespace\Model
         );
         
         // Miscellaneus
-        $this->calcDiscountAddition();
+        //$this->calcDiscountAddition();
     }
     
     /**
      * Calculates Discounts, Deductions, Fines and Additions
+     *
+     * NOT USED
      */
     protected function calcDiscountAddition()
     {
@@ -88,5 +90,52 @@ class BankBillet extends namespace\Model
             $sum += $this->data['service']['value'] + $this->data['service']['tax'];
             $this->data['misc']['charged'] = self::formatMoney($sum);
         }
+    }
+    
+    /**
+     * Inserts the record of the Shipping File
+     *
+     * NOTES:
+     * - Error is handled by Database
+     *
+     * @param mixed $data It is ignored
+     *
+     * @return true For success or string[] of errors for failure
+     */
+    public function insertEntry($data = null)
+    {
+        $t = $this->title;
+        $query = "INSERT INTO `titles` "
+               . "(`id`, `assignor`, `payer`, `guarantor`, `onum`, `wallet`, `doc_type`, `kind`, `specie`, `value`, `iof`, `rebate`, `fine_type`, `fine_date`, `fine_value`, `discount_type`, `discount_date`, `discount_value`, `description`, `due`, `stamp`) "
+               . "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $this->db_banki->prepare(
+            $query,
+            'iiiiiisiidddisdisdsss',
+            [
+                $t->id,
+                $this->assignor->id,
+                $t->payer->id,
+                $this->guarantor->id ?? null,
+                $t->onum,
+                $t->wallet,
+                $t->doc_type,
+                $t->kind,
+                $t->specie,
+                $t->value,
+                $t->iof,
+                $t->rebate,
+                $t->fine['type'],
+                $t->fine['date'],
+                $t->fine['value'],
+                $t->discount['type'],
+                $t->discount['date'],
+                $t->discount['value'],
+                substr($t->description, 0, 25),
+                $t->due,
+                $t->stamp
+            ]
+        );
+        //$this->db_banki->query("UNLOCK TABLES `shipping_files` WRITE");
+        return true;
     }
 }

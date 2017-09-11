@@ -64,6 +64,8 @@ class BankBillet extends namespace\Controller
     /**
      * Generates the Bank Billet from data in the model
      *
+     * After this method, the view is ready to output the pdf.
+     *
      * @return boolean for success or failure
      */
     public function execute()
@@ -74,17 +76,39 @@ class BankBillet extends namespace\Controller
     }
     
     /**
-     * Outputs the Bank Billet
+     * Echos the Bank Billet with headers
      *
-     * @see http://www.fpdf.org/en/doc/output.htm
-     *
-     * @param string $dest Destination where to send the document.
-     * @param string $name The name of the file. It is ignored in case of destination S.
-     *
-     * @return ...
+     * @param string $name The name of the file.
      */
-    public function output($dest = 'I', $name = 'doc.pdf')
+    public function output($name = '')
     {
-        return $this->view->Output($dest, $name);
+        $this->view->Output('I', $name);
+    }
+    
+    /**
+     * Writes the Bank Billet to a local file and updates the Database
+     *
+     * @param string $path   Path to directory where the file will be saved
+     * @param string $prefix String inserted before the file index
+     *
+     * @return string Filename or false on failure
+     */
+    public function saveFile($path, $prefix = '')
+    {
+        $filename = $prefix . ($prefix != '' ? '_' : '')
+                  . BankI\Utils::padNumber($this->model->title->id, 15) . '_'
+                  . date('Y-m-d_h-i-s')
+                  . '.pdf';
+        
+        $file = @fopen($path . '/' . $filename, 'w');
+        if ($file === false) {
+            return false;
+        }
+        fwrite($file, $this->view->Output('S'));
+        fclose($file);
+        
+        $this->model->insertEntry();
+        
+        return $filename;
     }
 }

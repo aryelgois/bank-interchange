@@ -49,7 +49,7 @@ is not used in the actual scripts for this package.
 
 I know, the script is not working yet.. It's under development.
 
-- [ ] Merge a (personal) project which generates bank billets in PDF.
+- [x] Merge a (personal) project which generates bank billets in PDF.
 - [ ] Real world test.
 - [ ] Write the Return File interpreter.
   - [ ] It should receive the data somehow.. fetch from the bank's site or
