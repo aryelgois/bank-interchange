@@ -49,12 +49,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/Utils.git",
-                "reference": "fac38799fcddd71d438e0ef797b411bff46fe2a0"
+                "reference": "38c7c8b7b689f3323c0f70771eb5826f90c75ce8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/Utils/zipball/fac38799fcddd71d438e0ef797b411bff46fe2a0",
-                "reference": "fac38799fcddd71d438e0ef797b411bff46fe2a0",
+                "url": "https://api.github.com/repos/aryelgois/Utils/zipball/38c7c8b7b689f3323c0f70771eb5826f90c75ce8",
+                "reference": "38c7c8b7b689f3323c0f70771eb5826f90c75ce8",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
             "keywords": [
                 "utils"
             ],
-            "time": "2017-09-11T01:58:47+00:00"
+            "time": "2017-09-11T03:28:25+00:00"
         },
         {
             "name": "setasign/fpdf",
