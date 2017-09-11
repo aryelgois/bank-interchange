@@ -92,11 +92,40 @@ abstract class BankBillet extends FPDF
     ];
     
     /**
+     * Font presets of family, weight, size and color
+     *
+     * @const array[]
+     */
+    const FONTS = [
+        'digitable'  => ['Arial', 'B',  8, [0, 0,  0]],
+        'digitable1' => ['Arial', 'B', 10, [0, 0,  0]],
+        'billhead'   => ['Arial', '',   6, [0, 0,  0]],
+        'bank_code'  => ['Arial', 'B', 14, [0, 0,  0]],
+        'cell_title' => ['Arial', '',   6, [0, 0, 51]],
+        'cell_data'  => ['Arial', 'B',  7, [0, 0,  0]],
+        'footer'     => ['Arial', '',   9, [0, 0,  0]]
+    ];
+    
+    /**
+     * Size of dashes: black, white
+     *
+     * @const integer[]
+     */
+    const DASH_STYLE = [2, 1];
+    
+    /**
+     * Default line width for borders
+     *
+     * @const integer
+     */
+    const DEFAULT_LINE_WIDTH = 0.2;
+    
+    /**
      * Dictionary of terms used in the billet
      *
-     * @const string[]
+     * @var string[]
      */
-    const DICTIONARY = [
+    protected $dictionary = [
         'accept'        => 'Aceite',
         'addition'      => '(+) Outros acréscimos',
         'agency_code'   => 'Agência/Código do Cedente',
@@ -133,21 +162,6 @@ abstract class BankBillet extends FPDF
     ];
     
     /**
-     * Font presets of family, weight, size and color
-     *
-     * @const array[]
-     */
-    const FONTS = [
-        'digitable'  => ['Arial', 'B',  8, [0, 0,  0]],
-        'digitable1' => ['Arial', 'B', 10, [0, 0,  0]],
-        'billhead'   => ['Arial', '',   6, [0, 0,  0]],
-        'bank_code'  => ['Arial', 'B', 14, [0, 0,  0]],
-        'cell_title' => ['Arial', '',   6, [0, 0, 51]],
-        'cell_data'  => ['Arial', 'B',  7, [0, 0,  0]],
-        'footer'     => ['Arial', '',   9, [0, 0,  0]]
-    ];
-    
-    /**
      * Holds data from database and manipulates some tables
      *
      * @var Model
@@ -171,6 +185,8 @@ abstract class BankBillet extends FPDF
     {
         parent::__construct();
         $this->AliasNbPages('{{ total_pages }}');
+        
+        $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
         
         $this->model = $model;
         
@@ -293,7 +309,7 @@ abstract class BankBillet extends FPDF
         $this->MultiCell(177, 3, utf8_decode(static::HEADER_INSTRUCTIONS['body']));
         $this->Ln(2);
         $this->billetSetFont('digitable');
-        $this->MultiCell(177, 3.5, utf8_decode(sprintf(static::DICTIONARY['header_info'], $this->billet['digitable'], $this->formatMoney($this->billet['value']))));
+        $this->MultiCell(177, 3.5, utf8_decode(sprintf($this->dictionary['header_info'], $this->billet['digitable'], $this->formatMoney($this->billet['value']))));
         $this->Ln(4);
     }
     
@@ -310,43 +326,80 @@ abstract class BankBillet extends FPDF
     }
     
     /**
+     * Inserts a dashed line, with optional text before or after
+     *
+     * The text uses previous font
+     *
+     * @param string  $text       An optional text
+     * @param boolean $text_first If the text comes first
+     * @param string  $align      Aligns the text (L|C|R)
+     */
+    protected function drawDash($text = '', $text_first = false, $align = 'R')
+    {
+        $cell = function ($text, $align)
+        {
+            $this->Cell(177, 4, utf8_decode($text), 0, 1, $align);
+        };
+        
+        if ($text_first) {
+            $cell($text, $align);
+        }
+        
+        $this->SetLineWidth(static::DEFAULT_LINE_WIDTH * 0.625);
+        $y = $this->GetY();
+        $this->SetDash(...static::DASH_STYLE);
+        $this->Line(10, $y, 187, $y);
+        $this->SetDash();
+        $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
+        
+        if (!$text_first) {
+            $cell($text, $align);
+        }
+    }
+    
+    /**
      * Inserts the Bank header
      *
-     * @param string  $cod   Bank code
-     * @param string  $line  Digitable line
+     * @param string  $digitable_align   Aligns the digitable line (L|C|R)
+     * @param integer $line_width_factor Multiplier for the line width
      */
-    protected function drawBankHeader()
+    protected function drawBankHeader($digitable_align = 'R', $line_width_factor = 2)
     {
+        $bank = $this->model->bank;
+        $logo = self::PATH_LOGOS . '/banks/' . $bank->logo;
+        
         $this->Ln(3);
-        if ($this->model->bank->logo != '') {
-            $this->Image(self::PATH_LOGOS . '/banks/' . $this->model->bank->logo, null, null, 40);
+        if (is_file($logo)) {
+            $this->Image($logo, null, null, 40);
             $this->SetXY(50, $this->GetY() - 7);
         } else {
             $this->billetSetFont('cell_data');
-            $this->Cell(40, 7, utf8_decode($this->model->bank->name));
+            $this->Cell(40, 7, utf8_decode($bank->name));
         }
-        $this->SetLineWidth(0.4);
+        
+        $this->SetLineWidth(static::DEFAULT_LINE_WIDTH * $line_width_factor);
         $this->billetSetFont('bank_code');
         $this->Cell(15, 7, $this->formatBankCode(), 'LR', 0, 'C');
         $this->billetSetFont('digitable1');
-        $this->Cell(122, 7, $this->billet['digitable'], 0, 1, 'R');
+        $this->Cell(122, 7, $this->billet['digitable'], 0, 1, $digitable_align);
         $y = $this->GetY();
         $this->Line(10, $y, 187, $y);
-        $this->SetLineWidth(0.2);
+        $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
     }
     
     /**
      * Inserts row of cells
      *
      * @param mixed[] $cells Data to be written
+     * @param boolean $close If the border should be closed in the left
      */
-    protected function drawTableRow($cells, $close_left = false)
+    protected function drawTableRow($cells, $close = false)
     {
-        $write_row = function ($field, $border) use ($cells, $close_left)
+        $write_row = function ($field, $border) use ($cells, $close)
         {
             $count = count($cells);
             foreach ($cells as $cell) {
-                $this->Cell($cell['w'], 3.5, utf8_decode($cell[$field]), $border . ($close_left && $count == 1 ? 'R' : ''), ($count == 1 ? 1 : 0), $cell[$field . '_align'] ?? 'L');
+                $this->Cell($cell['w'], 3.5, utf8_decode($cell[$field]), $border . ($close && $count == 1 ? 'R' : ''), ($count == 1 ? 1 : 0), $cell[$field . '_align'] ?? 'L');
                 $count--;
             }
         };
@@ -362,8 +415,9 @@ abstract class BankBillet extends FPDF
      * @param mixed[] $cells Data to be written
      * @param integer $x     Abscissa offset from page border
      * @param integer $w     Column width
+     * @param boolean $close If the border should be closed in the left
      */
-    protected function drawTableColumn($cells, $x, $w, $close_left = false)
+    protected function drawTableColumn($cells, $x, $w, $close = false)
     {
         $fields = [
             'title' => ['font' => 'cell_title', 'border' => 'L'],
@@ -373,7 +427,7 @@ abstract class BankBillet extends FPDF
             foreach ($fields as $field => $config) {
                 $this->SetX($x);
                 $this->billetSetFont($config['font']);
-                $this->Cell($w, 3.5, utf8_decode($cell[$field]), $config['border'] . ($close_left ? 'R' : ''), 1, $cell[$field . '_align'] ?? 'L');
+                $this->Cell($w, 3.5, utf8_decode($cell[$field]), $config['border'] . ($close ? 'R' : ''), 1, $cell[$field . '_align'] ?? 'L');
             }
         }
     }
@@ -576,36 +630,6 @@ abstract class BankBillet extends FPDF
         $this->SetFont($f[0], $f[1], $f[2]);
         if (count($f) > 3) {
             $this->SetTextColor(...$f[3]);
-        }
-    }
-    
-    /**
-     * Inserts a dashed line, with optional text before or after
-     *
-     * The text uses previous font
-     *
-     * @param string  $text       An optional text
-     * @param string  $align      'L' | 'C' | 'R'. Default is 'L'
-     * @param boolean $text_first If the text comes first
-     */
-    protected function billetDash($text = '', $align = 'L', $text_first = false)
-    {
-        $cell = function ($text, $align)
-        {
-            $this->Cell(177, 4, utf8_decode($text), 0, 1, $align);
-        };
-        
-        if ($text_first) {
-            $cell($text, $align);
-        }
-        
-        $y = $this->GetY();
-        $this->SetDash(0.5, 0.75); // caixa: 1, 2
-        $this->Line(10, $y, 187, $y);
-        $this->SetDash();
-        
-        if (!$text_first) {
-            $cell($text, $align);
         }
     }
     

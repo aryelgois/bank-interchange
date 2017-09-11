@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/Objects.git",
-                "reference": "72ba253ba6d91da1dbbfb16792ed7ebbe28a1454"
+                "reference": "f89c9dbaebc01bac16698e0f825f2e95922601d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/Objects/zipball/72ba253ba6d91da1dbbfb16792ed7ebbe28a1454",
-                "reference": "72ba253ba6d91da1dbbfb16792ed7ebbe28a1454",
+                "url": "https://api.github.com/repos/aryelgois/Objects/zipball/f89c9dbaebc01bac16698e0f825f2e95922601d9",
+                "reference": "f89c9dbaebc01bac16698e0f825f2e95922601d9",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
                 }
             ],
             "description": "General purpose instantiable classes",
-            "time": "2017-09-10T21:00:08+00:00"
+            "time": "2017-09-11T19:25:34+00:00"
         },
         {
             "name": "aryelgois/utils",

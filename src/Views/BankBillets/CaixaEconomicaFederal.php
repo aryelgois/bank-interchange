@@ -23,14 +23,14 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
      */
     protected function drawBillet()
     {
-        $dict = static::DICTIONARY;
+        $dict = $this->dictionary;
         
         $this->AddPage();
         
         $this->drawPageHeader();
         
         $this->billetSetFont('cell_data');
-        $this->billetDash($dict['payer_receipt'], 'R');
+        $this->drawDash($dict['payer_receipt']);
         
         $this->drawBillhead();
         
@@ -39,7 +39,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
         $this->drawTable1();
         
         $this->billetSetFont('cell_title');
-        $this->billetDash($dict['cut_here'], 'R', true);
+        $this->drawDash($dict['cut_here'], true);
         
         $this->drawBankHeader();
         
@@ -48,7 +48,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
         $this->drawBarCode();
         
         $this->billetSetFont('cell_title');
-        $this->billetDash($dict['cut_here'], 'R', true);
+        $this->drawDash($dict['cut_here'], true);
     }
     
     /**
@@ -59,7 +59,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
      */
     protected function drawTable1()
     {
-        $dict = static::DICTIONARY;
+        $dict = $this->dictionary;
         $model = $this->model;
         $assignor = $this->model->assignor;
         $bank = $this->model->bank;
@@ -123,7 +123,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
      */
     protected function drawTable2()
     {
-        $dict = static::DICTIONARY;
+        $dict = $this->dictionary;
         $model = $this->model;
         $assignor = $this->model->assignor;
         $bank = $this->model->bank;
@@ -135,8 +135,8 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
         /*
          * Structure:
          *
-         * Payment location
-         * Payer
+         * Payment place
+         * Assignor
          * Document Date | Document number | Document specie | Accept | Processing Date
          * Bank's use | Wallet | Specie | Amount | Document value UN
          */
