@@ -133,46 +133,44 @@ class Title
     public $guarantor;
     
     /**
-     * Creates a new Title object from data in a Database
+     * Creates a new Title object from data in an array
+     *
+     * The Database connections are used to load the payer
+     *
+     * NOTES:
+     * - $title keys should be the same as `titles` columns
+     * - Due must be between 1997-10-07 and 2025-02-21, inclusives; or should be
+     *   empty/with a message
      *
      * @see data/database.sql
      *
      * @param Database $db_address Address Database from aryelgois\databases
-     * @param Database $db_banki   Database with an `titles` table
-     * @param integer  $id         Title's id in the table
+     * @param Database $db_banki   Database with an `payers` table
+     * @param mixed[   $title      Title's data
      * @param Payer[]  &$cache     For reuse of Payer objects, optional
-     *
-     * @throws RuntimeException If it can not load title from database
      */
     public function __construct(
         Utils\Database $db_address,
         Utils\Database $db_banki,
-        $id,
+        $title,
         &$cache = null
     ) {
-        // load from database
-        $title = Utils\Database::fetch($db_banki->query("SELECT * FROM `titles` WHERE `id` = " . $id));
-        if (empty($title)) {
-            throw new \RuntimeException('Could not load title from database');
-        }
-        $title = $title[0];
-        
         // is there an easier way?
-        $this->id = $title['id'];
+        $this->id = $title['id'] ?? null; // MAYBE
         $this->onum = $title['onum'];
-        $this->wallet = $title['wallet'];
+        $this->wallet = $title['wallet'] ?? 1;
         $this->doc_type = $title['doc_type'];
         $this->kind = $title['kind'];
         $this->specie = $title['specie'];
         $this->value = (float)$title['value'];
-        $this->iof = (float)$title['iof'];
-        $this->rebate = (float)$title['rebate'];
-        $this->description = $title['description'];
+        $this->iof = (float)($title['iof'] ?? 0);
+        $this->rebate = (float)($title['rebate'] ?? 0);
+        $this->description = $title['description'] ?? '';
         $this->due = $title['due'];
-        $this->stamp = $title['stamp'];
+        $this->stamp = $title['stamp'] ?? date('Y-m-d H:i:s');
         
         // fine and discount
-        $default = ['type' => 3, 'date' => '', 'value' => 0];
+        $default = ['type' => 3, 'date' => null, 'value' => null];
         if ($title['fine_type'] == 3) {
             $this->fine = $default;
         } else {
@@ -193,9 +191,35 @@ class Title
         }
         
         $this->payer = self::newPayer($db_address, $db_banki, $title['payer'], $cache);
-        $this->guarantor = ($title['guarantor'] !== null)
+        $this->guarantor = (array_key_exists('guarantor', $title) && $title['guarantor'] !== null)
             ? self::newPayer($db_address, $db_banki, $title['guarantor'], $cache)
             : null;
+    }
+    
+    /**
+     * Creates a new Title object from data in a Database
+     *
+     * @see data/database.sql
+     *
+     * @param Database $db_address Address Database from aryelgois\databases
+     * @param Database $db_banki   Database with tables `titles` and `payers`
+     * @param integer  $id         Title's id in the table
+     * @param Payer[]  &$cache     For reuse of Payer objects, optional
+     *
+     * @throws RuntimeException If it can not load title from database
+     */
+    public static function fromDatabase(
+        Utils\Database $db_address,
+        Utils\Database $db_banki,
+        $id,
+        &$cache = null
+    ) {
+        $title = Utils\Database::fetch($db_banki->query("SELECT * FROM `titles` WHERE `id` = " . $id));
+        if (empty($title)) {
+            throw new \RuntimeException('Could not load title from database');
+        }
+        
+        return new self($db_address, $db_banki, $title[0], $cache);
     }
     
     /**

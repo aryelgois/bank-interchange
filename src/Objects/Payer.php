@@ -21,6 +21,13 @@ use aryelgois\BankInterchange as BankI;
 class Payer extends Objects\Person
 {
     /**
+     * Payer's id
+     *
+     * @var integer
+     */
+    public $id;
+    
+    /**
      * Contains a string ready to be inserted into the Shipping File
      *
      * @var string
@@ -50,24 +57,10 @@ class Payer extends Objects\Person
         }
         $payer = $payer[0];
         
-        $address_data = Utils\Database::fetch($db_banki->query("SELECT * FROM `fulladdress` WHERE `id` = " . $payer['address']));
-        if (empty($address_data)) {
-            throw new \RuntimeException('Could not load payer\'s address from database');
-        }
-        $address_data = $address_data[0];
-        
-        $address = new Objects\FullAddress(
-            $db_address,
-            $address_data['county'],
-            $address_data['neighborhood'],
-            $address_data['place'],
-            $address_data['number'],
-            $address_data['zipcode'],
-            $address_data['detail']
-        );
-        
         parent::__construct($payer['name'], $payer['document']);
-        $this->address = [$address];
+        
+        $this->id = $id;
+        $this->address[] = new namespace\Address($db_address, $db_banki, $payer['address']);
         
         $this->formatCnab240();
     }

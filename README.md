@@ -8,11 +8,12 @@ PHP.
 O CNAB permite a comunicação entre empresas e bancos, organizando as informações
 em arquivos de texto em que cada linha tem 240 caracteres.
 
-O objetivo desse pacote é automatizar o processo de criação de Arquivos Remessa
-e de leitura de Arquivos Retorno em um website:
+O objetivo desse pacote é automatizar a criação de Boletos bancários e Arquivos
+Remessa, e a leitura de Arquivos Retorno em um website:
 
-- O Arquivo Remessa seria gerado quando seu cliente realizasse uma compra, por
-  exemplo.
+- O Boleto seria gerado quando o cliente realizasse uma compra, por exemplo.
+- O Arquivo Remessa seria gerado no final do dia, acumulando todos os boletos
+  daquele mesmo dia.
 - O Arquivo Retorno enviado pelo banco informa se o pagamento foi efetuado, além
   de outros detalhes, e ativaria alguns processos automáticos no site.
 
@@ -28,8 +29,9 @@ information in text files whose each line has 240 characters.
 This package aims to automatize the generation of Shipping Files and the reading
 of Return Files in a website:
 
-- The Shipping File would be generated when your client buys something, for
-  example.
+- The billet would be generated when your client buys something, for example.
+- The Shipping File would be generated at the end of the day,  accumulating all
+  billets of that day.
 - The Return File sent by the bank tells if the payment was accomplished,
   besides other details, and would trigger some hooks in the site.
 
@@ -47,17 +49,11 @@ is not used in the actual scripts for this package.
 
 I know, the script is not working yet.. It's under development.
 
-- [x] Finish Shipping Files class
-  - [x] `registerLotDetail()` requires some data about the product and the payer
-    (the client). It also has differents segments which have the same lot index.
-  - [x] Test if the other "low level" methods are working.
-  - [x] Make the "high level" methods work.
+- [x] Merge a (personal) project which generates bank billets in PDF.
+- [ ] Real world test.
 - [ ] Write the Return File interpreter.
   - [ ] It should receive the data somehow.. fetch from the bank's site or
     provide as local files?
 - [ ] Create hooks for Return Files.
   - [ ] A nice interface to integrate with one's website.
-- [ ] Merge a (personal) project which generates bank billets.
-  - It's personal because i didn't send to Github, and I want it to be part of
-    this package. I will push later.
 - [ ] Configure packagist.

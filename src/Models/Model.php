@@ -11,13 +11,13 @@ use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
 
 /**
- * A basic controller to create the shipping file
+ * A basic BankInterchange model
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/BankInterchange
  */
-class Model
+abstract class Model
 {
     /**
      * Interfaces a connection to `address` database
@@ -48,89 +48,66 @@ class Model
     public $bank;
     
     /**
-     * All titles to be added
-     *
-     * @var Title[]
-     */
-    public $titles;
-    
-    /**
      * Creates a new ShippingFile Model object
      *
      * @param Database $db_address  An interface to `address` database
      * @param Database $db_banki    An interface to `bank_interchange` database
      * @param integer  $assignor_id Assignor's id from database
-     * @param integer  $status      Status by which titles will be selected
      */
     public function __construct(
         Utils\Database $db_address,
         Utils\Database $db_banki,
-        $assignor_id,
-        $status = 0
+        $assignor_id
     ) {
         $this->db_address = $db_address;
         $this->db_banki = $db_banki;
         
         // fetch assignor and bank
-        $this->assignor = new BankI\Objects\Assignor($db_banki, $assignor_id);
+        $this->assignor = new BankI\Objects\Assignor($db_address, $db_banki, $assignor_id);
         $this->bank = new BankI\Objects\Bank($db_banki, $this->assignor->bank);
-        
-        // fetch titles
-        $this->titles = $cache = [];
-        $query = "SELECT `id` FROM `titles` WHERE `assignor` = ? AND `status` = ? ORDER BY `stamp`";
-        $titles = array_column(Utils\Database::fetch($db_banki->prepare($query, 'ii', [$assignor_id, $status])), 'id');
-        foreach ($titles as $id) {
-            $this->titles[$id] = new BankI\Objects\Title($db_address, $db_banki, $id, $cache);
-        }
     }
     
     /**
-     * Locks tables and returns next `shipping_files` index
+     * Locks a table and returns next auto increment index
+     *
+     * @param string $table The table's name to be locked
      *
      * @return integer
      */
-    public function getNextId()
+    public function getNextId($table)
     {
-        $this->db_banki->query("SET autocommit = 0; LOCK TABLES `shipping_files` WRITE");
-        $result = Utils\Database::fetch($this->db_banki->query("SHOW TABLE STATUS LIKE 'shipping_files'"));
+        $this->db_banki->query("SET autocommit = 0; LOCK TABLES `" . $table . "` WRITE");
+        $result = Utils\Database::fetch($this->db_banki->query("SHOW TABLE STATUS LIKE '" . $table . "'"));
         return $result[0]['Auto_increment'];
     }
     
     /**
-     * Inserts a record of a previously generated Shipping File
+     * Inserts a record in a table
      *
-     * @param string $filename Shipping File name
+     * Dont forget to unlock the locked table in getNextId()
      *
-     * @return true For success or string[] of errors for failure
+     * @param mixed $data Depends on implementation
+     *
+     * @return mixed Depends on implementation
      */
-    public function insertFile($filename)
-    {
-        $query = "INSERT INTO `shipping_files` (`filename`) VALUES (?)";
-        $stmt = $this->db_banki->connect->prepare($query);
-        $stmt->bind_param('s', $filename);
-        $stmt->execute();
-        if ($stmt->error !== '') {
-            return $stmt->error;
-        }
-        $this->db_banki->query("UNLOCK TABLES `shipping_files` WRITE");
-        return true;
-    }
+    public abstract function insertEntry($data = null);
     
     /**
-     * Update `titles` entries to a given status
+     * Update table's rows to a given status
      *
-     * @param integer $status New status for every title entry
+     * @param string    $table  The table's name to be afected
+     * @param integer[] $ids    List of afected rows
+     * @param integer   $status New status for all listed rows
      *
      * @return true For success or string[] of errors for failure
      */
-    public function updateStatus($status)
+    public function updateStatus($table, $ids, $status)
     {
         $err = [];
-        $query = "UPDATE `titles` SET `status` = ?, `update` = CURRENT_TIMESTAMP WHERE `id` = ?";
+        $query = "UPDATE `" . $table . "` SET `status` = ?, `update` = CURRENT_TIMESTAMP WHERE `id` = ?";
         $stmt = $this->db_banki->connect->prepare($query);
         $stmt->bind_param('ii', $status, $id);
-        foreach ($this->titles as $row) {
-            $id = $row->id;
+        foreach ($ids as $id) {
             $stmt->execute();
             if ($stmt->error !== '') {
                 $err[] = $stmt->error;

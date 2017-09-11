@@ -33,18 +33,25 @@ class Bank
     public $name;
     
     /**
+     * Class name for Bank's Billet view
+     *
+     * @var string
+     */
+    public $view;
+    
+    /**
+     * Filename to Bank's logo, inside res/logos/banks
+     *
+     * @var string
+     */
+    public $logo;
+    
+    /**
      * Bank's tax for billets
      *
      * @var float
      */
     public $tax;
-    
-    /**
-     * Filename to Bank's logo, inside res/
-     *
-     * @var string
-     */
-    public $logo;
     
     /**
      * Creates a new Bank object from data in a Database
@@ -67,7 +74,8 @@ class Bank
         
         $this->code = $result['code'];
         $this->name = $result['name'];
-        $this->tax  = $result['tax'];
-        //$this->logo = $result['logo'];
+        $this->view = $result['view'];
+        $this->logo = $result['logo'];
+        $this->tax  = (float)$result['tax'];
     }
 }
