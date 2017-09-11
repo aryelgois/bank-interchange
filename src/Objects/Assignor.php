@@ -43,8 +43,8 @@ class Assignor extends Objects\Person
     /**
      * Bank Agency. Contains:
      *
-     * 'number' => 5 digits,
-     * 'cd' => 1 digit        // check digit
+     * 'number' => max 5 digits,
+     * 'cd' => 1 digit            // check digit
      *
      * @var string[]
      */
@@ -53,8 +53,8 @@ class Assignor extends Objects\Person
     /**
      * Bank Account. Contains:
      *
-     * 'number' => 12 digits,
-     * 'cd' => 1 digit        // check digit
+     * 'number' => max 12 digits,
+     * 'cd' => 1 digit            // check digit
      *
      * @var string[]
      */

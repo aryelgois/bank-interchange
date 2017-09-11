@@ -50,4 +50,25 @@ class Address extends Objects\FullAddress
             $address_data['detail']
         );
     }
+    
+    public function outputLong()
+    {
+        $result = $this->place . ', '
+                . $this->number . ', '
+                . ($this->detail != '' ? ', ' . $this->detail : '')
+                . $this->neighborhood . "\n"
+                . $this->county['name'] . '/' . $this->state['code'] . ' - '
+                . 'CEP: ' . Utils\Validation::cep($this->zipcode);
+        return $result;
+    }
+    
+    public function outputShort()
+    {
+        $result = $this->place . ', '
+                . $this->number . ', '
+                . $this->neighborhood . ', '
+                . $this->county['name'] . '/' . $this->state['code'] . ' '
+                . Utils\Validation::cep($this->zipcode);
+        return $result;
+    }
 }

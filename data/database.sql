@@ -16,9 +16,10 @@ CREATE TABLE `fulladdress` (
 CREATE TABLE `banks` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
     `code`          char(3)         NOT NULL,
-    `name`          varchar(30)     NOT NULL,
-    `tax`           decimal(6,4)    NOT NULL,
+    `name`          varchar(60)     NOT NULL,
+    `view`          varchar(30)     NOT NULL,
     `logo`          varchar(30),
+    `tax`           decimal(6,4)    NOT NULL,
     PRIMARY KEY (`id`)
 );
 
@@ -27,7 +28,7 @@ CREATE TABLE `assignors` (
     `bank`          int(10)         UNSIGNED NOT NULL,
     `address`       int(10)         UNSIGNED NOT NULL,
     `document`      varchar(14)     NOT NULL,
-    `name`          varchar(30)     NOT NULL,
+    `name`          varchar(60)     NOT NULL,
     `covenant`      char(20)        NOT NULL,
     `agency`        char(5)         NOT NULL,
     `agency_cd`     char(1)         NOT NULL,
@@ -45,7 +46,7 @@ CREATE TABLE `payers` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
     `address`       int(10)         UNSIGNED NOT NULL,
     `document`      varchar(14)     NOT NULL,
-    `name`          varchar(40)     NOT NULL,
+    `name`          varchar(60)     NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`address`) REFERENCES `fulladdress` (`id`)
 );

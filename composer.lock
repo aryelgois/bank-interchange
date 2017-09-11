@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/Objects.git",
-                "reference": "8d1f3e51b0e1a307c815e49bf2b090c865b83be7"
+                "reference": "72ba253ba6d91da1dbbfb16792ed7ebbe28a1454"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/Objects/zipball/8d1f3e51b0e1a307c815e49bf2b090c865b83be7",
-                "reference": "8d1f3e51b0e1a307c815e49bf2b090c865b83be7",
+                "url": "https://api.github.com/repos/aryelgois/Objects/zipball/72ba253ba6d91da1dbbfb16792ed7ebbe28a1454",
+                "reference": "72ba253ba6d91da1dbbfb16792ed7ebbe28a1454",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
                 }
             ],
             "description": "General purpose instantiable classes",
-            "time": "2017-09-09T13:31:04+00:00"
+            "time": "2017-09-10T21:00:08+00:00"
         },
         {
             "name": "aryelgois/utils",
@@ -49,12 +49,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/Utils.git",
-                "reference": "f290323a8bceb372f1b69aec89b2a7f6ad82a0ec"
+                "reference": "fac38799fcddd71d438e0ef797b411bff46fe2a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/Utils/zipball/f290323a8bceb372f1b69aec89b2a7f6ad82a0ec",
-                "reference": "f290323a8bceb372f1b69aec89b2a7f6ad82a0ec",
+                "url": "https://api.github.com/repos/aryelgois/Utils/zipball/fac38799fcddd71d438e0ef797b411bff46fe2a0",
+                "reference": "fac38799fcddd71d438e0ef797b411bff46fe2a0",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
             "keywords": [
                 "utils"
             ],
-            "time": "2017-09-09T12:55:50+00:00"
+            "time": "2017-09-11T01:58:47+00:00"
         },
         {
             "name": "setasign/fpdf",

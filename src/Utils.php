@@ -7,7 +7,7 @@
 
 namespace aryelgois\BankInterchange;
 
-use aryelgois\objects;
+use aryelgois\Objects;
 use VRia\Utils\NoDiacritic;
 
 /**
@@ -64,7 +64,7 @@ abstract class Utils
      *
      * @return string
      */
-    public static function formatDocument(objects\Person $person, $len = 14)
+    public static function formatDocument(Objects\Person $person, $len = 14)
     {
         return $person->document['type'] . self::padNumber($person->document['number'], $len);
     }

@@ -139,6 +139,8 @@ class Title
      *
      * NOTES:
      * - $title keys should be the same as `titles` columns
+     * - Due must be between 1997-10-07 and 2025-02-21, inclusives; or should be
+     *   empty/with a message
      *
      * @see data/database.sql
      *
@@ -154,18 +156,18 @@ class Title
         &$cache = null
     ) {
         // is there an easier way?
-        $this->id = $title['id'];
+        $this->id = $title['id'] ?? null; // MAYBE
         $this->onum = $title['onum'];
-        $this->wallet = $title['wallet'];
+        $this->wallet = $title['wallet'] ?? 1;
         $this->doc_type = $title['doc_type'];
         $this->kind = $title['kind'];
         $this->specie = $title['specie'];
         $this->value = (float)$title['value'];
-        $this->iof = (float)$title['iof'];
-        $this->rebate = (float)$title['rebate'];
-        $this->description = $title['description'];
+        $this->iof = (float)($title['iof'] ?? 0);
+        $this->rebate = (float)($title['rebate'] ?? 0);
+        $this->description = $title['description'] ?? '';
         $this->due = $title['due'];
-        $this->stamp = $title['stamp'];
+        $this->stamp = $title['stamp'] ?? date('Y-m-d');
         
         // fine and discount
         $default = ['type' => 3, 'date' => '', 'value' => 0];
@@ -189,7 +191,7 @@ class Title
         }
         
         $this->payer = self::newPayer($db_address, $db_banki, $title['payer'], $cache);
-        $this->guarantor = ($title['guarantor'] !== null)
+        $this->guarantor = (array_key_exists('guarantor', $title) && $title['guarantor'] !== null)
             ? self::newPayer($db_address, $db_banki, $title['guarantor'], $cache)
             : null;
     }

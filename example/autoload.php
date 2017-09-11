@@ -14,6 +14,3 @@ include __DIR__ . '/Database.php';
 $db_config = __DIR__ . '/database_config.json';
 $db_address = new Db($db_config, 'address');
 $db_banki = new Db($db_config, 'banki');
-
-// load config file
-$config = json_decode(file_get_contents(__DIR__ . '/config.json'), true);

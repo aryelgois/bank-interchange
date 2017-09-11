@@ -81,7 +81,7 @@ class ShippingFile
      * @param Model    $model    Contains data fetched from database
      * @param integer  $file_id  Sequential file number, max 6 digits
      */
-    public function __construct(BankI\Models\Model $model, $file_id) {
+    public function __construct(BankI\Models\ShippingFile $model, $file_id) {
         $this->model = $model;
         $this->file_id = $file_id;
         
