@@ -264,7 +264,7 @@ class Banese extends BankI\Views\BankBillet
         $this->MultiCell(112.2, 3.5, utf8_decode($payer->name . "\n" . $payer->address[0]->outputLong()));
         $y1 = $this->GetY();
         $this->SetXY(119.2, $y);
-        $this->Cell(36, 3.5, $assignor->formatDocument(true), 0, 0, 'C');
+        $this->Cell(36, 3.5, $payer->formatDocument(true), 0, 0, 'C');
         $this->setY($y1);
         
         // Guarantor
