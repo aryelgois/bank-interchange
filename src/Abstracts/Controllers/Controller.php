@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Controllers;
+namespace aryelgois\BankInterchange\Abstracts\Controllers;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;

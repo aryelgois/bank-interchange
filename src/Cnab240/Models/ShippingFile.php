@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Models;
+namespace aryelgois\BankInterchange\Cnab240\Models;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
@@ -17,7 +17,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/BankInterchange
  */
-class ShippingFile extends namespace\Model
+class ShippingFile extends BankI\Abstracts\Models\Model
 {
     /**
      * All titles to be added

@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Models;
+namespace aryelgois\BankInterchange\BankBillet\Models;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
@@ -17,7 +17,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/BankInterchange
  */
-class BankBillet extends namespace\Model
+class Model extends BankI\Abstracts\Models\Model
 {
     /**
      * The new Title to be inserted

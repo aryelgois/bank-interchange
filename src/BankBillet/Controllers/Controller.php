@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Controllers;
+namespace aryelgois\BankInterchange\BankBillet\Controllers;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
@@ -19,7 +19,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/BankInterchange
  */
-class BankBillet extends namespace\Controller
+class Controller extends BankI\Abstracts\Controllers\Controller
 {
     /**
      * List of required $config keys
@@ -58,7 +58,7 @@ class BankBillet extends namespace\Controller
     ) {
         parent::__construct(...func_get_args());
         
-        $this->model = new BankI\Models\BankBillet($db_address, $db_banki, $config);
+        $this->model = new BankI\BankBillet\Models\Model($db_address, $db_banki, $config);
     }
     
     /**
@@ -70,7 +70,7 @@ class BankBillet extends namespace\Controller
      */
     public function execute()
     {
-        $view_class = '\\aryelgois\\BankInterchange\\Views\\BankBillets\\' . $this->model->bank->view;
+        $view_class = '\\aryelgois\\BankInterchange\\BankBillet\\Views\\' . $this->model->bank->view;
         $this->view = new $view_class($this->model, $this->config['billet']);
         return true;
     }

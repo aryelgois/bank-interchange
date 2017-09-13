@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Controllers;
+namespace aryelgois\BankInterchange\Cnab240\Controllers;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
@@ -17,7 +17,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/BankInterchange
  */
-class ShippingFile extends namespace\Controller
+class ShippingFile extends BankI\Abstracts\Controllers\Controller
 {
     /**
      * List of required $config keys
@@ -44,7 +44,7 @@ class ShippingFile extends namespace\Controller
     ) {
         parent::__construct(...func_get_args());
         
-        $this->model = new BankI\Models\ShippingFile($db_address, $db_banki, $config['assignor']);
+        $this->model = new BankI\Cnab240\Models\ShippingFile($db_address, $db_banki, $config['assignor']);
     }
     
     /**
@@ -55,7 +55,7 @@ class ShippingFile extends namespace\Controller
     public function execute()
     {
         $id = $this->model->getNextId();
-        $view = new BankI\Views\ShippingFile($this->model, $id);
+        $view = new BankI\Cnab240\Views\ShippingFile($this->model, $id);
         if (empty($this->model->titles)) {
             return false;
         }

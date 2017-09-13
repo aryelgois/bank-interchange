@@ -28,7 +28,7 @@ $config = [
 ];
 
 // new controler
-$controller = new BankI\Controllers\BankBillet($db_address, $db_banki, $config);
+$controller = new BankI\BankBillet\Controllers\Controller($db_address, $db_banki, $config);
 
 //output result
 if ($controller->execute()) {

@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views;
+namespace aryelgois\BankInterchange\Abstracts\Views;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
@@ -44,7 +44,7 @@ abstract class BankBillet extends FPDF
      *
      * @const string
      */
-    const PATH_LOGOS = __DIR__ . '/../../res/logos';
+    const PATH_LOGOS = __DIR__ . '/../../../res/logos';
     
     /**
      * Key is specie code, Value is symbol and formatting style
@@ -181,7 +181,7 @@ abstract class BankBillet extends FPDF
      * @param Models\BankBillet $model Holds data for the bank billet
      * @param mixed[]           $data  Data for the bank billet
      */
-    public function __construct(BankI\Models\BankBillet $model, $data)
+    public function __construct(BankI\BankBillet\Models\Model $model, $data)
     {
         parent::__construct();
         $this->AliasNbPages('{{ total_pages }}');
