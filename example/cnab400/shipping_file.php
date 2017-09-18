@@ -13,7 +13,7 @@ $controller = new BankI\Cnab400\Controllers\ShippingFile($db_address, $db_banki,
 
 // output result
 if ($controller->execute()) {
-    $filename = 'CNAB400'; //$controller->save(__DIR__ . '/../data/cnab400/shipping_files');
+    $filename = $controller->save(__DIR__ . '/../data/cnab400/shipping_files');
     if ($filename != false) {
         echo '<h2>' . $filename . "</h2>\n";
         echo '<pre>' . $controller->result . "</pre>\n\n\n";
