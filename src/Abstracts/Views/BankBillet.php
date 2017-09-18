@@ -21,7 +21,7 @@ use FPDF;
  *
  * @author Aryel Mota Góis
  * @license MIT
- * @link https://www.github.com/aryelgois/BankInterchange
+ * @link https://www.github.com/aryelgois/bank-interchange
  */
 abstract class BankBillet extends FPDF
 {

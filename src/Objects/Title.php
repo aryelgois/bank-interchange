@@ -16,7 +16,7 @@ use aryelgois\Utils;
  *
  * @author Aryel Mota Góis
  * @license MIT
- * @link https://www.github.com/aryelgois/BankInterchange
+ * @link https://www.github.com/aryelgois/bank-interchange
  */
 class Title
 {
