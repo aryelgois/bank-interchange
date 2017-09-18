@@ -48,7 +48,7 @@ bank billet).
 
 I know, the script is not working yet.. It's under development.
 
-- [ ] Write the Shipping File generator for CNAB400.
+- [x] Write the Shipping File generator for CNAB400.
 - [ ] Real world test CNAB240 and CNAB400.
 - [ ] Write the Return File interpreter for CNAB240 and CNAB400.
   - [ ] It should receive the data somehow.. fetch from the bank's site or
