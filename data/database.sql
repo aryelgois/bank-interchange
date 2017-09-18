@@ -13,6 +13,28 @@ CREATE TABLE `fulladdress` (
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `species` (
+    `id`            tinyint(3)      UNSIGNED NOT NULL AUTO_INCREMENT,
+    `symbol`        varchar(5)      NOT NULL,
+    `cnab240`       char(2)         NOT NULL,
+    `cnab400`       char(2)         NOT NULL,
+    `thousand`      char(1)         NOT NULL,
+    `decimal`       char(1)         NOT NULL,
+    `name`          varchar(30)     NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `wallets` (
+    `id`            tinyint(3)      UNSIGNED NOT NULL AUTO_INCREMENT,
+    `symbol`        varchar(5)      NOT NULL,
+    `cnab240`       char(1)         NOT NULL,
+    `cnab400`       char(1)         NOT NULL,
+    `operation`     tinyint(2)      NOT NULL,
+    `name`          varchar(60)     NOT NULL,
+    `notes`         varchar(60)     NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
 CREATE TABLE `banks` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
     `code`          char(3)         NOT NULL,
@@ -24,7 +46,7 @@ CREATE TABLE `banks` (
 );
 
 CREATE TABLE `assignors` (
-    `id`            int(10)         UNSIGNED NOT NULL,
+    `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
     `bank`          int(10)         UNSIGNED NOT NULL,
     `address`       int(10)         UNSIGNED NOT NULL,
     `document`      varchar(14)     NOT NULL,
@@ -34,7 +56,7 @@ CREATE TABLE `assignors` (
     `agency_cd`     char(1)         NOT NULL,
     `account`       char(12)        NOT NULL,
     `account_cd`    char(1)         NOT NULL,
-    `edi7`          char(6)         NOT NULL,
+    `edi`           char(6)         NOT NULL,
     `logo`          varchar(30),
     `url`           varchar(30),
     PRIMARY KEY (`id`),
@@ -56,12 +78,12 @@ CREATE TABLE `titles` (
     `assignor`      int(10)         UNSIGNED NOT NULL,
     `payer`         int(10)         UNSIGNED NOT NULL,
     `guarantor`     int(10)         UNSIGNED,
+    `wallet`        tinyint(3)      UNSIGNED NOT NULL,
+    `specie`        tinyint(3)      UNSIGNED NOT NULL,
     `onum`          int(10)         UNSIGNED NOT NULL,
     `status`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 0,
-    `wallet`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 1,
     `doc_type`      char(1)         NOT NULL,
     `kind`          tinyint(2)      UNSIGNED NOT NULL,
-    `specie`        tinyint(2)      UNSIGNED NOT NULL,
     `value`         decimal(17,4)   NOT NULL,
     `iof`           decimal(17,4)   NOT NULL,
     `rebate`        decimal(17,4)   NOT NULL,
@@ -78,7 +100,9 @@ CREATE TABLE `titles` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`assignor`) REFERENCES `assignors` (`id`),
     FOREIGN KEY (`payer`) REFERENCES `payers` (`id`),
-    FOREIGN KEY (`guarantor`) REFERENCES `payers` (`id`)
+    FOREIGN KEY (`guarantor`) REFERENCES `payers` (`id`),
+    FOREIGN KEY (`specie`) REFERENCES `species` (`id`),
+    FOREIGN KEY (`wallet`) REFERENCES `wallets` (`id`)
 );
 
 CREATE TABLE `shipping_files` (

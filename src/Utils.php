@@ -68,4 +68,20 @@ abstract class Utils
     {
         return $person->document['type'] . self::padNumber($person->document['number'], $len);
     }
+    
+    /**
+     * Calculates Our number's check digit
+     *
+     * @param string $onum Our number which check digit will be calculated
+     *
+     * @return string
+     */
+    public static function checkDigitOnum($onum)
+    {
+        $digit = \aryelgois\Utils\Validation::mod11($onum);
+        $digit = ($digit > 1)
+            ? $digit - 11
+            : 0;
+        return abs($digit);
+    }
 }

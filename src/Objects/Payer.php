@@ -28,11 +28,18 @@ class Payer extends Objects\Person
     public $id;
     
     /**
-     * Contains a string ready to be inserted into the Shipping File
+     * Cache for toCnab240()
      *
      * @var string
      */
-    public $cnab240_string;
+    protected $cnab240_string;
+    
+    /**
+     * Cache for toCnab400()
+     *
+     * @var string
+     */
+    protected $cnab400_string;
     
     /**
      * Creates a new Payer object from data in a Database
@@ -61,24 +68,43 @@ class Payer extends Objects\Person
         
         $this->id = $id;
         $this->address[] = new namespace\Address($db_address, $db_banki, $payer['address']);
-        
-        $this->formatCnab240();
     }
     
     /**
      * Formats Payer's data to be CNAB240 compliant
      */
-    protected function formatCnab240()
+    public function toCnab240()
     {
-        $a = $this->address[0];
-        $result = BankI\Utils::formatDocument($this, 15)
-                . BankI\Utils::padAlfa($this->name, 40)
-                . BankI\Utils::padAlfa($a->place . ', ' . $a->number . ($a->detail != '' ? ', ' . $a->detail : ''), 40)
-                . BankI\Utils::padAlfa($a->neighborhood, 15)
-                . BankI\Utils::padNumber($a->zipcode, 8)
-                . BankI\Utils::padAlfa($a->county['name'], 15)
-                . BankI\Utils::padAlfa($a->state['code'], 2);
-        
-        $this->cnab240_string = $result;
+        if ($this->cnab240_string == null) {
+            $a = $this->address[0];
+            $result = BankI\Utils::formatDocument($this, 15)
+                    . BankI\Utils::padAlfa($this->name, 40)
+                    . BankI\Utils::padAlfa($a->place . ', ' . $a->number . ($a->detail != '' ? ', ' . $a->detail : ''), 40)
+                    . BankI\Utils::padAlfa($a->neighborhood, 15)
+                    . BankI\Utils::padNumber($a->zipcode, 8)
+                    . BankI\Utils::padAlfa($a->county['name'], 15)
+                    . BankI\Utils::padAlfa($a->state['code'], 2);
+            $this->cnab240_string = $result;
+        }
+        return $this->cnab240_string;
+    }
+    
+    /**
+     * Formats Payer's data to be CNAB400 compliant
+     */
+    public function toCnab400()
+    {
+        if ($this->cnab400_string == null) {
+            $a = $this->address[0];
+            $result = '0' . BankI\Utils::formatDocument($this)
+                    . BankI\Utils::padAlfa($this->name, 40)
+                    . BankI\Utils::padAlfa($a->place . ', ' . $a->number . ', ' . $a->neighborhood, 40)
+                    . BankI\Utils::padAlfa($a->detail, 12)
+                    . BankI\Utils::padNumber($a->zipcode, 8)
+                    . BankI\Utils::padAlfa($a->county['name'], 15)
+                    . BankI\Utils::padAlfa($a->state['code'], 2);
+            $this->cnab400_string = $result;
+        }
+        return $this->cnab400_string;
     }
 }

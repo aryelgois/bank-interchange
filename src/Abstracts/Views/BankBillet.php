@@ -47,51 +47,6 @@ abstract class BankBillet extends FPDF
     const PATH_LOGOS = __DIR__ . '/../../../res/logos';
     
     /**
-     * Key is specie code, Value is symbol and formatting style
-     *
-     * @const string[]
-     */
-    const SPECIE = [
-        '9' => [
-            'symbol' => 'R$',
-            'thousand' => '',
-            'decimal' => ','
-        ]
-    ];
-    
-    /**
-     * Every type of wallet
-     *
-     * @const string[]
-     */
-    const WALLET = [
-        '0' => [
-            'code' => 'SR',
-            'name' => 'Sem Registro'
-        ],
-        '1' => [
-            'code' => 'CS',
-            'name' => 'Cobrança Simples'
-        ],
-        '2' => [
-            'code' => 'CV',
-            'name' => 'Cobrança Vinculada'
-        ],
-        '3' =>[
-            'code' => 'CC',
-            'name' => 'Cobrança Caucionada'
-        ],
-        '4' => [
-            'code' => 'CD',
-            'name' => 'Cobrança Descontada'
-        ],
-        '5' => [
-            'code' => 'CV',
-            'name' => 'Cobrança Vendor'
-        ]
-    ];
-    
-    /**
      * Font presets of family, weight, size and color
      *
      * @const array[]
@@ -224,12 +179,7 @@ abstract class BankBillet extends FPDF
         $onum = BankI\Utils::padNumber($this->model->assignor->agency['number'], 3)
               . BankI\Utils::padNumber($this->model->title->onum, 8);
         
-        $digit = Utils\Validation::mod11($onum);
-        $digit = ($digit > 1)
-            ? $digit - 11
-            : 0;
-        
-        return abs($digit);
+        return BankI\Utils::checkDigitOnum($onum);
     }
     
     /**
@@ -266,7 +216,7 @@ abstract class BankBillet extends FPDF
     {
         $barcode = [
             $this->model->bank->code,
-            $this->model->title->specie,
+            $this->model->title->specie['cnab' . $this->model->cnab],
             '', // Check digit
             $this->dueFactor(),
             BankI\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
@@ -596,7 +546,7 @@ abstract class BankBillet extends FPDF
      */
     protected function formatMoney($value, $symbol = true)
     {
-        $specie = static::SPECIE[$this->model->title->specie];
+        $specie = $this->model->title->specie;
         return ($symbol ? $specie['symbol'] . ' ' : '') . number_format($value, 2, $specie['decimal'], $specie['thousand']);
     }
     

@@ -13,6 +13,3 @@ INSERT INTO `assignors` (`id`, `bank`, `address`, `document`, `name`, `covenant`
 
 INSERT INTO `payers` (`id`, `address`, `document`, `name`) VALUES
 (1, 1, '00000000191', 'Nome do Cliente');
-
-INSERT INTO `titles`(`id`, `assignor`, `payer`, `onum`, `status`, `wallet`, `doc_type`, `kind`, `specie`, `value`, `iof`, `rebate`, `description`, `due`) VALUES
-(1, 1, 1, 1, 0, 1, '1', 99, 9, '50.0000', '0.0000', '0.0000', 'Compra no site', '2017-09-15')

@@ -148,6 +148,8 @@ class Title
      * @param Database $db_banki   Database with an `payers` table
      * @param mixed[   $title      Title's data
      * @param Payer[]  &$cache     For reuse of Payer objects, optional
+     *
+     * @throws RuntimeException If it can not load title from database
      */
     public function __construct(
         Utils\Database $db_address,
@@ -158,16 +160,28 @@ class Title
         // is there an easier way?
         $this->id = $title['id'] ?? null; // MAYBE
         $this->onum = $title['onum'];
-        $this->wallet = $title['wallet'] ?? 1;
         $this->doc_type = $title['doc_type'];
         $this->kind = $title['kind'];
-        $this->specie = $title['specie'];
         $this->value = (float)$title['value'];
         $this->iof = (float)($title['iof'] ?? 0);
         $this->rebate = (float)($title['rebate'] ?? 0);
         $this->description = $title['description'] ?? '';
         $this->due = $title['due'];
         $this->stamp = $title['stamp'] ?? date('Y-m-d H:i:s');
+        
+        // specie
+        $result = Utils\Database::fetch($db_banki->query("SELECT * FROM `species` WHERE `id` = " . $title['specie']));
+        if (empty($result)) {
+            throw new \RuntimeException('Could not load specie from database');
+        }
+        $this->specie = $result[0];
+        
+        // wallet
+        $result = Utils\Database::fetch($db_banki->query("SELECT * FROM `wallets` WHERE `id` = " . $title['wallet']));
+        if (empty($result)) {
+            throw new \RuntimeException('Could not load wallet from database');
+        }
+        $this->wallet = $result[0];
         
         // fine and discount
         $default = ['type' => 3, 'date' => null, 'value' => null];

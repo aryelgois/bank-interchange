@@ -78,7 +78,7 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
             [
                 ['w' =>  80.8, 'title' => $dict['assignor'],      'data' => $assignor->name],
                 ['w' =>  35.4, 'title' => $dict['agency_code'],   'data' => $this->formatAgencyCode()],
-                ['w' =>  11,   'title' => $dict['specie'],        'data' => self::SPECIE[$title->specie]['symbol']],
+                ['w' =>  11,   'title' => $dict['specie'],        'data' => $title->specie['symbol']],
                 ['w' =>  16,   'title' => $dict['amount'],        'data' => ''],                                                              // $data['misc']['amount']
                 ['w' =>  33.8, 'title' => $dict['onum'],          'data' => $this->formatOnum(),                        'data_align' => 'R']
             ],
@@ -150,16 +150,16 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
             [
                 ['w' =>  32,   'title' => $dict['date_document'], 'data' => self::formatDate($title->stamp)],
                 ['w' =>  42.2, 'title' => $dict['doc_number_sh'], 'data' => BankI\Utils::padNumber($title->id, 10)],
-                ['w' =>  18,   'title' => $dict['specie_doc'],    'data' => ''],                                      //$data['misc']['specie_doc']
-                ['w' =>  11,   'title' => $dict['accept'],        'data' => ''],                                      //$data['misc']['accept']
+                ['w' =>  18,   'title' => $dict['specie_doc'],    'data' => ''],                                     //$data['misc']['specie_doc']
+                ['w' =>  11,   'title' => $dict['accept'],        'data' => ''],                                     //$data['misc']['accept']
                 ['w' =>  24,   'title' => $dict['date_process'],  'data' => date('d/m/Y')]
             ],
             [
-                ['w' =>  32,   'title' => $dict['bank_use'],      'data' => ''],                                      //$data['misc']['bank_use']
-                ['w' =>  24,   'title' => $dict['wallet'],        'data' => self::WALLET[$title->wallet]['code']],
-                ['w' =>  16,   'title' => $dict['specie'],        'data' => self::SPECIE[$title->specie]['symbol']],
-                ['w' =>  34.2, 'title' => $dict['amount'],        'data' => ''],                                      //$data['misc']['amount']
-                ['w' =>  21,   'title' => $dict['doc_value'],     'data' => '']                                       //$data['misc']['value_un']
+                ['w' =>  32,   'title' => $dict['bank_use'],      'data' => ''],                                     //$data['misc']['bank_use']
+                ['w' =>  24,   'title' => $dict['wallet'],        'data' => $title->wallet['symbol']],
+                ['w' =>  16,   'title' => $dict['specie'],        'data' => $title->specie['symbol']],
+                ['w' =>  34.2, 'title' => $dict['amount'],        'data' => ''],                                     //$data['misc']['amount']
+                ['w' =>  21,   'title' => $dict['doc_value'],     'data' => '']                                      //$data['misc']['value_un']
             ]
         ];
         foreach ($table as $row) {

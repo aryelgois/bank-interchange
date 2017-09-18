@@ -27,6 +27,13 @@ class Model extends BankI\Abstracts\Models\Model
     public $title;
     
     /**
+     * Which Cnab is to be used
+     *
+     * @var string
+     */
+    public $cnab;
+    
+    /**
      * Creates a new BankBillet Model object
      *
      * @param Database $db_address  An interface to `address` database
@@ -40,6 +47,7 @@ class Model extends BankI\Abstracts\Models\Model
     ) {
         $assignor_id = $config['assignor'];
         $title = $config['title'];
+        $this->cnab = $config['cnab'];
         
         parent::__construct($db_address, $db_banki, $assignor_id);
         

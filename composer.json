@@ -1,7 +1,7 @@
 {
     "name": "aryelgois/bank-interchange",
     "description": "Generate Bank Billets and Shipping Files, and read Return Files to interact with Banks",
-    "keywords": ["febraban", "bank", "cnab", "billet", "ticket"],
+    "keywords": ["febraban", "bank", "cnab240", "cnab400", "billet", "ticket"],
     "license": "MIT",
     "authors": [
         {
