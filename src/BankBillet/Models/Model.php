@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Models;
+namespace aryelgois\BankInterchange\BankBillet\Models;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
@@ -17,7 +17,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/BankInterchange
  */
-class BankBillet extends namespace\Model
+class Model extends BankI\Abstracts\Models\Model
 {
     /**
      * The new Title to be inserted
@@ -106,21 +106,22 @@ class BankBillet extends namespace\Model
     {
         $t = $this->title;
         $query = "INSERT INTO `titles` "
-               . "(`id`, `assignor`, `payer`, `guarantor`, `onum`, `wallet`, `doc_type`, `kind`, `specie`, `value`, `iof`, `rebate`, `fine_type`, `fine_date`, `fine_value`, `discount_type`, `discount_date`, `discount_value`, `description`, `due`, `stamp`) "
-               . "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+               . "(`id`, `assignor`, `payer`, `guarantor`, `wallet`, `specie`, `onum`, `cnab`, `doc_type`, `kind`, `value`, `iof`, `rebate`, `fine_type`, `fine_date`, `fine_value`, `discount_type`, `discount_date`, `discount_value`, `description`, `due`, `stamp`) "
+               . "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db_banki->prepare(
             $query,
-            'iiiiiisiidddisdisdsss',
+            'iiiiiiissidddisdisdsss',
             [
                 $t->id,
                 $this->assignor->id,
                 $t->payer->id,
                 $this->guarantor->id ?? null,
+                $t->wallet['id'],
+                $t->specie['id'],
                 $t->onum,
-                $t->wallet,
+                $t->cnab,
                 $t->doc_type,
                 $t->kind,
-                $t->specie,
                 $t->value,
                 $t->iof,
                 $t->rebate,

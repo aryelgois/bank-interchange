@@ -61,11 +61,11 @@ class Assignor extends Objects\Person
     public $account;
     
     /**
-     * EDI7 code informed by the Bank
+     * EDI code informed by the Bank
      *
      * @var string
      */
-    public $edi7;
+    public $edi;
     
     /**
      * Filename to Assignor's logo, inside res/logos/assignors
@@ -117,7 +117,7 @@ class Assignor extends Objects\Person
             'number' => $result['account'],
             'cd' => $result['account_cd']
         ];
-        $this->edi7 = $result['edi7'];
+        $this->edi = $result['edi'];
         
         $this->logo = $result['logo'];
         $this->url = $result['url'];

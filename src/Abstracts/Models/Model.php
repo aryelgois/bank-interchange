@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Models;
+namespace aryelgois\BankInterchange\Abstracts\Models;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;

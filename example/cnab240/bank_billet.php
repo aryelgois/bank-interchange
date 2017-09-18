@@ -2,16 +2,17 @@
 
 use aryelgois\BankInterchange as BankI;
 
-require_once __DIR__ . '/autoload.php';
+require_once __DIR__ . '/../autoload.php';
 
 $config = [
     'assignor' => 1, // use assignor #1 from Database
     'title' => [
+        'cnab' => '240',
         'payer' => 1, // client id from session
-        'wallet' => 1,
+        'wallet' => 5,
         'doc_type' => 1,
         'kind' => 99,
-        'specie' => 9,
+        'specie' => 1,
         'value' => 20, // you have to sum every item represented by the title
         //'iof' => 0,
         //'rebate' => 0,
@@ -28,11 +29,11 @@ $config = [
 ];
 
 // new controler
-$controller = new BankI\Controllers\BankBillet($db_address, $db_banki, $config);
+$controller = new BankI\BankBillet\Controllers\Controller($db_address, $db_banki, $config);
 
 //output result
 if ($controller->execute()) {
-    $path = __DIR__ . '/data/bank_billets';
+    $path = __DIR__ . '/../data/bank_billets';
     $filename = $controller->saveFile($path);
     if ($filename !== false) {
         $controller->output();

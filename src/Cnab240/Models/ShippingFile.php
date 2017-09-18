@@ -1,0 +1,28 @@
+<?php
+/**
+ * This Software is part of aryelgois\BankInterchange and is provided "as is".
+ *
+ * @see LICENSE
+ */
+
+namespace aryelgois\BankInterchange\Cnab240\Models;
+
+use aryelgois\Utils;
+use aryelgois\BankInterchange as BankI;
+
+/**
+ * Model class for ShippingFile
+ *
+ * @author Aryel Mota Góis
+ * @license MIT
+ * @link https://www.github.com/aryelgois/BankInterchange
+ */
+class ShippingFile extends BankI\Abstracts\Models\ShippingFile
+{
+    /**
+     * Which CNAB is being implemented
+     *
+     * @var string
+     */
+    const CNAB_NUMBER = '240';
+}

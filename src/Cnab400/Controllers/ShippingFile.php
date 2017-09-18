@@ -5,19 +5,19 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Controllers;
+namespace aryelgois\BankInterchange\Cnab400\Controllers;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
 
 /**
- * A controller to generate Shipping Files
+ * A controller to generate CNAB400 Shipping Files
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/BankInterchange
  */
-class ShippingFile extends namespace\Controller
+class ShippingFile extends BankI\Abstracts\Controllers\ShippingFile
 {
     /**
      * List of required $config keys
@@ -33,7 +33,7 @@ class ShippingFile extends namespace\Controller
      *
      * @param Database $db_address An interface to `address` database
      * @param Database $db_banki   An interface to `bank_interchange` database
-     * @param mixed    $config     Configurations for this Controller
+     * @param mixed[]  $config     Configurations for this Controller
      *
      * @throws InvalidArgumentException If there are missing configurations
      */
@@ -42,9 +42,9 @@ class ShippingFile extends namespace\Controller
         Utils\Database $db_banki,
         $config
     ) {
-        parent::__construct(...func_get_args());
+        $this->config = $config;
         
-        $this->model = new BankI\Models\ShippingFile($db_address, $db_banki, $config['assignor']);
+        $this->model = new BankI\Cnab400\Models\ShippingFile($db_address, $db_banki, $config['assignor']);
     }
     
     /**
@@ -55,12 +55,12 @@ class ShippingFile extends namespace\Controller
     public function execute()
     {
         $id = $this->model->getNextId();
-        $view = new BankI\Views\ShippingFile($this->model, $id);
+        $view = new BankI\Cnab400\Views\ShippingFile($this->model, $id);
         if (empty($this->model->titles)) {
             return false;
         }
         foreach ($this->model->titles as $title) {
-            $view->addEntry(1, $title);
+            $view->addRegistry($title);
         }
         $this->result = $view->output();
         $this->id = $id;
@@ -74,25 +74,29 @@ class ShippingFile extends namespace\Controller
      *
      * @return string Filename or false on failure
      */
-    public function saveFile($path)
+    public function save($path)
     {
-        $filename = 'COB.240.'
-                  . BankI\Utils::padNumber($this->model->assignor->edi7, 6) . '.'
-                  . date('Ymd') . '.'
-                  . BankI\Utils::padNumber($this->id, 5) . '.'
-                  . BankI\Utils::padNumber($this->model->assignor->covenant, 5, true) // @todo verify if covenant is actually small and the Headers exagerate the covenant lenght
-                  . '.REM';
-        
-        $file = @fopen($path . '/' . $filename, 'w');
-        if ($file === false) {
-            return false;
-        }
-        fwrite($file, $this->result);
-        fclose($file);
+        $filename = parent::save($path);
         
         $this->model->insertEntry($filename);
         $this->model->updateStatus('titles', array_column($this->model->titles, 'id'), 1);
         
+        return $filename;
+    }
+    
+    /**
+     * Generates the filename to save the Shipping File
+     *
+     * @return string
+     */
+    protected function getFilename()
+    {
+        $filename = 'COB.400.'
+                  . BankI\Utils::padNumber($this->model->assignor->edi, 6) . '.'
+                  . date('Ymd') . '.'
+                  . BankI\Utils::padNumber($this->id, 5) . '.'
+                  . BankI\Utils::padNumber($this->model->assignor->covenant, 5)
+                  . '.REM';
         return $filename;
     }
 }

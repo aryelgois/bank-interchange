@@ -2,18 +2,18 @@
 
 use aryelgois\BankInterchange as BankI;
 
-require_once __DIR__ . '/autoload.php';
+require_once __DIR__ . '/../autoload.php';
 
 $config = [
     'assignor' => 1 // use assignor #1 from Database
 ];
 
 // new controler
-$controller = new BankI\Controllers\ShippingFile($db_address, $db_banki, $config);
+$controller = new BankI\Cnab400\Controllers\ShippingFile($db_address, $db_banki, $config);
 
-//output result
+// output result
 if ($controller->execute()) {
-    $filename = $controller->saveFile(__DIR__ . '/data/shipping_files');
+    $filename = $controller->save(__DIR__ . '/../data/cnab400/shipping_files');
     if ($filename != false) {
         echo '<h2>' . $filename . "</h2>\n";
         echo '<pre>' . $controller->result . "</pre>\n\n\n";

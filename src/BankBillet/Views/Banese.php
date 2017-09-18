@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views\BankBillets;
+namespace aryelgois\BankInterchange\BankBillet\Views;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
@@ -17,7 +17,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/BankInterchange
  */
-class Banese extends BankI\Views\BankBillet
+class Banese extends BankI\Abstracts\Views\BankBillet
 {
     /**
      * Font presets of family, weight, size and color
@@ -188,16 +188,16 @@ class Banese extends BankI\Views\BankBillet
             [
                 ['w' =>  32,   'title' => $dict['date_document'], 'data' => self::formatDate($title->stamp)],
                 ['w' =>  27,   'title' => $dict['doc_number_sh'], 'data' => BankI\Utils::padNumber($title->id, 10)],
-                ['w' =>  20,   'title' => $dict['specie_doc'],    'data' => ''],                                      //$data['misc']['specie_doc']
-                ['w' =>  12,   'title' => $dict['accept'],        'data' => ''],                                      //$data['misc']['accept']
+                ['w' =>  20,   'title' => $dict['specie_doc'],    'data' => ''],                                     //$data['misc']['specie_doc']
+                ['w' =>  12,   'title' => $dict['accept'],        'data' => ''],                                     //$data['misc']['accept']
                 ['w' =>  36.2, 'title' => $dict['date_process'],  'data' => date('d/m/Y')]
             ],
             [
-                ['w' =>  32,   'title' => $dict['bank_use'],      'data' => ''],                                      //$data['misc']['bank_use']
-                ['w' =>  16,   'title' => $dict['wallet'],        'data' => self::WALLET[$title->wallet]['code']],
-                ['w' =>  11,   'title' => $dict['specie'],        'data' => self::SPECIE[$title->specie]['symbol']],
-                ['w' =>  32,   'title' => $dict['amount'],        'data' => ''],                                      //$data['misc']['amount']
-                ['w' =>  36.2, 'title' => $dict['doc_value'],     'data' => '']                                       //$data['misc']['value_un']
+                ['w' =>  32,   'title' => $dict['bank_use'],      'data' => ''],                                     //$data['misc']['bank_use']
+                ['w' =>  16,   'title' => $dict['wallet'],        'data' => $title->wallet['symbol']],
+                ['w' =>  11,   'title' => $dict['specie'],        'data' => $title->specie['symbol']],
+                ['w' =>  32,   'title' => $dict['amount'],        'data' => ''],                                     //$data['misc']['amount']
+                ['w' =>  36.2, 'title' => $dict['doc_value'],     'data' => '']                                      //$data['misc']['value_un']
             ]
         ];
         foreach ($table as $row) {
@@ -286,7 +286,7 @@ class Banese extends BankI\Views\BankBillet
         // Mechanical authentication
         $this->SetX(119.2);
         $this->billetSetFont('cell_title');
-        $this->Cell(67.8, 3.5, utf8_decode($dict['mech_auth'] . '/' . self::WALLET[$title->wallet]['name']));
+        $this->Cell(67.8, 3.5, utf8_decode($dict['mech_auth'] . '/' . $title->wallet['name']));
         $this->Ln(3.5);
     }
 }
