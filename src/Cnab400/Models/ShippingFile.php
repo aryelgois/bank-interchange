@@ -18,4 +18,11 @@ use aryelgois\BankInterchange as BankI;
  * @link https://www.github.com/aryelgois/BankInterchange
  */
 class ShippingFile extends BankI\Abstracts\Models\ShippingFile
-{}
+{
+    /**
+     * Which CNAB is being implemented
+     *
+     * @var string
+     */
+    const CNAB_NUMBER = '400';
+}

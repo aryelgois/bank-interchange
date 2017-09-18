@@ -20,6 +20,13 @@ use aryelgois\BankInterchange as BankI;
 class ShippingFile extends namespace\Model
 {
     /**
+     * Which CNAB is being implemented
+     *
+     * @var string
+     */
+    const CNAB_NUMBER = '';
+    
+    /**
      * All titles to be added
      *
      * @var Title[]
@@ -52,8 +59,8 @@ class ShippingFile extends namespace\Model
     public function fetchTitles($assignor_id, $status = 0)
     {
         $this->titles = $cache = [];
-        $query = "SELECT `id` FROM `titles` WHERE `assignor` = ? AND `status` = ? ORDER BY `stamp`";
-        $titles = array_column(Utils\Database::fetch($this->db_banki->prepare($query, 'ii', [$assignor_id, $status])), 'id');
+        $query = "SELECT `id` FROM `titles` WHERE `cnab` = ? AND `assignor` = ? AND `status` = ? ORDER BY `stamp`";
+        $titles = array_column(Utils\Database::fetch($this->db_banki->prepare($query, 'sii', [static::CNAB_NUMBER, $assignor_id, $status])), 'id');
         foreach ($titles as $id) {
             $this->titles[$id] = BankI\Objects\Title::fromDatabase($this->db_address, $this->db_banki, $id, $cache);
         }
@@ -83,9 +90,13 @@ class ShippingFile extends namespace\Model
      */
     public function insertEntry($data = null)
     {
-        $query = "INSERT INTO `shipping_files` (`filename`) VALUES (?)";
+        // dirty hack
+        $a = static::CNAB_NUMBER;
+        $b = &$a;
+        
+        $query = "INSERT INTO `shipping_files` (`cnab`, `filename`) VALUES (?, ?)";
         $stmt = $this->db_banki->connect->prepare($query);
-        $stmt->bind_param('s', $data);
+        $stmt->bind_param('ss', $b, $data);
         $stmt->execute();
         if ($stmt->error !== '') {
             return $stmt->error;

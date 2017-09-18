@@ -110,6 +110,7 @@ CREATE TABLE `titles` (
 CREATE TABLE `shipping_files` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
     `status`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 0,
+    `cnab`          char(3)         NOT NULL,
     `filename`      char(39),
     `stamp`         timestamp       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `update`        datetime,
