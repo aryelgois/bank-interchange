@@ -160,7 +160,7 @@ class Title
         // is there an easier way?
         $this->id = $title['id'] ?? null; // MAYBE
         $this->onum = $title['onum'];
-        $this->doc_type = $title['doc_type'];
+        $this->doc_type = $title['doc_type'] ?? 1;
         $this->kind = $title['kind'];
         $this->value = (float)$title['value'];
         $this->iof = (float)($title['iof'] ?? 0);

@@ -82,7 +82,7 @@ CREATE TABLE `titles` (
     `specie`        tinyint(3)      UNSIGNED NOT NULL,
     `onum`          int(10)         UNSIGNED NOT NULL,
     `status`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 0,
-    `doc_type`      char(1)         NOT NULL,
+    `doc_type`      char(1)         NOT NULL DEFAULT 1,
     `kind`          tinyint(2)      UNSIGNED NOT NULL,
     `value`         decimal(17,4)   NOT NULL,
     `iof`           decimal(17,4)   NOT NULL,
@@ -102,7 +102,8 @@ CREATE TABLE `titles` (
     FOREIGN KEY (`payer`) REFERENCES `payers` (`id`),
     FOREIGN KEY (`guarantor`) REFERENCES `payers` (`id`),
     FOREIGN KEY (`specie`) REFERENCES `species` (`id`),
-    FOREIGN KEY (`wallet`) REFERENCES `wallets` (`id`)
+    FOREIGN KEY (`wallet`) REFERENCES `wallets` (`id`),
+    UNIQUE KEY `assignor_AND_onum`(`assignor`, `onum`)
 );
 
 CREATE TABLE `shipping_files` (
