@@ -28,6 +28,13 @@ class Title
     public $id;
     
     /**
+     * Which CNAB is to be used
+     *
+     * @var string
+     */
+    public $cnab;
+    
+    /**
      * Title's "our number"
      *
      * @var integer
@@ -159,6 +166,7 @@ class Title
     ) {
         // is there an easier way?
         $this->id = $title['id'] ?? null; // MAYBE
+        $this->cnab = $title['cnab'];
         $this->onum = $title['onum'];
         $this->doc_type = $title['doc_type'] ?? 1;
         $this->kind = $title['kind'];

@@ -216,7 +216,7 @@ abstract class BankBillet extends FPDF
     {
         $barcode = [
             $this->model->bank->code,
-            $this->model->title->specie['cnab' . $this->model->cnab],
+            $this->model->title->specie['cnab' . $this->model->title->cnab],
             '', // Check digit
             $this->dueFactor(),
             BankI\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),

@@ -27,13 +27,6 @@ class Model extends BankI\Abstracts\Models\Model
     public $title;
     
     /**
-     * Which Cnab is to be used
-     *
-     * @var string
-     */
-    public $cnab;
-    
-    /**
      * Creates a new BankBillet Model object
      *
      * @param Database $db_address  An interface to `address` database
@@ -47,7 +40,6 @@ class Model extends BankI\Abstracts\Models\Model
     ) {
         $assignor_id = $config['assignor'];
         $title = $config['title'];
-        $this->cnab = $config['cnab'];
         
         parent::__construct($db_address, $db_banki, $assignor_id);
         
@@ -114,21 +106,22 @@ class Model extends BankI\Abstracts\Models\Model
     {
         $t = $this->title;
         $query = "INSERT INTO `titles` "
-               . "(`id`, `assignor`, `payer`, `guarantor`, `onum`, `wallet`, `doc_type`, `kind`, `specie`, `value`, `iof`, `rebate`, `fine_type`, `fine_date`, `fine_value`, `discount_type`, `discount_date`, `discount_value`, `description`, `due`, `stamp`) "
-               . "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+               . "(`id`, `assignor`, `payer`, `guarantor`, `wallet`, `specie`, `onum`, `cnab`, `doc_type`, `kind`, `value`, `iof`, `rebate`, `fine_type`, `fine_date`, `fine_value`, `discount_type`, `discount_date`, `discount_value`, `description`, `due`, `stamp`) "
+               . "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $this->db_banki->prepare(
             $query,
-            'iiiiiisiidddisdisdsss',
+            'iiiiiiissidddisdisdsss',
             [
                 $t->id,
                 $this->assignor->id,
                 $t->payer->id,
                 $this->guarantor->id ?? null,
+                $t->wallet['id'],
+                $t->specie['id'],
                 $t->onum,
-                $t->wallet,
+                $t->cnab,
                 $t->doc_type,
                 $t->kind,
-                $t->specie,
                 $t->value,
                 $t->iof,
                 $t->rebate,

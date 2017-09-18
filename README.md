@@ -40,8 +40,7 @@ Files, and the reading of Return Files in a webserver:
 # Example
 
 There is an example simulating an e-Comerce. You can choose between CNAB240 and
-CNAB400, they will use the same information from the title (which produces the
-bank billet).
+CNAB400, and there are just minor differences between the required data.
 
 
 # TODO

@@ -7,6 +7,7 @@ require_once __DIR__ . '/../autoload.php';
 $config = [
     'assignor' => 1, // use assignor #1 from Database
     'title' => [
+        'cnab' => '240',
         'payer' => 1, // client id from session
         'wallet' => 5,
         'doc_type' => 1,
@@ -24,8 +25,7 @@ $config = [
         'payment_place' => 'Pagável em qualquer Banco até o vencimento',
         'demonstrative' => "Pagamento de boleto - Teste de boleto\nTaxa bancária - {{ tax }}\nBankInterchange - https://www.github.com/aryelgois/BankInterchange",
         'instructions'  => "- Sr. Caixa, cobrar multa de 2% após o vencimento\n- Receber até 10 dias após o vencimento\n- Em caso de dúvidas entre em contato conosco: suporte@exemplo.com.br\n  Emitido pelo sistema BankInterchange - https://www.github.com/aryelgois/BankInterchange"
-    ],
-    'cnab' => '240'
+    ]
 ];
 
 // new controler
