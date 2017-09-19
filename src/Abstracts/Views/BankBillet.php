@@ -461,7 +461,7 @@ abstract class BankBillet extends FPDF
         ];
         
         // @todo check digit
-        $cd = '0';
+        $cd = $assignor->account['cd'];
         
         if ($full) {
             return implode(' / ', $tmp) . '-' . $cd;
@@ -497,6 +497,9 @@ abstract class BankBillet extends FPDF
     protected static function formatDate($date)
     {
         $d = \DateTime::createFromFormat('Y-m-d', $date);
+        if (!$d) {
+            $d = \DateTime::createFromFormat('Y-m-d H:i:s', $date);
+        }
         return ($d ? $d->format('d/m/Y') : $date);
     }
     

@@ -11,7 +11,7 @@ $config = [
 // new controler
 $controller = new BankI\Cnab240\Controllers\ShippingFile($db_address, $db_banki, $config);
 
-//output result
+// output result
 if ($controller->execute()) {
     $filename = $controller->save(__DIR__ . '/../data/cnab240/shipping_files');
     if ($filename != false) {

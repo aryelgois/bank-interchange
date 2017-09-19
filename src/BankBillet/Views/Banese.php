@@ -233,7 +233,7 @@ class Banese extends BankI\Abstracts\Views\BankBillet
          */
         $this->SetY($y);
         $table = [
-            ['title' => $dict['date_due'],    'data' => static::formatDate($title->due),            'data_align' => 'R'],
+            ['title' => $dict['date_due'],    'data' => self::formatDate($title->due),              'data_align' => 'R'],
             ['title' => $dict['agency_code'], 'data' => $this->formatAgencyCode(),                  'data_align' => 'R'],
             ['title' => $dict['onum'],        'data' => $this->formatOnum(),                        'data_align' => 'R'],
             ['title' => $dict['doc_value='],  'data' => $this->formatMoney($this->billet['value']), 'data_align' => 'R'],

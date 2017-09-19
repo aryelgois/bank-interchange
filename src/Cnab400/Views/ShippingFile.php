@@ -157,7 +157,7 @@ class ShippingFile extends BankI\Abstracts\Views\ShippingFile
     {
         $a = $this->model->assignor;
         $result = BankI\Utils::padNumber($a->agency['number'], 4)
-                . BankI\Utils::padNumber($a->agency['cd'], 2)
+                . '00' //BankI\Utils::padNumber($a->agency['cd'], 2)
                 . BankI\Utils::padNumber($a->account['number'], 7)
                 . BankI\Utils::padNumber($a->account['cd'], 1);
         return $result;
