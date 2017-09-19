@@ -62,7 +62,7 @@ class ShippingFile extends BankI\Abstracts\Controllers\ShippingFile
         foreach ($this->model->titles as $title) {
             $view->addRegistry($title);
         }
-        $this->result = $view->output();
+        $this->result = $view->output("\r\n", chr(26));
         $this->id = $id;
         return true;
     }
