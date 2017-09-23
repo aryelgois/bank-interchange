@@ -54,4 +54,4 @@ I know, the script is not working yet.. It's under development.
     provide as local files?
 - [ ] Create hooks for Return Files.
   - [ ] A nice interface to integrate with one's website.
-- [ ] Configure packagist.
+- [x] Configure packagist.
