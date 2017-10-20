@@ -29,6 +29,11 @@ class BancoDoNordeste extends namespace\CaixaEconomicaFederal
     const ACCOUNT_LEN = 7;
 
     /**
+     * Temporary way to set the document specie
+     */
+    const SPECIE_DOC = 'RC';
+
+    /**
      * Free space, defined by Bank.
      *
      * Here: Agency/Assignor's code . Our number . Wallet operation . '000'
@@ -40,5 +45,16 @@ class BancoDoNordeste extends namespace\CaixaEconomicaFederal
                 . '21'
                 . '000';
         return $result;
+    }
+
+    /**
+     * Prepare some data to be used during Draw
+     *
+     * @param mixed[] $data Data for the bank billet
+     */
+    protected function beforeDraw($data)
+    {
+        parent::beforeDraw($data);
+        $this->model->title->wallet['symbol'] = $this->model->title->wallet['operation'];
     }
 }
