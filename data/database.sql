@@ -26,12 +26,10 @@ CREATE TABLE `species` (
 
 CREATE TABLE `wallets` (
     `id`            tinyint(3)      UNSIGNED NOT NULL AUTO_INCREMENT,
-    `symbol`        varchar(5)      NOT NULL,
-    `cnab240`       char(1)         NOT NULL,
-    `cnab400`       char(1)         NOT NULL,
+    `febraban`      tinyint(2)      NOT NULL,
     `operation`     tinyint(2)      NOT NULL,
+    `symbol`        char(2)         NOT NULL,
     `name`          varchar(60)     NOT NULL,
-    `notes`         varchar(60)     NOT NULL,
     PRIMARY KEY (`id`)
 );
 

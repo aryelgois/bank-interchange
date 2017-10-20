@@ -299,7 +299,7 @@ class ShippingFile
                       . $this->assignorAgencyAccount()
                       
                       . BankI\Utils::padNumber($title->onum, 20)
-                      . $title->wallet['cnab240']
+                      . $title->wallet['febraban']
                       . '1'                     // Title's Registration
                       . $title->doc_type
                       . '2'                     // Emission identifier
