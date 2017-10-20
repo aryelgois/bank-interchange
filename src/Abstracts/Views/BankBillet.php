@@ -26,6 +26,11 @@ use FPDF;
 abstract class BankBillet extends FPDF
 {
     /**
+     * Length used to zero-pad "Our Number"
+     */
+    const ONUM_LEN = 8;
+
+    /**
      * Information on page header about printing
      *
      * @const string[]
@@ -562,7 +567,10 @@ abstract class BankBillet extends FPDF
      */
     protected function formatOnum($dash = true)
     {
-        return BankI\Utils::padNumber($this->model->title->onum, 8) . ($dash ? '-' : '') . $this->checkDigitOnum();
+        $result = BankI\Utils::padNumber($this->model->title->onum, static::ONUM_LEN)
+                . ($dash ? '-' : '')
+                . $this->checkDigitOnum();
+        return $result;
     }
     
     
