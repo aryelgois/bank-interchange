@@ -3,7 +3,7 @@ USE bank_interchange;
 -- Species
 
 INSERT INTO `species` (`id`, `symbol`, `name`, `cnab240`, `cnab400`, `thousand`, `decimal`) VALUES
-(1, 'R$', 'Real', 9, 0, '', ',');
+(1, 'R$', 'Real', 9, 9, '', ',');
 
 
 -- Wallets
