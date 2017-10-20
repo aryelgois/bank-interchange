@@ -150,7 +150,7 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
             [
                 ['w' =>  32,   'title' => $dict['date_document'], 'data' => self::formatDate($title->stamp)],
                 ['w' =>  42.2, 'title' => $dict['doc_number_sh'], 'data' => BankI\Utils::padNumber($title->id, 10)],
-                ['w' =>  18,   'title' => $dict['specie_doc'],    'data' => ''],                                     //$data['misc']['specie_doc']
+                ['w' =>  18,   'title' => $dict['specie_doc'],    'data' => static::SPECIE_DOC],                     //$data['misc']['specie_doc']
                 ['w' =>  11,   'title' => $dict['accept'],        'data' => ''],                                     //$data['misc']['accept']
                 ['w' =>  24,   'title' => $dict['date_process'],  'data' => date('d/m/Y')]
             ],

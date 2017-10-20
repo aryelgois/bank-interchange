@@ -36,6 +36,11 @@ abstract class BankBillet extends FPDF
     const ACCOUNT_LEN = 11;
 
     /**
+     * Temporary way to set the document specie
+     */
+    const SPECIE_DOC = '11';
+
+    /**
      * Information on page header about printing
      *
      * @const string[]
