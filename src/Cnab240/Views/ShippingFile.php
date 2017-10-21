@@ -112,6 +112,7 @@ class ShippingFile
         }
         $this->lots[++$this->lot] = [
             'registries' => 1, // already counting the following LotHeader
+            'lines' => 1, // already counting the following LotHeader
             'titles' => 0,
             'total' => 0.0,
             'closed' => false
@@ -137,6 +138,10 @@ class ShippingFile
             return false;
         }
         // Check if the Lot is full
+        /**
+         * @todo change those big numbers to be 999999 - the amount of lines
+         *       to be added
+         */
         $count = $this->lots[$this->lot]['registries'];
         if ($count > 999998) {
             throw new \OverflowException('The Lot got too many registries');
@@ -147,10 +152,11 @@ class ShippingFile
         $this->registerLotDetail($movement, $title);
         
         $this->lots[$this->lot]['registries']++;
+        $this->lots[$this->lot]['lines'] += 2;
         $this->lots[$this->lot]['titles']++;
         $this->lots[$this->lot]['total'] += $title->value;
-        $this->registries++;
         
+        $this->registries += 2; // the amount of segments (type 3)
         return true;
     }
     
@@ -161,6 +167,7 @@ class ShippingFile
     {
         if (!$this->closed || !$this->lots[$this->lot]['closed']) {
             $this->lots[$this->lot]['registries']++;
+            $this->lots[$this->lot]['lines']++;
             $this->registerLotTrailer();
             $this->registries++;
             $this->lots[$this->lot]['closed'] = true;
@@ -353,7 +360,7 @@ class ShippingFile
     {
         $this->file[] = self::fieldControl(5)
                       . '         '
-                      . BankI\Utils::padNumber($this->lots[$this->lot]['registries'], 6)
+                      . BankI\Utils::padNumber($this->lots[$this->lot]['lines'], 6)
                       . BankI\Utils::padNumber($this->lots[$this->lot]['titles'], 6)
                       . BankI\Utils::padNumber(number_format($this->lots[$this->lot]['total'], 2, '', ''), 17)
                       . '000000' . '00000000000000000'
