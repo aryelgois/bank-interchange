@@ -105,7 +105,7 @@ class ShippingFile extends BankI\Abstracts\Views\ShippingFile
                   . '0000000000' // contract
                   . self::secondDiscount($title)
                   . '        '
-                  . $title->wallet['cnab400']
+                  . $title->wallet['febraban']
                   . BankI\Utils::padNumber($config['service'], 2)
                   . BankI\Utils::padNumber($title->id, 10)
                   . date('dmy', strtotime($title->due))

@@ -26,6 +26,21 @@ use FPDF;
 abstract class BankBillet extends FPDF
 {
     /**
+     * Length used to zero-pad "Our Number"
+     */
+    const ONUM_LEN = 8;
+
+    /**
+     * Length used to zero-pad the account (WITHOUT the checkdigit)
+     */
+    const ACCOUNT_LEN = 11;
+
+    /**
+     * Temporary way to set the document specie
+     */
+    const SPECIE_DOC = '11';
+
+    /**
      * Information on page header about printing
      *
      * @const string[]
@@ -457,7 +472,7 @@ abstract class BankBillet extends FPDF
         $assignor = $this->model->assignor;
         $tmp = [
             BankI\Utils::padNumber($assignor->agency['number'], 4),
-            BankI\Utils::padNumber($assignor->account['number'], 11)
+            BankI\Utils::padNumber($assignor->account['number'], static::ACCOUNT_LEN)
         ];
         
         // @todo check digit
@@ -562,7 +577,10 @@ abstract class BankBillet extends FPDF
      */
     protected function formatOnum($dash = true)
     {
-        return BankI\Utils::padNumber($this->model->title->onum, 8) . ($dash ? '-' : '') . $this->checkDigitOnum();
+        $result = BankI\Utils::padNumber($this->model->title->onum, static::ONUM_LEN)
+                . ($dash ? '-' : '')
+                . $this->checkDigitOnum();
+        return $result;
     }
     
     
