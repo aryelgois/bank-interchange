@@ -1,26 +1,37 @@
 CREATE DATABASE bank_interchange CHARSET = UTF8 COLLATE = utf8_general_ci;
 USE bank_interchange;
 
-CREATE TABLE `fulladdress` (
+-- Basic Tables
+--
+-- Low level Tables containing very basic data
+
+CREATE TABLE `full_addresses` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
-    `county`        int(10)         UNSIGNED NOT NULL, -- Foreign to database Address: `counties` (`id`)
-    `neighborhood`  varchar(15)     NOT NULL,
-    `place`         varchar(40)     NOT NULL,
-    `number`        varchar(40)     NOT NULL,
+    `county`        int(10)         UNSIGNED NOT NULL, -- Foreign: `address` `counties` (`id`)
+    `neighborhood`  varchar(60)     NOT NULL,
+    `place`         varchar(60)     NOT NULL,
+    `number`        varchar(20)     NOT NULL,
     `zipcode`       varchar(8)      NOT NULL,
-    `detail`        varchar(40)     NOT NULL DEFAULT '',
-    `stamp`         timestamp       NOT NULL, -- to check changes
+    `detail`        varchar(60)     NOT NULL DEFAULT '',
+    `update`        timestamp       NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `people` (
+    `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name`          varchar(60)     NOT NULL,
+    `document`      varchar(14)     NOT NULL,
     PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `species` (
     `id`            tinyint(3)      UNSIGNED NOT NULL AUTO_INCREMENT,
     `symbol`        varchar(5)      NOT NULL,
+    `name`          varchar(30)     NOT NULL,
     `cnab240`       char(2)         NOT NULL,
     `cnab400`       char(2)         NOT NULL,
     `thousand`      char(1)         NOT NULL,
     `decimal`       char(1)         NOT NULL,
-    `name`          varchar(30)     NOT NULL,
     PRIMARY KEY (`id`)
 );
 
@@ -32,6 +43,10 @@ CREATE TABLE `wallets` (
     `name`          varchar(60)     NOT NULL,
     PRIMARY KEY (`id`)
 );
+
+-- Main Tables
+--
+-- Tables with most important data for this package
 
 CREATE TABLE `banks` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -45,10 +60,10 @@ CREATE TABLE `banks` (
 
 CREATE TABLE `assignors` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
-    `bank`          int(10)         UNSIGNED NOT NULL,
+    `person`        int(10)         UNSIGNED NOT NULL,
     `address`       int(10)         UNSIGNED NOT NULL,
-    `document`      varchar(14)     NOT NULL,
-    `name`          varchar(60)     NOT NULL,
+    `bank`          int(10)         UNSIGNED NOT NULL,
+    `wallet`        tinyint(3)      UNSIGNED NOT NULL,
     `covenant`      char(20)        NOT NULL,
     `agency`        char(5)         NOT NULL,
     `agency_cd`     char(1)         NOT NULL,
@@ -58,17 +73,19 @@ CREATE TABLE `assignors` (
     `logo`          varchar(30),
     `url`           varchar(30),
     PRIMARY KEY (`id`),
+    FOREIGN KEY (`person`) REFERENCES `people` (`id`),
+    FOREIGN KEY (`address`) REFERENCES `full_addresses` (`id`),
     FOREIGN KEY (`bank`) REFERENCES `banks` (`id`),
-    FOREIGN KEY (`address`) REFERENCES `fulladdress` (`id`)
+    FOREIGN KEY (`wallet`) REFERENCES `wallets` (`id`)
 );
 
 CREATE TABLE `payers` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
+    `person`        int(10)         UNSIGNED NOT NULL,
     `address`       int(10)         UNSIGNED NOT NULL,
-    `document`      varchar(14)     NOT NULL,
-    `name`          varchar(60)     NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`address`) REFERENCES `fulladdress` (`id`)
+    FOREIGN KEY (`person`) REFERENCES `people` (`id`),
+    FOREIGN KEY (`address`) REFERENCES `full_addresses` (`id`)
 );
 
 CREATE TABLE `titles` (
@@ -76,9 +93,8 @@ CREATE TABLE `titles` (
     `assignor`      int(10)         UNSIGNED NOT NULL,
     `payer`         int(10)         UNSIGNED NOT NULL,
     `guarantor`     int(10)         UNSIGNED,
-    `wallet`        tinyint(3)      UNSIGNED NOT NULL,
     `specie`        tinyint(3)      UNSIGNED NOT NULL,
-    `onum`          int(10)         UNSIGNED NOT NULL,
+    `our_number`    int(10)         UNSIGNED NOT NULL,
     `status`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 0,
     `cnab`          char(3)         NOT NULL,
     `doc_type`      char(1)         NOT NULL DEFAULT 1,
@@ -101,16 +117,23 @@ CREATE TABLE `titles` (
     FOREIGN KEY (`payer`) REFERENCES `payers` (`id`),
     FOREIGN KEY (`guarantor`) REFERENCES `payers` (`id`),
     FOREIGN KEY (`specie`) REFERENCES `species` (`id`),
-    FOREIGN KEY (`wallet`) REFERENCES `wallets` (`id`),
-    UNIQUE KEY `assignor_AND_onum`(`assignor`, `onum`)
+    UNIQUE KEY `assignor__AND__our_number`(`assignor`, `our_number`)
 );
 
 CREATE TABLE `shipping_files` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
     `status`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 0,
     `cnab`          char(3)         NOT NULL,
-    `filename`      char(39),
+    `filename`      char(39), -- drop?
     `stamp`         timestamp       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `update`        datetime,
     PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `shipping_file_titles` (
+    `shipping_file` int(10)         UNSIGNED NOT NULL,
+    `title`         int(10)         UNSIGNED NOT NULL,
+    FOREIGN KEY (`shipping_file`) REFERENCES `shipping_files` (`id`),
+    FOREIGN KEY (`title`) REFERENCES `titles` (`id`),
+    PRIMARY KEY (`shipping_file`, `title`)
 );
