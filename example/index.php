@@ -27,6 +27,15 @@ function select_option_foreign_person(Medools\ModelIterator $iterator) {
     }
 }
 
+function format_person_pretty(Medools\Models\Person $person) {
+    $result = $person->get('name')
+            . '<br/><small>'
+            . $person->documentFormat(true)
+            . '</small>';
+
+    return $result;
+}
+
 ?>
 <!doctype html>
 <html>
@@ -34,6 +43,14 @@ function select_option_foreign_person(Medools\ModelIterator $iterator) {
     <meta charset="UTF-8" />
     <title>Example - BankInterchange</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <script>
+function select_all(source, name) {
+    checkboxes = document.getElementsByName(name);
+    for (let i = 0, n = checkboxes.length; i < n; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+    </script>
 </head>
 <body>
     <h2>Intro</h2>
@@ -57,12 +74,12 @@ function select_option_foreign_person(Medools\ModelIterator $iterator) {
         The client would log in, choose some products (the value below is the
         sum) and the server would known from who.
     </p>
-    <form method="POST">
+    <form action="generate_title.php" method="POST">
         <table>
             <tr>
                 <td>The client</td>
                 <td>
-                    <select name="payer">
+                    <select name="payer" required>
 <?php
 
 select_option_foreign_person(
@@ -76,7 +93,7 @@ select_option_foreign_person(
             <tr>
                 <td>is buying from</td>
                 <td>
-                    <select name="assignor">
+                    <select name="assignor" required>
 <?php
 
 select_option_foreign_person(
@@ -103,10 +120,10 @@ select_option_foreign_person(
         List of all titles in the database. The ones not yet in a shipping file
         have a checkbox.
     </p>
-    <form>
+    <form method="POST">
         <table class="table-list">
             <tr>
-                <th><input name="titles_all" type="checkbox" /></th>
+                <th><input type="checkbox" onchange="select_all(this, 'titles[]')" /></th>
                 <th>id</th>
                 <th>Client</th>
                 <th>Assignor</th>
@@ -114,18 +131,42 @@ select_option_foreign_person(
                 <th>Date</th>
                 <th>Billet</th>
             </tr>
-            <tr>
-                <td><input name="titles[]" value="0" type="checkbox" /></td>
-                <td>0</td>
-                <td>Name</td>
-                <td>Name</td>
-                <td>R$ 0,0</td>
-                <td>Y-m-d H:i:s</td>
-                <td><a href="get_billet.php?id=0">pdf</a></td>
-            </tr>
+<?php
+
+$template = "            <tr>
+                <td><input name=\"titles[]\" value=\"%s\" type=\"checkbox\" /></td>
+                <td>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+                <td><a href=\"generate_billet.php?id=%s\">pdf</a></td>
+            </tr>\n";
+
+$iterator = new Medools\ModelIterator(new BankInterchange\Models\Title, []);
+foreach ($iterator as $model) {
+    $id = $model->get('id');
+    $payer_person = $model->getForeign('payer')->getForeign('person');
+    $assignor_person = $model->getForeign('assignor')->getForeign('person');
+    $value = $model->getForeign('specie')->getFormated($model->get('value'));
+
+    $data = [
+        $id,
+        $id,
+        format_person_pretty($payer_person),
+        format_person_pretty($assignor_person),
+        $value,
+        $model->get('stamp'),
+        $id,
+    ];
+
+    printf($template, ...$data);
+}
+
+?>
         </table>
-        <button name="action" value="generate_cnab240">Generate CNAB240</button>
-        <button name="action" value="generate_cnab400">Generate CNAB400</button>
+        <button action="generate_cnab240.php">Generate CNAB240</button>
+        <button action="generate_cnab400.php">Generate CNAB400</button>
         <p>
             Remember that, in production, you have to generate and send the
             Shipping File before outputing the Billet.

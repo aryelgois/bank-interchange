@@ -9,7 +9,7 @@ table.table-list th {
 }
 
 table.table-list td, table.table-list th {
-  padding: 0.3em;
+  padding: 0.5em;
 }
 
 table.table-list tr:not(:first-child) td {
