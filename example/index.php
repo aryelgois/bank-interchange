@@ -1,3 +1,23 @@
+<?php
+
+require_once 'autoload.php';
+
+use aryelgois\BankInterchange;
+use aryelgois\Medools;
+
+function select_option_foreign_person(Medools\ModelIterator $iterator) {
+    foreach ($iterator as $model) {
+        $person = $model->getForeign('person');
+        printf(
+            "                        <option value=\"%s\">%s (%s)</option>\n",
+            $person->get('id'),
+            $person->get('name'),
+            $person->documentFormat()
+        );
+    }
+}
+
+?>
 <!doctype html>
 <html>
 <head>
@@ -33,6 +53,13 @@
                 <td>The client</td>
                 <td>
                     <select name="payer">
+<?php
+
+select_option_foreign_person(
+    new Medools\ModelIterator(new BankInterchange\Models\Payer, [])
+);
+
+?>
                     </select>
                 </td>
             </tr>
@@ -40,6 +67,13 @@
                 <td>is buying from</td>
                 <td>
                     <select name="assignor">
+<?php
+
+select_option_foreign_person(
+    new Medools\ModelIterator(new BankInterchange\Models\Assignor, [])
+);
+
+?>
                     </select>
                 </td>
             </tr>
