@@ -5,71 +5,60 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Objects;
+namespace aryelgois\BankInterchange\Models;
 
-use aryelgois\Utils;
-use aryelgois\Objects;
 use aryelgois\BankInterchange as BankI;
+use aryelgois\Medools;
 
 /**
- * A Payer object loaded from a database
+ * Someone who pays for something
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Payer extends Objects\Person
+class Payer extends Medools\Model
 {
-    /**
-     * Payer's id
-     *
-     * @var integer
+    const DATABASE_NAME_KEY = 'bank_interchange';
+
+    const TABLE = 'payers';
+
+    const COLUMNS = [
+        'id',
+        'person',
+        'address',
+    ];
+
+    const FOREIGN_KEYS = [
+        'person' => [
+            '\aryelgois\Medools\Models\Person',
+            'id'
+        ],
+        'address' => [
+            '\aryelgois\Medools\Models\Address\FullAddress',
+            'id'
+        ],
+    ];
+
+    /*
+     * Old members
+     * =======================================================================
      */
-    public $id;
-    
+
     /**
      * Cache for toCnab240()
      *
      * @var string
      */
     protected $cnab240_string;
-    
+
     /**
      * Cache for toCnab400()
      *
      * @var string
      */
     protected $cnab400_string;
-    
-    /**
-     * Creates a new Payer object from data in a Database
-     *
-     * @see data/database.sql
-     *
-     * @param Database $db_address Address Database from aryelgois\databases
-     * @param Database $db_banki   Database with an `payers` table
-     * @param integer  $id         Payer's id in the table
-     *
-     * @throws RuntimeException If it can not load from database
-     */
-    public function __construct(
-        Utils\Database $db_address,
-        Utils\Database $db_banki,
-        $id
-    ) {
-        // load from database
-        $payer = Utils\Database::fetch($db_banki->query("SELECT * FROM `payers` WHERE `id` = " . $id . " LIMIT 1"));
-        if (empty($payer)) {
-            throw new \RuntimeException('Could not load payer from database');
-        }
-        $payer = $payer[0];
-        
-        parent::__construct($payer['name'], $payer['document']);
-        
-        $this->id = $id;
-        $this->address[] = new namespace\Address($db_address, $db_banki, $payer['address']);
-    }
-    
+
     /**
      * Formats Payer's data to be CNAB240 compliant
      */
@@ -88,7 +77,7 @@ class Payer extends Objects\Person
         }
         return $this->cnab240_string;
     }
-    
+
     /**
      * Formats Payer's data to be CNAB400 compliant
      */
