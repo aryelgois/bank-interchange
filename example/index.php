@@ -5,17 +5,9 @@ require_once 'autoload.php';
 use aryelgois\BankInterchange;
 use aryelgois\Medools;
 
-function select_option_foreign_person(Medools\ModelIterator $iterator) {
+function protected_example(callable $callback, ...$params) {
     try {
-        foreach ($iterator as $model) {
-            $person = $model->getForeign('person');
-            printf(
-                "                        <option value=\"%s\">%s (%s)</option>\n",
-                $model->get('id'),
-                $person->get('name'),
-                $person->documentFormat()
-            );
-        }
+        $callback(...$params);
     } catch (RuntimeException $e) {
         if ($e->getMessage() !== 'Unknown database') {
             throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
@@ -24,6 +16,51 @@ function select_option_foreign_person(Medools\ModelIterator $iterator) {
          * Silently skip error:
          * User might not have configured config/medools.php yet
          */
+    }
+}
+
+function select_option_foreign_person(Medools\ModelIterator $iterator) {
+    foreach ($iterator as $model) {
+        $person = $model->getForeign('person');
+        printf(
+            "                        <option value=\"%s\">%s (%s)</option>\n",
+            $model->get('id'),
+            $person->get('name'),
+            $person->documentFormat()
+        );
+    }
+}
+
+function list_titles()
+{
+    $template = "            <tr>
+                <td><input name=\"titles[]\" value=\"%s\" type=\"checkbox\" /></td>
+                <td>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+                <td><a href=\"generate_billet.php?id=%s\">pdf</a></td>
+            </tr>\n";
+
+    $iterator = new Medools\ModelIterator(new BankInterchange\Models\Title, []);
+    foreach ($iterator as $model) {
+        $id = $model->get('id');
+        $payer_person = $model->getForeign('payer')->getForeign('person');
+        $assignor_person = $model->getForeign('assignor')->getForeign('person');
+        $value = $model->getForeign('specie')->getFormated($model->get('value'));
+
+        $data = [
+            $id,
+            $id,
+            format_person_pretty($payer_person),
+            format_person_pretty($assignor_person),
+            $value,
+            $model->get('stamp'),
+            $id,
+        ];
+
+        printf($template, ...$data);
     }
 }
 
@@ -82,7 +119,8 @@ function select_all(source, name) {
                     <select name="payer" required>
 <?php
 
-select_option_foreign_person(
+protected_example(
+    'select_option_foreign_person',
     new Medools\ModelIterator(new BankInterchange\Models\Payer, [])
 );
 
@@ -96,7 +134,8 @@ select_option_foreign_person(
                     <select name="assignor" required>
 <?php
 
-select_option_foreign_person(
+protected_example(
+    'select_option_foreign_person',
     new Medools\ModelIterator(new BankInterchange\Models\Assignor, [])
 );
 
@@ -133,35 +172,7 @@ select_option_foreign_person(
             </tr>
 <?php
 
-$template = "            <tr>
-                <td><input name=\"titles[]\" value=\"%s\" type=\"checkbox\" /></td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td><a href=\"generate_billet.php?id=%s\">pdf</a></td>
-            </tr>\n";
-
-$iterator = new Medools\ModelIterator(new BankInterchange\Models\Title, []);
-foreach ($iterator as $model) {
-    $id = $model->get('id');
-    $payer_person = $model->getForeign('payer')->getForeign('person');
-    $assignor_person = $model->getForeign('assignor')->getForeign('person');
-    $value = $model->getForeign('specie')->getFormated($model->get('value'));
-
-    $data = [
-        $id,
-        $id,
-        format_person_pretty($payer_person),
-        format_person_pretty($assignor_person),
-        $value,
-        $model->get('stamp'),
-        $id,
-    ];
-
-    printf($template, ...$data);
-}
+protected_example('list_titles');
 
 ?>
         </table>
