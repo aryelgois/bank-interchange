@@ -27,7 +27,7 @@ class ShippingFile extends BankI\Abstracts\Controllers\Controller
      * @const string[]
      */
     const CONFIG_KEYS = ['assignor'];
-    
+
     /**
      * Creates a new ShippingFile Controller object
      *
@@ -43,10 +43,10 @@ class ShippingFile extends BankI\Abstracts\Controllers\Controller
         $config
     ) {
         parent::__construct(...func_get_args());
-        
+
         $this->model = new BankI\Cnab240\Models\ShippingFile($db_address, $db_banki, $config['assignor']);
     }
-    
+
     /**
      * Generates the ShippingFile from data in the model
      *
@@ -66,7 +66,7 @@ class ShippingFile extends BankI\Abstracts\Controllers\Controller
         $this->id = $id;
         return true;
     }
-    
+
     /**
      * Writes the Shipping File to a local file and updates the Database
      *
@@ -82,17 +82,17 @@ class ShippingFile extends BankI\Abstracts\Controllers\Controller
                   . BankI\Utils::padNumber($this->id, 5) . '.'
                   . BankI\Utils::padNumber($this->model->assignor->covenant, 5, true) // @todo verify if covenant is actually small and the Headers exagerate the covenant lenght
                   . '.REM';
-        
+
         $file = @fopen($path . '/' . $filename, 'w');
         if ($file === false) {
             return false;
         }
         fwrite($file, $this->result);
         fclose($file);
-        
+
         $this->model->insertEntry($filename);
         $this->model->updateStatus('titles', array_column($this->model->titles, 'id'), 1);
-        
+
         return $filename;
     }
 }

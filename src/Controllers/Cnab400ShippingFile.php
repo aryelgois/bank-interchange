@@ -27,7 +27,7 @@ class ShippingFile extends BankI\Abstracts\Controllers\ShippingFile
      * @const string[]
      */
     const CONFIG_KEYS = ['assignor'];
-    
+
     /**
      * Creates a new ShippingFile Controller object
      *
@@ -43,10 +43,10 @@ class ShippingFile extends BankI\Abstracts\Controllers\ShippingFile
         $config
     ) {
         $this->config = $config;
-        
+
         $this->model = new BankI\Cnab400\Models\ShippingFile($db_address, $db_banki, $config['assignor']);
     }
-    
+
     /**
      * Generates the ShippingFile from data in the model
      *
@@ -66,7 +66,7 @@ class ShippingFile extends BankI\Abstracts\Controllers\ShippingFile
         $this->id = $id;
         return true;
     }
-    
+
     /**
      * Writes the Shipping File to a local file and updates the Database
      *
@@ -77,13 +77,13 @@ class ShippingFile extends BankI\Abstracts\Controllers\ShippingFile
     public function save($path)
     {
         $filename = parent::save($path);
-        
+
         $this->model->insertEntry($filename);
         $this->model->updateStatus('titles', array_column($this->model->titles, 'id'), 1);
-        
+
         return $filename;
     }
-    
+
     /**
      * Generates the filename to save the Shipping File
      *

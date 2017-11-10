@@ -34,14 +34,14 @@ class Controller extends BankI\Abstracts\Controllers\Controller
      * @const string[]
      */
     const CONFIG_KEYS = ['assignor', 'title', 'billet'];
-    
+
     /**
      * Holds the FPDF object with the bank billet
      *
      * @var Views\BankBillet
      */
     protected $view;
-    
+
     /**
      * Creates a new BankBillet Controller object
      *
@@ -57,10 +57,10 @@ class Controller extends BankI\Abstracts\Controllers\Controller
         $config
     ) {
         parent::__construct(...func_get_args());
-        
+
         $this->model = new BankI\BankBillet\Models\Model($db_address, $db_banki, $config);
     }
-    
+
     /**
      * Generates the Bank Billet from data in the model
      *
@@ -74,7 +74,7 @@ class Controller extends BankI\Abstracts\Controllers\Controller
         $this->view = new $view_class($this->model, $this->config['billet']);
         return true;
     }
-    
+
     /**
      * Echos the Bank Billet with headers
      *
@@ -84,7 +84,7 @@ class Controller extends BankI\Abstracts\Controllers\Controller
     {
         $this->view->Output('I', $name);
     }
-    
+
     /**
      * Writes the Bank Billet to a local file and updates the Database
      *
@@ -99,16 +99,16 @@ class Controller extends BankI\Abstracts\Controllers\Controller
                   . BankI\Utils::padNumber($this->model->title->id, 15) . '_'
                   . date('Y-m-d_h-i-s')
                   . '.pdf';
-        
+
         $file = @fopen($path . '/' . $filename, 'w');
         if ($file === false) {
             return false;
         }
         fwrite($file, $this->view->Output('S'));
         fclose($file);
-        
+
         $this->model->insertEntry();
-        
+
         return $filename;
     }
 }

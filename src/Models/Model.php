@@ -25,28 +25,28 @@ abstract class Model
      * @var Database
      */
     protected $db_address;
-    
+
     /**
      * Interfaces a connection to `bank_interchange` database
      *
      * @var Database
      */
     protected $db_banki;
-    
+
     /**
      * Assignor's data
      *
      * @var Assignor
      */
     public $assignor;
-    
+
     /**
      * Bank's data
      *
      * @var Bank
      */
     public $bank;
-    
+
     /**
      * Creates a new ShippingFile Model object
      *
@@ -61,12 +61,12 @@ abstract class Model
     ) {
         $this->db_address = $db_address;
         $this->db_banki = $db_banki;
-        
+
         // fetch assignor and bank
         $this->assignor = new BankI\Objects\Assignor($db_address, $db_banki, $assignor_id);
         $this->bank = new BankI\Objects\Bank($db_banki, $this->assignor->bank);
     }
-    
+
     /**
      * Locks a table and returns next auto increment index
      *
@@ -80,7 +80,7 @@ abstract class Model
         $result = Utils\Database::fetch($this->db_banki->query("SHOW TABLE STATUS LIKE '" . $table . "'"));
         return $result[0]['Auto_increment'];
     }
-    
+
     /**
      * Inserts a record in a table
      *
@@ -91,7 +91,7 @@ abstract class Model
      * @return mixed Depends on implementation
      */
     public abstract function insertEntry($data = null);
-    
+
     /**
      * Update table's rows to a given status
      *

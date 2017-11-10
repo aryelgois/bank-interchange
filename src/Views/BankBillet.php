@@ -53,14 +53,14 @@ abstract class BankBillet extends FPDF
                 . "- Caso não apareça o código de barras no final, clique em F5 para atualizar esta tela.\n"
                 . '- Caso tenha problemas ao imprimir, copie a seqüencia numérica abaixo e pague no caixa eletrônico ou no internet banking:'
     ];
-    
+
     /**
      * Path to directory with logos
      *
      * @const string
      */
     const PATH_LOGOS = __DIR__ . '/../../../res/logos';
-    
+
     /**
      * Font presets of family, weight, size and color
      *
@@ -75,21 +75,21 @@ abstract class BankBillet extends FPDF
         'cell_data'  => ['Arial', 'B',  7, [0, 0,  0]],
         'footer'     => ['Arial', '',   9, [0, 0,  0]]
     ];
-    
+
     /**
      * Size of dashes: black, white
      *
      * @const integer[]
      */
     const DASH_STYLE = [2, 1];
-    
+
     /**
      * Default line width for borders
      *
      * @const integer
      */
     const DEFAULT_LINE_WIDTH = 0.2;
-    
+
     /**
      * Dictionary of terms used in the billet
      *
@@ -130,21 +130,21 @@ abstract class BankBillet extends FPDF
         'specie_doc'    => 'Espécie doc.',
         'wallet'        => 'Carteira'
     ];
-    
+
     /**
      * Holds data from database and manipulates some tables
      *
      * @var Model
      */
     protected $model;
-    
+
     /**
      * Contains data for the billet
      *
      * @var mixed[]
      */
     protected $billet = [];
-    
+
     /**
      * Creates a new Billet View object
      *
@@ -155,22 +155,22 @@ abstract class BankBillet extends FPDF
     {
         parent::__construct();
         $this->AliasNbPages('{{ total_pages }}');
-        
+
         $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
-        
+
         $this->model = $model;
-        
+
         $this->beforeDraw($data);
-        
+
         $this->drawBillet();
     }
-    
-    
+
+
     /*
      * Before Drawing / Helper
      * =========================================================================
      */
-    
+
     /**
      * Prepare some data to be used during Draw
      *
@@ -180,10 +180,10 @@ abstract class BankBillet extends FPDF
     {
         $this->billet['value'] = (float)($this->model->title->value + $this->model->bank->tax);
         $this->generateBarcode();
-        
+
         $this->billet = array_merge($this->billet, $data);
     }
-    
+
     /**
      * Calculates Our number's check digit
      *
@@ -193,10 +193,10 @@ abstract class BankBillet extends FPDF
     {
         $onum = BankI\Utils::padNumber($this->model->assignor->agency['number'], 3)
               . BankI\Utils::padNumber($this->model->title->onum, 8);
-        
+
         return BankI\Utils::checkDigitOnum($onum);
     }
-    
+
     /**
      * Calculates the check digit for Barcode
      *
@@ -211,7 +211,7 @@ abstract class BankBillet extends FPDF
             : 11 - $tmp;
         return $cd;
     }
-    
+
     /**
      * Calculate the amount of days since 1997-10-07
      *
@@ -226,7 +226,7 @@ abstract class BankBillet extends FPDF
         }
         return '0000';
     }
-    
+
     protected function generateBarcode()
     {
         $barcode = [
@@ -238,12 +238,12 @@ abstract class BankBillet extends FPDF
             $this->generateFreeSpace()
         ];
         $barcode[2] = self::checkDigitBarcode(implode('', $barcode));
-        
+
         $this->billet['barcode'] = implode('', $barcode);
-        
+
         $this->billet['digitable'] = static::formatDigitable(...$barcode);
     }
-    
+
     /**
      * Free space, defined by Bank.
      *
@@ -253,19 +253,19 @@ abstract class BankBillet extends FPDF
     {
         return $this->formatOnum(false) . $this->formatAgencyCode(false);
     }
-    
-    
+
+
     /*
      * Drawing
      * =========================================================================
      */
-    
-    
+
+
     /**
      * Procedurally draws the bank billet using FPDF methods
      */
     protected abstract function drawBillet();
-    
+
     protected function drawPageHeader()
     {
         $this->billetSetFont('cell_data');
@@ -277,7 +277,7 @@ abstract class BankBillet extends FPDF
         $this->MultiCell(177, 3.5, utf8_decode(sprintf($this->dictionary['header_info'], $this->billet['digitable'], $this->formatMoney($this->billet['value']))));
         $this->Ln(4);
     }
-    
+
     protected function drawBillhead()
     {
         $this->Ln(2);
@@ -289,7 +289,7 @@ abstract class BankBillet extends FPDF
         $this->MultiCell(103.2, 2.5, utf8_decode($this->model->assignor->name . "\n" . $this->model->assignor->formatDocument() . "\n" . $this->model->assignor->address[0]->outputLong()));
         $this->SetY(max($y1, $this->GetY()));
     }
-    
+
     /**
      * Inserts a dashed line, with optional text before or after
      *
@@ -305,23 +305,23 @@ abstract class BankBillet extends FPDF
         {
             $this->Cell(177, 4, utf8_decode($text), 0, 1, $align);
         };
-        
+
         if ($text_first) {
             $cell($text, $align);
         }
-        
+
         $this->SetLineWidth(static::DEFAULT_LINE_WIDTH * 0.625);
         $y = $this->GetY();
         $this->SetDash(...static::DASH_STYLE);
         $this->Line(10, $y, 187, $y);
         $this->SetDash();
         $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
-        
+
         if (!$text_first) {
             $cell($text, $align);
         }
     }
-    
+
     /**
      * Inserts the Bank header
      *
@@ -332,7 +332,7 @@ abstract class BankBillet extends FPDF
     {
         $bank = $this->model->bank;
         $logo = self::PATH_LOGOS . '/banks/' . $bank->logo;
-        
+
         $this->Ln(3);
         if (is_file($logo)) {
             $this->Image($logo, null, null, 40);
@@ -341,7 +341,7 @@ abstract class BankBillet extends FPDF
             $this->billetSetFont('cell_data');
             $this->Cell(40, 7, utf8_decode($bank->name));
         }
-        
+
         $this->SetLineWidth(static::DEFAULT_LINE_WIDTH * $line_width_factor);
         $this->billetSetFont('bank_code');
         $this->Cell(15, 7, $this->formatBankCode(), 'LR', 0, 'C');
@@ -351,7 +351,7 @@ abstract class BankBillet extends FPDF
         $this->Line(10, $y, 187, $y);
         $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
     }
-    
+
     /**
      * Inserts row of cells
      *
@@ -373,7 +373,7 @@ abstract class BankBillet extends FPDF
         $this->billetSetFont('cell_data');
         $write_row('data', 'LB');
     }
-    
+
     /**
      * Inserts column of cells
      *
@@ -396,7 +396,7 @@ abstract class BankBillet extends FPDF
             }
         }
     }
-    
+
     /**
      * Produces a bar code from string of digits in style "2 of 5 intercalated"
      *
@@ -422,7 +422,7 @@ abstract class BankBillet extends FPDF
             '10010',
             '01010'
         ];
-        
+
         // If odd $data
         if ((strlen($data) % 2) != 0) {
             $data = '0' . $data;
@@ -433,7 +433,7 @@ abstract class BankBillet extends FPDF
             $code .= implode('', Utils\Utils::arrayInterpolate($map[$data[$i]], $map[$data[$i + 1]]));
         }
         $code .= '100'; // Trailing value
-        
+
         // Draw
         $this->SetFillColor(0);
         $x = $this->GetX();
@@ -451,13 +451,13 @@ abstract class BankBillet extends FPDF
         }
         $this->Ln($height);
     }
-    
-    
+
+
     /*
      * Formatting
      * =========================================================================
      */
-    
+
     /**
      * Formats Agency/Assignor's code
      *
@@ -474,16 +474,16 @@ abstract class BankBillet extends FPDF
             BankI\Utils::padNumber($assignor->agency['number'], 4),
             BankI\Utils::padNumber($assignor->account['number'], static::ACCOUNT_LEN)
         ];
-        
+
         // @todo check digit
         $cd = $assignor->account['cd'];
-        
+
         if ($full) {
             return implode(' / ', $tmp) . '-' . $cd;
         }
         return implode('', $tmp) . $cd;
     }
-    
+
     /**
      * Calculates Bank code's check digit and formats it
      *
@@ -492,16 +492,16 @@ abstract class BankBillet extends FPDF
     protected function formatBankCode()
     {
         $code = $this->model->bank->code;
-        
+
         $checksum = Utils\Validation::mod11Pre($code);
         $digit = $checksum * 10 % 11;
         if ($digit == 10) {
             $digit = 0;
         }
-        
+
         return $code . '-' . $digit;
     }
-    
+
     /**
      * Formats a date from Y-m-d to d/m/Y
      *
@@ -517,7 +517,7 @@ abstract class BankBillet extends FPDF
         }
         return ($d ? $d->format('d/m/Y') : $date);
     }
-    
+
     /**
      * Formats the barcode into a Digitable line
      *
@@ -532,29 +532,29 @@ abstract class BankBillet extends FPDF
     protected static function formatDigitable($bank, $specie, $cd, $due, $value, $free)
     {
         $fields = [];
-        
+
         // Field #0 - Bank code, Specie code, 5 first digits from Free space, Check digit for this field
         $tmp = $bank . $specie . substr($free, 0, 5);
         $tmp .= Utils\Validation::mod10($tmp);
         $fields[] = implode('.', str_split($tmp, 5));
-        
+
         // Field #1 - Digits 6 to 15 from Free space, Check digit for this field
         $tmp = substr($free, 5, 10);
         $fields[] = implode('.', str_split($tmp, 5)) . Utils\Validation::mod10($tmp);
-        
+
         // Field #2 - Digits 16 to 25 from Free space, Check digit for this field
         $tmp = substr($free, 15, 10);
         $fields[] = implode('.', str_split($tmp, 5)) . Utils\Validation::mod10($tmp);
-        
+
         // Field #3 - Digitable line Check digit
         $fields[] = $cd;
-        
+
         // Field #4 - Due factor, Document value
         $fields[] = $due . $value;
-        
+
         return implode(' ', $fields);
     }
-    
+
     /**
      * Formats a numeric value as monetary value
      *
@@ -567,7 +567,7 @@ abstract class BankBillet extends FPDF
         $specie = $this->model->title->specie;
         return ($symbol ? $specie['symbol'] . ' ' : '') . number_format($value, 2, $specie['decimal'], $specie['thousand']);
     }
-    
+
     /**
      * Calculates Our number's check digit and formats it
      *
@@ -582,14 +582,14 @@ abstract class BankBillet extends FPDF
                 . $this->checkDigitOnum();
         return $result;
     }
-    
-    
+
+
     /*
      * Internal
      * =========================================================================
      */
-    
-    
+
+
     /**
      * Allows an easy way to set current font
      *
@@ -603,7 +603,7 @@ abstract class BankBillet extends FPDF
             $this->SetTextColor(...$f[3]);
         }
     }
-    
+
     /**
      * This extension allows to set a dash pattern and draw dashed lines or rectangles.
      *
@@ -624,7 +624,7 @@ abstract class BankBillet extends FPDF
         }
         $this->_out($s);
     }
-    
+
     /**
      * Page footer
      *

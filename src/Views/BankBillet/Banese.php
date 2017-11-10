@@ -33,22 +33,22 @@ class Banese extends BankI\Abstracts\Views\BankBillet
         'cell_data'  => ['Arial', 'B',  7, [ 0,  0,  0]],
         'footer'     => ['Arial', '',   9, [ 0,  0,  0]]
     ];
-    
+
     /**
      * Size of dashes: black, white
      *
      * @const integer[]
      */
     const DASH_STYLE = [0.625, 0.75];
-    
+
     /**
      * Default line width for borders
      *
      * @const integer
      */
     const DEFAULT_LINE_WIDTH = 0.3;
-    
-    
+
+
     /**
      * Free space: Asbace key
      *
@@ -62,7 +62,7 @@ class Banese extends BankI\Abstracts\Views\BankBillet
              . BankI\Utils::padNumber($this->model->bank->code, 3, true);
         $cd1 = Utils\Validation::mod10($key);
         $cd2 = Utils\Validation::mod11($key . $cd1, 7);
-        
+
         if ($cd2 == 1) {
             if ($cd1 < 9) {
                 $cd1++;
@@ -74,10 +74,10 @@ class Banese extends BankI\Abstracts\Views\BankBillet
         } elseif ($cd2 > 1) {
             $cd2 = 11 - $cd2;
         }
-        
+
         return $key . $cd1 . $cd2;
     }
-    
+
     /**
      * Procedurally draws the bank billet using FPDF methods
      */
@@ -113,40 +113,40 @@ class Banese extends BankI\Abstracts\Views\BankBillet
         foreach ($keys as $key) {
             $this->dictionary[$key] = mb_strtoupper($this->dictionary[$key]);
         }
-        
+
         $dict = $this->dictionary;
-        
+
         $this->AddPage();
-        
+
         $this->drawPageHeader();
-        
+
         $this->billetSetFont('cell_data');
         $this->drawDash($dict['payer_receipt']);
-        
+
         $this->drawBillhead();
-        
+
         $this->drawBankHeader('L', 1);
-        
+
         $this->drawTable('demonstrative');
-        
+
         $this->Ln(4);
-        
+
         $this->billetSetFont('cell_title');
         $this->drawDash($dict['compensation']);
-        
+
         $this->SetY($this->GetY() - 3);
-        
+
         $this->drawBankHeader('L', 1);
-        
+
         $this->drawTable('instructions');
-        
+
         $this->SetY($this->GetY() - 3);
         $this->drawBarCode();
-        
+
         //$this->billetSetFont('cell_title');
         //$this->drawDash($dict['cut_here'], true);
     }
-    
+
     /**
      * Generic Table
      *
@@ -166,9 +166,9 @@ class Banese extends BankI\Abstracts\Views\BankBillet
         $title = $this->model->title;
         $payer = $this->model->title->payer;
         $guarantor = $this->model->title->guarantor;
-        
+
         $y = $this->GetY(); // get Y to come back and add the aside column
-        
+
         /*
          * Structure:
          *
@@ -203,7 +203,7 @@ class Banese extends BankI\Abstracts\Views\BankBillet
         foreach ($table as $row) {
             $this->drawTableRow($row);
         }
-        
+
         // Big cell: Instructions or Demonstrative
         $big_cell_text = $this->billet[$big_cell] ?? '';
         if ($big_cell == 'demonstrative') {
@@ -215,7 +215,7 @@ class Banese extends BankI\Abstracts\Views\BankBillet
         $this->billetSetFont('cell_data');
         $this->MultiCell(127.2, 3.5, utf8_decode($big_cell_text));
         $y2 = $this->GetY();
-        
+
         /**
          * Aside column:
          *
@@ -244,7 +244,7 @@ class Banese extends BankI\Abstracts\Views\BankBillet
             ['title' => $dict['charged'],     'data' => '',                                         'data_align' => 'R']  //$data['misc']['charged']
         ];
         $this->drawTableColumn($table, 137.2, 49.8, true);
-        
+
         // Instructions border
         $y = $this->GetY();
         $y3 = max($y, $y2);
@@ -254,7 +254,7 @@ class Banese extends BankI\Abstracts\Views\BankBillet
             $this->Line(137.2, $y3, 137.2, $y);
             $this->SetY($y3);
         }
-        
+
         // Payer
         $y = $this->GetY();
         $this->billetSetFont('cell_title');
@@ -266,7 +266,7 @@ class Banese extends BankI\Abstracts\Views\BankBillet
         $this->SetXY(119.2, $y);
         $this->Cell(36, 3.5, $payer->formatDocument(true), 0, 0, 'C');
         $this->setY($y1);
-        
+
         // Guarantor
         $guarantor_data = ($guarantor !== null)
             ? $guarantor->name . '     ' . $guarantor->address[0]->outputShort()
@@ -277,12 +277,12 @@ class Banese extends BankI\Abstracts\Views\BankBillet
         $this->Cell(153, 3.5, utf8_decode($guarantor_data), 0, 1);
         $x = $this->GetX();
         $y1 = $this->GetY();
-        
+
         // Payer / Guarantor border
         $this->Line($x, $y, $x, $y1);
         $this->Line($x, $y1, 187, $y1);
         $this->Line(187, $y, 187, $y1);
-        
+
         // Mechanical authentication
         $this->SetX(119.2);
         $this->billetSetFont('cell_title');

@@ -31,7 +31,7 @@ abstract class Utils
     {
         return strtoupper(substr(str_pad(NoDiacritic::filter($val), $len), 0, $len));
     }
-    
+
     /**
      * Adds leading zeroes to a value
      *
@@ -55,7 +55,7 @@ abstract class Utils
         }
         return $result;
     }
-    
+
     /**
      * Formats a Person Document
      *
@@ -68,7 +68,7 @@ abstract class Utils
     {
         return $person->document['type'] . self::padNumber($person->document['number'], $len);
     }
-    
+
     /**
      * Calculates Our number's check digit
      *

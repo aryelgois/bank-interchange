@@ -30,14 +30,14 @@ abstract class ShippingFile
      * @var Model
      */
     protected $model;
-    
+
     /**
      * Total registries in the file
      *
      * integer
      */
     protected $registries = 0;
-    
+
     /**
      * Every registry in the file
      *
@@ -46,14 +46,14 @@ abstract class ShippingFile
      * @var string[]
      */
     protected $file = [];
-    
+
     /**
      * Controls if it's allowed to add more registries
      *
      * @var boolean
      */
     protected $closed = false;
-    
+
     /**
      * Creates a new ShippingFile view object
      *
@@ -64,15 +64,15 @@ abstract class ShippingFile
     {
         $this->model = $model;
         $this->file_id = $file_id;
-        
+
         $this->open();
     }
-    
+
     /**
      * Adds a File Header
      */
     abstract protected function open();
-    
+
     /**
      * Adds a new Title registry
      *
@@ -84,12 +84,12 @@ abstract class ShippingFile
      * @throws OverflowException If there are too many registries
      */
     abstract public function addRegistry(BankI\Objects\Title $title, $opt = null);
-    
+
     /**
      * Adds a File Trailer
      */
     abstract protected function close();
-    
+
     /**
      * Outputs the contents in a multiline string
      *
@@ -111,14 +111,14 @@ abstract class ShippingFile
         }
         return $result;
     }
-    
-    
+
+
     /*
      * Formatting
      * =========================================================================
      */
-    
-    
+
+
     /**
      * Formats Assignor's Agency and Account with check digits
      *
@@ -132,7 +132,7 @@ abstract class ShippingFile
         $result .= static::assignorAgencyAccountCheck($result);
         return $result;
     }
-    
+
     /**
      * Calculates Agency/Account check digit
      *

@@ -24,33 +24,33 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
     protected function drawBillet()
     {
         $dict = $this->dictionary;
-        
+
         $this->AddPage();
-        
+
         $this->drawPageHeader();
-        
+
         $this->billetSetFont('cell_data');
         $this->drawDash($dict['payer_receipt']);
-        
+
         $this->drawBillhead();
-        
+
         $this->drawBankHeader();
-        
+
         $this->drawTable1();
-        
+
         $this->billetSetFont('cell_title');
         $this->drawDash($dict['cut_here'], true);
-        
+
         $this->drawBankHeader();
-        
+
         $this->drawTable2();
-        
+
         $this->drawBarCode();
-        
+
         $this->billetSetFont('cell_title');
         $this->drawDash($dict['cut_here'], true);
     }
-    
+
     /**
      * Table 1, stays with the Payer
      *
@@ -65,7 +65,7 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
         $bank = $this->model->bank;
         $title = $this->model->title;
         $payer = $this->model->title->payer;
-        
+
         /*
          * Structure:
          *
@@ -102,7 +102,7 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
         foreach ($table as $row) {
             $this->drawTableRow($row);
         }
-        
+
         // Demonstrative ('{{ tax }}' is replaced by the money-formated tax)
         $this->billetSetFont('cell_title');
         $this->Cell(151, 3.5, $dict['demonstrative'], 0, 0);
@@ -117,7 +117,7 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
         $this->SetY(max($y + 14, $y1, $y2));
         $this->Ln(12);
     }
-    
+
     /**
      * Table 2, stays in payment place
      */
@@ -129,9 +129,9 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
         $bank = $this->model->bank;
         $title = $this->model->title;
         $payer = $this->model->title->payer;
-        
+
         $y = $this->GetY(); // get Y to come back and add the aside column
-        
+
         /*
          * Structure:
          *
@@ -165,7 +165,7 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
         foreach ($table as $row) {
             $this->drawTableRow($row);
         }
-        
+
         // Instructions
         $y1 = $this->GetY();
         $this->billetSetFont('cell_title');
@@ -173,7 +173,7 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
         $this->billetSetFont('cell_data');
         $this->MultiCell(127.2, 3.5, utf8_decode($this->billet['instructions'] ?? ''));
         $y2 = $this->GetY();
-        
+
         /**
          * Aside column:
          *
@@ -202,7 +202,7 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
             ['title' => $dict['charged'],     'data' => '',                                         'data_align' => 'R']  //$data['misc']['charged']
         ];
         $this->drawTableColumn($table, 137.2, 49.8);
-        
+
         // Instructions border
         $y = $this->GetY();
         $y3 = max($y, $y2);
@@ -212,7 +212,7 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
             $this->Line(137.2, $y3, 137.2, $y);
             $this->SetY($y3);
         }
-        
+
         // Payer
         $this->billetSetFont('cell_title');
         $this->Cell(127.2, 7, $dict['payer'], 'L', 1);
@@ -221,7 +221,7 @@ class CaixaEconomicaFederal extends BankI\Abstracts\Views\BankBillet
         $this->SetXY(137.2, $this->GetY() - 3.5);
         $this->billetSetFont('cell_title');
         $this->Cell(49.8, 3.5, utf8_decode($dict['cod_down']), 'LB', 1);
-        
+
         // Guarantor
         $this->Cell(110, 3.5, $dict['guarantor']);
         $this->Cell(39.5, 3.5, utf8_decode($dict['mech_auth'] . ' - '), 0, 0, 'R');

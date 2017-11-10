@@ -25,14 +25,14 @@ class ShippingFile extends namespace\Model
      * @var string
      */
     const CNAB_NUMBER = '';
-    
+
     /**
      * All titles to be added
      *
      * @var Title[]
      */
     public $titles;
-    
+
     /**
      * Creates a new ShippingFile Model object
      *
@@ -47,10 +47,10 @@ class ShippingFile extends namespace\Model
         $assignor_id
     ) {
         parent::__construct(...func_get_args());
-        
+
         $this->fetchTitles($assignor_id, 0);
     }
-    
+
     /**
      * Creates Title objects from titles in Database
      *
@@ -65,7 +65,7 @@ class ShippingFile extends namespace\Model
             $this->titles[$id] = BankI\Objects\Title::fromDatabase($this->db_address, $this->db_banki, $id, $cache);
         }
     }
-    
+
     /**
      * Locks a table and returns next auto increment index
      *
@@ -80,7 +80,7 @@ class ShippingFile extends namespace\Model
     {
         return parent::getNextId($table);
     }
-    
+
     /**
      * Inserts the record of the Shipping File
      *
@@ -93,7 +93,7 @@ class ShippingFile extends namespace\Model
         // dirty hack
         $a = static::CNAB_NUMBER;
         $b = &$a;
-        
+
         $query = "INSERT INTO `shipping_files` (`cnab`, `filename`) VALUES (?, ?)";
         $stmt = $this->db_banki->connect->prepare($query);
         $stmt->bind_param('ss', $b, $data);

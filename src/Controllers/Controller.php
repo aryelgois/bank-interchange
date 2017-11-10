@@ -25,35 +25,35 @@ abstract class Controller
      * @const string[]
      */
     const CONFIG_KEYS = [];
-    
+
     /**
      * Holds user configurations
      *
      * @var mixed[]
      */
     protected $config;
-    
+
     /**
      * Holds data from database and manipulates some tables
      *
      * @var Model
      */
     protected $model;
-    
+
     /**
      * Controller result after execute()
      *
      * @var string
      */
     public $result = '';
-    
+
     /**
      * New entry id in the database after execute()
      *
      * @var integer
      */
     public $id = 0;
-    
+
     /**
      * Creates a new Controller object
      *
@@ -73,7 +73,7 @@ abstract class Controller
         }
         $this->config = $config;
     }
-    
+
     /**
      * Generates a view output from data in the model
      *

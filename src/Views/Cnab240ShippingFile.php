@@ -25,56 +25,56 @@ class ShippingFile
      * @const string
      */
     const VERSION_FILE_LAYOUT = '101';
-    
+
     /**
      * FEBRABAN's version of lot layout
      *
      * @const string
      */
     const VERSION_LOT_LAYOUT = '060';
-    
+
     /**
      * Holds data from database and manipulates some tables
      *
      * @var Model
      */
     protected $model;
-    
+
     /**
      * Total registries in the file
      *
      * integer
      */
     protected $registries = 0;
-    
+
     /**
      * Every entry of the file
      *
      * @var string[]
      */
     protected $file = [];
-    
+
     /**
      * Current Lot
      *
      * @var integer
      */
     protected $lot = 0;
-    
+
     /**
      * Contais lot's data
      *
      * array[]
      */
     protected $lots;
-    
+
     /**
      * Controls if it's allowed to add more registries
      *
      * @var boolean
      */
     protected $closed = false;
-    
+
     /**
      * Creates a new Shipping File object
      *
@@ -84,10 +84,10 @@ class ShippingFile
     public function __construct(BankI\Cnab240\Models\ShippingFile $model, $file_id) {
         $this->model = $model;
         $this->file_id = $file_id;
-        
+
         $this->open();
     }
-    
+
     /**
      * Adds a File Header
      */
@@ -97,7 +97,7 @@ class ShippingFile
         $this->registries++;
         $this->addLot();
     }
-    
+
     /**
      * Starts a new Lot
      *
@@ -120,7 +120,7 @@ class ShippingFile
         $this->registerLotHeader();
         $this->registries++;
     }
-    
+
     /**
      * Adds a new Title entry
      *
@@ -148,18 +148,18 @@ class ShippingFile
         } elseif ($count == 999998) {
             $this->addLot();
         }
-        
+
         $this->registerLotDetail($movement, $title);
-        
+
         $this->lots[$this->lot]['registries']++;
         $this->lots[$this->lot]['lines'] += 2;
         $this->lots[$this->lot]['titles']++;
         $this->lots[$this->lot]['total'] += $title->value;
-        
         $this->registries += 2; // the amount of segments (type 3)
+
         return true;
     }
-    
+
     /**
      * Adds a Lot Trailer if the current lot is open
      */
@@ -173,7 +173,7 @@ class ShippingFile
             $this->lots[$this->lot]['closed'] = true;
         }
     }
-    
+
     /**
      * Adds a File Trailer
      */
@@ -187,7 +187,7 @@ class ShippingFile
             $this->closed = true;
         }
     }
-    
+
     /**
      * Outputs the contents in a multiline string
      *
@@ -201,14 +201,14 @@ class ShippingFile
         $this->close();
         return implode("\n", $this->file);
     }
-    
-    
+
+
     /*
      * Formatting
      * =========================================================================
      */
-    
-    
+
+
     /**
      * Formats Assignor's Agency and Account with check digits
      *
@@ -222,7 +222,7 @@ class ShippingFile
         $result .= self::assignorAgencyAccountCheck($result);
         return $result;
     }
-    
+
     /**
      * Calculates Agency/Account check digit
      *
@@ -233,17 +233,17 @@ class ShippingFile
     protected static function assignorAgencyAccountCheck($agency_account)
     {
         $cd = Utils\Validation::mod10($agency_account);
-        
+
         return $cd;
     }
-    
-    
+
+
     /*
      * Internals
      * =========================================================================
      */
-    
-    
+
+
     /**
      * Adds a File Header
      */
@@ -262,7 +262,7 @@ class ShippingFile
                       . str_repeat(' ', 20)
                       . str_repeat(' ', 29);
     }
-    
+
     /**
      * Adds a Lot Header
      */
@@ -282,7 +282,7 @@ class ShippingFile
                       . '00000000'          // credit date
                       . str_repeat(' ', 33);
     }
-    
+
     /**
      * Adds a Lot Detail
      *
@@ -299,12 +299,12 @@ class ShippingFile
             BankI\Utils::padNumber($movement, 2)
         ];
         $payer = $title->payer;
-        
+
         $service[1] = 'P';
         $this->file[] = $control
                       . implode('', $service)
                       . $this->assignorAgencyAccount()
-                      
+
                       . BankI\Utils::padNumber($title->onum, 20)
                       . $title->wallet['febraban']
                       . '1'                     // Title's Registration
@@ -319,15 +319,15 @@ class ShippingFile
                       . BankI\Utils::padNumber($title->kind, 2)
                       . 'A'                     // Identifies title acceptance by payer
                       . date('dmY', strtotime($title->stamp))
-                      
+
                       . $title->fine['type']
                       . ($title->fine['date'] != '' ? date('dmY', strtotime($title->fine['date'])) : '00000000')
                       . BankI\Utils::padNumber(number_format($title->fine['value'], 2, '', ''), 15)
-                      
+
                       . $title->discount['type']
                       . ($title->discount['date'] != '' ? date('dmY', strtotime($title->discount['date'])) : '00000000')
                       . BankI\Utils::padNumber(number_format($title->discount['value'], 2, '', ''), 15)
-                      
+
                       . BankI\Utils::padNumber(number_format($title->iof, 2, '', ''), 15)
                       . BankI\Utils::padNumber(number_format($title->rebate, 2, '', ''), 15)
                       . BankI\Utils::padAlfa($title->description, 25)
@@ -338,21 +338,21 @@ class ShippingFile
                       . BankI\Utils::padNumber($title->specie['cnab240'], 2)
                       . '0000000000'            // Contract number
                       . '1';                    // Free use: it's defining partial payment isn't allowed
-        
+
         $service[1] = 'Q';
         $this->file[] = $control
                       . implode('', $service)
                       . $payer->toCnab240()
-                      
+
                       . (($title->guarantor === null)
                           ? str_repeat('0', 16) . str_repeat(' ', 40)
                           : BankI\Utils::formatDocument($title->guarantor, 15) . BankI\Utils::padAlfa($title->guarantor->name, 40))
-                      
+
                       . '000'                   // Corresponding bank
                       . '00000000000000000000'  // "Our number" at corresponding bank
                       . '        ';
     }
-    
+
     /**
      * Adds a Lot Trailer
      */
@@ -369,7 +369,7 @@ class ShippingFile
                       . '        '
                       . str_repeat(' ', 117);
     }
-    
+
     /**
      * Adds a File Trailer
      */
@@ -382,14 +382,14 @@ class ShippingFile
                       . '000000'
                       . str_repeat(' ', 205);
     }
-    
-    
+
+
     /*
      * Helper
      * =========================================================================
      */
-    
-    
+
+
     /**
      * Formats Control field
      *

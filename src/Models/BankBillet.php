@@ -25,7 +25,7 @@ class Model extends BankI\Abstracts\Models\Model
      * @var Title
      */
     public $title;
-    
+
     /**
      * Creates a new BankBillet Model object
      *
@@ -40,27 +40,27 @@ class Model extends BankI\Abstracts\Models\Model
     ) {
         $assignor_id = $config['assignor'];
         $title = $config['title'];
-        
+
         parent::__construct($db_address, $db_banki, $assignor_id);
-        
+
         // next id
         $title['id'] = self::getNextId('titles');
-        
+
         // next Onum
         $result = Utils\Database::fetch($db_banki->query("SELECT MAX(`onum`) as `onum` FROM `titles` WHERE `assignor` = " . $assignor_id));
         $title['onum'] = ($result[0]['onum'] ?? 0) + 1;
-        
+
         // create Title
         $this->title = new BankI\Objects\Title(
             $db_address,
             $db_banki,
             $title
         );
-        
+
         // Miscellaneus
         //$this->calcDiscountAddition();
     }
-    
+
     /**
      * Calculates Discounts, Deductions, Fines and Additions
      *
@@ -76,7 +76,7 @@ class Model extends BankI\Abstracts\Models\Model
         ];
         $sum = 0;
         $trigger = false;
-        
+
         foreach ($fields as $field => $operation) {
             $v = &$this->data['misc'][$field];
             if (is_numeric($v)) {
@@ -91,7 +91,7 @@ class Model extends BankI\Abstracts\Models\Model
             $this->data['misc']['charged'] = self::formatMoney($sum);
         }
     }
-    
+
     /**
      * Inserts the record of the Shipping File
      *

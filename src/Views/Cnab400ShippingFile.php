@@ -27,7 +27,7 @@ class ShippingFile extends BankI\Abstracts\Views\ShippingFile
         $this->registries++;
         $this->registerHeader();
     }
-    
+
     /**
      * Adds a new Title entry
      *
@@ -42,12 +42,12 @@ class ShippingFile extends BankI\Abstracts\Views\ShippingFile
         if ($this->closed) {
             return false;
         }
-        
+
         $this->incrementRegistries(999998);
         $this->registerTransaction($title, $opt);
         return true;
     }
-    
+
     /**
      * Adds a File Trailer
      */
@@ -59,14 +59,14 @@ class ShippingFile extends BankI\Abstracts\Views\ShippingFile
             $this->closed = true;
         }
     }
-    
-    
+
+
     /*
      * Internals
      * =========================================================================
      */
-    
-    
+
+
     /**
      * Adds a Header
      */
@@ -85,7 +85,7 @@ class ShippingFile extends BankI\Abstracts\Views\ShippingFile
                   . BankI\Utils::padNumber($this->registries, 6);
         $this->file[] = $registry;
     }
-    
+
     /**
      * Adds a Transaction
      *
@@ -129,7 +129,7 @@ class ShippingFile extends BankI\Abstracts\Views\ShippingFile
                   . BankI\Utils::padNumber($this->registries, 6);
         $this->file[] = $registry;
     }
-    
+
     /**
      * Adds a Trailer
      */
@@ -140,14 +140,14 @@ class ShippingFile extends BankI\Abstracts\Views\ShippingFile
                   . BankI\Utils::padNumber($this->registries, 6);
         $this->file[] = $registry;
     }
-    
-    
+
+
     /*
      * Formatting
      * =========================================================================
      */
-    
-    
+
+
     /**
      * Formats Assignor's Agency and Account with check digits
      *
@@ -162,21 +162,21 @@ class ShippingFile extends BankI\Abstracts\Views\ShippingFile
                 . BankI\Utils::padNumber($a->account['cd'], 1);
         return $result;
     }
-    
+
     protected static function secondDiscount($title)
     {
         $result = '000000'
                 . '0000000000000';
         return $result;
     }
-    
-    
+
+
     /*
      * Helper
      * =========================================================================
      */
-    
-    
+
+
     /**
      * Increments the Registries counter
      *

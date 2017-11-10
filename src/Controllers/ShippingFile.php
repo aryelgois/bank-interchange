@@ -32,17 +32,17 @@ abstract class ShippingFile extends namespace\Controller
     public function save($path)
     {
         $filename = $this->getFilename();
-        
+
         $file = @fopen($path . '/' . $filename, 'w');
         if ($file === false) {
             return false;
         }
         fwrite($file, $this->result);
         fclose($file);
-        
+
         return $filename;
     }
-    
+
     /**
      * Generates the filename to save the Shipping File
      *
