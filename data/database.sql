@@ -28,8 +28,10 @@ CREATE TABLE `species` (
     `id`            tinyint(3)      UNSIGNED NOT NULL AUTO_INCREMENT,
     `symbol`        varchar(5)      NOT NULL,
     `name`          varchar(30)     NOT NULL,
+    `name_plural`   varchar(30),
     `cnab240`       char(2)         NOT NULL,
     `cnab400`       char(2)         NOT NULL,
+    `decimals`      tinyint(2)      NOT NULL DEFAULT 2,
     `thousand`      char(1)         NOT NULL,
     `decimal`       char(1)         NOT NULL,
     PRIMARY KEY (`id`)
