@@ -6,14 +6,24 @@ use aryelgois\BankInterchange;
 use aryelgois\Medools;
 
 function select_option_foreign_person(Medools\ModelIterator $iterator) {
-    foreach ($iterator as $model) {
-        $person = $model->getForeign('person');
-        printf(
-            "                        <option value=\"%s\">%s (%s)</option>\n",
-            $person->get('id'),
-            $person->get('name'),
-            $person->documentFormat()
-        );
+    try {
+        foreach ($iterator as $model) {
+            $person = $model->getForeign('person');
+            printf(
+                "                        <option value=\"%s\">%s (%s)</option>\n",
+                $model->get('id'),
+                $person->get('name'),
+                $person->documentFormat()
+            );
+        }
+    } catch (RuntimeException $e) {
+        if ($e->getMessage() !== 'Unknown database') {
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        }
+        /*
+         * Silently skip error:
+         * User might not have configured config/medools.php yet
+         */
     }
 }
 
