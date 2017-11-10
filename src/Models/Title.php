@@ -14,6 +14,9 @@ use aryelgois\Medools;
  *
  * It might be one or products/services
  *
+ * NOTE:
+ * - The pair `assignor` and `our_number` must be UNIQUE
+ *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
@@ -81,4 +84,33 @@ class Title extends Medools\Model
             'id'
         ],
     ];
+
+    /**
+     * Sets the `our_number` column based on current `assignor`
+     *
+     * Intended to be used only when creating a new entry
+     *
+     * NOTE:
+     * - Be sure to save() soon
+     *
+     * @throws \LogicException If assignor is not set
+     */
+    public function setOurNumber()
+    {
+        $assignor = $this->get('assignor');
+        if ($assignor === null) {
+            throw new LogicException('You MUST set `assignor` column first');
+        }
+
+        $database = self::getDatabase();
+        $our_number = $database->max(
+            static::TABLE,
+            'our_number',
+            [
+                'assignor' => $assignor
+            ]
+        );
+
+        $this->set('our_number', ++$our_number);
+    }
 }
