@@ -8,7 +8,6 @@
 namespace aryelgois\BankInterchange;
 
 use aryelgois\Utils\Validation;
-use aryelgois\Medools;
 use VRia\Utils\NoDiacritic;
 
 /**
@@ -42,7 +41,7 @@ abstract class Utils
      *
      * @return string
      *
-     * @throws LengthException If $val overflows
+     * @throws \LengthException If $val overflows
      */
     public static function padNumber($val, $len, $trim = false)
     {
