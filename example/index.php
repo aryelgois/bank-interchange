@@ -21,12 +21,10 @@ function protected_example(callable $callback, ...$params) {
 
 function select_option_foreign_person(Medools\ModelIterator $iterator) {
     foreach ($iterator as $model) {
-        $person = $model->getForeign('person');
         printf(
-            "                        <option value=\"%s\">%s (%s)</option>\n",
+            "                        <option value=\"%s\">%s</option>\n",
             $model->get('id'),
-            $person->get('name'),
-            $person->documentFormat()
+            format_model_pretty($model, false)
         );
     }
 }
@@ -46,15 +44,15 @@ function list_titles()
     $iterator = new Medools\ModelIterator(new BankInterchange\Models\Title, []);
     foreach ($iterator as $model) {
         $id = $model->get('id');
-        $payer_person = $model->getForeign('payer')->getForeign('person');
-        $assignor_person = $model->getForeign('assignor')->getForeign('person');
+        $payer = $model->getForeign('payer');
+        $assignor = $model->getForeign('assignor');
         $value = $model->getForeign('specie')->getFormated($model->get('value'));
 
         $data = [
             $id,
             $id,
-            format_person_pretty($payer_person),
-            format_person_pretty($assignor_person),
+            format_model_pretty($payer),
+            format_model_pretty($assignor),
             $value,
             $model->get('stamp'),
             $id,
@@ -64,11 +62,16 @@ function list_titles()
     }
 }
 
-function format_person_pretty(Medools\Models\Person $person) {
+function format_model_pretty($model, $html = true) {
+    $person = $model->getForeign('person');
+    $info = ($model instanceof BankInterchange\Models\Assignor)
+          ? 'Account: ' . $model->formatAgencyAccount(4, 11)
+          : $person->documentFormat(true);
+
     $result = $person->get('name')
-            . '<br/><small>'
-            . $person->documentFormat(true)
-            . '</small>';
+            . ($html ? '<br/><small>' : ' (')
+            . $info
+            . ($html ? '</small>' : ')');
 
     return $result;
 }
