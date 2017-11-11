@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views\BankBillet;
+namespace aryelgois\BankInterchange\Views\BankBillets;
 
 use aryelgois\BankInterchange as BankI;
 

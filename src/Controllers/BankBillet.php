@@ -43,7 +43,7 @@ class BankBillet
 
         $bank = $title->getForeign('assignor')->getForeign('bank');
 
-        $view_class = '\\aryelgois\\BankInterchange\\Views\\BankBillet\\'
+        $view_class = '\\aryelgois\\BankInterchange\\Views\\BankBillets\\'
                     . $bank->get('view');
 
         $this->view = new $view_class($title, $data, $logos);
