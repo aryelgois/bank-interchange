@@ -7,7 +7,8 @@
 
 namespace aryelgois\BankInterchange;
 
-use aryelgois\Objects;
+use aryelgois\Utils\Validation;
+use aryelgois\Medools;
 use VRia\Utils\NoDiacritic;
 
 /**
@@ -57,31 +58,20 @@ abstract class Utils
     }
 
     /**
-     * Formats a Person Document
-     *
-     * @param Person  $person Person object whose document will be formatted
-     * @param integer $len    Document length to be padded (not returned length)
-     *
-     * @return string
-     */
-    public static function formatDocument(Objects\Person $person, $len = 14)
-    {
-        return $person->document['type'] . self::padNumber($person->document['number'], $len);
-    }
-
-    /**
      * Calculates Our number's check digit
      *
-     * @param string $onum Our number which check digit will be calculated
+     * @param string $our_number Our number which check digit will be calculated
      *
      * @return string
      */
-    public static function checkDigitOnum($onum)
+    public static function checkDigitOurNumber($our_number)
     {
-        $digit = \aryelgois\Utils\Validation::mod11($onum);
+        $digit = Validation::mod11($our_number);
+
         $digit = ($digit > 1)
-            ? $digit - 11
-            : 0;
+               ? $digit - 11
+               : 0;
+
         return abs($digit);
     }
 }

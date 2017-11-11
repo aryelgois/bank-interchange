@@ -49,7 +49,7 @@ class Assignor extends Medools\Model
             'id'
         ],
         'address' => [
-            '\aryelgois\Medools\Models\Address\FullAddress',
+            __NAMESPACE__ . '\FullAddress',
             'id'
         ],
         'bank' => [

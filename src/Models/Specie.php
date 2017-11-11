@@ -27,8 +27,7 @@ class Specie extends Medools\Model
         'symbol',
         'name',
         'name_plural',
-        'cnab240',
-        'cnab400',
+        'febraban',
         'decimals',
         'thousand',
         'decimal',
@@ -42,7 +41,8 @@ class Specie extends Medools\Model
      * Outputs a value formated to this model
      *
      * @param number $value  Some monetary value to be formated
-     * @param string $format If should prepend 'symbol' or append 'name'
+     * @param string $format If should prepend 'symbol' or append 'name', or if
+     *                       should return without any ('raw')
      *
      * @return string
      */
@@ -62,6 +62,10 @@ class Specie extends Medools\Model
                     $name = $this->get('name');
                 }
                 return $formatted . ' ' . $name;
+                break;
+
+            case 'raw':
+                return $formatted;
                 break;
 
             case 'symbol':

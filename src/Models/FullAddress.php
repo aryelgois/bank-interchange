@@ -7,7 +7,7 @@
 
 namespace aryelgois\BankInterchange\Models;
 
-use aryelgois\Utils;
+use aryelgois\Utils\Validation;
 use aryelgois\Medools;
 
 /**
@@ -21,29 +21,42 @@ class FullAddress extends Medools\Models\Address\FullAddress
 {
     const DATABASE_NAME_KEY = 'bank_interchange';
 
-    /*
-     * Old methods
-     * =======================================================================
+    /**
+     * Outputs Model's data in a long format
+     *
+     * @return string
      */
-
     public function outputLong()
     {
-        $result = $this->place . ', '
-                . $this->number . ', '
-                . ($this->detail != '' ? ', ' . $this->detail : '')
-                . $this->neighborhood . "\n"
-                . $this->county['name'] . '/' . $this->state['code'] . ' - '
-                . 'CEP: ' . Utils\Validation::cep($this->zipcode);
+        $data = $this->getData(true);
+
+        $result = $data['place'] . ', '
+                . $data['number'] . ', '
+                . ($data['detail'] != '' ? ', ' . $data['detail'] : '')
+                . $data['neighborhood'] . "\n"
+                . $data['county']['name'] . '/'
+                . $data['county']['state']['code'] . ' - '
+                . 'CEP: ' . Validation::cep($data['zipcode']);
+
         return $result;
     }
 
+    /**
+     * Outputs Model's data in a short format
+     *
+     * @return string
+     */
     public function outputShort()
     {
-        $result = $this->place . ', '
-                . $this->number . ', '
-                . $this->neighborhood . ', '
-                . $this->county['name'] . '/' . $this->state['code'] . ' '
-                . Utils\Validation::cep($this->zipcode);
+        $data = $this->getData(true);
+
+        $result = $data['place'] . ', '
+                . $data['number'] . ', '
+                . $data['neighborhood'] . ', '
+                . $data['county']['name'] . '/'
+                . $data['county']['state']['code'] . ' '
+                . Validation::cep($data['zipcode']);
+
         return $result;
     }
 }
