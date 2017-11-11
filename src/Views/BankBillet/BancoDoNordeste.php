@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\BankBillet\Views;
+namespace aryelgois\BankInterchange\Views\BankBillet;
 
 use aryelgois\BankInterchange as BankI;
 
@@ -16,17 +16,17 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class BancoDoNordeste extends namespace\CaixaEconomicaFederal
+class BancoDoNordeste extends CaixaEconomicaFederal
 {
     /**
      * Length used to zero-pad "Our Number"
      */
-    const ONUM_LEN = 7;
+    const OUR_NUMBER_LENGTH = 7;
 
     /**
      * Length used to zero-pad the account
      */
-    const ACCOUNT_LEN = 7;
+    const ACCOUNT_LENGTH = 7;
 
     /**
      * Temporary way to set the document specie
@@ -40,8 +40,8 @@ class BancoDoNordeste extends namespace\CaixaEconomicaFederal
      */
     protected function generateFreeSpace()
     {
-        $result = $this->formatAgencyCode(false)
-                . $this->formatOnum(false)
+        $result = $this->formatAgencyAccount(false)
+                . $this->formatOurNumber(false)
                 . '21'
                 . '000';
         return $result;
@@ -52,9 +52,9 @@ class BancoDoNordeste extends namespace\CaixaEconomicaFederal
      *
      * @param mixed[] $data Data for the bank billet
      */
-    protected function beforeDraw($data)
+    protected function beforeDraw()
     {
-        parent::beforeDraw($data);
-        $this->model->title->wallet['symbol'] = $this->model->title->wallet['operation'];
+        $this->ref['wallet']->set('symbol', $this->ref['wallet']->get('operation'));
+        parent::beforeDraw();
     }
 }
