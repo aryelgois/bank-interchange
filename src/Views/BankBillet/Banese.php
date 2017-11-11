@@ -7,7 +7,7 @@
 
 namespace aryelgois\BankInterchange\Views\BankBillet;
 
-use aryelgois\Utils;
+use aryelgois\Utils\Validation;
 use aryelgois\BankInterchange as BankI;
 
 /**
@@ -59,16 +59,16 @@ class Banese extends BankI\Views\BankBillet
              . BankI\Utils::padNumber($this->ref['assignor']->get('account'), 9, true)
              . $this->formatOurNumber(false)
              . BankI\Utils::padNumber($this->ref['bank']->get('code'), 3, true);
-        $cd1 = Utils\Validation::mod10($key);
-        $cd2 = Utils\Validation::mod11($key . $cd1, 7);
+        $cd1 = Validation::mod10($key);
+        $cd2 = Validation::mod11($key . $cd1, 7);
 
         if ($cd2 == 1) {
             if ($cd1 < 9) {
                 $cd1++;
-                $cd2 = Utils\Validation::mod11($key . $cd1, 7);
+                $cd2 = Validation::mod11($key . $cd1, 7);
             } elseif ($cd1 == 9) {
                 $cd1 = 0;
-                $cd2 = Utils\Validation::mod11($key . $cd1, 7);
+                $cd2 = Validation::mod11($key . $cd1, 7);
             }
         } elseif ($cd2 > 1) {
             $cd2 = 11 - $cd2;
