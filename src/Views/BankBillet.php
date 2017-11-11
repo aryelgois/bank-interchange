@@ -161,7 +161,9 @@ abstract class BankBillet extends FPDF
 
         $this->title = $title;
         $this->billet = $data;
-        $this->logos = $logos;
+        if (file_exists($logos) && is_dir($logos)) {
+            $this->logos = realpath($logos);
+        }
 
         $ref = [];
         $ref['assignor']         = $title->getForeign('assignor');
@@ -308,13 +310,19 @@ abstract class BankBillet extends FPDF
     protected function drawBillhead()
     {
         $this->Ln(2);
-        $y = $this->GetY();
-        $this->Image($this->logos . '/assignors/' . $this->ref['assignor']->get('logo'), null, null, 40, 0, '', $this->ref['assignor']->get('url'));
-        $y1 = $this->GetY();
+        $logo = $this->logos
+              . '/assignors/'
+              . $this->ref['assignor']->get('logo');
+
+        if ($this->logos !== null && is_file($logo)) {
+            $y = $this->GetY();
+            $this->Image($logo, null, null, 40, 0, '', $this->ref['assignor']->get('url'));
+            $y1 = $this->GetY();
+            $this->SetXY(50, $y);
+        }
         $this->billetSetFont('billhead');
-        $this->SetXY(50, $y);
         $this->MultiCell(103.2, 2.5, utf8_decode($this->ref['assignor.person']->get('name') . "\n" . $this->ref['assignor.person']->documentFormat() . "\n" . $this->ref['assignor.address']->outputLong()));
-        $this->SetY(max($y1, $this->GetY()));
+        $this->SetY(max($y1 ?? 0, $this->GetY()));
     }
 
     /**
@@ -362,7 +370,7 @@ abstract class BankBillet extends FPDF
         $logo = $this->logos . '/banks/' . $bank->get('logo');
 
         $this->Ln(3);
-        if (is_file($logo)) {
+        if ($this->logos !== null && is_file($logo)) {
             $this->Image($logo, null, null, 40);
             $this->SetXY(50, $this->GetY() - 7);
         } else {
