@@ -46,7 +46,7 @@ function list_titles()
         $id = $model->get('id');
         $payer = $model->getForeign('payer');
         $assignor = $model->getForeign('assignor');
-        $value = $model->getForeign('specie')->getFormated($model->get('value'));
+        $value = $model->getForeign('specie')->format($model->get('value'));
 
         $data = [
             $id,

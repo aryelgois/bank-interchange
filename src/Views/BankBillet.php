@@ -618,13 +618,13 @@ abstract class BankBillet extends FPDF
      * Formats a numeric value as monetary value
      *
      * @param number  $value  Value to be formated
-     * @param string  $format @see Models/Specie::getFormated()
+     * @param string  $format @see Models/Specie::format()
      *
      * @return string
      */
     protected function formatMoney($value, $format = 'symbol')
     {
-        return $this->ref['specie']->getFormated($value, $format);
+        return $this->ref['specie']->format($value, $format);
     }
 
     /**

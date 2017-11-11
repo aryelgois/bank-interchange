@@ -46,7 +46,7 @@ class Specie extends Medools\Model
      *
      * @return string
      */
-    public function getFormated($value, $format = 'symbol')
+    public function format($value, $format = 'symbol')
     {
         $formatted = number_format(
             $value,
