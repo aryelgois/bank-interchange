@@ -8,6 +8,7 @@
 namespace aryelgois\BankInterchange\Models;
 
 use aryelgois\Medools;
+use aryelgois\BankInterchange as BankI;
 
 /**
  * It's who made a covenant with the Bank and has to emit bank billets.
@@ -61,4 +62,32 @@ class Assignor extends Medools\Model
             'id'
         ],
     ];
+
+    /**
+     * Formats Agency/Assignor's code
+     *
+     * @param integer $agency_length
+     * @param integer $account_length
+     * @param boolean $symbols        If should include symbols
+     *
+     * @return string
+     *
+     * @throws \LengthException @see Utils::padNumber()
+     */
+    public function formatAgencyAccount(
+        $agency_length,
+        $account_length,
+        $symbols = true
+    ) {
+        $tmp = [
+            BankI\Utils::padNumber($this->get('agency'), $agency_length),
+            BankI\Utils::padNumber($this->get('account'), $account_length)
+        ];
+        $check_digit = $this->get('account_cd');
+
+        if ($symbols) {
+            return implode(' / ', $tmp) . '-' . $check_digit;
+        }
+        return implode('', $tmp) . $check_digit;
+    }
 }

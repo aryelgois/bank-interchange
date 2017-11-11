@@ -31,7 +31,12 @@ abstract class BankBillet extends FPDF
     const OUR_NUMBER_LENGTH = 8;
 
     /**
-     * Length used to zero-pad the account (WITHOUT the checkdigit)
+     * Length used to zero-pad the assignor's agency (WITHOUT the checkdigit)
+     */
+    const AGENCY_LENGTH = 4;
+
+    /**
+     * Length used to zero-pad the assignor's account (WITHOUT the checkdigit)
      */
     const ACCOUNT_LENGTH = 11;
 
@@ -265,7 +270,7 @@ abstract class BankBillet extends FPDF
      */
     protected function generateFreeSpace()
     {
-        return $this->formatOurNumber(false) . $this->formatAgencyCode(false);
+        return $this->formatOurNumber(false) . $this->formatAgencyAccount(false);
     }
 
     /*
@@ -481,25 +486,19 @@ abstract class BankBillet extends FPDF
      */
 
     /**
-     * Formats Agency/Assignor's code
+     * Formats Assignor's Agency/Account
      *
-     * @param boolean $full If shoud return the full formatting
+     * @param boolean $symbol If shoud include symbols
      *
      * @return string
      */
-    protected function formatAgencyCode($full = true)
+    protected function formatAgencyAccount($symbol = true)
     {
-        $assignor = $this->ref['assignor'];
-        $tmp = [
-            BankI\Utils::padNumber($assignor->get('agency'), 4),
-            BankI\Utils::padNumber($assignor->get('account'), static::ACCOUNT_LENGTH)
-        ];
-        $check_digit = $assignor->get('account_cd');
-
-        if ($full) {
-            return implode(' / ', $tmp) . '-' . $check_digit;
-        }
-        return implode('', $tmp) . $check_digit;
+        return $this->ref['assignor']->formatAgencyAccount(
+            static::AGENCY_LENGTH,
+            static::ACCOUNT_LENGTH,
+            $symbol
+        );
     }
 
     /**
