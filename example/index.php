@@ -5,6 +5,10 @@ require_once 'autoload.php';
 use aryelgois\BankInterchange;
 use aryelgois\Medools;
 
+/*
+ * helper functions
+ */
+
 function protected_example(callable $callback)
 {
     try {
@@ -20,6 +24,21 @@ function protected_example(callable $callback)
     }
 }
 
+function format_model_pretty($model, $html = true)
+{
+    $person = $model->getForeign('person');
+    $info = ($model instanceof BankInterchange\Models\Assignor)
+          ? 'Account: ' . $model->formatAgencyAccount(4, 11)
+          : $person->documentFormat(true);
+
+    $result = $person->get('name')
+            . ($html ? '<br/><small>' : ' (')
+            . $info
+            . ($html ? '</small>' : ')');
+
+    return $result;
+}
+
 function select_option_foreign_person(Medools\ModelIterator $iterator)
 {
     foreach ($iterator as $model) {
@@ -30,6 +49,10 @@ function select_option_foreign_person(Medools\ModelIterator $iterator)
         );
     }
 }
+
+/*
+ * example functions
+ */
 
 function list_payers()
 {
@@ -76,21 +99,6 @@ function list_titles()
 
         printf($template, ...$data);
     }
-}
-
-function format_model_pretty($model, $html = true)
-{
-    $person = $model->getForeign('person');
-    $info = ($model instanceof BankInterchange\Models\Assignor)
-          ? 'Account: ' . $model->formatAgencyAccount(4, 11)
-          : $person->documentFormat(true);
-
-    $result = $person->get('name')
-            . ($html ? '<br/><small>' : ' (')
-            . $info
-            . ($html ? '</small>' : ')');
-
-    return $result;
 }
 
 function list_shipping_files()
