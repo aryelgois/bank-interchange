@@ -10,6 +10,7 @@ namespace aryelgois\BankInterchange\Views;
 use aryelgois\Utils;
 use aryelgois\Medools;
 use aryelgois\BankInterchange as BankI;
+use VRia\Utils\NoDiacritic;
 
 /**
  * Generates CNAB compliant Shipping Files to be sent to banks
@@ -32,14 +33,14 @@ abstract class Cnab
      *
      * @const string
      */
-    const FILE_END = "\u{26}";
+    const FILE_END = "\u{1a}";
 
     /**
-     * Resulting CNAB file
+     * CNAB Shipping File registries
      *
-     * @var string
+     * @var string[]
      */
-    protected $file = '';
+    protected $file = [];
 
     /**
      * Total registries in the file
@@ -89,7 +90,8 @@ abstract class Cnab
      */
     final public function output()
     {
-        return $this->file;
+        return implode(static::LINE_END, $this->file)
+             . static::LINE_END . static::FILE_END;
     }
 
     /*
@@ -117,6 +119,23 @@ abstract class Cnab
     {
         $this->incrementRegistries(999998);
         $this->registerTransaction($title);
+    }
+
+    /**
+     * Actually inserts the registry in $this->file
+     *
+     * @param string   $format A sprintf() format
+     * @param string[] $data   Registry data to be inserted
+     */
+    final protected function register($format, $data)
+    {
+        // data cleanup
+        foreach ($data as $id => $value) {
+            $data[$id] = strtoupper(NoDiacritic::filter($value));
+            $data[$id] = preg_replace('/:;,\.\/\\\?\$\*!#_-/', '', $data[$id]);
+        }
+
+        $this->file[] = sprintf($format, ...$data);
     }
 
     /**

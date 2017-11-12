@@ -51,13 +51,6 @@ class Payer extends Medools\Model
     protected $cnab240_string;
 
     /**
-     * Cache for toCnab400()
-     *
-     * @var string
-     */
-    protected $cnab400_string;
-
-    /**
      * Formats Payer's data to be CNAB240 compliant
      */
     public function toCnab240()
@@ -77,27 +70,5 @@ class Payer extends Medools\Model
             $this->cnab240_string = $result;
         }
         return $this->cnab240_string;
-    }
-
-    /**
-     * Formats Payer's data to be CNAB400 compliant
-     */
-    public function toCnab400()
-    {
-        if ($this->cnab400_string == null) {
-            $person = $this->getForeign('person');
-            $address = $this->getForeign('address');
-
-            $result = '0' . $person->documentFormat()
-                    . BankI\Utils::padAlfa($person->get('name'), 40)
-                    . BankI\Utils::padAlfa($address->get('place') . ', ' . $address->get('number') . ', ' . $address->get('neighborhood'), 40)
-                    . BankI\Utils::padAlfa($address->get('detail'), 12)
-                    . BankI\Utils::padNumber($address->get('zipcode'), 8)
-                    . BankI\Utils::padAlfa($address->getForeign('county')->get('name'), 15)
-                    . BankI\Utils::padAlfa($address->getForeign('county')->getForeign('state')->get('code'), 2);
-
-            $this->cnab400_string = $result;
-        }
-        return $this->cnab400_string;
     }
 }
