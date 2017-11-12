@@ -5,12 +5,12 @@ require_once 'autoload.php';
 use aryelgois\BankInterchange;
 use aryelgois\Medools;
 
-function protected_example(callable $callback, ...$params)
+function protected_example(callable $callback)
 {
     try {
-        $callback(...$params);
-    } catch (RuntimeException $e) {
-        if ($e->getMessage() !== 'Unknown database') {
+        $callback();
+    } catch (Exception $e) {
+        if (strpos($e->getMessage(), 'Unknown database') === false) {
             throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
         /*
@@ -29,6 +29,20 @@ function select_option_foreign_person(Medools\ModelIterator $iterator)
             format_model_pretty($model, false)
         );
     }
+}
+
+function list_payers()
+{
+    select_option_foreign_person(
+        new Medools\ModelIterator(new BankInterchange\Models\Payer, [])
+    );
+}
+
+function list_assignors()
+{
+    select_option_foreign_person(
+        new Medools\ModelIterator(new BankInterchange\Models\Assignor, [])
+    );
 }
 
 function list_titles()
@@ -171,10 +185,7 @@ function select_all(source, name) {
                     <select name="payer" required>
 <?php
 
-protected_example(
-    'select_option_foreign_person',
-    new Medools\ModelIterator(new BankInterchange\Models\Payer, [])
-);
+protected_example('list_payers');
 
 ?>
                     </select>
@@ -186,10 +197,7 @@ protected_example(
                     <select name="assignor" required>
 <?php
 
-protected_example(
-    'select_option_foreign_person',
-    new Medools\ModelIterator(new BankInterchange\Models\Assignor, [])
-);
+protected_example('list_assignors');
 
 ?>
                     </select>
