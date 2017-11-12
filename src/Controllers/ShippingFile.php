@@ -38,14 +38,14 @@ abstract class ShippingFile
         }
 
         $check = BankI\Models\Title::dump(['id' => array_values($title_list)]);
-        if (
-            empty($check)
-            || count(array_unique(array_column($check, 'assignor'))) > 1
-        ) {
+        $assignor = array_unique(array_column($check, 'assignor'));
+        if (count($assignor) != 1) {
             throw new \InvalidArgumentException('Title list is invalid');
         }
+        $assignor = $assignor[0];
 
         $shipping_file = new BankI\Models\ShippingFile;
+        $shipping_file->set('assignor', $assignor);
         $shipping_file->set('status', 0);
         $shipping_file->save();
         $id = $shipping_file->get('id');
