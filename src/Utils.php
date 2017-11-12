@@ -55,22 +55,4 @@ abstract class Utils
         }
         return $result;
     }
-
-    /**
-     * Calculates Our number's check digit
-     *
-     * @param string $our_number Our number which check digit will be calculated
-     *
-     * @return string
-     */
-    public static function checkDigitOurNumber($our_number)
-    {
-        $digit = Validation::mod11($our_number);
-
-        $digit = ($digit > 1)
-               ? $digit - 11
-               : 0;
-
-        return abs($digit);
-    }
 }

@@ -209,7 +209,7 @@ abstract class BankBillet extends FPDF
         $our_number = BankI\Utils::padNumber($this->ref['assignor']->get('agency'), 3)
                     . BankI\Utils::padNumber($this->title->get('our_number'), 8);
 
-        return BankI\Utils::checkDigitOurNumber($our_number);
+        return $this->title->checkDigitOurNumberAlgorithm($our_number);
     }
 
     /**

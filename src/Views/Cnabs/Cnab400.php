@@ -86,7 +86,7 @@ class Cnab400 extends BankI\Views\Cnab
             '',
             $title->get('id'),
             $title->get('our_number'),
-            BankI\Utils::checkDigitOurNumber($title->get('our_number')),
+            $title->checkDigitOurNumber(),
             '0', // contract
             '0', // second discount date
             '0', // second discount value

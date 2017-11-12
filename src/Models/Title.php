@@ -7,6 +7,7 @@
 
 namespace aryelgois\BankInterchange\Models;
 
+use aryelgois\Utils;
 use aryelgois\Medools;
 
 /**
@@ -82,6 +83,34 @@ class Title extends Medools\Model
             'id'
         ],
     ];
+
+    /**
+     * Calculates this model's `our_number` check digit
+     *
+     * @return string
+     */
+    public function checkDigitOurNumber()
+    {
+        return self::checkDigitOurNumberAlgorithm($this->get('our_number'));
+    }
+
+    /**
+     * Calculates Our number check digit
+     *
+     * @param string $our_number Value to calculate the check digit
+     *
+     * @return string
+     */
+    public static function checkDigitOurNumberAlgorithm($our_number)
+    {
+        $digit = Utils\Validation::mod11($our_number);
+
+        $digit = ($digit > 1)
+               ? $digit - 11
+               : 0;
+
+        return abs($digit);
+    }
 
     /**
      * Sets the `our_number` column based on current `assignor`
