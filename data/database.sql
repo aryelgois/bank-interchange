@@ -123,8 +123,6 @@ CREATE TABLE `titles` (
 CREATE TABLE `shipping_files` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
     `status`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 0,
-    `cnab`          char(3)         NOT NULL,
-    `filename`      char(39), -- drop?
     `stamp`         timestamp       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `update`        datetime,
     PRIMARY KEY (`id`)
@@ -133,6 +131,7 @@ CREATE TABLE `shipping_files` (
 CREATE TABLE `shipping_file_titles` (
     `shipping_file` int(10)         UNSIGNED NOT NULL,
     `title`         int(10)         UNSIGNED NOT NULL,
+    `status`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 0,
     FOREIGN KEY (`shipping_file`) REFERENCES `shipping_files` (`id`),
     FOREIGN KEY (`title`) REFERENCES `titles` (`id`),
     PRIMARY KEY (`shipping_file`, `title`)

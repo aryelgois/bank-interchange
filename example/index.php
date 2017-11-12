@@ -157,10 +157,10 @@ protected_example(
         </table>
     </form>
 
-    <h2>Titles generated</h2>
+    <h2>Generate Shipping File</h2>
     <p>
-        List of all titles in the database. The ones not yet in a shipping file
-        have a checkbox.
+        Below is a list of all titles in the database. Those not yet in a
+        shipping file have a checkbox.
     </p>
     <form method="POST">
         <table class="table-list">
@@ -179,30 +179,35 @@ protected_example('list_titles');
 
 ?>
         </table>
-        <button action="generate_cnab240.php">Generate CNAB240</button>
-        <button action="generate_cnab400.php">Generate CNAB400</button>
+        <button formaction="generate_shipping_file.php">Ok</button>
         <p>
             Remember that, in production, you have to generate and send the
             Shipping File before outputing the Billet.
         </p>
     </form>
 
-    <h2>Shipping Files generated</h2>
+    <h2>Generate CNAB</h2>
     <p>
-        List of all Shipping Files in the database.
+        Below is a list of all Shipping Files in the database. Choose how you
+        want to render them.
     </p>
     <table class="table-list">
         <tr>
             <th>id</th>
-            <th>Filename</th>
+            <th>Titles</th>
+            <th>Total</th>
             <th>Date</th>
-            <th>File</th>
+            <th>CNAB</th>
         </tr>
         <tr>
             <td>0</td>
-            <td>Name</td>
+            <td>List</td>
+            <td>0.0</td>
             <td>Y-m-d H:i:s</td>
-            <td><a href="storage/shipping_files/file">CNAB240/CNAB400</a></td>
+            <td>
+                <a href="generate_cnab.php?cnab=240&id=0">CNAB240</a>
+                <a href="generate_cnab.php?cnab=400&id=0">CNAB400</a>
+            </td>
         </tr>
     </table>
 
