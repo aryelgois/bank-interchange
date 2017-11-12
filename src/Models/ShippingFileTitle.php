@@ -23,7 +23,6 @@ class ShippingFileTitle extends Medools\Model
     const COLUMNS = [
         'shipping_file',
         'title',
-        'status',
     ];
 
     const PRIMARY_KEY = [
@@ -32,10 +31,6 @@ class ShippingFileTitle extends Medools\Model
     ];
 
     const AUTO_INCREMENT = null;
-
-    const OPTIONAL_COLUMNS = [
-        'status',
-    ];
 
     const FOREIGN_KEYS = [
         'shipping_file' => [

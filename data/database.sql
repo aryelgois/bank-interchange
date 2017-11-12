@@ -122,16 +122,17 @@ CREATE TABLE `titles` (
 
 CREATE TABLE `shipping_files` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
+    `assignor`      int(10)         UNSIGNED NOT NULL,
     `status`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 0,
     `stamp`         timestamp       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `update`        datetime,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`assignor`) REFERENCES `assignors` (`id`)
 );
 
 CREATE TABLE `shipping_file_titles` (
     `shipping_file` int(10)         UNSIGNED NOT NULL,
     `title`         int(10)         UNSIGNED NOT NULL,
-    `status`        tinyint(1)      UNSIGNED NOT NULL DEFAULT 0,
     FOREIGN KEY (`shipping_file`) REFERENCES `shipping_files` (`id`),
     FOREIGN KEY (`title`) REFERENCES `titles` (`id`),
     PRIMARY KEY (`shipping_file`, `title`)

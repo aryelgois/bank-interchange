@@ -12,7 +12,8 @@ use aryelgois\BankInterchange as BankI;
 /**
  * Controller class for Shipping Files
  *
- * A Shipping File is a document sent to the Bank
+ * A ShippingFile is a group of Titles to be sent to the Bank. It is sent in a
+ * given format, called CNAB
  *
  * @author Aryel Mota Góis
  * @license MIT

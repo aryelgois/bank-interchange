@@ -63,14 +63,17 @@ class Payer extends Medools\Model
     public function toCnab240()
     {
         if ($this->cnab240_string == null) {
-            $a = $this->address[0];
-            $result = BankI\Utils::formatDocument($this, 15)
-                    . BankI\Utils::padAlfa($this->name, 40)
-                    . BankI\Utils::padAlfa($a->place . ', ' . $a->number . ($a->detail != '' ? ', ' . $a->detail : ''), 40)
-                    . BankI\Utils::padAlfa($a->neighborhood, 15)
-                    . BankI\Utils::padNumber($a->zipcode, 8)
-                    . BankI\Utils::padAlfa($a->county['name'], 15)
-                    . BankI\Utils::padAlfa($a->state['code'], 2);
+            $person = $this->getForeign('person');
+            $address = $this->getForeign('address');
+
+            $result = BankI\Utils::padNumber($person->documentFormat(), 15)
+                    . BankI\Utils::padAlfa($person->get('name'), 40)
+                    . BankI\Utils::padAlfa($address->get('place') . ', ' . $address->get('number') . ($address->get('detail') != '' ? ', ' . $address->get('detail') : ''), 40)
+                    . BankI\Utils::padAlfa($address->get('neighborhood'), 15)
+                    . BankI\Utils::padNumber($address->get('zipcode'), 8)
+                    . BankI\Utils::padAlfa($address->getForeign('county')->get('name'), 15)
+                    . BankI\Utils::padAlfa($address->getForeign('county')->getForeign('state')->get('code'), 2);
+
             $this->cnab240_string = $result;
         }
         return $this->cnab240_string;
@@ -82,14 +85,17 @@ class Payer extends Medools\Model
     public function toCnab400()
     {
         if ($this->cnab400_string == null) {
-            $a = $this->address[0];
-            $result = '0' . BankI\Utils::formatDocument($this)
-                    . BankI\Utils::padAlfa($this->name, 40)
-                    . BankI\Utils::padAlfa($a->place . ', ' . $a->number . ', ' . $a->neighborhood, 40)
-                    . BankI\Utils::padAlfa($a->detail, 12)
-                    . BankI\Utils::padNumber($a->zipcode, 8)
-                    . BankI\Utils::padAlfa($a->county['name'], 15)
-                    . BankI\Utils::padAlfa($a->state['code'], 2);
+            $person = $this->getForeign('person');
+            $address = $this->getForeign('address');
+
+            $result = '0' . $person->documentFormat()
+                    . BankI\Utils::padAlfa($person->get('name'), 40)
+                    . BankI\Utils::padAlfa($address->get('place') . ', ' . $address->get('number') . ', ' . $address->get('neighborhood'), 40)
+                    . BankI\Utils::padAlfa($address->get('detail'), 12)
+                    . BankI\Utils::padNumber($address->get('zipcode'), 8)
+                    . BankI\Utils::padAlfa($address->getForeign('county')->get('name'), 15)
+                    . BankI\Utils::padAlfa($address->getForeign('county')->getForeign('state')->get('code'), 2);
+
             $this->cnab400_string = $result;
         }
         return $this->cnab400_string;
