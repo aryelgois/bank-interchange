@@ -18,8 +18,6 @@ use aryelgois\Medools;
  */
 class Wallet extends Medools\Model
 {
-    const DATABASE_NAME_KEY = 'bank_interchange';
-
     const TABLE = 'wallets';
 
     const COLUMNS = [

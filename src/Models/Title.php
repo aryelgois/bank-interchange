@@ -23,8 +23,6 @@ use aryelgois\Medools;
  */
 class Title extends Medools\Model
 {
-    const DATABASE_NAME_KEY = 'bank_interchange';
-
     const TABLE = 'titles';
 
     const COLUMNS = [

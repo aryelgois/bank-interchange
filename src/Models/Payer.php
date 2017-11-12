@@ -19,8 +19,6 @@ use aryelgois\Medools;
  */
 class Payer extends Medools\Model
 {
-    const DATABASE_NAME_KEY = 'bank_interchange';
-
     const TABLE = 'payers';
 
     const COLUMNS = [

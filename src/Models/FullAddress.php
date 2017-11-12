@@ -19,8 +19,6 @@ use aryelgois\Medools;
  */
 class FullAddress extends Medools\Models\Address\FullAddress
 {
-    const DATABASE_NAME_KEY = 'bank_interchange';
-
     /**
      * Outputs Model's data in a long format
      *

@@ -19,8 +19,6 @@ use aryelgois\BankInterchange as BankI;
  */
 class Assignor extends Medools\Model
 {
-    const DATABASE_NAME_KEY = 'bank_interchange';
-
     const TABLE = 'assignors';
 
     const COLUMNS = [
