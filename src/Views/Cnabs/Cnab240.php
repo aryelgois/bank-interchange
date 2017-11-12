@@ -75,8 +75,8 @@ class Cnab240 extends BankI\Views\Cnab
             'total' => 0.0,
             'closed' => false
         ];
-        $this->registerLotHeader();
-        $this->registries++;
+        $this->addLotHeader();
+        $this->registry_count++;
     }
 
     /**
@@ -107,13 +107,13 @@ class Cnab240 extends BankI\Views\Cnab
             $this->addLot();
         }
 
-        $this->registerLotDetail($movement, $title);
+        $this->addLotDetail($movement, $title);
 
         $this->lots[$this->lot]['registries']++;
         $this->lots[$this->lot]['lines'] += 2;
         $this->lots[$this->lot]['titles']++;
         $this->lots[$this->lot]['total'] += $title->value;
-        $this->registries += 2; // the amount of segments (type 3)
+        $this->registry_count += 2; // the amount of segments (type 3)
 
         return true;
     }
@@ -126,8 +126,8 @@ class Cnab240 extends BankI\Views\Cnab
         if (!$this->lots[$this->lot]['closed']) {
             $this->lots[$this->lot]['registries']++;
             $this->lots[$this->lot]['lines']++;
-            $this->registerLotTrailer();
-            $this->registries++;
+            $this->addLotTrailer();
+            $this->registry_count++;
             $this->lots[$this->lot]['closed'] = true;
         }
     }
@@ -139,8 +139,8 @@ class Cnab240 extends BankI\Views\Cnab
     {
         $this->closeLot();
         $this->lot = 9999;
-        $this->registries++;
-        $this->registerFileTrailer();
+        $this->registry_count++;
+        $this->addFileTrailer();
     }
 
     /*
@@ -148,7 +148,7 @@ class Cnab240 extends BankI\Views\Cnab
      * =========================================================================
      */
 
-    protected function registerTransaction(BankI\Models\Title $title)
+    protected function addTitle(BankI\Models\Title $title)
     {
 
     }
@@ -156,7 +156,7 @@ class Cnab240 extends BankI\Views\Cnab
     /**
      * Adds a File Header
      */
-    protected function registerFileHeader()
+    protected function addFileHeader()
     {
         $assignor = $this->shipping_file->getForeign('assignor');
         $assignor_person = $assignor->getForeign('person');
@@ -181,7 +181,7 @@ class Cnab240 extends BankI\Views\Cnab
     /**
      * Adds a Lot Header
      */
-    protected function registerLotHeader()
+    protected function addLotHeader()
     {
         $assignor = $this->shipping_file->getForeign('assignor');
         $assignor_person = $assignor->getForeign('person');
@@ -210,7 +210,7 @@ class Cnab240 extends BankI\Views\Cnab
      * @param integer $movement ...
      * @param Title   $title    Holds data about the title and the related payer
      */
-    protected function registerLotDetail($movement, BankI\Objects\Title $title)
+    protected function addLotDetail($movement, BankI\Objects\Title $title)
     {
         $control = self::fieldControl(3);
         $service = [
@@ -281,7 +281,7 @@ class Cnab240 extends BankI\Views\Cnab
     /**
      * Adds a Lot Trailer
      */
-    protected function registerLotTrailer()
+    protected function addLotTrailer()
     {
         $rg = self::fieldControl(5)
             . '         '
@@ -300,12 +300,12 @@ class Cnab240 extends BankI\Views\Cnab
     /**
      * Adds a File Trailer
      */
-    protected function registerFileTrailer()
+    protected function addFileTrailer()
     {
         $rg = self::fieldControl(9)
             . '         '
             . BankI\Utils::padNumber(count($this->lots), 6)
-            . BankI\Utils::padNumber($this->registries, 6)
+            . BankI\Utils::padNumber($this->registry_count, 6)
             . '000000'
             . str_repeat(' ', 205);
 

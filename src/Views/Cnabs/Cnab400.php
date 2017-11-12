@@ -22,7 +22,7 @@ class Cnab400 extends BankI\Views\Cnab
     /**
      * Adds a File Header
      */
-    protected function registerFileHeader()
+    protected function addFileHeader()
     {
         $assignor = $this->shipping_file->getForeign('assignor');
         $assignor_person = $assignor->getForeign('person');
@@ -48,7 +48,7 @@ class Cnab400 extends BankI\Views\Cnab
             date('dmy'),
             $assignor->get('edi'),
             '',
-            $this->registries,
+            $this->registry_count,
         ];
 
         $this->register($format, $data);
@@ -60,7 +60,7 @@ class Cnab400 extends BankI\Views\Cnab
      * @param integer $movement ...
      * @param Title   $title    Holds data about the title and the related payer
      */
-    protected function registerTransaction(BankI\Models\Title $title)
+    protected function addTitle(BankI\Models\Title $title)
     {
         $assignor = $title->getForeign('assignor');
         $assignor_person = $assignor->getForeign('person');
@@ -119,7 +119,7 @@ class Cnab400 extends BankI\Views\Cnab
             '', // message or guarantor name
             '99', // protest deadline
             $title->getForeign('specie')->get('febraban'),
-            $this->registries,
+            $this->registry_count,
         ];
 
         $this->register($format, $data);
@@ -128,14 +128,14 @@ class Cnab400 extends BankI\Views\Cnab
     /**
      * Adds a Trailer
      */
-    protected function registerFileTrailer()
+    protected function addFileTrailer()
     {
         $format = '%01.1s%-393.393s%06.6s';
 
         $data = [
             '9',
             '',
-            $this->registries,
+            $this->registry_count,
         ];
 
         $this->register($format, $data);

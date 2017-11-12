@@ -40,14 +40,14 @@ abstract class Cnab
      *
      * @var string[]
      */
-    protected $file = [];
+    protected $registries = [];
 
     /**
      * Total registries in the file
      *
      * integer
      */
-    protected $registries = 0;
+    protected $registry_count = 0;
 
     /**
      * ...
@@ -90,7 +90,7 @@ abstract class Cnab
      */
     final public function output()
     {
-        return implode(static::LINE_END, $this->file)
+        return implode(static::LINE_END, $this->registries)
              . static::LINE_END . static::FILE_END;
     }
 
@@ -104,8 +104,8 @@ abstract class Cnab
      */
     protected function open()
     {
-        $this->registries++;
-        $this->registerFileHeader();
+        $this->registry_count++;
+        $this->addFileHeader();
     }
 
     /**
@@ -117,12 +117,12 @@ abstract class Cnab
      */
     protected function add(BankI\Models\Title $title)
     {
-        $this->incrementRegistries(999998);
-        $this->registerTransaction($title);
+        $this->increment(999998);
+        $this->addTitle($title);
     }
 
     /**
-     * Actually inserts the registry in $this->file
+     * Actually inserts the registry in $this->registries
      *
      * @param string   $format A sprintf() format
      * @param string[] $data   Registry data to be inserted
@@ -135,7 +135,7 @@ abstract class Cnab
             $data[$id] = preg_replace('/:;,\.\/\\\?\$\*!#_-/', '', $data[$id]);
         }
 
-        $this->file[] = sprintf($format, ...$data);
+        $this->registries[] = sprintf($format, ...$data);
     }
 
     /**
@@ -143,8 +143,8 @@ abstract class Cnab
      */
     protected function close()
     {
-        $this->incrementRegistries(999999);
-        $this->registerFileTrailer();
+        $this->increment(999999);
+        $this->addFileTrailer();
     }
 
     /*
@@ -155,19 +155,19 @@ abstract class Cnab
     /**
      * ...
      */
-    abstract protected function registerFileHeader();
+    abstract protected function addFileHeader();
 
     /**
      * ...
      *
      * @param Models\Title $title ...
      */
-    abstract protected function registerTransaction(BankI\Models\Title $title);
+    abstract protected function addTitle(BankI\Models\Title $title);
 
     /**
      * ...
      */
-    abstract protected function registerFileTrailer();
+    abstract protected function addFileTrailer();
 
     /*
      * Helper
@@ -181,12 +181,12 @@ abstract class Cnab
      *
      * @throws \OverflowException If there are too many registries
      */
-    protected function incrementRegistries($limit)
+    protected function increment($limit)
     {
-        if ($this->registries > $limit) {
+        if ($this->registry_count > $limit) {
             throw new \OverflowException('The File got too many registries');
         }
-        $this->registries++;
+        $this->registry_count++;
     }
 
     /*
