@@ -5,7 +5,8 @@ require_once 'autoload.php';
 use aryelgois\BankInterchange;
 use aryelgois\Medools;
 
-function protected_example(callable $callback, ...$params) {
+function protected_example(callable $callback, ...$params)
+{
     try {
         $callback(...$params);
     } catch (RuntimeException $e) {
@@ -19,7 +20,8 @@ function protected_example(callable $callback, ...$params) {
     }
 }
 
-function select_option_foreign_person(Medools\ModelIterator $iterator) {
+function select_option_foreign_person(Medools\ModelIterator $iterator)
+{
     foreach ($iterator as $model) {
         printf(
             "                        <option value=\"%s\">%s</option>\n",
@@ -62,7 +64,8 @@ function list_titles()
     }
 }
 
-function format_model_pretty($model, $html = true) {
+function format_model_pretty($model, $html = true)
+{
     $person = $model->getForeign('person');
     $info = ($model instanceof BankInterchange\Models\Assignor)
           ? 'Account: ' . $model->formatAgencyAccount(4, 11)
@@ -74,6 +77,48 @@ function format_model_pretty($model, $html = true) {
             . ($html ? '</small>' : ')');
 
     return $result;
+}
+
+function list_shipping_files()
+{
+    $template = "        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>
+                <a href=\"generate_cnab.php?cnab=240&id=%s\">CNAB240</a>
+                <a href=\"generate_cnab.php?cnab=400&id=%s\">CNAB400</a>
+            </td>
+        </tr>\n";
+
+    $shipping_files = new Medools\ModelIterator(new BankInterchange\Models\ShippingFile, []);
+    foreach ($shipping_files as $shipping_file) {
+        $id = $shipping_file->get('id');
+        $titles = [];
+        $total = 0.0;
+
+        $shipping_file_titles = new Medools\ModelIterator(
+            new BankInterchange\Models\ShippingFileTitle,
+            ['shipping_file' => $id]
+        );
+        foreach ($shipping_file_titles as $sft) {
+            $title = $sft->getForeign('title');
+            $titles[] = $title->get('id');
+            $total += (float) $title->get('value');
+        }
+
+        $data = [
+            $id,
+            implode(', ', $titles),
+            $title->getForeign('specie')->format($total),
+            $shipping_file->get('stamp'),
+            $id,
+            $id,
+        ];
+
+        printf($template, ...$data);
+    }
 }
 
 ?>
@@ -99,12 +144,16 @@ function select_all(source, name) {
     </p>
 
     <h2>Setup</h2>
-    <p>
-        First of all, you need to create <a href="../data/database.sql">this database</a>
-        in your server, then populate it with <a href="../data/database_populate.sql">this</a>
-        and <a href="database_populate_example.sql">this</a>.<br />
-        Then, configure the database options in <code>../config/medools.php</code>
-    </p>
+    <ol>
+        <li>
+            Create <a href="../data/database.sql">this database</a> in your
+            server, then populate it with <a href="../data/database_populate.sql">this</a>
+            and <a href="database_populate_example.sql">this</a>.
+        </li>
+        <li>
+            Configure the database options in <code>../config/medools.php</code>
+        </li>
+    </ol>
 
     <h2>Generate Title</h2>
     <p>
@@ -199,16 +248,11 @@ protected_example('list_titles');
             <th>Date</th>
             <th>CNAB</th>
         </tr>
-        <tr>
-            <td>0</td>
-            <td>List</td>
-            <td>0.0</td>
-            <td>Y-m-d H:i:s</td>
-            <td>
-                <a href="generate_cnab.php?cnab=240&id=0">CNAB240</a>
-                <a href="generate_cnab.php?cnab=400&id=0">CNAB400</a>
-            </td>
-        </tr>
+<?php
+
+protected_example('list_shipping_files');
+
+?>
     </table>
 
     <h2>TODO</h2>
