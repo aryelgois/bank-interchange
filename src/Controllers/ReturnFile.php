@@ -103,9 +103,30 @@ class ReturnFile
             'warnings' => [],
         ];
 
-        foreach ($this->return_file as $registry) {
-            # code...
+        $patterns = [
+            'file_header'  => '/^(\d{3})(\d{4})0 {9}(\d{1})(\d{14})(\d{20})(\d{5})(.)(\d{12})(.)(.)(.{30})(.{30}) {10}2(\d{8})(\d{6})(\d{6})(\d{3})(\d{5}) {20}( {20}) {29}$/',
+            'lot_header'   => '/^(\d{3})(\d{4})1(.)(\d{2}) {2}(\d{3}) (\d{1})(\d{15})(\d{20})(\d{5})(.)(\d{12})(.)(.)(.{30})(.{40})(.{40})(\d{8})(\d{8})(\d{8}) {33}$/',
+            'title_t'      => '/^(\d{3})(\d{4})3(\d{5})T (\d{2})(\d{5})(.)(\d{12})(.)(.)(\d{20})(\d)(.{15})(\d{8})(\d{15})(\d{3})(\d{5})(\d)(.{25})(\d{2})(\d)(\d{15})(.{40})(\d{10})(\d{15})(.{10}) {17}$/',
+            'title_u'      => '/^(\d{3})(\d{4})3(\d{5})U (\d{2})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{8})(\d{8})(.{4})(.{8})(\d{15})(.{30})(\d{3})(\d{20}) {7}$/',
+            'lot_trailer'  => '/^(\d{3})(\d{4})5 {9}(\d{6})(\d{6})(\d{17})(\d{6})(\d{17})(\d{6})(\d{17})(\d{6})(\d{17})(.{8}) {117}$/',
+            'file_trailer' => '/^(\d{3})(\d{4})9 {9}(\d{6})(\d{6})(\d{6}) {205}$/',
+        ];
+        $registries = [];
+
+        foreach ($this->return_file as $row => $registry) {
+            $matched = false;
+            foreach ($patterns as $pattern) {
+                if (preg_match($pattern, $registry, $matches)) {
+                    $registries[] = array_map('trim', $matches);
+                    $matched = true;
+                    break;
+                }
+            }
+            if (!$matched) {
+                # code...
+            }
         }
+        return $registries;
 
         return $result;
     }
@@ -123,9 +144,27 @@ class ReturnFile
             'warnings' => [],
         ];
 
-        foreach ($this->return_file as $registry) {
-            # code...
+        $patterns = [
+            'file_header'  => '/^02RETORNO(\d{2})(.{15})(\d{20})(.{30})(\d{3})(.{15})(\d{6})(\d{2})(\d{14}) {273}(\d{5})(\d{6})$/',
+            'title'        => '/^1(\d{2})(\d{14})(\d{20})(.{25})(\d{20}) {25}(\d{1})(\d{2})(\d{6})(.{10}) {20}(\d{6})(\d{13})(\d{3})(\d{5})(\d{2})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13}) {9}(.)(\d{12})(\d{6})(\d{13})(\d{2})(\d{2}) {54}(\d{2})(\d)(\d{6})$/',
+            'file_trailer' => '/^92(\d{2})(\d{3}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{14})(\d{3})(\d{14})(\d{14})(\d{14})(\d{14}) {144}(\d{6})$/',
+        ];
+        $registries = [];
+
+        foreach ($this->return_file as $row => $registry) {
+            $matched = false;
+            foreach ($patterns as $pattern) {
+                if (preg_match($pattern, $registry, $matches)) {
+                    $registries[] = array_map('trim', $matches);
+                    $matched = true;
+                    break;
+                }
+            }
+            if (!$matched) {
+                # code...
+            }
         }
+        return $registries;
 
         return $result;
     }
