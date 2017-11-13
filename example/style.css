@@ -19,3 +19,9 @@ table.table-list tr:not(:first-child) td {
 table.table-list tr:nth-child(odd) td {
   background: #f3f3f3;
 }
+
+textarea {
+  height: 200px;
+  width: 700px;
+  white-space: pre;
+}

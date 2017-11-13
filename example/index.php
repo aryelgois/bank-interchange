@@ -271,9 +271,16 @@ protected_example('list_shipping_files');
 ?>
     </table>
 
-    <h2>TODO</h2>
-    <ul>
-        <li>Return Files</li>
-    </ul>
+    <h2>Return File</h2>
+    <p>
+        Enter a Return File sent by a Bank to process it
+    </p>
+    <form action="process_return_file.php" method="POST">
+        <textarea name="return_file" required></textarea>
+        <p>
+            <label><input name="apply" type="checkbox" />Apply in the Database</label>
+        </p>
+        <button>Send</button>
+    </form>
 </body>
 </html>
