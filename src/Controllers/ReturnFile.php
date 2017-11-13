@@ -19,7 +19,7 @@ use aryelgois\BankInterchange as BankI;
 class ReturnFile
 {
     /**
-     * Contains the Return File, with lines splitted
+     * Contains the Return File, with rows splitted
      *
      * @var string[]
      */
@@ -48,25 +48,44 @@ class ReturnFile
      */
     public function __construct($return_file)
     {
-        $return_file = explode("\n", str_replace("\r", '', $return_file));
-
-        $return_file = array_filter($return_file);
+        /*
+         * Splits rows and removes empty rows
+         */
+        $return_file = array_filter(
+            explode("\n", str_replace("\r", '', $return_file))
+        );
         if (empty($return_file)) {
             throw new \InvalidArgumentException('Return File is empty');
         }
 
-        $length = array_count_values(array_map('strlen', $return_file));
-        if (count($length) !== 1) {
+        /*
+         * Rows length
+         */
+        $lengths = array_map('strlen', $return_file);
+
+        /*
+         * Defines CNAB by longest row
+         */
+        $cnab = max($lengths);
+        if (!in_array($cnab, Cnab::STANDARDS)) {
             throw new \InvalidArgumentException(
-                'Return File has lines with different length'
+                'Invalid CNAB: ' . $cnab . ' positions'
             );
         }
 
-        $cnab = array_keys($length)[0];
-        if (!in_array($cnab, Cnab::STANDARDS)) {
-            throw new \InvalidArgumentException('Invalid CNAB');
+        /*
+         * Pads shorter rows (maybe are missing ' '. if not, will fail latter)
+         */
+        $shorter = array_filter($lengths, function ($len) use ($cnab) {
+            return $len != $cnab;
+        });
+        foreach (array_keys($shorter) as $row) {
+            $return_file[$row] = str_pad($return_file[$row], $cnab);
         }
 
+        /*
+         * Store data
+         */
         $this->return_file = $return_file;
         $this->cnab = $cnab;
     }
@@ -75,7 +94,7 @@ class ReturnFile
      * Validates the Return File
      *
      * @return array[] With validation data
-     * @return null    For a not implemented Cnab
+     * @return null    For a not implemented CNAB
      */
     public function validate()
     {
