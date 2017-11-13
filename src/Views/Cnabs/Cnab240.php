@@ -11,7 +11,7 @@ use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
 
 /**
- * Generates Shipping Files to be sent to banks
+ * Generates CNAB240 Shipping Files to be sent to banks
  *
  * @author Aryel Mota Góis
  * @license MIT
@@ -53,7 +53,7 @@ class Cnab240 extends BankI\Views\Cnab
     protected function open()
     {
         parent::open();
-        $this->addLot();
+        $this->openLot();
     }
 
     /**
@@ -61,40 +61,42 @@ class Cnab240 extends BankI\Views\Cnab
      *
      * @throws \OverflowException If the file has too many Lots
      */
-    public function addLot()
+    protected function openLot()
     {
         if ($this->lot >= 9998) {
             throw new \OverflowException('The File got too many Lots');
         } elseif ($this->lot > 0) {
             $this->closeLot();
         }
+
         $this->lots[++$this->lot] = [
-            'registries' => 1, // already counting the following LotHeader
-            'lines' => 1, // already counting the following LotHeader
+            'registries' => 1, // Already counting the
+            'lines' => 1,      // following LotHeader
             'titles' => 0,
             'total' => 0.0,
             'closed' => false
         ];
+
         $this->addLotHeader();
-        $this->registry_count++;
+        $this->increment(999997); // I think
     }
 
     /**
      * Adds a new Title entry
      *
-     * @param integer $movement ...
      * @param Title   $title    What the entry is about
      *
      * @return boolean For success or failure
      *
      * @throws \OverflowException If there are too many lot registries
      */
-    public function addEntry($movement, BankI\Objects\Title $title)
+    protected function addTitle(BankI\Models\Title $title)
     {
         // Check if the file or the current log is closed
-        if ($this->closed || $this->lots[$this->lot]['closed']) {
+        if ($this->lots[$this->lot]['closed']) {
             return false;
         }
+
         // Check if the Lot is full
         /**
          * @todo change those big numbers to be 999999 - the amount of lines
@@ -104,15 +106,15 @@ class Cnab240 extends BankI\Views\Cnab
         if ($count > 999998) {
             throw new \OverflowException('The Lot got too many registries');
         } elseif ($count == 999998) {
-            $this->addLot();
+            $this->openLot();
         }
 
-        $this->addLotDetail($movement, $title);
+        $this->addLotDetail($title);
 
         $this->lots[$this->lot]['registries']++;
         $this->lots[$this->lot]['lines'] += 2;
         $this->lots[$this->lot]['titles']++;
-        $this->lots[$this->lot]['total'] += $title->value;
+        $this->lots[$this->lot]['total'] += $title->get('value');
         $this->registry_count += 2; // the amount of segments (type 3)
 
         return true;
@@ -148,11 +150,6 @@ class Cnab240 extends BankI\Views\Cnab
      * =========================================================================
      */
 
-    protected function addTitle(BankI\Models\Title $title)
-    {
-
-    }
-
     /**
      * Adds a File Header
      */
@@ -162,20 +159,38 @@ class Cnab240 extends BankI\Views\Cnab
         $assignor_person = $assignor->getForeign('person');
         $bank = $assignor->getForeign('bank');
 
-        $rg = self::fieldControl(0)
-            . str_repeat(' ', 9)
-            . BankI\Utils::padNumber($assignor_person->get('document'), 14)
-            . BankI\Utils::padNumber($assignor->get('covenant'), 20)
-            . $this->formatAgencyAccount()
-            . BankI\Utils::padAlfa($assignor_person->get('name'), 30)
-            . BankI\Utils::padAlfa($bank->get('name'), 30)
-            . str_repeat(' ', 10)
-            . '1' . date('dmYHis') . BankI\Utils::padNumber($this->shipping_file->get('id'), 6) . self::VERSION_FILE_LAYOUT . '00000'
-            . str_repeat(' ', 20)
-            . str_repeat(' ', 20)
-            . str_repeat(' ', 29);
+        $format = '%03.3s%04.4s%01.1s%-9.9s%01.1s%014.14s%020.20s%05.5s%-1.1s'
+                . '%012.12s%-1.1s%-1.1s%-30.30s%-30.30s%-10.10s%01.1s%08.8s'
+                . '%06.6s%06.6s%03.3s%05.5s%-20.20s%-20.20s%-29.29s';
 
-        $this->file .= $rg . static::LINE_END;
+        $data = [
+            $bank->get('code'),
+            $this->lot,
+            '0',
+            '',
+            $assignor_person->documentValidate()['type'],
+            $assignor_person->get('document'),
+            $assignor->get('covenant'),
+            $assignor->get('agency'),
+            '',
+            $assignor->get('account'),
+            $assignor->get('account_cd'),
+            '',
+            $assignor_person->get('name'),
+            $bank->get('name'),
+            '',
+            '1',
+            date('dmY'),
+            date('His'),
+            $this->shipping_file->get('id'),
+            self::VERSION_FILE_LAYOUT,
+            '00000',
+            '',
+            '',
+            '',
+        ];
+
+        $this->register($format, $data);
     }
 
     /**
@@ -187,95 +202,145 @@ class Cnab240 extends BankI\Views\Cnab
         $assignor_person = $assignor->getForeign('person');
         $bank = $assignor->getForeign('bank');
 
-        $rg = self::fieldControl(1)
-            . 'R' . '01' . '  ' . self::VERSION_LOT_LAYOUT
-            . ' '
-            . BankI\Utils::padNumber($assignor_person->get('document'), 15)
-            . BankI\Utils::padNumber($assignor->get('covenant'), 20)
-            . $this->formatAgencyAccount()
-            . BankI\Utils::padAlfa($assignor_person->get('name'), 30)
-            . str_repeat(' ', 40) // message 1
-            . str_repeat(' ', 40) // message 2
-            . '00000000'          // number shipping/return
-            . '00000000'          // recording date
-            . '00000000'          // credit date
-            . str_repeat(' ', 33);
+        $format = '%03.3s%04.4s%01.1s%-1.1s%02.2s%-2.2s%03.3s%-1.1s%01.1s'
+                . '%015.15s%020.20s%05.5s%-1.1s%012.12s%-1.1s%-1.1s%-30.30s'
+                . '%-40.40s%-40.40s%08.8s%08.8s%08.8s%-33.33s';
 
-        $this->file .= $rg . static::LINE_END;
+        $data = [
+            $bank->get('code'),
+            $this->lot,
+            '1',
+            'R',
+            '1',
+            '',
+            self::VERSION_LOT_LAYOUT,
+            '',
+            $assignor_person->documentValidate()['type'],
+            $assignor_person->get('document'),
+            $assignor->get('covenant'),
+            $assignor->get('agency'),
+            '',
+            $assignor->get('account'),
+            $assignor->get('account_cd'),
+            '',
+            $assignor_person->get('name'),
+            '',  // message 1
+            '',  // message 2
+            '0', // number shipping/return
+            '0', // recording date
+            '0', // credit date
+            '',
+        ];
+
+        $this->register($format, $data);
     }
 
     /**
      * Adds a Lot Detail
      *
-     * @param integer $movement ...
      * @param Title   $title    Holds data about the title and the related payer
+     * @param integer $movement ...
      */
-    protected function addLotDetail($movement, BankI\Objects\Title $title)
+    protected function addLotDetail(BankI\Models\Title $title, $movement = 1)
     {
-        $control = self::fieldControl(3);
-        $service = [
-            BankI\Utils::padNumber($this->lots[$this->lot]['registries'], 5),
-            null, // changed later
-            ' ',
-            BankI\Utils::padNumber($movement, 2)
+        $assignor = $title->getForeign('assignor');
+        $assignor_person = $assignor->getForeign('person');
+        $bank = $assignor->getForeign('bank');
+        $payer = $title->getForeign('payer');
+        $payer_person = $payer->getForeign('person');
+        $payer_address = $payer->getForeign('address');
+        $guarantor_person = $title->getForeign('guarantor')->getForeign('person');
+
+        /*
+         * 'P' Segment
+         */
+
+        $format = '%03.3s%04.4s%01.1s%05.5s%-1.1s%-1.1s%02.2s%05.5s%-1.1s'
+                . '%012.12s%-1.1s%-1.1s%020.20s%01.1s%01.1s%-1.1s%01.1s%-1.1s'
+                . '%-15.15s%08.8s%015.15s%05.5s%-1.1s%02.2s%-1.1s%08.8s%01.1s'
+                . '%08.8s%015.15s%01.1s%08.8s%015.15s%015.15s%015.15s%-25.25s'
+                . '%01.1s%02.2s%01.1s%03.3s%02.2s%010.10s%-1.1s';
+
+        $data = [
+            $bank->get('code'),
+            $this->lot,
+            '3',
+            $this->lots[$this->lot]['registries'],
+            'P',
+            '',
+            $movement,
+            $assignor->get('agency'),
+            '0',
+            $assignor->get('account'),
+            $assignor->get('account_cd'),
+            '',
+            $title->get('our_number'),
+            $assignor->getForeign('wallet')->get('febraban'),
+            '1', // Title's Registration
+            $title->get('doc_type'),
+            '2', // Emission identifier
+            '2', // Distribuition identifier
+            $title->get('id'),
+            date('dmY', strtotime($title->get('due'))),
+            number_format($title->get('value'), 2, '', ''),
+            '0', // Collection agency
+            '',  // Collection agency Check Digit
+            $title->get('kind'),
+            'A', // Identifies title acceptance by payer
+            date('dmY', strtotime($title->get('stamp'))),
+            $title->get('fine_type'),
+            ($title->get('fine_date') != '' ? date('dmY', strtotime($title->get('fine_date'))) : '0'),
+            number_format($title->get('fine_value'), 2, '', ''),
+            $title->get('discount_type'),
+            ($title->get('discount_date') != '' ? date('dmY', strtotime($title->get('discount_date'))) : '0'),
+            number_format($title->get('discount_value'), 2, '', ''),
+            number_format($title->get('iof'), 2, '', ''),
+            number_format($title->get('rebate'), 2, '', ''),
+            $title->get('description'),
+            '3', // Protest code
+            '0', // Protest deadline
+            '1', // low/return code
+            '0', // low/return deadline
+            $title->getForeign('specie')->get('febraban'),
+            '0', // Contract number
+            '1', // Free use: it's defining partial payment isn't allowed
         ];
-        $payer = $title->payer;
 
-        $service[1] = 'P';
-        $rg = $control
-            . implode('', $service)
-            . $this->formatAgencyAccount()
+        $this->register($format, $data);
 
-            . BankI\Utils::padNumber($title->onum, 20)
-            . $title->wallet['febraban']
-            . '1'                     // Title's Registration
-            . $title->doc_type
-            . '2'                     // Emission identifier
-            . '2'                     // Distribuition identifier
-            . BankI\Utils::padNumber($title->id, 15)
-            . date('dmY', strtotime($title->due))
-            . BankI\Utils::padNumber(number_format($title->value, 2, '', ''), 15)
-            . '00000'                 // Collection agency
-            . ' '                     // Collection agency Check Digit
-            . BankI\Utils::padNumber($title->kind, 2)
-            . 'A'                     // Identifies title acceptance by payer
-            . date('dmY', strtotime($title->stamp))
+        /*
+         * 'Q' Segment
+         */
 
-            . $title->fine['type']
-            . ($title->fine['date'] != '' ? date('dmY', strtotime($title->fine['date'])) : '00000000')
-            . BankI\Utils::padNumber(number_format($title->fine['value'], 2, '', ''), 15)
+        $format = '%03.3s%04.4s%01.1s%05.5s%-1.1s%-1.1s%02.2s%01.1s%015.15s'
+                . '%-40.40s%-40.40s%-15.15s%08.8s%-15.15s%-2.2s%01.1s%015.15s'
+                . '%-40.40s%03.3s%020.20s%-8.8s';
 
-            . $title->discount['type']
-            . ($title->discount['date'] != '' ? date('dmY', strtotime($title->discount['date'])) : '00000000')
-            . BankI\Utils::padNumber(number_format($title->discount['value'], 2, '', ''), 15)
+        $data = [
+            $bank->get('code'),
+            $this->lot,
+            '0',
+            $this->lots[$this->lot]['registries'],
+            'Q',
+            '',
+            $movement,
+            $payer_person->documentValidate()['type'],
+            $payer_person->get('document'),
+            $payer_person->get('name'),
+            $payer_address->get('place'),
+            $payer_address->get('neighborhood'),
+            $payer_address->get('zipcode'),
+            $payer_address->getForeign('county')->get('name'),
+            $payer_address->getForeign('county')->getForeign('state')->get('code'),
+            $guarantor_person->documentValidate()['type'],
+            $guarantor_person->get('document'),
+            $guarantor_person->get('name'),
+            '0', // Corresponding bank
+            '0', // "Our number" at corresponding bank
+            '',
+        ];
 
-            . BankI\Utils::padNumber(number_format($title->iof, 2, '', ''), 15)
-            . BankI\Utils::padNumber(number_format($title->rebate, 2, '', ''), 15)
-            . BankI\Utils::padAlfa($title->description, 25)
-            . '3'                     // Protest code
-            . '00'                    // Protest deadline
-            . '1'                     // low/return code
-            . '000'                   // low/return deadline
-            . BankI\Utils::padNumber($title->specie['cnab240'], 2)
-            . '0000000000'            // Contract number
-            . '1';                    // Free use: it's defining partial payment isn't allowed
-
-        $this->file .= $rg . static::LINE_END;
-
-        $service[1] = 'Q';
-        $rg = $control
-            . implode('', $service)
-            . $payer->toCnab240()
-
-            . (($title->guarantor === null)
-              ? str_repeat('0', 16) . str_repeat(' ', 40)
-              : BankI\Utils::formatDocument($title->guarantor, 15) . BankI\Utils::padAlfa($title->guarantor->name, 40))
-
-            . '000'                   // Corresponding bank
-            . '00000000000000000000'  // "Our number" at corresponding bank
-            . '        ';
-
-        $this->file .= $rg . static::LINE_END;
+        $this->register($format, $data);
     }
 
     /**
@@ -283,18 +348,28 @@ class Cnab240 extends BankI\Views\Cnab
      */
     protected function addLotTrailer()
     {
-        $rg = self::fieldControl(5)
-            . '         '
-            . BankI\Utils::padNumber($this->lots[$this->lot]['lines'], 6)
-            . BankI\Utils::padNumber($this->lots[$this->lot]['titles'], 6)
-            . BankI\Utils::padNumber(number_format($this->lots[$this->lot]['total'], 2, '', ''), 17)
-            . '000000' . '00000000000000000'
-            . '000000' . '00000000000000000'
-            . '000000' . '00000000000000000'
-            . '        '
-            . str_repeat(' ', 117);
+        $format = '%03.3s%04.4s%01.1s%-9.9s%06.6s%06.6s%017.17s%06.6s%017.17s'
+                . '%06.6s%017.17s%06.6s%017.17s%-8.8s%-117.117s';
 
-        $this->file .= $rg . static::LINE_END;
+        $data = [
+            $this->shipping_file->getForeign('assignor')->getForeign('bank')->get('code'),
+            $this->lot,
+            '5',
+            '',
+            $this->lots[$this->lot]['lines'],
+            $this->lots[$this->lot]['titles'],
+            number_format($this->lots[$this->lot]['total'], 2, '', ''),
+            '0', // CV
+            '0', // CV
+            '0', // CC
+            '0', // CC
+            '0', // CD
+            '0', // CD
+            '',
+            '',
+        ];
+
+        $this->register($format, $data);
     }
 
     /**
@@ -302,30 +377,19 @@ class Cnab240 extends BankI\Views\Cnab
      */
     protected function addFileTrailer()
     {
-        $rg = self::fieldControl(9)
-            . '         '
-            . BankI\Utils::padNumber(count($this->lots), 6)
-            . BankI\Utils::padNumber($this->registry_count, 6)
-            . '000000'
-            . str_repeat(' ', 205);
+        $format = '%03.3s%04.4s%01.1s%-9.9s%06.6s%06.6s%06.6s%-205.205s';
 
-        $this->file .= $rg . static::LINE_END;
-    }
+        $data = [
+            $this->shipping_file->getForeign('assignor')->getForeign('bank')->get('code'),
+            $this->lot,
+            '9',
+            '',
+            count($this->lots),
+            $this->registry_count,
+            '0',
+            '',
+        ];
 
-    /*
-     * Helper
-     * =========================================================================
-     */
-
-    /**
-     * Formats Control field
-     *
-     * @param integer $type Code adopted by FEBRABAN to identify the registry type
-     *
-     * @return string
-     */
-    protected function fieldControl($type)
-    {
-        return $this->shipping_file->getForeign('assignor')->getForeign('bank')->get('code') . BankI\Utils::padNumber($this->lot, 4) . $type;
+        $this->register($format, $data);
     }
 }

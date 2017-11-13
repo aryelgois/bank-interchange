@@ -188,25 +188,4 @@ abstract class Cnab
         }
         $this->registry_count++;
     }
-
-    /*
-     * Formatting
-     * =========================================================================
-     */
-
-    /**
-     * Formats Assignor's Agency and Account with check digits
-     *
-     * @return string
-     */
-    protected function formatAgencyAccount()
-    {
-        $assignor = $this->shipping_file->getForeign('assignor');
-        $result = BankI\Utils::padNumber($assignor->get('agency'), 5)
-                . $assignor->get('agency_cd')
-                . BankI\Utils::padNumber($assignor->get('account'), 12)
-                . $assignor->get('account_cd');
-        $result .= Utils\Validation::mod10($result);
-        return $result;
-    }
 }
