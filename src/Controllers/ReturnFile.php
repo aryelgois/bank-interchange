@@ -19,6 +19,15 @@ use aryelgois\BankInterchange as BankI;
 class ReturnFile
 {
     /**
+     * Path to matcher file
+     *
+     * It contains registry patterns and key maps for each CNAB
+     *
+     * @const string
+     */
+    const MATCHER = __DIR__ . '/../../config/return_file_matcher.json';
+
+    /**
      * Contains the Return File, with rows splitted
      *
      * @var string[]
@@ -33,6 +42,13 @@ class ReturnFile
     protected $cnab;
 
     /**
+     * All the data to match the CNAB registries
+     *
+     * @var array[]
+     */
+    protected $matcher;
+
+    /**
      * Commands to update the Database, after validation()
      *
      * @var array[]
@@ -44,10 +60,19 @@ class ReturnFile
      *
      * @param string $return_file The Return File to be processed
      *
+     * @throws \RuntimeException         If could not load matcher
      * @throws \InvalidArgumentException If $return_file is invalid
      */
     public function __construct($return_file)
     {
+        /*
+         * Load matcher
+         */
+        $this->matcher = json_decode(file_get_contents(static::MATCHER), true);
+        if ($this->matcher === null) {
+            throw new \RuntimeException('Could not load matcher');
+        }
+
         /*
          * Splits rows and removes empty rows
          */
@@ -67,7 +92,7 @@ class ReturnFile
          * Defines CNAB by longest row
          */
         $cnab = max($lengths);
-        if (!in_array($cnab, Cnab::STANDARDS)) {
+        if (!array_key_exists($cnab, $this->matcher)) {
             throw new \InvalidArgumentException(
                 'Invalid CNAB: ' . $cnab . ' positions'
             );
@@ -98,93 +123,88 @@ class ReturnFile
      */
     public function validate()
     {
-        switch ($this->cnab) {
-            case 240:
-                return $this->validateCnab240();
-                break;
-
-            case 400:
-                return $this->validateCnab400();
-                break;
-        }
-    }
-
-    /**
-     * Validates the CNAB240 Return File
-     *
-     * @return array[] Notes about the validation
-     */
-    protected function validateCnab240()
-    {
-        $result = [
-            'errors' => [],
-            'info' => [],
-            'warnings' => [],
-        ];
-
-        $patterns = [
-            'file_header'  => '/^(\d{3})(\d{4})0 {9}(\d{1})(\d{14})(\d{20})(\d{5})(.)(\d{12})(.)(.)(.{30})(.{30}) {10}2(\d{8})(\d{6})(\d{6})(\d{3})(\d{5}) {20}( {20}) {29}$/',
-            'lot_header'   => '/^(\d{3})(\d{4})1(.)(\d{2}) {2}(\d{3}) (\d{1})(\d{15})(\d{20})(\d{5})(.)(\d{12})(.)(.)(.{30})(.{40})(.{40})(\d{8})(\d{8})(\d{8}) {33}$/',
-            'title_t'      => '/^(\d{3})(\d{4})3(\d{5})T (\d{2})(\d{5})(.)(\d{12})(.)(.)(\d{20})(\d)(.{15})(\d{8})(\d{15})(\d{3})(\d{5})(\d)(.{25})(\d{2})(\d)(\d{15})(.{40})(\d{10})(\d{15})(.{10}) {17}$/',
-            'title_u'      => '/^(\d{3})(\d{4})3(\d{5})U (\d{2})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{8})(\d{8})(.{4})(.{8})(\d{15})(.{30})(\d{3})(\d{20}) {7}$/',
-            'lot_trailer'  => '/^(\d{3})(\d{4})5 {9}(\d{6})(\d{6})(\d{17})(\d{6})(\d{17})(\d{6})(\d{17})(\d{6})(\d{17})(.{8}) {117}$/',
-            'file_trailer' => '/^(\d{3})(\d{4})9 {9}(\d{6})(\d{6})(\d{6}) {205}$/',
-        ];
+        $matcher = $this->matcher[$this->cnab];
         $registries = [];
+        $result = [
+            'error' => [],
+            'info' => [],
+            'warning' => [],
+        ];
 
         foreach ($this->return_file as $row => $registry) {
+            /*
+             * Match $registry data
+             */
             $matched = false;
-            foreach ($patterns as $pattern) {
-                if (preg_match($pattern, $registry, $matches)) {
-                    $registries[] = array_map('trim', $matches);
-                    $matched = true;
+            foreach ($matcher as $matcher_name => $matcher_data) {
+                if (preg_match($matcher_data['pattern'], $registry, $matches)) {
+                    $match = array_combine(
+                        $matcher_data['map'],
+                        array_map('trim', array_slice($matches, 1))
+                    );
+                    $matched = $matcher_name;
                     break;
                 }
             }
-            if (!$matched) {
-                # code...
-            }
-        }
-        return $registries;
 
-        return $result;
-    }
+            if ($matched) {
+                /*
+                 * Specific operations
+                 */
+                switch ($this->cnab) {
+                    case 240:
+                        switch ($matched) {
+                            case 'file_header':
+                                # code...
+                                break;
 
-    /**
-     * Validates the CNAB400 Return File
-     *
-     * @return array[] Notes about the validation
-     */
-    protected function validateCnab400()
-    {
-        $result = [
-            'errors' => [],
-            'info' => [],
-            'warnings' => [],
-        ];
+                            case 'log_header':
+                                # code...
+                                break;
 
-        $patterns = [
-            'file_header'  => '/^02RETORNO(\d{2})(.{15})(\d{20})(.{30})(\d{3})(.{15})(\d{6})(\d{2})(\d{14}) {273}(\d{5})(\d{6})$/',
-            'title'        => '/^1(\d{2})(\d{14})(\d{20})(.{25})(\d{20}) {25}(\d{1})(\d{2})(\d{6})(.{10}) {20}(\d{6})(\d{13})(\d{3})(\d{5})(\d{2})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13}) {9}(.)(\d{12})(\d{6})(\d{13})(\d{2})(\d{2}) {54}(\d{2})(\d)(\d{6})$/',
-            'file_trailer' => '/^92(\d{2})(\d{3}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{14})(\d{3})(\d{14})(\d{14})(\d{14})(\d{14}) {144}(\d{6})$/',
-        ];
-        $registries = [];
+                            case 'title_t':
+                                # code...
+                                break;
 
-        foreach ($this->return_file as $row => $registry) {
-            $matched = false;
-            foreach ($patterns as $pattern) {
-                if (preg_match($pattern, $registry, $matches)) {
-                    $registries[] = array_map('trim', $matches);
-                    $matched = true;
-                    break;
+                            case 'title_u':
+                                # code...
+                                break;
+
+                            case 'log_trailer':
+                                # code...
+                                break;
+
+                            case 'file_trailer':
+                                # code...
+                                break;
+                        }
+                        break;
+
+                    case 400:
+                        switch ($matched) {
+                            case 'file_header':
+                                # code...
+                                break;
+
+                            case 'title':
+                                # code...
+                                break;
+
+                            case 'file_trailer':
+                                # code...
+                                break;
+                        }
+                        break;
                 }
-            }
-            if (!$matched) {
-                # code...
+
+                $registries[] = $match;
+            } else {
+                $result['error'][] = "Row $row doesn't match any"
+                                   . " CNAB$this->cnab registry";
             }
         }
-        return $registries;
 
+        return $registries;
         return $result;
     }
 
