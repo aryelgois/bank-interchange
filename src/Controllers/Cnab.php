@@ -38,6 +38,13 @@ class Cnab
     protected $view;
 
     /**
+     * ...
+     *
+     * @var string
+     */
+    protected $filename;
+
+    /**
      * Creates a new Cnab Controller object
      *
      * @param integer  $cnab  Number of CNAB model
@@ -57,6 +64,8 @@ class Cnab
                     . 'Cnab' . $cnab;
 
         $this->view = new $view_class($shipping_file);
+
+        $this->filename = $this->view->filename($cnab);
     }
 
     /**
@@ -71,5 +80,15 @@ class Cnab
     public function output($directory = '')
     {
         return $this->view->output();
+    }
+
+    /**
+     * ...
+     *
+     * @return string
+     */
+    public function filename()
+    {
+        return $this->filename;
     }
 }

@@ -94,6 +94,28 @@ abstract class Cnab
              . static::LINE_END . static::FILE_END;
     }
 
+    /**
+     * ...
+     *
+     * @return string
+     */
+    final public function filename($cnab)
+    {
+        $assignor = $this->shipping_file->getForeign('assignor');
+
+        $format = 'COB.%03.3s.%06.6s.%08.8s.%05.5s.%05.5s.REM';
+
+        $data = [
+            $cnab,
+            $assignor->get('edi'),
+            date('Ymd', strtotime($this->shipping_file->get('stamp'))),
+            $this->shipping_file->get('id'),
+            $assignor->get('covenant'),
+        ];
+
+        return sprintf($format, ...$data);
+    }
+
     /*
      * Main methods
      * =========================================================================
