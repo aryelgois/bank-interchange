@@ -5,48 +5,58 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Abstracts\Controllers;
+namespace aryelgois\BankInterchange\Controllers;
 
-use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
 
 /**
- * A controller to generate Shipping Files
+ * Controller class for Shipping Files
  *
- * ABSTRACTS:
- * - getFilename()
+ * A ShippingFile is a group of Titles to be sent to the Bank. It is sent in a
+ * given format, called CNAB
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-abstract class ShippingFile extends namespace\Controller
+abstract class ShippingFile
 {
     /**
-     * Writes the Shipping File to a local file
+     * Creates a new ShippingFile Model
      *
-     * @param string $path Path to directory where the file will be saved
+     * @param integer[] $title_list A list of Models\Title `id`
+     *                  They all must be for the same assignor.
      *
-     * @return string Filename or false on failure
+     * @return integer The id for the new ShippingFile
+     *
+     * @throws \InvalidArgumentException If $title_list is empty or invalid
      */
-    public function save($path)
+    public static function create(array $title_list)
     {
-        $filename = $this->getFilename();
-        
-        $file = @fopen($path . '/' . $filename, 'w');
-        if ($file === false) {
-            return false;
+        if (empty($title_list)) {
+            throw new \InvalidArgumentException('Title list is empty');
         }
-        fwrite($file, $this->result);
-        fclose($file);
-        
-        return $filename;
+
+        $check = BankI\Models\Title::dump(['id' => array_values($title_list)]);
+        $assignor = array_unique(array_column($check, 'assignor'));
+        if (count($assignor) != 1) {
+            throw new \InvalidArgumentException('Title list is invalid');
+        }
+        $assignor = $assignor[0];
+
+        $shipping_file = new BankI\Models\ShippingFile;
+        $shipping_file->set('assignor', $assignor);
+        $shipping_file->set('status', 0);
+        $shipping_file->save();
+        $id = $shipping_file->get('id');
+
+        foreach ($title_list as $title_id) {
+            $sft = new BankI\Models\ShippingFileTitle;
+            $sft->set('shipping_file', $id);
+            $sft->set('title', $title_id);
+            $sft->save();
+        }
+
+        return $id;
     }
-    
-    /**
-     * Generates the filename to save the Shipping File
-     *
-     * @return string
-     */
-    abstract protected function getFilename();
 }

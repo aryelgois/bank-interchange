@@ -7,8 +7,8 @@
 
 return [
     'databases' => [
-        'bank_interchange' => 'bank_interchange',
-        'address'          => 'address',
+        'default'       => 'bank_interchange',
+        'address'       => 'address',
     ],
     'options' => [
         // required

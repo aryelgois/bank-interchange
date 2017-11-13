@@ -7,36 +7,33 @@
 
 namespace aryelgois\BankInterchange\Models;
 
+use aryelgois\BankInterchange as BankI;
 use aryelgois\Medools;
 
 /**
- * Group of Titles to be set to the Bank
+ * Someone who pays for something
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class ShippingFile extends Medools\Model
+class Payer extends Medools\Model
 {
-    const TABLE = 'shipping_files';
+    const TABLE = 'payers';
 
     const COLUMNS = [
         'id',
-        'assignor',
-        'status',
-        'stamp',
-        'update',
-    ];
-
-    const OPTIONAL_COLUMNS = [
-        'status',
-        'stamp',
-        'update',
+        'person',
+        'address',
     ];
 
     const FOREIGN_KEYS = [
-        'assignor' => [
-            __NAMESPACE__ . '\Assignor',
+        'person' => [
+            '\aryelgois\Medools\Models\Person',
+            'id'
+        ],
+        'address' => [
+            __NAMESPACE__ . '\FullAddress',
             'id'
         ],
     ];

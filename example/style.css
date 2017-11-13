@@ -1,0 +1,21 @@
+table.table-list {
+  border-collapse: collapse;
+  border: 1px solid #e0e0e0;
+  margin: 1em 0;
+}
+
+table.table-list th {
+  background: #e5e5e5;
+}
+
+table.table-list td, table.table-list th {
+  padding: 0.5em;
+}
+
+table.table-list tr:not(:first-child) td {
+  border-top: 1px solid #ddd;
+}
+
+table.table-list tr:nth-child(odd) td {
+  background: #f3f3f3;
+}
