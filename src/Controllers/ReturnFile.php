@@ -49,6 +49,20 @@ class ReturnFile
     protected $matcher;
 
     /**
+     * Human readable messages post validation
+     *
+     * @var string[]
+     */
+    protected $message;
+
+    /**
+     * Registries data
+     *
+     * @var array[]
+     */
+    protected $registries;
+
+    /**
      * Commands to update the Database, after validation()
      *
      * @var array[]
@@ -68,8 +82,8 @@ class ReturnFile
         /*
          * Load matcher
          */
-        $this->matcher = json_decode(file_get_contents(static::MATCHER), true);
-        if ($this->matcher === null) {
+        $matcher = json_decode(file_get_contents(static::MATCHER), true);
+        if ($matcher === null) {
             throw new \RuntimeException('Could not load matcher');
         }
 
@@ -92,7 +106,7 @@ class ReturnFile
          * Defines CNAB by longest row
          */
         $cnab = max($lengths);
-        if (!array_key_exists($cnab, $this->matcher)) {
+        if (!array_key_exists($cnab, $matcher)) {
             throw new \InvalidArgumentException(
                 'Invalid CNAB: ' . $cnab . ' positions'
             );
@@ -113,30 +127,26 @@ class ReturnFile
          */
         $this->return_file = $return_file;
         $this->cnab = $cnab;
-    }
-
-    /**
-     * Validates the Return File
-     *
-     * @return array[] With validation data
-     * @return null    For a not implemented CNAB
-     */
-    public function validate()
-    {
-        $matcher = $this->matcher[$this->cnab];
-        $registries = [];
-        $result = [
+        $this->matcher = $matcher[$cnab];
+        $this->message = [
             'error' => [],
             'info' => [],
             'warning' => [],
         ];
+        $this->registries = [];
+    }
 
+    /**
+     * Validates the Return File registries
+     *
+     * @return array[] With validation messages
+     * @return null    For a not implemented CNAB
+     */
+    public function validate()
+    {
         foreach ($this->return_file as $row => $registry) {
-            /*
-             * Match $registry data
-             */
             $matched = false;
-            foreach ($matcher as $matcher_name => $matcher_data) {
+            foreach ($this->matcher as $matcher_name => $matcher_data) {
                 if (preg_match($matcher_data['pattern'], $registry, $matches)) {
                     $match = array_combine(
                         $matcher_data['map'],
@@ -148,64 +158,66 @@ class ReturnFile
             }
 
             if ($matched) {
-                /*
-                 * Specific operations
-                 */
-                switch ($this->cnab) {
-                    case 240:
-                        switch ($matched) {
-                            case 'file_header':
-                                # code...
-                                break;
-
-                            case 'log_header':
-                                # code...
-                                break;
-
-                            case 'title_t':
-                                # code...
-                                break;
-
-                            case 'title_u':
-                                # code...
-                                break;
-
-                            case 'log_trailer':
-                                # code...
-                                break;
-
-                            case 'file_trailer':
-                                # code...
-                                break;
-                        }
-                        break;
-
-                    case 400:
-                        switch ($matched) {
-                            case 'file_header':
-                                # code...
-                                break;
-
-                            case 'title':
-                                # code...
-                                break;
-
-                            case 'file_trailer':
-                                # code...
-                                break;
-                        }
-                        break;
-                }
-
-                $registries[] = $match;
+                $this->process($matched, $match);
             } else {
-                $result['error'][] = "Row $row doesn't match any"
-                                   . " CNAB$this->cnab registry";
+                $this->message['error'][] = "Row $row doesn't match any"
+                                          . " CNAB$this->cnab registry";
             }
         }
+        return $this->message;
+    }
 
-        return $registries;
-        return $result;
+    /**
+     * Specific operations
+     */
+    protected function process($matched, $match)
+    {
+        switch ($this->cnab) {
+            case 240:
+                switch ($matched) {
+                    case 'file_header':
+                        # code...
+                        break;
+
+                    case 'lot_header':
+                        # code...
+                        break;
+
+                    case 'title_t':
+                        # code...
+                        break;
+
+                    case 'title_u':
+                        # code...
+                        break;
+
+                    case 'lot_trailer':
+                        # code...
+                        break;
+
+                    case 'file_trailer':
+                        # code...
+                        break;
+                }
+                break;
+
+            case 400:
+                switch ($matched) {
+                    case 'file_header':
+                        # code...
+                        break;
+
+                    case 'title':
+                        # code...
+                        break;
+
+                    case 'file_trailer':
+                        # code...
+                        break;
+                }
+                break;
+        }
+        $this->registries[] = $match;
     }
 
     /**
