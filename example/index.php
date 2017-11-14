@@ -70,15 +70,15 @@ function list_assignors()
 
 function list_titles()
 {
-    $template = "            <tr>
-                <td><input name=\"titles[]\" value=\"%s\" type=\"checkbox\" /></td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td><a href=\"generate_billet.php?id=%s\">pdf</a></td>
-            </tr>\n";
+    $template = "                <tr>
+                    <td><input name=\"titles[]\" value=\"%s\" type=\"checkbox\" /></td>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td><a href=\"generate_billet.php?id=%s\">pdf</a></td>
+                </tr>\n";
 
     $iterator = new Medools\ModelIterator(new BankInterchange\Models\Title, []);
     foreach ($iterator as $model) {
@@ -103,16 +103,16 @@ function list_titles()
 
 function list_shipping_files()
 {
-    $template = "        <tr>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>
-                <a href=\"generate_cnab.php?cnab=240&id=%s\">CNAB240</a>
-                <a href=\"generate_cnab.php?cnab=400&id=%s\">CNAB400</a>
-            </td>
-        </tr>\n";
+    $template = "            <tr>
+                <td>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+                <td>
+                    <a href=\"generate_cnab.php?cnab=240&id=%s\">CNAB240</a>
+                    <a href=\"generate_cnab.php?cnab=400&id=%s\">CNAB400</a>
+                </td>
+            </tr>\n";
 
     $shipping_files = new Medools\ModelIterator(new BankInterchange\Models\ShippingFile, []);
     foreach ($shipping_files as $shipping_file) {
@@ -160,120 +160,132 @@ function select_all(source, name) {
     </script>
 </head>
 <body>
-    <h2>Intro</h2>
-    <p>
-        This example represents a fictional e-Comerce
-    </p>
+    <section id="intro">
+        <h2>Intro</h2>
+        <p>
+            This example represents a fictional e-Comerce
+        </p>
+    </section>
 
-    <h2>Setup</h2>
-    <ol>
-        <li>
-            Create <a href="../data/database.sql">this database</a> in your
-            server, then populate it with <a href="../data/database_populate.sql">this</a>
-            and <a href="database_populate_example.sql">this</a>.
-        </li>
-        <li>
-            Configure the database options in <code>../config/medools.php</code>
-        </li>
-    </ol>
+    <section id="setup">
+        <h2>Setup</h2>
+        <ol>
+            <li>
+                Create <a href="../data/database.sql">this database</a> in your
+                server, then populate it with <a href="../data/database_populate.sql">this</a>
+                and <a href="database_populate_example.sql">this</a>.
+            </li>
+            <li>
+                Configure the database options in <code>../config/medools.php</code>
+            </li>
+        </ol>
+    </section>
 
-    <h2>Generate Title</h2>
-    <p>
-        It represents the client interaction in the Website.
-    </p>
-    <p>
-        The client would log in, choose some products (the value below is the
-        sum) and the server would known from who.
-    </p>
-    <form action="generate_title.php" method="POST">
-        <table>
-            <tr>
-                <td>The client</td>
-                <td>
-                    <select name="payer" required>
+    <section id="generate_title">
+        <h2>Generate Title</h2>
+        <p>
+            It represents the client interaction in the Website.
+        </p>
+        <p>
+            The client would log in, choose some products (the value below is the
+            sum) and the server would known from who.
+        </p>
+        <form action="generate_title.php" method="POST">
+            <table>
+                <tr>
+                    <td>The client</td>
+                    <td>
+                        <select name="payer" required>
 <?php
 
 protected_example('list_payers');
 
 ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>is buying from</td>
-                <td>
-                    <select name="assignor" required>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>is buying from</td>
+                    <td>
+                        <select name="assignor" required>
 <?php
 
 protected_example('list_assignors');
 
 ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>something of <span>R$</span></td>
-                <td><input name="value" type="number" min="0.5" step="0.01" value="5" required /></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><button name="action" value="generate_title">Ok</button></td>
-            </tr>
-        </table>
-    </form>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>something of <span>R$</span></td>
+                    <td><input name="value" type="number" min="0.5" step="0.01" value="5" required /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button name="action" value="generate_title">Ok</button></td>
+                </tr>
+            </table>
+        </form>
+    </section>
 
-    <h2>Generate Shipping File</h2>
-    <p>
-        Below is a list of all titles in the database. Those not yet in a
-        shipping file have a checkbox.
-    </p>
-    <form method="POST">
-        <table class="table-list">
-            <tr>
-                <th><input type="checkbox" onchange="select_all(this, 'titles[]')" /></th>
-                <th>id</th>
-                <th>Client</th>
-                <th>Assignor</th>
-                <th>Value</th>
-                <th>Date</th>
-                <th>Billet</th>
-            </tr>
+    <section id="generate_shipping_file">
+        <h2>Generate Shipping File</h2>
+        <p>
+            Below is a list of all titles in the database. Those not yet in a
+            shipping file have a checkbox.
+        </p>
+        <form method="POST">
+            <table class="table-list">
+                <tr>
+                    <th><input type="checkbox" onchange="select_all(this, 'titles[]')" /></th>
+                    <th>id</th>
+                    <th>Client</th>
+                    <th>Assignor</th>
+                    <th>Value</th>
+                    <th>Date</th>
+                    <th>Billet</th>
+                </tr>
 <?php
 
 protected_example('list_titles');
 
 ?>
-        </table>
-        <button formaction="generate_shipping_file.php">Ok</button>
-        <p>
-            Remember that, in production, you have to generate and send the
-            Shipping File before outputing the Billet.
-        </p>
-    </form>
+            </table>
+            <button formaction="generate_shipping_file.php">Ok</button>
+            <p>
+                Remember that, in production, you have to generate and send the
+                Shipping File before outputing the Billet.
+            </p>
+        </form>
+    </section>
 
-    <h2>Generate CNAB</h2>
-    <p>
-        Below is a list of all Shipping Files in the database. Choose how you
-        want to render them.
-    </p>
-    <table class="table-list">
-        <tr>
-            <th>id</th>
-            <th>Titles</th>
-            <th>Total</th>
-            <th>Date</th>
-            <th>CNAB</th>
-        </tr>
+    <section id="generate_cnab">
+        <h2>Generate CNAB</h2>
+        <p>
+            Below is a list of all Shipping Files in the database. Choose how you
+            want to render them.
+        </p>
+        <table class="table-list">
+            <tr>
+                <th>id</th>
+                <th>Titles</th>
+                <th>Total</th>
+                <th>Date</th>
+                <th>CNAB</th>
+            </tr>
 <?php
 
 protected_example('list_shipping_files');
 
 ?>
-    </table>
+        </table>
+    </section>
 
-    <h2>TODO</h2>
-    <ul>
-        <li>Return Files</li>
-    </ul>
+    <section id="todo">
+        <h2>TODO</h2>
+        <ul>
+            <li>Return Files</li>
+        </ul>
+    </section>
 </body>
 </html>

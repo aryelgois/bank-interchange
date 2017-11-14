@@ -1,21 +1,51 @@
+body {
+  background: #f6f6f6;
+  font-family: sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
+  margin: 0;
+}
+
+body > section {
+  padding: 1em 6em 3em 6em;
+}
+body > section + section {
+  border-top: 2px dashed #ccc;
+}
+
+section > h2 {
+  color: #444;
+  font-size: 2.5em;
+  margin: 0.6em 0 0.3em;
+}
+
+code {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.125em;
+}
+
 table.table-list {
+  background: #fff;
   border-collapse: collapse;
   border: 1px solid #e0e0e0;
   margin: 1em 0;
 }
 
 table.table-list th {
-  background: #e5e5e5;
+  background: #549cda;
+  color: #fff;
 }
 
 table.table-list td, table.table-list th {
   padding: 0.5em;
 }
 
-table.table-list tr:not(:first-child) td {
+table.table-list tr + tr td {
   border-top: 1px solid #ddd;
 }
 
 table.table-list tr:nth-child(odd) td {
-  background: #f3f3f3;
+  background: #f0f0f0;
 }
