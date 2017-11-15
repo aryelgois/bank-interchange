@@ -7,7 +7,9 @@
 
 namespace aryelgois\BankInterchange\Controllers;
 
+use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
+use VRia\Utils\NoDiacritic;
 
 /**
  * Interprets Return Files sent by banks
@@ -28,7 +30,7 @@ class ReturnFile
     const MATCHER = __DIR__ . '/../../config/return_file_matcher.json';
 
     /**
-     * Contains the Return File, with rows splitted
+     * Contains the Return File, with lines splitted
      *
      * @var string[]
      */
@@ -47,6 +49,13 @@ class ReturnFile
      * @var array[]
      */
     protected $matcher;
+
+    /**
+     * All the data matched from Return File
+     *
+     * @var array[]
+     */
+    protected $matches;
 
     /**
      * Human readable messages post validation
@@ -88,7 +97,7 @@ class ReturnFile
         }
 
         /*
-         * Splits rows and removes empty rows
+         * Splits lines and removes empty lines
          */
         $return_file = array_filter(
             explode("\n", str_replace("\r", '', $return_file))
@@ -98,12 +107,12 @@ class ReturnFile
         }
 
         /*
-         * Rows length
+         * Lines length
          */
         $lengths = array_map('strlen', $return_file);
 
         /*
-         * Defines CNAB by longest row
+         * Defines CNAB by longest line
          */
         $cnab = max($lengths);
         if (!array_key_exists($cnab, $matcher)) {
@@ -113,13 +122,13 @@ class ReturnFile
         }
 
         /*
-         * Pads shorter rows (maybe are missing ' '. if not, will fail latter)
+         * Pads shorter lines (maybe are missing ' '. if not, will fail latter)
          */
         $shorter = array_filter($lengths, function ($len) use ($cnab) {
             return $len != $cnab;
         });
-        foreach (array_keys($shorter) as $row) {
-            $return_file[$row] = str_pad($return_file[$row], $cnab);
+        foreach (array_keys($shorter) as $line) {
+            $return_file[$line] = str_pad($return_file[$line], $cnab);
         }
 
         /*
@@ -133,7 +142,10 @@ class ReturnFile
             'info' => [],
             'warning' => [],
         ];
-        $this->registries = [];
+        $this->registries = [
+            'meta' => [],
+            'lots' => [],
+        ];
     }
 
     /**
@@ -144,7 +156,7 @@ class ReturnFile
      */
     public function validate()
     {
-        foreach ($this->return_file as $row => $registry) {
+        foreach ($this->return_file as $line => $registry) {
             $matched = false;
             foreach ($this->matcher as $matcher_name => $matcher_data) {
                 if (preg_match($matcher_data['pattern'], $registry, $matches)) {
@@ -158,9 +170,9 @@ class ReturnFile
             }
 
             if ($matched) {
-                $this->process($matched, $match);
+                $this->process($line, $matched, $match);
             } else {
-                $this->message['error'][] = "Row $row doesn't match any"
+                $this->message['error'][] = "Line $line doesn't match any"
                                           . " CNAB$this->cnab registry";
             }
         }
@@ -170,29 +182,134 @@ class ReturnFile
     /**
      * Specific operations
      */
-    protected function process($matched, $match)
+    protected function process($line, $matched, $match)
     {
         switch ($this->cnab) {
             case 240:
                 switch ($matched) {
                     case 'file_header':
-                        # code...
+                        $meta = Utils\Utils::arrayWhitelist(
+                            $match,
+                            [
+                                'record_date',
+                                'record_time',
+                                'file_sequence',
+                                'assignor_use',
+                            ]
+                        );
+
+                        $assignor = $this->findAssignor($line, $match);
+                        if ($assignor) {
+                            $meta['assignor'] = $assignor;
+                        }
+
+                        $this->registries['meta'] = $meta;
+                        unset($this->matcher['file_header']); // might help processing
                         break;
 
                     case 'lot_header':
-                        # code...
+                        $lot = [
+                            'meta' => Utils\Utils::arrayWhitelist(
+                                $match,
+                                [
+                                    'message1',
+                                    'message2',
+                                    'shipping_return_number',
+                                    'shipping_return_record_date',
+                                    'credit_date',
+                                ]
+                            ),
+                            'data' => [],
+                            'registries' => 1,
+                        ];
+
+                        $assignor = $this->findAssignor($line, $match);
+                        if ($assignor) {
+                            $lot['meta']['assignor'] = $assignor;
+                        }
+
+                        $this->registries['lots'][$match['lot']] = $lot;
                         break;
 
                     case 'title_t':
-                        # code...
+                        $data = Utils\Utils::arrayWhitelist(
+                            $match,
+                            [
+                                'movement',
+                                'doc_number',
+                                'our_number',
+                                'due',
+                                'value',
+                                'receiver_bank',
+                                'receiver_agency',
+                                'receiver_agency_cd',
+                                'assignor_use',
+                                'specie',
+                                'contract',
+                                'tax',
+                                'occurrence',
+                            ]
+                        );
+
+                        $title = $this->findTitle($line, $match);
+                        if ($title) {
+                            $data['title'] = $title;
+                        }
+
+                        $this->registries['lots'][$match['lot']]['data'][$match['lot_registry']] = $data;
+                        $this->registries['lots'][$match['lot']]['registries']++;
                         break;
 
                     case 'title_u':
-                        # code...
+                        $data = Utils\Utils::arrayWhitelist(
+                            $match,
+                            [
+                                'value_paid',
+                                'value_net',
+                                'expenses',
+                                'credits',
+                                'occurrence_date',
+                                'credit_date',
+                                'payer_occurrence_code',
+                                'payer_occurrence_date',
+                                'payer_occurrence_value',
+                                'payer_occurrence_detail',
+                                'corresponding_bank',
+                                'corresponding_bank_our_number',
+                            ]
+                        );
+
+                        $this->registries['lots'][$match['lot']]['data'][$match['lot_registry']] = array_merge(
+                            $this->registries['lots'][$match['lot']]['data'][$match['lot_registry']] ?? [],
+                            $data
+                        );
+                        $this->registries['lots'][$match['lot']]['registries']++;
                         break;
 
                     case 'lot_trailer':
-                        # code...
+                        $data = Utils\Utils::arrayWhitelist(
+                            $match,
+                            [
+                                'title_cs_count',
+                                'title_cs_total',
+                                'title_cv_count',
+                                'title_cv_total',
+                                'title_cc_count',
+                                'title_cc_total',
+                                'title_cd_count',
+                                'title_cd_total',
+                                'warning',
+                            ]
+                        );
+
+                        if (++$this->registries['lots'][$match['lot']]['registries'] != $match['lot_registry_count']) {
+                            $this->message['error'][] = "Lot {$match['lot']} has different ammount of registries from it's Trailer";
+                        }
+
+                        $this->registries['lots'][$match['lot']]['meta'] = array_merge(
+                            $this->registries['lots'][$match['lot']]['meta'] ?? [],
+                            $data
+                        );
                         break;
 
                     case 'file_trailer':
@@ -217,7 +334,7 @@ class ReturnFile
                 }
                 break;
         }
-        $this->registries[] = $match;
+        $this->matches[] = $match;
     }
 
     /**
@@ -227,6 +344,56 @@ class ReturnFile
     {
         foreach($this->apply_data as $command) {
             # code...
+        }
+    }
+
+    /*
+     * Helper
+     * =========================================================================
+     */
+
+    protected function findAssignor($line, $match)
+    {
+        $assignor = new BankI\Models\Assignor;
+        $database = $assignor->getDatabase();
+
+        // Find based on document and covenant
+        $result = $database->select(
+            'assignors',
+            [
+                '[><]people' => ['person' => 'id'],
+            ],
+            ['assignors.id'],
+            [
+                'people.document[~]' => (int) $match['assignor_document'],
+                'assignors.covenant[~]' => (int) $match['assignor_covenant'],
+            ]
+        );
+
+        if (empty($result)) {
+            $this->message['warning'][] = "Assignor in line $line not found in the Database";
+        } else {
+            $id = $result[0]['id'];
+            if (count($result) > 1) {
+                $this->message['warning'][] = "Multiple Assignors found in line $line. Using id $id";
+            }
+            $assignor->load($id);
+            return $assignor;
+        }
+    }
+
+    protected function findTitle($line, $match)
+    {
+        $title = new BankI\Models\Title;
+
+        $loaded = $title->load(
+            ['our_number[~]' => (int) $match['our_number']]
+        );
+
+        if (!$loaded) {
+            $this->message['warning'][] = "Our number in line $line not found in the Database";
+        } else {
+            return $title;
         }
     }
 }
