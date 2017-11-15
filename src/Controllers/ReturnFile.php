@@ -243,7 +243,7 @@ class ReturnFile
                             $lot['meta']['assignor'] = $assignor;
                         }
 
-                        $this->registries['lots'][$match['lot']] = $lot;
+                        $this->registries['lots'][(int) $match['lot']] = $lot;
                         $this->matcher_enabled = [
                             'title_t',
                             'lot_trailer'
@@ -275,8 +275,8 @@ class ReturnFile
                             $data['title'] = $title;
                         }
 
-                        $this->registries['lots'][$match['lot']]['data'][$match['lot_registry']] = $data;
-                        $this->registries['lots'][$match['lot']]['registries']++;
+                        $this->registries['lots'][(int) $match['lot']]['data'][(int) $match['lot_registry']] = $data;
+                        $this->registries['lots'][(int) $match['lot']]['registries']++;
                         $this->matcher_enabled = [
                             'title_u',
                             'lot_trailer'
@@ -302,11 +302,11 @@ class ReturnFile
                             ]
                         );
 
-                        $this->registries['lots'][$match['lot']]['data'][$match['lot_registry']] = array_merge(
-                            $this->registries['lots'][$match['lot']]['data'][$match['lot_registry']] ?? [],
+                        $this->registries['lots'][(int) $match['lot']]['data'][(int) $match['lot_registry']] = array_merge(
+                            $this->registries['lots'][(int) $match['lot']]['data'][(int) $match['lot_registry']] ?? [],
                             $data
                         );
-                        $this->registries['lots'][$match['lot']]['registries']++;
+                        $this->registries['lots'][(int) $match['lot']]['registries']++;
                         $this->matcher_enabled = [
                             'title_t',
                             'lot_trailer'
@@ -329,12 +329,12 @@ class ReturnFile
                             ]
                         );
 
-                        if (++$this->registries['lots'][$match['lot']]['registries'] != $match['lot_registry_count']) {
+                        if (++$this->registries['lots'][(int) $match['lot']]['registries'] != (int) $match['lot_registry_count']) {
                             $this->message['error'][] = "Lot {$match['lot']} has different ammount of registries from it's Trailer";
                         }
 
-                        $this->registries['lots'][$match['lot']]['meta'] = array_merge(
-                            $this->registries['lots'][$match['lot']]['meta'] ?? [],
+                        $this->registries['lots'][(int) $match['lot']]['meta'] = array_merge(
+                            $this->registries['lots'][(int) $match['lot']]['meta'] ?? [],
                             $data
                         );
                         $this->matcher_enabled = [
@@ -421,7 +421,7 @@ class ReturnFile
                             $data['title'] = $title;
                         }
 
-                        $this->registries['lots'][0]['data'][$match['registry']] = $data;
+                        $this->registries['lots'][0]['data'][(int) $match['registry']] = $data;
                         $this->matcher_enabled = ['title', 'file_trailer'];
                         break;
 
