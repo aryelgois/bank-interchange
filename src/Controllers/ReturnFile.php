@@ -37,7 +37,7 @@ class ReturnFile
     protected $return_file;
 
     /**
-     * Which Cnab the Return File might be
+     * Which CNAB the Return File might be
      *
      * @var string
      */
@@ -49,6 +49,13 @@ class ReturnFile
      * @var array[]
      */
     protected $matcher;
+
+    /**
+     * Which registries are enabled in the matcher
+     *
+     * @var string[]
+     */
+    protected $matcher_enabled;
 
     /**
      * All the data matched from Return File
@@ -156,9 +163,18 @@ class ReturnFile
      */
     public function validate()
     {
+        $this->matcher_enabled = ['file_header'];
+        $matcher_enabled_old = null;
         foreach ($this->return_file as $line => $registry) {
             $matched = false;
-            foreach ($this->matcher as $matcher_name => $matcher_data) {
+            if ($matcher_enabled_old != $this->matcher_enabled) {
+                $matcher = Utils\Utils::arrayWhitelist(
+                    $this->matcher,
+                    $this->matcher_enabled
+                );
+                $matcher_enabled_old = $this->matcher_enabled;
+            }
+            foreach ($matcher as $matcher_name => $matcher_data) {
                 if (preg_match($matcher_data['pattern'], $registry, $matches)) {
                     $match = array_combine(
                         $matcher_data['map'],
@@ -172,9 +188,7 @@ class ReturnFile
             if ($matched) {
                 $this->process($line, $matched, $match);
             } else {
-                $this->message['error'][] = 'Line ' . ($line + 1)
-                                          . " doesn't match any"
-                                          . " CNAB$this->cnab registry";
+                $this->message['error'][] = 'Registry mismatch on line ' . ($line + 1);
             }
         }
         return $this->message;
@@ -205,7 +219,7 @@ class ReturnFile
                         }
 
                         $this->registries['meta'] = $meta;
-                        unset($this->matcher['file_header']); // might help processing
+                        $this->matcher_enabled = ['lot_header', 'file_trailer'];
                         break;
 
                     case 'lot_header':
@@ -230,6 +244,10 @@ class ReturnFile
                         }
 
                         $this->registries['lots'][$match['lot']] = $lot;
+                        $this->matcher_enabled = [
+                            'title_t',
+                            'lot_trailer'
+                        ];
                         break;
 
                     case 'title_t':
@@ -259,6 +277,10 @@ class ReturnFile
 
                         $this->registries['lots'][$match['lot']]['data'][$match['lot_registry']] = $data;
                         $this->registries['lots'][$match['lot']]['registries']++;
+                        $this->matcher_enabled = [
+                            'title_u',
+                            'lot_trailer'
+                        ];
                         break;
 
                     case 'title_u':
@@ -285,6 +307,10 @@ class ReturnFile
                             $data
                         );
                         $this->registries['lots'][$match['lot']]['registries']++;
+                        $this->matcher_enabled = [
+                            'title_t',
+                            'lot_trailer'
+                        ];
                         break;
 
                     case 'lot_trailer':
@@ -311,6 +337,10 @@ class ReturnFile
                             $this->registries['lots'][$match['lot']]['meta'] ?? [],
                             $data
                         );
+                        $this->matcher_enabled = [
+                            'lot_header',
+                            'file_trailer'
+                        ];
                         break;
 
                     case 'file_trailer':
@@ -327,6 +357,8 @@ class ReturnFile
                         if ($registry_count + 2 != $match['registry_count']) {
                             $this->message['error'][] = "Registry count differ";
                         }
+
+                        $this->matcher_enabled = [];
                         break;
                 }
                 break;
