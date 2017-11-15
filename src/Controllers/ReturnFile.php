@@ -366,15 +366,95 @@ class ReturnFile
             case 400:
                 switch ($matched) {
                     case 'file_header':
-                        # code...
+                        $meta = Utils\Utils::arrayWhitelist(
+                            $match,
+                            [
+                                'record_date',
+                                'agency_account',
+                                'assignor_document',
+                                'file_sequence',
+                            ]
+                        );
+                        $lot = [
+                            'meta' => [],
+                            'data' => [],
+                        ];
+
+                        // how the assignor account is stored differ from banks
+
+                        $this->registries['meta'] = $meta;
+                        $this->registries['lots'][0] = $lot;
+                        $this->matcher_enabled = ['title', 'file_trailer'];
                         break;
 
                     case 'title':
-                        # code...
+                        $data = Utils\Utils::arrayWhitelist(
+                            $match,
+                            [
+                                'assignor_use',
+                                'our_number',
+                                'occurrence',
+                                'occurrence_date',
+                                'your_number',
+                                'due',
+                                'value',
+                                'receiver_bank',
+                                'receiver_agency',
+                                'tax',
+                                'expenses',
+                                'value_paid',
+                                'late_fine',
+                                'credits',
+                                'late_confirm',
+                                'late_confirm_charge',
+                                'discount_confirm',
+                                'discount_value_confirm',
+                                'instruction1_confirm',
+                                'instruction2_confirm',
+                                'protest_confirm',
+                                'specie',
+                            ]
+                        );
+
+                        $title = $this->findTitle($line, $match);
+                        if ($title) {
+                            $data['title'] = $title;
+                        }
+
+                        $this->registries['lots'][0]['data'][$match['registry']] = $data;
+                        $this->matcher_enabled = ['title', 'file_trailer'];
                         break;
 
                     case 'file_trailer':
-                        # code...
+                        $meta = Utils\Utils::arrayWhitelist(
+                            $match,
+                            [
+                                'title_cs_count',
+                                'title_cs_total',
+                                'warning_cs',
+                                'title_cv_count',
+                                'title_cv_total',
+                                'warning_cv',
+                                'title_cc_count',
+                                'title_cc_total',
+                                'warning_cc',
+                                'title_cd_count',
+                                'title_cd_total',
+                                'warning_cd',
+                            ]
+                        );
+
+                        $count = $match['title_cs_count']
+                               + $match['title_cv_count']
+                               + $match['title_cc_count']
+                               + $match['title_cd_count'];
+
+                        if (count($this->registries['lots'][0]['data']) != $count) {
+                            $this->message['error'][] = "Title count differ";
+                        }
+
+                        $this->registries['lots'][0]['meta'] = $meta;
+                        $this->matcher_enabled = [];
                         break;
                 }
                 break;
