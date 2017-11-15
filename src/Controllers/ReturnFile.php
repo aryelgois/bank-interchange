@@ -314,7 +314,19 @@ class ReturnFile
                         break;
 
                     case 'file_trailer':
-                        # code...
+                        if (count($this->registries['lots']) != $match['lot_count']) {
+                            $this->message['error'][] = "Lot count differ";
+                        }
+
+                        $registry_count = array_sum(
+                            array_column(
+                                $this->registries['lots'],
+                                'registries'
+                            )
+                        );
+                        if ($registry_count + 2 != $match['registry_count']) {
+                            $this->message['error'][] = "Registry count differ";
+                        }
                         break;
                 }
                 break;
