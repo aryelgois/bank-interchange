@@ -65,11 +65,13 @@ class ReturnFile
     protected $matches;
 
     /**
-     * Human readable messages post validation
+     * Human readable errors post validation
      *
-     * @var string[]
+     * Each item is ['error_type', 'error_message']
+     *
+     * @var array[]
      */
-    protected $message;
+    protected $errors = [];
 
     /**
      * Registries data
@@ -144,11 +146,6 @@ class ReturnFile
         $this->return_file = $return_file;
         $this->cnab = $cnab;
         $this->matcher = $matcher[$cnab];
-        $this->message = [
-            'error' => [],
-            'info' => [],
-            'warning' => [],
-        ];
         $this->registries = [
             'meta' => [],
             'lots' => [],
@@ -158,8 +155,7 @@ class ReturnFile
     /**
      * Validates the Return File registries
      *
-     * @return array[] With validation messages
-     * @return null    For a not implemented CNAB
+     * @return array[] With validation errors
      */
     public function validate()
     {
@@ -188,10 +184,10 @@ class ReturnFile
             if ($matched) {
                 $this->process($line, $matched, $match);
             } else {
-                $this->message['error'][] = 'Registry mismatch on line ' . ($line + 1);
+                $this->errors[] = ['error', 'Registry mismatch on line ' . ($line + 1)];
             }
         }
-        return $this->message;
+        return $this->errors;
     }
 
     /**
@@ -330,7 +326,7 @@ class ReturnFile
                         );
 
                         if (++$this->registries['lots'][(int) $match['lot']]['registries'] != (int) $match['lot_registry_count']) {
-                            $this->message['error'][] = "Lot {$match['lot']} has different ammount of registries from it's Trailer";
+                            $this->errors[] = ['error', "Lot {$match['lot']} has different ammount of registries from it's Trailer"];
                         }
 
                         $this->registries['lots'][(int) $match['lot']]['meta'] = array_merge(
@@ -345,7 +341,7 @@ class ReturnFile
 
                     case 'file_trailer':
                         if (count($this->registries['lots']) != $match['lot_count']) {
-                            $this->message['error'][] = "Lot count differ";
+                            $this->errors[] = ['error', "Lot count differ"];
                         }
 
                         $registry_count = array_sum(
@@ -355,7 +351,7 @@ class ReturnFile
                             )
                         );
                         if ($registry_count + 2 != $match['registry_count']) {
-                            $this->message['error'][] = "Registry count differ";
+                            $this->errors[] = ['error', "Registry count differ"];
                         }
 
                         $this->matcher_enabled = [];
@@ -450,7 +446,7 @@ class ReturnFile
                                + $match['title_cd_count'];
 
                         if (count($this->registries['lots'][0]['data']) != $count) {
-                            $this->message['error'][] = "Title count differ";
+                            $this->errors[] = ['error', "Title count differ"];
                         }
 
                         $this->registries['lots'][0]['meta'] = $meta;
@@ -496,11 +492,11 @@ class ReturnFile
         );
 
         if (empty($result)) {
-            $this->message['warning'][] = 'Assignor in line ' . ($line + 1) . ' not found in the Database';
+            $this->errors[] = ['warning', 'Assignor in line ' . ($line + 1) . ' not found in the Database'];
         } else {
             $id = $result[0]['id'];
             if (count($result) > 1) {
-                $this->message['warning'][] = 'Multiple Assignors found in line ' . ($line + 1) . '. Using id $id';
+                $this->errors[] = ['warning', 'Multiple Assignors found in line ' . ($line + 1) . '. Using id $id'];
             }
             $assignor->load($id);
             return $assignor;
@@ -516,7 +512,7 @@ class ReturnFile
         );
 
         if (!$loaded) {
-            $this->message['warning'][] = 'Our number in line ' . ($line + 1) . ' not found in the Database';
+            $this->errors[] = ['warning', 'Our number in line ' . ($line + 1) . ' not found in the Database'];
         } else {
             return $title;
         }
