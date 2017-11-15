@@ -172,7 +172,8 @@ class ReturnFile
             if ($matched) {
                 $this->process($line, $matched, $match);
             } else {
-                $this->message['error'][] = "Line $line doesn't match any"
+                $this->message['error'][] = 'Line ' . ($line + 1)
+                                          . " doesn't match any"
                                           . " CNAB$this->cnab registry";
             }
         }
@@ -371,11 +372,11 @@ class ReturnFile
         );
 
         if (empty($result)) {
-            $this->message['warning'][] = "Assignor in line $line not found in the Database";
+            $this->message['warning'][] = 'Assignor in line ' . ($line + 1) . ' not found in the Database';
         } else {
             $id = $result[0]['id'];
             if (count($result) > 1) {
-                $this->message['warning'][] = "Multiple Assignors found in line $line. Using id $id";
+                $this->message['warning'][] = 'Multiple Assignors found in line ' . ($line + 1) . '. Using id $id';
             }
             $assignor->load($id);
             return $assignor;
@@ -391,7 +392,7 @@ class ReturnFile
         );
 
         if (!$loaded) {
-            $this->message['warning'][] = "Our number in line $line not found in the Database";
+            $this->message['warning'][] = 'Our number in line ' . ($line + 1) . ' not found in the Database';
         } else {
             return $title;
         }
