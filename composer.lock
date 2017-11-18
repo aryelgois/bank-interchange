@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe06ce9fa755eb2930f0c1317cb36536",
+    "content-hash": "29a6cc3ccbad2db70d2089c6b0536735",
     "packages": [
         {
             "name": "aryelgois/medools",
-            "version": "v1.0",
+            "version": "v2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/Medools.git",
-                "reference": "634f7c7d0bb1607849e4ddc0456d43002c437b5e"
+                "reference": "f011521c1c8a092cb6042a0d72dc7b61db158968"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/Medools/zipball/634f7c7d0bb1607849e4ddc0456d43002c437b5e",
-                "reference": "634f7c7d0bb1607849e4ddc0456d43002c437b5e",
+                "url": "https://api.github.com/repos/aryelgois/Medools/zipball/f011521c1c8a092cb6042a0d72dc7b61db158968",
+                "reference": "f011521c1c8a092cb6042a0d72dc7b61db158968",
                 "shasum": ""
             },
             "require": {
-                "aryelgois/utils": "^0.1",
+                "aryelgois/utils": "^0.2",
                 "catfan/medoo": "^1.4",
                 "php": "^7.0"
             },
@@ -46,20 +46,20 @@
                 "database",
                 "medoo"
             ],
-            "time": "2017-11-09T17:49:18+00:00"
+            "time": "2017-11-18T19:36:58+00:00"
         },
         {
             "name": "aryelgois/utils",
-            "version": "v0.1",
+            "version": "v0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/utils.git",
-                "reference": "2f1b1ecdf2416c494483edffc2c6ad556e671399"
+                "reference": "98bc8e02758eb461135a7831dd65353b20129952"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/utils/zipball/2f1b1ecdf2416c494483edffc2c6ad556e671399",
-                "reference": "2f1b1ecdf2416c494483edffc2c6ad556e671399",
+                "url": "https://api.github.com/repos/aryelgois/utils/zipball/98bc8e02758eb461135a7831dd65353b20129952",
+                "reference": "98bc8e02758eb461135a7831dd65353b20129952",
                 "shasum": ""
             },
             "require": {
@@ -85,7 +85,7 @@
             "keywords": [
                 "utils"
             ],
-            "time": "2017-11-09T11:04:58+00:00"
+            "time": "2017-11-16T01:49:54+00:00"
         },
         {
             "name": "catfan/medoo",
