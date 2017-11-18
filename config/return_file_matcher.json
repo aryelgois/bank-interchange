@@ -1,0 +1,213 @@
+{
+    "240": {
+        "file_header": {
+            "pattern": "/^(\\d{3})(\\d{4})0 {9}(\\d{1})(\\d{14})(\\d{20})(\\d{5})(.)(\\d{12})(.)(.)(.{30})(.{30}) {10}2(\\d{8})(\\d{6})(\\d{6})(\\d{3})(\\d{5}) {20}( {20}) {29}$/",
+            "map": [
+                "bank_code",
+                "lot",
+                "assignor_document_type",
+                "assignor_document",
+                "assignor_covenant",
+                "assignor_agency",
+                "assignor_agency_cd",
+                "assignor_account",
+                "assignor_account_cd",
+                "assignor_agency_account_cd",
+                "assignor_name",
+                "bank_name",
+                "record_date",
+                "record_time",
+                "file_sequence",
+                "file_layout",
+                "density",
+                "assignor_use"
+            ]
+        },
+        "lot_header": {
+            "pattern": "/^(\\d{3})(\\d{4})1([RT])(\\d{2}) {2}(\\d{3}) (\\d{1})(\\d{15})(\\d{20})(\\d{5})(.)(\\d{12})(.)(.)(.{30})(.{40})(.{40})(\\d{8})(\\d{8})(\\d{8}) {33}$/",
+            "map": [
+                "bank_code",
+                "lot",
+                "service_code",
+                "service_type",
+                "lot_layout",
+                "assignor_document_type",
+                "assignor_document",
+                "assignor_covenant",
+                "assignor_agency",
+                "assignor_agency_cd",
+                "assignor_account",
+                "assignor_account_cd",
+                "assignor_agency_account_cd",
+                "assignor_name",
+                "message1",
+                "message2",
+                "shipping_return_number",
+                "shipping_return_record_date",
+                "credit_date"
+            ]
+        },
+        "title_t": {
+            "pattern": "/^(\\d{3})(\\d{4})3(\\d{5})T (\\d{2})(\\d{5})(.)(\\d{12})(.)(.)(\\d{20})(\\d)(.{15})(\\d{8})(\\d{15})(\\d{3})(\\d{5})(\\d)(.{25})(\\d{2})(\\d)(\\d{15})(.{40})(\\d{10})(\\d{15})(.{10}) {17}$/",
+            "map": [
+                "bank_code",
+                "lot",
+                "lot_registry",
+                "movement",
+                "assignor_agency",
+                "assignor_agency_cd",
+                "assignor_account",
+                "assignor_account_cd",
+                "assignor_account_cd",
+                "our_number",
+                "wallet",
+                "doc_number",
+                "due",
+                "value",
+                "receiver_bank",
+                "receiver_agency",
+                "receiver_agency_cd",
+                "assignor_use",
+                "specie",
+                "payer_document_type",
+                "payer_document",
+                "payer_name",
+                "contract",
+                "tax",
+                "occurrence"
+            ]
+        },
+        "title_u": {
+            "pattern": "/^(\\d{3})(\\d{4})3(\\d{5})U (\\d{2})(\\d{15})(\\d{15})(\\d{15})(\\d{15})(\\d{15})(\\d{15})(\\d{15})(\\d{15})(\\d{8})(\\d{8})(.{4})(.{8})(\\d{15})(.{30})(\\d{3})(\\d{20}) {7}$/",
+            "map": [
+                "bank_code",
+                "lot",
+                "lot_registry",
+                "movement",
+                "fine_value",
+                "discount_value",
+                "rebate",
+                "iof",
+                "value_paid",
+                "value_net",
+                "expenses",
+                "credits",
+                "occurrence_date",
+                "credit_date",
+                "payer_occurrence_code",
+                "payer_occurrence_date",
+                "payer_occurrence_value",
+                "payer_occurrence_detail",
+                "corresponding_bank",
+                "corresponding_bank_our_number"
+            ]
+        },
+        "lot_trailer": {
+            "pattern": "/^(\\d{3})(\\d{4})5 {9}(\\d{6})(\\d{6})(\\d{17})(\\d{6})(\\d{17})(\\d{6})(\\d{17})(\\d{6})(\\d{17})(.{8}) {117}$/",
+            "map": [
+                "bank_code",
+                "lot",
+                "lot_registry_count",
+                "title_cs_count",
+                "title_cs_total",
+                "title_cv_count",
+                "title_cv_total",
+                "title_cc_count",
+                "title_cc_total",
+                "title_cd_count",
+                "title_cd_total",
+                "warning"
+            ]
+        },
+        "file_trailer": {
+            "pattern": "/^(\\d{3})(\\d{4})9 {9}(\\d{6})(\\d{6})(\\d{6}) {205}$/",
+            "map": [
+                "bank_code",
+                "lot",
+                "lot_count",
+                "registry_count",
+                "reconciliation_accounts_count"
+            ]
+        }
+    },
+    "400": {
+        "file_header": {
+            "pattern": "/^02RETORNO(\\d{2}).{15}(\\d{20})(.{30})(\\d{3})(.{15})(\\d{6})(\\d{2})(\\d{14}) {273}(\\d{5})(\\d{6})$/",
+            "map": [
+                "service_code",
+                "agency_account",
+                "assignor_name",
+                "bank_code",
+                "bank_name",
+                "record_date",
+                "assignor_document_type",
+                "assignor_document",
+                "file_sequence",
+                "registry"
+            ]
+        },
+        "title": {
+            "pattern": "/^1(\\d{2})(\\d{14})(\\d{20})(.{25})(\\d{20}) {25}(\\d{1})(\\d{2})(\\d{6})(.{10}) {20}(\\d{6})(\\d{13})(\\d{3})(\\d{5})(\\d{2})(\\d{13})(\\d{13})(\\d{13})(\\d{13})(\\d{13})(\\d{13})(\\d{13})(\\d{13})(\\d{13}) {9}(.)(\\d{12})(\\d{6})(\\d{13})(\\d{2})(\\d{2}) {54}(\\d{2})(\\d)(\\d{6})$/",
+            "map": [
+                "assignor_document_type",
+                "assignor_document",
+                "agency_account",
+                "assignor_use",
+                "our_number",
+                "wallet",
+                "occurrence",
+                "occurrence_date",
+                "your_number",
+                "due",
+                "value",
+                "receiver_bank",
+                "receiver_agency",
+                "kind",
+                "tax",
+                "expenses",
+                "fine_discount",
+                "iof",
+                "rebate",
+                "discount_value",
+                "value_paid",
+                "late_fine",
+                "credits",
+                "late_confirm",
+                "late_confirm_charge",
+                "discount_confirm",
+                "discount_value_confirm",
+                "instruction1_confirm",
+                "instruction2_confirm",
+                "protest_confirm",
+                "specie",
+                "registry"
+            ]
+        },
+        "file_trailer": {
+            "pattern": "/^92(\\d{2})(\\d{3}) {10}(\\d{8})(\\d{14})(\\d{8}) {10}(\\d{8})(\\d{14})(\\d{8}) {10}(\\d{8})(\\d{14})(\\d{8}) {10}(\\d{8})(\\d{14})(\\d{8}) {10}(\\d{14})(\\d{3})(\\d{14})(\\d{14})(\\d{14})(\\d{14}) {144}(\\d{6})$/",
+            "map": [
+                "service_code",
+                "bank_code",
+                "title_cs_count",
+                "title_cs_total",
+                "warning_cs",
+                "title_cv_count",
+                "title_cv_total",
+                "warning_cv",
+                "title_cc_count",
+                "title_cc_total",
+                "warning_cc",
+                "title_cd_count",
+                "title_cd_total",
+                "warning_cd",
+                "discount_margin",
+                "down_rate",
+                "regular_titles",
+                "loan_limit",
+                "loan_balance",
+                "loan_fine",
+                "registry"
+            ]
+        }
+    }
+}

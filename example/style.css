@@ -49,3 +49,9 @@ table.table-list tr + tr td {
 table.table-list tr:nth-child(odd) td {
   background: #f0f0f0;
 }
+
+textarea {
+  height: 200px;
+  width: 700px;
+  white-space: pre;
+}
