@@ -26,12 +26,12 @@ function protected_example(callable $callback)
 
 function format_model_pretty($model, $html = true)
 {
-    $person = $model->getForeign('person');
+    $person = $model->person;
     $info = ($model instanceof BankInterchange\Models\Assignor)
           ? 'Account: ' . $model->formatAgencyAccount(4, 11)
           : $person->documentFormat(true);
 
-    $result = $person->get('name')
+    $result = $person->name
             . ($html ? '<br/><small>' : ' (')
             . $info
             . ($html ? '</small>' : ')');
@@ -44,7 +44,7 @@ function select_option_foreign_person(Medools\ModelIterator $iterator)
     foreach ($iterator as $model) {
         printf(
             "                        <option value=\"%s\">%s</option>\n",
-            $model->get('id'),
+            $model->id,
             format_model_pretty($model, false)
         );
     }
@@ -57,14 +57,14 @@ function select_option_foreign_person(Medools\ModelIterator $iterator)
 function list_payers()
 {
     select_option_foreign_person(
-        new Medools\ModelIterator(new BankInterchange\Models\Payer, [])
+        new Medools\ModelIterator('aryelgois\BankInterchange\Models\Payer', [])
     );
 }
 
 function list_assignors()
 {
     select_option_foreign_person(
-        new Medools\ModelIterator(new BankInterchange\Models\Assignor, [])
+        new Medools\ModelIterator('aryelgois\BankInterchange\Models\Assignor', [])
     );
 }
 
@@ -80,12 +80,12 @@ function list_titles()
                     <td><a href=\"generate_billet.php?id=%s\">pdf</a></td>
                 </tr>\n";
 
-    $iterator = new Medools\ModelIterator(new BankInterchange\Models\Title, []);
+    $iterator = new Medools\ModelIterator('aryelgois\BankInterchange\Models\Title', []);
     foreach ($iterator as $model) {
-        $id = $model->get('id');
-        $payer = $model->getForeign('payer');
-        $assignor = $model->getForeign('assignor');
-        $value = $model->getForeign('specie')->format($model->get('value'));
+        $id = $model->id;
+        $payer = $model->payer;
+        $assignor = $model->assignor;
+        $value = $model->specie->format($model->value);
 
         $data = [
             $id,
@@ -93,7 +93,7 @@ function list_titles()
             format_model_pretty($payer),
             format_model_pretty($assignor),
             $value,
-            $model->get('stamp'),
+            $model->stamp,
             $id,
         ];
 
@@ -114,27 +114,27 @@ function list_shipping_files()
                 </td>
             </tr>\n";
 
-    $shipping_files = new Medools\ModelIterator(new BankInterchange\Models\ShippingFile, []);
+    $shipping_files = new Medools\ModelIterator('aryelgois\BankInterchange\Models\ShippingFile', []);
     foreach ($shipping_files as $shipping_file) {
-        $id = $shipping_file->get('id');
+        $id = $shipping_file->id;
         $titles = [];
         $total = 0.0;
 
         $shipping_file_titles = new Medools\ModelIterator(
-            new BankInterchange\Models\ShippingFileTitle,
+            'aryelgois\BankInterchange\Models\ShippingFileTitle',
             ['shipping_file' => $id]
         );
         foreach ($shipping_file_titles as $sft) {
-            $title = $sft->getForeign('title');
-            $titles[] = $title->get('id');
-            $total += (float) $title->get('value');
+            $title = $sft->title;
+            $titles[] = $title->id;
+            $total += (float) $title->value;
         }
 
         $data = [
             $id,
             implode(', ', $titles),
-            $title->getForeign('specie')->format($total),
-            $shipping_file->get('stamp'),
+            $title->specie->format($total),
+            $shipping_file->stamp,
             $id,
             $id,
         ];

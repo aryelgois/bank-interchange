@@ -48,16 +48,16 @@ class Specie extends Medools\Model
     {
         $formatted = number_format(
             $value,
-            $this->get('decimals'),
-            $this->get('decimal'),
-            $this->get('thousand')
+            $this->decimals,
+            $this->decimal,
+            $this->thousand
         );
 
         switch ($format) {
             case 'name':
-                $name = $this->get('name_plural');
+                $name = $this->name_plural;
                 if (!$name || (float) $value === 1.0) {
-                    $name = $this->get('name');
+                    $name = $this->name;
                 }
                 return $formatted . ' ' . $name;
                 break;
@@ -68,7 +68,7 @@ class Specie extends Medools\Model
 
             case 'symbol':
             default:
-                return $this->get('symbol') . ' ' . $formatted;
+                return $this->symbol . ' ' . $formatted;
                 break;
         }
     }

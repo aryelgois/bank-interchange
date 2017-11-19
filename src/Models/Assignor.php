@@ -78,10 +78,10 @@ class Assignor extends Medools\Model
         $symbols = true
     ) {
         $tmp = [
-            BankI\Utils::padNumber($this->get('agency'), $agency_length),
-            BankI\Utils::padNumber($this->get('account'), $account_length)
+            BankI\Utils::padNumber($this->agency, $agency_length),
+            BankI\Utils::padNumber($this->account, $account_length)
         ];
-        $check_digit = $this->get('account_cd');
+        $check_digit = $this->account_cd;
 
         if ($symbols) {
             return implode(' / ', $tmp) . '-' . $check_digit;
