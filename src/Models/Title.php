@@ -91,7 +91,7 @@ class Title extends Medools\Model
      */
     public function checkDigitOurNumber()
     {
-        return self::checkDigitOurNumberAlgorithm($this->get('our_number'));
+        return self::checkDigitOurNumberAlgorithm($this->our_number);
     }
 
     /**
@@ -124,7 +124,7 @@ class Title extends Medools\Model
      */
     public function setOurNumber()
     {
-        $assignor = $this->get('assignor');
+        $assignor = $this->assignor;
         if ($assignor === null) {
             throw new LogicException('You MUST set `assignor` column first');
         }
@@ -138,6 +138,6 @@ class Title extends Medools\Model
             ]
         );
 
-        $this->set('our_number', ++$our_number);
+        $this->our_number = ++$our_number;
     }
 }
