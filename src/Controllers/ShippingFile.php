@@ -45,15 +45,15 @@ abstract class ShippingFile
         $assignor = $assignor[0];
 
         $shipping_file = new BankI\Models\ShippingFile;
-        $shipping_file->set('assignor', $assignor);
-        $shipping_file->set('status', 0);
+        $shipping_file->assignor = $assignor;
+        $shipping_file->status = 0;
         $shipping_file->save();
-        $id = $shipping_file->get('id');
+        $id = $shipping_file->id;
 
         foreach ($title_list as $title_id) {
             $sft = new BankI\Models\ShippingFileTitle;
-            $sft->set('shipping_file', $id);
-            $sft->set('title', $title_id);
+            $sft->shipping_file = $id;
+            $sft->title = $title_id;
             $sft->save();
         }
 
