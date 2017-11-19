@@ -41,10 +41,10 @@ class BankBillet
     {
         $title = new BankI\Models\Title($where);
 
-        $bank = $title->getForeign('assignor')->getForeign('bank');
+        $bank = $title->assignor->bank;
 
         $view_class = '\\aryelgois\\BankInterchange\\Views\\BankBillets\\'
-                    . $bank->get('view');
+                    . $bank->view;
 
         $this->view = new $view_class($title, $data, $logos);
     }

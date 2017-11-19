@@ -77,16 +77,16 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
          */
         $table = [
             [
-                ['w' =>  80.8, 'title' => $dict['assignor'],      'data' => $assignor_person->get('name')],
+                ['w' =>  80.8, 'title' => $dict['assignor'],      'data' => $assignor_person->name],
                 ['w' =>  35.4, 'title' => $dict['agency_code'],   'data' => $this->formatAgencyAccount()],
-                ['w' =>  11,   'title' => $dict['specie'],        'data' => $this->ref['specie']->get('symbol')],
+                ['w' =>  11,   'title' => $dict['specie'],        'data' => $this->ref['specie']->symbol],
                 ['w' =>  16,   'title' => $dict['amount'],        'data' => ''],                                          // $data['misc']['amount']
                 ['w' =>  33.8, 'title' => $dict['our_number'],    'data' => $this->formatOurNumber(),                   'data_align' => 'R']
             ],
             [
-                ['w' =>  52.8, 'title' => $dict['doc_number'],    'data' => BankI\Utils::padNumber($title->get('id'), 10)],
+                ['w' =>  52.8, 'title' => $dict['doc_number'],    'data' => BankI\Utils::padNumber($title->id, 10)],
                 ['w' =>  37,   'title' => $dict['cpf_cnpj'],      'data' => $assignor_person->documentFormat()],
-                ['w' =>  37.4, 'title' => $dict['date_due'],      'data' => self::formatDate($title->get('due'))],
+                ['w' =>  37.4, 'title' => $dict['date_due'],      'data' => self::formatDate($title->due)],
                 ['w' =>  49.8, 'title' => $dict['doc_value'],     'data' => $this->formatMoney($this->billet['value']), 'data_align' => 'R']
             ],
             [
@@ -97,7 +97,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
                 ['w' =>  49.8, 'title' => $dict['charged'],       'data' => '',                                         'data_align' => 'R']  //$data['misc']['charged']
             ],
             [
-                ['w' => 177,   'title' => $dict['payer'],         'data' => $payer_person->get('name')]
+                ['w' => 177,   'title' => $dict['payer'],         'data' => $payer_person->name]
             ]
         ];
         foreach ($table as $row) {
@@ -110,7 +110,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
         $this->Cell(26, 3.5, utf8_decode($dict['mech_auth']), 0, 1);
         $this->billetSetFont('cell_data');
         $y = $this->GetY();
-        $this->MultiCell(151, 3.5, utf8_decode(str_replace('{{ tax }}', $this->formatMoney($bank->get('tax')), $this->billet['demonstrative'] ?? '')));
+        $this->MultiCell(151, 3.5, utf8_decode(str_replace('{{ tax }}', $this->formatMoney($bank->tax), $this->billet['demonstrative'] ?? '')));
         $y1 = $this->GetY();
         $this->SetXY(161, $y);
         $this->Cell(26, 3.5, '', 0, 1);
@@ -147,19 +147,19 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
                 ['w' => 127.2, 'title' => $dict['payment_place'], 'data' => $this->billet['payment_place'] ?? '']
             ],
             [
-                ['w' => 127.2, 'title' => $dict['assignor'],      'data' => $assignor_person->get('name')]
+                ['w' => 127.2, 'title' => $dict['assignor'],      'data' => $assignor_person->name]
             ],
             [
-                ['w' =>  32,   'title' => $dict['date_document'], 'data' => self::formatDate($title->get('stamp'))],
-                ['w' =>  42.2, 'title' => $dict['doc_number_sh'], 'data' => BankI\Utils::padNumber($title->get('id'), 10)],
+                ['w' =>  32,   'title' => $dict['date_document'], 'data' => self::formatDate($title->stamp)],
+                ['w' =>  42.2, 'title' => $dict['doc_number_sh'], 'data' => BankI\Utils::padNumber($title->id, 10)],
                 ['w' =>  18,   'title' => $dict['specie_doc'],    'data' => static::SPECIE_DOC],                          //$data['misc']['specie_doc']
                 ['w' =>  11,   'title' => $dict['accept'],        'data' => ''],                                          //$data['misc']['accept']
                 ['w' =>  24,   'title' => $dict['date_process'],  'data' => date('d/m/Y')]
             ],
             [
                 ['w' =>  32,   'title' => $dict['bank_use'],      'data' => ''],                                          //$data['misc']['bank_use']
-                ['w' =>  24,   'title' => $dict['wallet'],        'data' => $wallet->get('symbol')],
-                ['w' =>  16,   'title' => $dict['specie'],        'data' => $this->ref['specie']->get('symbol')],
+                ['w' =>  24,   'title' => $dict['wallet'],        'data' => $wallet->symbol],
+                ['w' =>  16,   'title' => $dict['specie'],        'data' => $this->ref['specie']->symbol],
                 ['w' =>  34.2, 'title' => $dict['amount'],        'data' => ''],                                          //$data['misc']['amount']
                 ['w' =>  21,   'title' => $dict['doc_value'],     'data' => '']                                           //$data['misc']['value_un']
             ]
@@ -193,7 +193,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
          */
         $this->SetY($y);
         $table = [
-            ['title' => $dict['date_due'],    'data' => self::formatDate($title->get('due')),       'data_align' => 'R'],
+            ['title' => $dict['date_due'],    'data' => self::formatDate($title->due),       'data_align' => 'R'],
             ['title' => $dict['agency_code'], 'data' => $this->formatAgencyAccount(),               'data_align' => 'R'],
             ['title' => $dict['our_number'],  'data' => $this->formatOurNumber(),                   'data_align' => 'R'],
             ['title' => $dict['doc_value='],  'data' => $this->formatMoney($this->billet['value']), 'data_align' => 'R'],
@@ -219,7 +219,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
         $this->billetSetFont('cell_title');
         $this->Cell(127.2, 7, $dict['payer'], 'L', 1);
         $this->billetSetFont('cell_data');
-        $this->MultiCell(127.2, 3.5, utf8_decode($payer_person->get('name') . "\n" . $this->ref['payer.address']->outputLong()), 'LB');
+        $this->MultiCell(127.2, 3.5, utf8_decode($payer_person->name . "\n" . $this->ref['payer.address']->outputLong()), 'LB');
         $this->SetXY(137.2, $this->GetY() - 3.5);
         $this->billetSetFont('cell_title');
         $this->Cell(49.8, 3.5, utf8_decode($dict['cod_down']), 'LB', 1);

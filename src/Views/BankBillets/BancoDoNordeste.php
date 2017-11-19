@@ -54,7 +54,7 @@ class BancoDoNordeste extends CaixaEconomicaFederal
      */
     protected function beforeDraw()
     {
-        $this->ref['wallet']->set('symbol', $this->ref['wallet']->get('operation'));
+        $this->ref['wallet']->symbol = $this->ref['wallet']->operation;
         parent::beforeDraw();
     }
 }

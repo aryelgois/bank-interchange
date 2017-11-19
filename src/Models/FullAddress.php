@@ -26,15 +26,13 @@ class FullAddress extends Medools\Models\Address\FullAddress
      */
     public function outputLong()
     {
-        $data = $this->getData(true);
-
-        $result = $data['place'] . ', '
-                . $data['number'] . ', '
-                . ($data['detail'] != '' ? ', ' . $data['detail'] : '')
-                . $data['neighborhood'] . "\n"
-                . $data['county']['name'] . '/'
-                . $data['county']['state']['code'] . ' - '
-                . 'CEP: ' . Validation::cep($data['zipcode']);
+        $result = $this->place . ', '
+                . $this->number . ', '
+                . ($this->detail != '' ? ', ' . $this->detail : '')
+                . $this->neighborhood . "\n"
+                . $this->county->name . '/'
+                . $this->county->state->code . ' - '
+                . 'CEP: ' . Validation::cep($this->zipcode);
 
         return $result;
     }
@@ -46,14 +44,12 @@ class FullAddress extends Medools\Models\Address\FullAddress
      */
     public function outputShort()
     {
-        $data = $this->getData(true);
-
-        $result = $data['place'] . ', '
-                . $data['number'] . ', '
-                . $data['neighborhood'] . ', '
-                . $data['county']['name'] . '/'
-                . $data['county']['state']['code'] . ' '
-                . Validation::cep($data['zipcode']);
+        $result = $this->place . ', '
+                . $this->number . ', '
+                . $this->neighborhood . ', '
+                . $this->county->name . '/'
+                . $this->county->state->code . ' '
+                . Validation::cep($this->zipcode);
 
         return $result;
     }

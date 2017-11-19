@@ -166,17 +166,17 @@ abstract class BankBillet extends FPDF
         }
 
         $ref = [];
-        $ref['assignor']         = $title->getForeign('assignor');
-        $ref['assignor.person']  = $ref['assignor']->getForeign('person');
-        $ref['assignor.address'] = $ref['assignor']->getForeign('address');
-        $ref['bank']             = $ref['assignor']->getForeign('bank');
-        $ref['payer']            = $title->getForeign('payer');
-        $ref['payer.person']     = $ref['payer']->getForeign('person');
-        $ref['payer.address']    = $ref['payer']->getForeign('address');
-        $ref['guarantor']        = $title->getForeign('guarantor');
-        $ref['guarantor.person'] = $ref['guarantor']->getForeign('person');
-        $ref['specie']           = $title->getForeign('specie');
-        $ref['wallet']           = $ref['assignor']->getForeign('wallet');
+        $ref['assignor']         = $title->assignor;
+        $ref['assignor.person']  = $ref['assignor']->person;
+        $ref['assignor.address'] = $ref['assignor']->address;
+        $ref['bank']             = $ref['assignor']->bank;
+        $ref['payer']            = $title->payer;
+        $ref['payer.person']     = $ref['payer']->person;
+        $ref['payer.address']    = $ref['payer']->address;
+        $ref['guarantor']        = $title->guarantor;
+        $ref['guarantor.person'] = $ref['guarantor']->person ?? null;
+        $ref['specie']           = $title->specie;
+        $ref['wallet']           = $ref['assignor']->wallet;
         $this->ref = $ref;
 
         $this->beforeDraw();
@@ -193,7 +193,7 @@ abstract class BankBillet extends FPDF
      */
     protected function beforeDraw()
     {
-        $value = $this->title->get('value') + $this->ref['bank']->get('tax');
+        $value = $this->title->value + $this->ref['bank']->tax;
         $this->billet['value'] = (float) $value;
 
         $this->generateBarcode();
@@ -206,8 +206,8 @@ abstract class BankBillet extends FPDF
      */
     protected function checkDigitOurNumber()
     {
-        $our_number = BankI\Utils::padNumber($this->ref['assignor']->get('agency'), 3)
-                    . BankI\Utils::padNumber($this->title->get('our_number'), 8);
+        $our_number = BankI\Utils::padNumber($this->ref['assignor']->agency, 3)
+                    . BankI\Utils::padNumber($this->title->our_number, 8);
 
         return $this->title->checkDigitOurNumberAlgorithm($our_number);
     }
@@ -236,7 +236,7 @@ abstract class BankBillet extends FPDF
      */
     protected function dueFactor()
     {
-        $date = \DateTime::createFromFormat('Y-m-d', $this->title->get('due'));
+        $date = \DateTime::createFromFormat('Y-m-d', $this->title->due);
         $epoch = new \DateTime('1997-10-07');
         if ($date && $date > $epoch) {
             $diff = substr($date->diff($epoch)->format('%a'), -4);
@@ -251,8 +251,8 @@ abstract class BankBillet extends FPDF
     protected function generateBarcode()
     {
         $barcode = [
-            $this->ref['bank']->get('code'),
-            $this->ref['specie']->get('febraban'),
+            $this->ref['bank']->code,
+            $this->ref['specie']->febraban,
             '', // Check digit
             $this->dueFactor(),
             BankI\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
@@ -312,16 +312,16 @@ abstract class BankBillet extends FPDF
         $this->Ln(2);
         $logo = $this->logos
               . '/assignors/'
-              . $this->ref['assignor']->get('logo');
+              . $this->ref['assignor']->logo;
 
         if ($this->logos !== null && is_file($logo)) {
             $y = $this->GetY();
-            $this->Image($logo, null, null, 40, 0, '', $this->ref['assignor']->get('url'));
+            $this->Image($logo, null, null, 40, 0, '', $this->ref['assignor']->url);
             $y1 = $this->GetY();
             $this->SetXY(50, $y);
         }
         $this->billetSetFont('billhead');
-        $this->MultiCell(103.2, 2.5, utf8_decode($this->ref['assignor.person']->get('name') . "\n" . $this->ref['assignor.person']->documentFormat() . "\n" . $this->ref['assignor.address']->outputLong()));
+        $this->MultiCell(103.2, 2.5, utf8_decode($this->ref['assignor.person']->name . "\n" . $this->ref['assignor.person']->documentFormat() . "\n" . $this->ref['assignor.address']->outputLong()));
         $this->SetY(max($y1 ?? 0, $this->GetY()));
     }
 
@@ -367,7 +367,7 @@ abstract class BankBillet extends FPDF
         $line_width_factor = 2
     ) {
         $bank = $this->ref['bank'];
-        $logo = $this->logos . '/banks/' . $bank->get('logo');
+        $logo = $this->logos . '/banks/' . $bank->logo;
 
         $this->Ln(3);
         if ($this->logos !== null && is_file($logo)) {
@@ -375,7 +375,7 @@ abstract class BankBillet extends FPDF
             $this->SetXY(50, $this->GetY() - 7);
         } else {
             $this->billetSetFont('cell_data');
-            $this->Cell(40, 7, utf8_decode($bank->get('name')));
+            $this->Cell(40, 7, utf8_decode($bank->name));
         }
 
         $this->SetLineWidth(static::DEFAULT_LINE_WIDTH * $line_width_factor);
@@ -516,7 +516,7 @@ abstract class BankBillet extends FPDF
      */
     protected function formatBankCode()
     {
-        $code = $this->ref['bank']->get('code');
+        $code = $this->ref['bank']->code;
 
         $checksum = Utils\Validation::mod11Pre($code);
         $digit = $checksum * 10 % 11;
@@ -637,7 +637,7 @@ abstract class BankBillet extends FPDF
     protected function formatOurNumber($dash = true)
     {
         $our_number = BankI\Utils::padNumber(
-            $this->title->get('our_number'),
+            $this->title->our_number,
             static::OUR_NUMBER_LENGTH
         );
 

@@ -55,10 +55,10 @@ class Banese extends BankI\Views\BankBillet
      */
     protected function generateFreeSpace()
     {
-        $key = BankI\Utils::padNumber($this->ref['assignor']->get('agency'), 2, true)
-             . BankI\Utils::padNumber($this->ref['assignor']->get('account'), 9, true)
+        $key = BankI\Utils::padNumber($this->ref['assignor']->agency, 2, true)
+             . BankI\Utils::padNumber($this->ref['assignor']->account, 9, true)
              . $this->formatOurNumber(false)
-             . BankI\Utils::padNumber($this->ref['bank']->get('code'), 3, true);
+             . BankI\Utils::padNumber($this->ref['bank']->code, 3, true);
         $cd1 = Validation::mod10($key);
         $cd2 = Validation::mod11($key . $cd1, 7);
 
@@ -179,19 +179,19 @@ class Banese extends BankI\Views\BankBillet
                 ['w' => 127.2, 'title' => $dict['payment_place'], 'data' => $this->billet['payment_place'] ?? '']
             ],
             [
-                ['w' => 127.2, 'title' => $dict['assignor'],      'data' => $assignor_person->get('name') . '     ' . $assignor_person->documentFormat(true)]
+                ['w' => 127.2, 'title' => $dict['assignor'],      'data' => $assignor_person->name . '     ' . $assignor_person->documentFormat(true)]
             ],
             [
-                ['w' =>  32,   'title' => $dict['date_document'], 'data' => self::formatDate($title->get('stamp'))],
-                ['w' =>  27,   'title' => $dict['doc_number_sh'], 'data' => BankI\Utils::padNumber($title->get('id'), 10)],
+                ['w' =>  32,   'title' => $dict['date_document'], 'data' => self::formatDate($title->stamp)],
+                ['w' =>  27,   'title' => $dict['doc_number_sh'], 'data' => BankI\Utils::padNumber($title->id, 10)],
                 ['w' =>  20,   'title' => $dict['specie_doc'],    'data' => '5'],                                           //$data['misc']['specie_doc']
                 ['w' =>  12,   'title' => $dict['accept'],        'data' => 'A'],                                           //$data['misc']['accept']
                 ['w' =>  36.2, 'title' => $dict['date_process'],  'data' => date('d/m/Y')]
             ],
             [
                 ['w' =>  32,   'title' => $dict['bank_use'],      'data' => ''],                                            //$data['misc']['bank_use']
-                ['w' =>  16,   'title' => $dict['wallet'],        'data' => $wallet->get('symbol')],
-                ['w' =>  11,   'title' => $dict['specie'],        'data' => $this->ref['specie']->get('symbol')],
+                ['w' =>  16,   'title' => $dict['wallet'],        'data' => $wallet->symbol],
+                ['w' =>  11,   'title' => $dict['specie'],        'data' => $this->ref['specie']->symbol],
                 ['w' =>  32,   'title' => $dict['amount'],        'data' => ''],                                            //$data['misc']['amount']
                 ['w' =>  36.2, 'title' => $dict['doc_value'],     'data' => '']                                             //$data['misc']['value_un']
             ]
@@ -203,7 +203,7 @@ class Banese extends BankI\Views\BankBillet
         // Big cell: Instructions or Demonstrative
         $big_cell_text = $this->billet[$big_cell] ?? '';
         if ($big_cell == 'demonstrative') {
-            $big_cell_text = str_replace('{{ tax }}', $this->formatMoney($bank->get('tax')), $big_cell_text);
+            $big_cell_text = str_replace('{{ tax }}', $this->formatMoney($bank->tax), $big_cell_text);
         }
         $y1 = $this->GetY();
         $this->billetSetFont('cell_title');
@@ -229,7 +229,7 @@ class Banese extends BankI\Views\BankBillet
          */
         $this->SetY($y);
         $table = [
-            ['title' => $dict['date_due'],    'data' => self::formatDate($title->get('due')),       'data_align' => 'R'],
+            ['title' => $dict['date_due'],    'data' => self::formatDate($title->due),       'data_align' => 'R'],
             ['title' => $dict['agency_code'], 'data' => $this->formatAgencyAccount(),               'data_align' => 'R'],
             ['title' => $dict['our_number'],  'data' => $this->formatOurNumber(),                   'data_align' => 'R'],
             ['title' => $dict['doc_value='],  'data' => $this->formatMoney($this->billet['value']), 'data_align' => 'R'],
@@ -257,15 +257,16 @@ class Banese extends BankI\Views\BankBillet
         $this->Cell(10, 3.5, $dict['payer']);
         $this->SetXY($this->GetX() + 5, $y);
         $this->billetSetFont('cell_data');
-        $this->MultiCell(112.2, 3.5, utf8_decode($payer_person->get('name') . "\n" . $this->ref['payer.address']->outputLong()));
+        $this->MultiCell(112.2, 3.5, utf8_decode($payer_person->name . "\n" . $this->ref['payer.address']->outputLong()));
         $y1 = $this->GetY();
         $this->SetXY(119.2, $y);
         $this->Cell(36, 3.5, $payer_person->documentFormat(true), 0, 0, 'C');
         $this->setY($y1);
 
         // Guarantor
-        $guarantor = ($this->ref['guarantor']->get('id') !== null)
-                   ? $this->ref['guarantor.person']->get('name') . '     '
+
+        $guarantor = ($this->ref['guarantor'] !== null)
+                   ? $this->ref['guarantor.person']->name . '     '
                    . $this->ref['guarantor.address']->outputShort()
                    : '';
         $this->billetSetFont('cell_title');
@@ -283,7 +284,7 @@ class Banese extends BankI\Views\BankBillet
         // Mechanical authentication
         $this->SetX(119.2);
         $this->billetSetFont('cell_title');
-        $this->Cell(67.8, 3.5, utf8_decode($dict['mech_auth'] . '/' . $wallet->get('name')));
+        $this->Cell(67.8, 3.5, utf8_decode($dict['mech_auth'] . '/' . $wallet->name));
         $this->Ln(3.5);
     }
 }
