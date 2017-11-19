@@ -24,9 +24,9 @@ class Cnab400 extends BankI\Views\Cnab
      */
     protected function addFileHeader()
     {
-        $assignor = $this->shipping_file->getForeign('assignor');
-        $assignor_person = $assignor->getForeign('person');
-        $bank = $assignor->getForeign('bank');
+        $assignor = $this->shipping_file->assignor;
+        $assignor_person = $assignor->person;
+        $bank = $assignor->bank;
 
         $format = '%01.1s%01.1s%-7.7s%02.2s%-15.15s%04.4s%02.2s%07.7s%01.1s'
                 . '%-6.6s%-30.30s%03.3s%-15.15s%06.6s%03.3s%-291.291s%06.6s';
@@ -37,16 +37,16 @@ class Cnab400 extends BankI\Views\Cnab
             'REMESSA',
             '01',
             'COBRANCA',
-            $assignor->get('agency'),
+            $assignor->agency,
             '',
-            $assignor->get('account'),
-            $assignor->get('account_cd'),
+            $assignor->account,
+            $assignor->account_cd,
             '',
-            $assignor_person->get('name'),
-            $bank->get('code'),
-            $bank->get('name'),
+            $assignor_person->name,
+            $bank->code,
+            $bank->name,
             date('dmy'),
-            $assignor->get('edi'),
+            $assignor->edi,
             '',
             $this->registry_count,
         ];
@@ -62,12 +62,12 @@ class Cnab400 extends BankI\Views\Cnab
      */
     protected function addTitle(BankI\Models\Title $title)
     {
-        $assignor = $title->getForeign('assignor');
-        $assignor_person = $assignor->getForeign('person');
-        $bank = $assignor->getForeign('bank');
-        $payer = $title->getForeign('payer');
-        $payer_person = $payer->getForeign('person');
-        $payer_address = $payer->getForeign('address');
+        $assignor = $title->assignor;
+        $assignor_person = $assignor->person;
+        $bank = $assignor->bank;
+        $payer = $title->payer;
+        $payer_person = $payer->person;
+        $payer_address = $payer->address;
 
         $format = '%01.1s%-16.16s%04.4s%02.2s%07.7s%01.1s%02.2s%-4.4s%-25.25s'
                 . '%07.7s%01.1s%010.10s%06.6s%013.13s%-8.8s%01.1s%02.2s%-10.10s'
@@ -78,47 +78,47 @@ class Cnab400 extends BankI\Views\Cnab
         $data = [
             '1',
             '',
-            $assignor->get('agency'),
+            $assignor->agency,
             '0',
-            $assignor->get('account'),
-            $assignor->get('account_cd'),
+            $assignor->account,
+            $assignor->account_cd,
             '0', // fine percent
             '',
-            $title->get('id'),
-            $title->get('our_number'),
+            $title->id,
+            $title->our_number,
             $title->checkDigitOurNumber(),
             '0', // contract
             '0', // second discount date
             '0', // second discount value
             '',
-            $assignor->getForeign('wallet')->get('febraban'),
+            $assignor->wallet->febraban,
             $config['service'] ?? '1',
-            $title->get('id'),
-            date('dmy', strtotime($title->get('due'))),
-            number_format($title->get('value'), 2, '', ''), // Specie raw format
+            $title->id,
+            date('dmy', strtotime($title->due)),
+            number_format($title->value, 2, '', ''), // Specie raw format
             '0', // Charging bank
             '0', // Charging agency
             '',
-            $title->get('kind'),
+            $title->kind,
             'A', // accept
-            date('dmy', strtotime($title->get('stamp'))),
+            date('dmy', strtotime($title->stamp)),
             $config['instruction_code'] ?? '0',
             '0', // one day fine
-            ($title->get('discount_date') != '' ? date('dmy', strtotime($title->get('discount_date'))) : '0'),
-            number_format($title->get('discount_value'), 2, '', ''),
-            number_format($title->get('iof'), 2, '', ''),
-            number_format($title->get('rebate'), 2, '', ''),
+            ($title->discount_date != '' ? date('dmy', strtotime($title->discount_date)) : '0'),
+            number_format($title->discount_value, 2, '', ''),
+            number_format($title->iof, 2, '', ''),
+            number_format($title->rebate, 2, '', ''),
             $payer_person->documentValidate()['type'] ?? '',
-            $payer_person->get('document'),
-            $payer_person->get('name'),
-            implode(' ', [$payer_address->get('place'), $payer_address->get('number'), $payer_address->get('neighborhood')]),
-            $payer_address->get('detail'),
-            $payer_address->get('zipcode'),
-            $payer_address->getForeign('county')->get('name'),
-            $payer_address->getForeign('county')->getForeign('state')->get('code'),
+            $payer_person->document,
+            $payer_person->name,
+            implode(' ', [$payer_address->place, $payer_address->number, $payer_address->neighborhood]),
+            $payer_address->detail,
+            $payer_address->zipcode,
+            $payer_address->county->name,
+            $payer_address->county->state->code,
             '', // message or guarantor name
             '99', // protest deadline
-            $title->getForeign('specie')->get('febraban'),
+            $title->specie->febraban,
             $this->registry_count,
         ];
 

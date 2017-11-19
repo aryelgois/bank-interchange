@@ -67,12 +67,12 @@ abstract class Cnab
         $this->shipping_file = $shipping_file;
 
         $title_list = BankI\Models\ShippingFileTitle::dump([
-            'shipping_file' => $shipping_file->get('id')
+            'shipping_file' => $shipping_file->id
         ]);
         $title_list = array_column($title_list, 'title');
 
         $shipping_file_titles = new Medools\ModelIterator(
-            new BankI\Models\Title,
+            'aryelgois\BankInterchange\Models\Title',
             ['id' => $title_list]
         );
 
@@ -101,16 +101,16 @@ abstract class Cnab
      */
     final public function filename($cnab)
     {
-        $assignor = $this->shipping_file->getForeign('assignor');
+        $assignor = $this->shipping_file->assignor;
 
         $format = 'COB.%03.3s.%06.6s.%08.8s.%05.5s.%05.5s.REM';
 
         $data = [
             $cnab,
-            $assignor->get('edi'),
-            date('Ymd', strtotime($this->shipping_file->get('stamp'))),
-            $this->shipping_file->get('id'),
-            $assignor->get('covenant'),
+            $assignor->edi,
+            date('Ymd', strtotime($this->shipping_file->stamp)),
+            $this->shipping_file->id,
+            $assignor->covenant,
         ];
 
         return sprintf($format, ...$data);

@@ -114,7 +114,7 @@ class Cnab240 extends BankI\Views\Cnab
         $this->lots[$this->lot]['registries']++;
         $this->lots[$this->lot]['lines'] += 2;
         $this->lots[$this->lot]['titles']++;
-        $this->lots[$this->lot]['total'] += $title->get('value');
+        $this->lots[$this->lot]['total'] += $title->value;
         $this->registry_count += 2; // the amount of segments (type 3)
 
         return true;
@@ -155,34 +155,34 @@ class Cnab240 extends BankI\Views\Cnab
      */
     protected function addFileHeader()
     {
-        $assignor = $this->shipping_file->getForeign('assignor');
-        $assignor_person = $assignor->getForeign('person');
-        $bank = $assignor->getForeign('bank');
+        $assignor = $this->shipping_file->assignor;
+        $assignor_person = $assignor->person;
+        $bank = $assignor->bank;
 
         $format = '%03.3s%04.4s%01.1s%-9.9s%01.1s%014.14s%020.20s%05.5s%-1.1s'
                 . '%012.12s%-1.1s%-1.1s%-30.30s%-30.30s%-10.10s%01.1s%08.8s'
                 . '%06.6s%06.6s%03.3s%05.5s%-20.20s%-20.20s%-29.29s';
 
         $data = [
-            $bank->get('code'),
+            $bank->code,
             $this->lot,
             '0',
             '',
             $assignor_person->documentValidate()['type'],
-            $assignor_person->get('document'),
-            $assignor->get('covenant'),
-            $assignor->get('agency'),
+            $assignor_person->document,
+            $assignor->covenant,
+            $assignor->agency,
             '',
-            $assignor->get('account'),
-            $assignor->get('account_cd'),
+            $assignor->account,
+            $assignor->account_cd,
             '',
-            $assignor_person->get('name'),
-            $bank->get('name'),
+            $assignor_person->name,
+            $bank->name,
             '',
             '1',
             date('dmY'),
             date('His'),
-            $this->shipping_file->get('id'),
+            $this->shipping_file->id,
             self::VERSION_FILE_LAYOUT,
             '00000',
             '',
@@ -198,16 +198,16 @@ class Cnab240 extends BankI\Views\Cnab
      */
     protected function addLotHeader()
     {
-        $assignor = $this->shipping_file->getForeign('assignor');
-        $assignor_person = $assignor->getForeign('person');
-        $bank = $assignor->getForeign('bank');
+        $assignor = $this->shipping_file->assignor;
+        $assignor_person = $assignor->person;
+        $bank = $assignor->bank;
 
         $format = '%03.3s%04.4s%01.1s%-1.1s%02.2s%-2.2s%03.3s%-1.1s%01.1s'
                 . '%015.15s%020.20s%05.5s%-1.1s%012.12s%-1.1s%-1.1s%-30.30s'
                 . '%-40.40s%-40.40s%08.8s%08.8s%08.8s%-33.33s';
 
         $data = [
-            $bank->get('code'),
+            $bank->code,
             $this->lot,
             '1',
             'R',
@@ -216,14 +216,14 @@ class Cnab240 extends BankI\Views\Cnab
             self::VERSION_LOT_LAYOUT,
             '',
             $assignor_person->documentValidate()['type'],
-            $assignor_person->get('document'),
-            $assignor->get('covenant'),
-            $assignor->get('agency'),
+            $assignor_person->document,
+            $assignor->covenant,
+            $assignor->agency,
             '',
-            $assignor->get('account'),
-            $assignor->get('account_cd'),
+            $assignor->account,
+            $assignor->account_cd,
             '',
-            $assignor_person->get('name'),
+            $assignor_person->name,
             '',  // message 1
             '',  // message 2
             '0', // number shipping/return
@@ -243,13 +243,13 @@ class Cnab240 extends BankI\Views\Cnab
      */
     protected function addLotDetail(BankI\Models\Title $title, $movement = 1)
     {
-        $assignor = $title->getForeign('assignor');
-        $assignor_person = $assignor->getForeign('person');
-        $bank = $assignor->getForeign('bank');
-        $payer = $title->getForeign('payer');
-        $payer_person = $payer->getForeign('person');
-        $payer_address = $payer->getForeign('address');
-        $guarantor_person = $title->getForeign('guarantor')->getForeign('person');
+        $assignor = $title->assignor;
+        $assignor_person = $assignor->person;
+        $bank = $assignor->bank;
+        $payer = $title->payer;
+        $payer_person = $payer->person;
+        $payer_address = $payer->address;
+        $guarantor_person = $title->guarantor->person ?? null;
 
         /*
          * 'P' Segment
@@ -262,46 +262,46 @@ class Cnab240 extends BankI\Views\Cnab
                 . '%01.1s%02.2s%01.1s%03.3s%02.2s%010.10s%-1.1s';
 
         $data = [
-            $bank->get('code'),
+            $bank->code,
             $this->lot,
             '3',
             $this->lots[$this->lot]['registries'],
             'P',
             '',
             $movement,
-            $assignor->get('agency'),
+            $assignor->agency,
             '0',
-            $assignor->get('account'),
-            $assignor->get('account_cd'),
+            $assignor->account,
+            $assignor->account_cd,
             '',
-            $title->get('our_number'),
-            $assignor->getForeign('wallet')->get('febraban'),
+            $title->our_number,
+            $assignor->wallet->febraban,
             '1', // Title's Registration
-            $title->get('doc_type'),
+            $title->doc_type,
             '2', // Emission identifier
             '2', // Distribuition identifier
-            $title->get('id'),
-            date('dmY', strtotime($title->get('due'))),
-            number_format($title->get('value'), 2, '', ''),
+            $title->id,
+            date('dmY', strtotime($title->due)),
+            number_format($title->value, 2, '', ''),
             '0', // Collection agency
             '',  // Collection agency Check Digit
-            $title->get('kind'),
+            $title->kind,
             'A', // Identifies title acceptance by payer
-            date('dmY', strtotime($title->get('stamp'))),
-            $title->get('fine_type'),
-            ($title->get('fine_date') != '' ? date('dmY', strtotime($title->get('fine_date'))) : '0'),
-            number_format($title->get('fine_value'), 2, '', ''),
-            $title->get('discount_type'),
-            ($title->get('discount_date') != '' ? date('dmY', strtotime($title->get('discount_date'))) : '0'),
-            number_format($title->get('discount_value'), 2, '', ''),
-            number_format($title->get('iof'), 2, '', ''),
-            number_format($title->get('rebate'), 2, '', ''),
-            $title->get('description'),
+            date('dmY', strtotime($title->stamp)),
+            $title->fine_type,
+            ($title->fine_date != '' ? date('dmY', strtotime($title->fine_date)) : '0'),
+            number_format($title->fine_value, 2, '', ''),
+            $title->discount_type,
+            ($title->discount_date != '' ? date('dmY', strtotime($title->discount_date)) : '0'),
+            number_format($title->discount_value, 2, '', ''),
+            number_format($title->iof, 2, '', ''),
+            number_format($title->rebate, 2, '', ''),
+            $title->description,
             '3', // Protest code
             '0', // Protest deadline
             '1', // low/return code
             '0', // low/return deadline
-            $title->getForeign('specie')->get('febraban'),
+            $title->specie->febraban,
             '0', // Contract number
             '1', // Free use: it's defining partial payment isn't allowed
         ];
@@ -317,7 +317,7 @@ class Cnab240 extends BankI\Views\Cnab
                 . '%-40.40s%03.3s%020.20s%-8.8s';
 
         $data = [
-            $bank->get('code'),
+            $bank->code,
             $this->lot,
             '0',
             $this->lots[$this->lot]['registries'],
@@ -325,16 +325,16 @@ class Cnab240 extends BankI\Views\Cnab
             '',
             $movement,
             $payer_person->documentValidate()['type'],
-            $payer_person->get('document'),
-            $payer_person->get('name'),
-            $payer_address->get('place'),
-            $payer_address->get('neighborhood'),
-            $payer_address->get('zipcode'),
-            $payer_address->getForeign('county')->get('name'),
-            $payer_address->getForeign('county')->getForeign('state')->get('code'),
-            $guarantor_person->documentValidate()['type'],
-            $guarantor_person->get('document'),
-            $guarantor_person->get('name'),
+            $payer_person->document,
+            $payer_person->name,
+            $payer_address->place,
+            $payer_address->neighborhood,
+            $payer_address->zipcode,
+            $payer_address->county->name,
+            $payer_address->county->state->code,
+            ($guarantor_person !== null ? $guarantor_person->documentValidate()['type'] : ''),
+            $guarantor_person->document ?? '',
+            $guarantor_person->name ?? '',
             '0', // Corresponding bank
             '0', // "Our number" at corresponding bank
             '',
@@ -352,7 +352,7 @@ class Cnab240 extends BankI\Views\Cnab
                 . '%06.6s%017.17s%06.6s%017.17s%-8.8s%-117.117s';
 
         $data = [
-            $this->shipping_file->getForeign('assignor')->getForeign('bank')->get('code'),
+            $this->shipping_file->assignor->bank->code,
             $this->lot,
             '5',
             '',
@@ -380,7 +380,7 @@ class Cnab240 extends BankI\Views\Cnab
         $format = '%03.3s%04.4s%01.1s%-9.9s%06.6s%06.6s%06.6s%-205.205s';
 
         $data = [
-            $this->shipping_file->getForeign('assignor')->getForeign('bank')->get('code'),
+            $this->shipping_file->assignor->bank->code,
             $this->lot,
             '9',
             '',
