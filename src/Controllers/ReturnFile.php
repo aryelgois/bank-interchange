@@ -242,6 +242,7 @@ class ReturnFile
                         $this->registries['lots'][(int) $match['lot']] = $lot;
                         $this->matcher_enabled = [
                             'title_t',
+                            'title_u',
                             'lot_trailer'
                         ];
                         break;
@@ -271,12 +272,11 @@ class ReturnFile
                             $data['title'] = $title;
                         }
 
-                        $this->registries['lots'][(int) $match['lot']]['data'][(int) $match['lot_registry']] = $data;
+                        $this->registries['lots'][(int) $match['lot']]['data'][(int) $match['lot_registry']] = array_merge(
+                            $this->registries['lots'][(int) $match['lot']]['data'][(int) $match['lot_registry']] ?? [],
+                            $data
+                        );
                         $this->registries['lots'][(int) $match['lot']]['registries']++;
-                        $this->matcher_enabled = [
-                            'title_u',
-                            'lot_trailer'
-                        ];
                         break;
 
                     case 'title_u':
@@ -303,10 +303,6 @@ class ReturnFile
                             $data
                         );
                         $this->registries['lots'][(int) $match['lot']]['registries']++;
-                        $this->matcher_enabled = [
-                            'title_t',
-                            'lot_trailer'
-                        ];
                         break;
 
                     case 'lot_trailer':
