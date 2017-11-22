@@ -54,6 +54,7 @@ abstract class ReturnFile
          * Get file header
          */
         $header = substr($return_file, 0, strpos($return_file, "\n"));
+        $header = str_replace("\r", '', $header);
         if ($header == '') {
             throw new \InvalidArgumentException('Could not find File Header');
         }
