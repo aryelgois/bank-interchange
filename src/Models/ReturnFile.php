@@ -21,20 +21,18 @@ use VRia\Utils\NoDiacritic;
 class ReturnFile
 {
     /**
-     * Path to matcher file
-     *
-     * It contains registry patterns and key maps for each CNAB
-     *
-     * @const string
-     */
-    const MATCHER = __DIR__ . '/../../config/return_file_matcher.json';
-
-    /**
      * Contains the Return File, with lines splitted
      *
      * @var string[]
      */
     protected $return_file;
+
+    /**
+     * Tells how to extract data from Return File and the meaning of some fields
+     *
+     * @var array[]
+     */
+    protected $config;
 
     /**
      * Which CNAB the Return File might be
@@ -44,18 +42,11 @@ class ReturnFile
     protected $cnab;
 
     /**
-     * All the data to match the CNAB registries
-     *
-     * @var array[]
-     */
-    protected $matcher;
-
-    /**
-     * Which registries are enabled in the matcher
+     * Which registries are enabled during validate()
      *
      * @var string[]
      */
-    protected $matcher_enabled;
+    private $matcher_enabled;
 
     /**
      * All the data matched from Return File
@@ -90,21 +81,13 @@ class ReturnFile
     /**
      * Creates a new ReturnFile Controller object
      *
-     * @param string $return_file The Return File to be processed
+     * @param string  $return_file The Return File to be processed
+     * @param array[] $config      @see self::$config
      *
-     * @throws \RuntimeException         If could not load matcher
      * @throws \InvalidArgumentException If $return_file is invalid
      */
-    public function __construct($return_file)
+    public function __construct($return_file, $config)
     {
-        /*
-         * Load matcher
-         */
-        $matcher = json_decode(file_get_contents(static::MATCHER), true);
-        if ($matcher === null) {
-            throw new \RuntimeException('Could not load matcher');
-        }
-
         /*
          * Splits lines and removes empty lines
          */
@@ -124,14 +107,14 @@ class ReturnFile
          * Defines CNAB by longest line
          */
         $cnab = max($lengths);
-        if (!array_key_exists($cnab, $matcher)) {
+        if (!array_key_exists($cnab, $config)) {
             throw new \InvalidArgumentException(
                 'Invalid CNAB: ' . $cnab . ' positions'
             );
         }
 
         /*
-         * Pads shorter lines (maybe are missing ' '. if not, will fail latter)
+         * Pads shorter lines (maybe are missing ' '. if not, will fail later)
          */
         $shorter = array_filter($lengths, function ($len) use ($cnab) {
             return $len != $cnab;
@@ -145,11 +128,16 @@ class ReturnFile
          */
         $this->return_file = $return_file;
         $this->cnab = $cnab;
-        $this->matcher = $matcher[$cnab];
+        $this->config = $config[$cnab];
         $this->registries = [
             'meta' => [],
             'lots' => [],
         ];
+
+        /*
+         * Validate Return File
+         */
+        $this->validate();
     }
 
     /**
@@ -157,7 +145,7 @@ class ReturnFile
      *
      * @return array[] With validation errors
      */
-    public function validate()
+    protected function validate()
     {
         $this->matcher_enabled = ['file_header'];
         $matcher_enabled_old = null;
@@ -165,7 +153,7 @@ class ReturnFile
             $matched = false;
             if ($matcher_enabled_old != $this->matcher_enabled) {
                 $matcher = Utils\Utils::arrayWhitelist(
-                    $this->matcher,
+                    $this->config['matcher'],
                     $this->matcher_enabled
                 );
                 $matcher_enabled_old = $this->matcher_enabled;
@@ -187,7 +175,6 @@ class ReturnFile
                 $this->errors[] = ['error', 'Registry mismatch on line ' . ($line + 1)];
             }
         }
-        return $this->errors;
     }
 
     /**
