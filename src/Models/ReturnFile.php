@@ -143,6 +143,11 @@ class ReturnFile
          * Validate Return File
          */
         $this->validate();
+
+        /*
+         * analyze Return File
+         */
+        $this->analyze();
     }
 
     /**
@@ -459,6 +464,71 @@ class ReturnFile
     {
         foreach($this->apply_data as $command) {
             # code...
+        }
+    }
+
+    /**
+    * Analyzes each registry in the Return File
+    *
+    * It looks for messages from the Bank
+    */
+    protected function analyze()
+    {
+        if ($this->cnab == 240) {
+            $movements = array_replace(...array_values(
+                $this->config['fields']['movement']
+            ));
+        }
+
+        foreach ($this->registries['lots'] as $lot_id => $lot) {
+            foreach ($lot['data'] as $registry_id => $registry) {
+                $message = [
+                    'our_number' => $registry['our_number'],
+                ];
+                $date = [
+                    'format' => '',
+                    'value' => null
+                ];
+                switch ($this->cnab) {
+                    case 240:
+                        $message['movement'] = $movements[$registry['movement']];
+                        $occurrence = null;
+                        foreach ($this->config['fields']['relation'] as $group => $list) {
+                            if (in_array($registry['movement'], $list)) {
+                                $occurrence = $group;
+                                break;
+                            }
+                        }
+
+                        if ($occurrence) {
+                            $message['occurrence'] = $this->config['fields']['occurrence'][$occurrence][$registry['occurrence']];
+                        } else {
+                            $this->messages['warning'] = 'Unknown occurrence in registry ' . $registry_id . '(lot ' . $lot_id . ')';
+                        }
+
+                        if (isset($registry['occurrence_date'])) {
+                            $date['format'] = 'dmY';
+                            $date['value'] = $registry['occurrence_date'];
+                        }
+                        break;
+
+                    case 400:
+                        $message['occurrence'] = $this->config['fields']['occurrence'][$registry['occurrence']];
+
+                        if (isset($registry['occurrence_date'])) {
+                            $date['format'] = 'dmy';
+                            $date['value'] = $registry['occurrence_date'];
+                        }
+                        break;
+                }
+                if ($date['value']) {
+                    $date = \DateTime::createFromFormat(...array_values($date));
+                    if ($date) {
+                        $message['occurrence_date'] = $date->format('Y-m-d');
+                    }
+                }
+                $this->messages['info'][] = $message;
+            }
         }
     }
 
