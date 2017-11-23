@@ -72,11 +72,11 @@ class ReturnFile
     protected $registries;
 
     /**
-     * Commands to update the Database, after validation()
+     * Changes to be applied in Titles
      *
      * @var array[]
      */
-    protected $apply_data;
+    protected $changes;
 
     /**
      * Creates a new ReturnFile Controller object
@@ -156,6 +156,16 @@ class ReturnFile
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * Applies changes to Titles in the Database
+     */
+    public function apply()
+    {
+        foreach($this->changes as $title_id => $data) {
+            # code...
+        }
     }
 
     /**
@@ -455,16 +465,6 @@ class ReturnFile
                 break;
         }
         $this->matches[] = $match;
-    }
-
-    /**
-     * Runs commands to update the Database
-     */
-    public function apply()
-    {
-        foreach($this->apply_data as $command) {
-            # code...
-        }
     }
 
     /**
