@@ -100,6 +100,7 @@ CREATE TABLE `titles` (
     `doc_type`      char(1)         NOT NULL DEFAULT 1,
     `kind`          tinyint(2)      UNSIGNED NOT NULL,
     `value`         decimal(17,4)   NOT NULL,
+    `value_paid`    decimal(17,4)   NOT NULL DEFAULT 0,
     `iof`           decimal(17,4)   NOT NULL,
     `rebate`        decimal(17,4)   NOT NULL,
     `fine_type`     tinyint(1)      NOT NULL DEFAULT 3,
