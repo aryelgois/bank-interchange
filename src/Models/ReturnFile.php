@@ -49,13 +49,6 @@ class ReturnFile
     private $matcher_enabled;
 
     /**
-     * All the data matched from Return File
-     *
-     * @var array[]
-     */
-    protected $matches;
-
-    /**
      * Human readable messages post validation
      *
      * There are 'info', 'error' and 'warning' keys
@@ -483,7 +476,6 @@ class ReturnFile
                 }
                 break;
         }
-        $this->matches[] = $match;
     }
 
     /**
