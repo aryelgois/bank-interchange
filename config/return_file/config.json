@@ -471,13 +471,6 @@
                 "22": "Alteração \"Seu Número\"",
                 "51": "Entrada Rejeitada"
             },
-            "instructions": {
-                "05": "Acatar instruções contidas no título",
-                "08": "Não cobrar encargos moratórios",
-                "12": "Não receber após vencimento",
-                "15": "Após vencimento, cobrar comissão de permanência do BANCO DO NORDESTE",
-                "00": "Sem Instruções – Acata as instruções da Carteira do Cedente"
-            },
             "error_table": [
                 "Falta valor do IOC.",
                 "Não permite desconto/ abatimento.",
