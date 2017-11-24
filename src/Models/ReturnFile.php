@@ -470,15 +470,16 @@ class ReturnFile
     /**
     * Analyzes each registry in the Return File
     *
-    * It looks for messages from the Bank
+    * It looks for messages from the Bank and for changes to apply in the
+    * Database.
     */
     protected function analyze()
     {
         if ($this->cnab == 240) {
-            $movements = array_replace(...array_values(
-                $this->config['fields']['movement']
-            ));
+            $movements = $this->config['fields']['movement'];
+            $movements_flatten = array_replace(...array_values($movements));
         }
+        $occurrences = $this->config['fields']['occurrence'];
 
         foreach ($this->registries['lots'] as $lot_id => $lot) {
             foreach ($lot['data'] as $registry_id => $registry) {
@@ -491,24 +492,43 @@ class ReturnFile
                 ];
                 switch ($this->cnab) {
                     case 240:
-                        $message['movement'] = $movements[$registry['movement']];
-                        $occurrence = null;
+                        $movement = $registry['movement'];
+                        $occurrence = $registry['occurrence'];
+
+                        $message['movement'] = $movements_flatten[$movement];
+                        $occurrence_group = null;
                         foreach ($this->config['fields']['relation'] as $group => $list) {
-                            if (in_array($registry['movement'], $list)) {
-                                $occurrence = $group;
+                            if (in_array($movement, $list)) {
+                                $occurrence_group = $group;
                                 break;
                             }
                         }
 
-                        if ($occurrence) {
-                            $message['occurrence'] = $this->config['fields']['occurrence'][$occurrence][$registry['occurrence']];
+                        if ($occurrence_group) {
+                            $message['occurrence'] = $occurrences[$occurrence_group][$occurrence];
                         } else {
-                            $this->messages['warning'] = 'Unknown occurrence in registry ' . $registry_id . '(lot ' . $lot_id . ')';
+                            $this->messages['warning'][] = 'Unknown occurrence in registry ' . $registry_id . ' (lot ' . $lot_id . ')';
                         }
 
                         if (isset($registry['occurrence_date'])) {
                             $date['format'] = 'dmY';
                             $date['value'] = $registry['occurrence_date'];
+                        }
+
+                        if (isset($registry['title'])) {
+                            if (array_key_exists($movement, $movements['error'])) {
+                                $this->changes[$registry['title']->id] = [
+                                    'status' => 1
+                                ];
+                            } elseif (array_key_exists($movement, $movements['info'])) {
+                                $data = ['status' => 0];
+                                if (isset($registry['value_paid'])) {
+                                    $data['value_paid'] = ($registry['value_paid'] / 10 ** $registry['title']->specie->decimals);
+                                }
+                                $this->changes[$registry['title']->id] = $data;
+                            } else {
+                                $this->messages['warning'][] = 'Could not identify movement in registry ' . $registry_id . ' (lot ' . $lot_id . ')';
+                            }
                         }
                         break;
 
