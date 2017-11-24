@@ -28,6 +28,13 @@ abstract class ReturnFile
     const CONFIG_PATH = __DIR__ . '/../../config/return_file';
 
     /**
+     * Fully Qualified Model Class name
+     *
+     * @const string
+     */
+    const MODEL_CLASS = 'aryelgois\BankInterchange\Models\ReturnFile';
+
+    /**
      * Loads config files and creates a new ReturnFile Model
      *
      * @param string $return_file The Return File to be processed
@@ -112,7 +119,7 @@ abstract class ReturnFile
         /*
          * Create Return File Model
          */
-        $model = new BankI\Models\ReturnFile($return_file, $config);
-        return $model;
+        $model_class = static::MODEL_CLASS;
+        return (new $model_class($return_file, $config));
     }
 }
