@@ -76,7 +76,7 @@ class ReturnFile
      *
      * @var array[]
      */
-    protected $changes;
+    protected $changes = [];
 
     /**
      * Creates a new ReturnFile Controller object
@@ -160,12 +160,31 @@ class ReturnFile
 
     /**
      * Applies changes to Titles in the Database
+     *
+     * @return false If there are no changes
+     * @return true  If run successfully
+     * @return int[] List of Titles' id which failed to update()
      */
     public function apply()
     {
-        foreach($this->changes as $title_id => $data) {
-            # code...
+        if (empty($this->changes)) {
+            return false;
         }
+
+        $failed = [];
+
+        foreach($this->changes as $title_id => $data) {
+            $title = new BankI\Models\Title($title_id);
+            $title->setMultiple($data);
+            if (!$title->update(array_keys($data))) {
+                $failed[] = $title_id;
+            }
+        }
+
+        if (empty($failed)) {
+            return true;
+        }
+        return $failed;
     }
 
     /**
