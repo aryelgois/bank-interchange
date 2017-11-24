@@ -37,6 +37,7 @@ class Title extends Medools\Model
         'doc_type',
         'kind',
         'value',          // (float)
+        'value_paid',     // (float)
         'iof',            // (float) A Brazilian tax
         'rebate',         // (float)
         'fine_type',
@@ -55,6 +56,7 @@ class Title extends Medools\Model
         'guarantor',
         'status',
         'doc_type',
+        'value_paid',
         'fine_type',
         'fine_date',
         'fine_value',
