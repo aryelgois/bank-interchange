@@ -533,11 +533,28 @@ class ReturnFile
                         break;
 
                     case 400:
-                        $message['occurrence'] = $this->config['fields']['occurrence'][$registry['occurrence']];
+                        $occurrence = $registry['occurrence'];
+
+                        $message['occurrence'] = $this->config['fields']['occurrence'][$occurrence];
 
                         if (isset($registry['occurrence_date'])) {
                             $date['format'] = 'dmy';
                             $date['value'] = $registry['occurrence_date'];
+                        }
+
+                        if (isset($registry['title'])) {
+                            if ($occurrence == "51") {
+                                $this->changes[$registry['title']->id] = [
+                                    'status' => 1
+                                ];
+                            } else {
+                                $data = ['status' => 0];
+                                $value_paid = $registry['value_paid'] / 10 ** $registry['title']->specie->decimals;
+                                if ($value_paid > 0) {
+                                    $data['value_paid'] = $value_paid;
+                                }
+                                $this->changes[$registry['title']->id] = $data;
+                            }
                         }
                         break;
                 }
