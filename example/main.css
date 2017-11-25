@@ -1,27 +1,13 @@
+/*
+ * Layout
+ */
+
 body {
   background: #f6f6f6;
   font-family: sans-serif;
   font-size: 14px;
   line-height: 1.5em;
   margin: 0;
-}
-
-
-main {
-  padding-left: 16em;
-}
-
-main > section {
-  padding: 1em 6em 3em 6em;
-}
-main > section + section {
-  border-top: 2px dashed #ccc;
-}
-
-main > section > h2 {
-  color: #444;
-  font-size: 2.5em;
-  margin: 0.6em 0 0.3em;
 }
 
 
@@ -65,6 +51,28 @@ aside nav a:hover {
   border-left-color: #00adff;
 }
 
+
+main {
+  padding-left: 16em;
+}
+
+main > section {
+  padding: 1em 6em 3em 6em;
+}
+main > section + section {
+  border-top: 2px dashed #ccc;
+}
+
+main > section > h2 {
+  color: #444;
+  font-size: 2.5em;
+  margin: 0.6em 0 0.3em;
+}
+
+
+/*
+ * Elements
+ */
 
 code {
   background: rgba(255, 255, 255, 0.6);
