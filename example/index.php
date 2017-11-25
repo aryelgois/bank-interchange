@@ -158,6 +158,9 @@ function select_all(source, name) {
         checkboxes[i].checked = source.checked;
     }
 }
+function element_enabled(id, enabled) {
+    document.getElementById(id).disabled = !enabled;
+}
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
     <link rel="stylesheet" href="main.css" />
@@ -174,6 +177,7 @@ function select_all(source, name) {
         <nav>
             <a href="#intro">Intro</a>
             <a href="#setup">Setup</a>
+            <a href="#new_person">New Person</a>
             <a href="#generate_title">Generate Title</a>
             <a href="#generate_shipping_file">Generate Shipping File</a>
             <a href="#generate_cnab">Generate Cnab</a>
@@ -219,6 +223,54 @@ function select_all(source, name) {
                     Configure the database options in <code>../config/medools.php</code>
                 </li>
             </ol>
+        </section>
+
+        <section id="new_person">
+            <h2>New Person</h2>
+            <p>
+                Add people to interact with the system. Your website should have
+                a customer register page, and the administrator would manage
+                the assignors.
+            </p>
+            <form action="new_person.php" method="POST">
+                <input id="person_type_assignor" name="person_type" type="radio" value="assignor" onchange="element_enabled('person_type_assignor_fields', true)" checked />
+                <label for="person_type_assignor">New Assignor</label>
+                <br />
+                <input id="person_type_customer" name="person_type" type="radio" value="customer" onchange="element_enabled('person_type_assignor_fields', false)" />
+                <label for="person_type_customer">New Customer</label>
+                <br />
+                <br />
+                <fieldset id="person_fields">
+                    <div>Name:</div><input name="name" max="60" required /><br />
+                    <div>Document:</div><input name="document" pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2}|\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})" required />
+                </fieldset>
+                <fieldset id="address_fields">
+                    <h3>Address</h3>
+                    <div>Place:</div><input name="place" max="60" required /><br />
+                    <div>Number:</div><input name="number" max="20" required /><br />
+                    <div>Detail:</div><input name="detail" max="60" /><br />
+                    <div>Neighborhood:</div><input name="neighborhood" max="60" required /><br />
+                    <div>Zipcode:</div><input name="zipcode" pattern="\d{2}\.?\d{3}-?\d{3}" required /><br />
+                    <div>Country:</div><select id="address_country"></select><br />
+                    <div>State:</div><select id="address_state"></select><br />
+                    <div>County:</div><select id="address_county" name="county"></select>
+                </fieldset>
+                <fieldset id="person_type_assignor_fields">
+                    <h3>Assignor</h3>
+                    <div>Bank:</div><select name="bank"></select><br />
+                    <div>Wallet:</div><select name="wallet"></select><br />
+                    <div>Covenant:</div><input name="covenant" max="20" pattern="\d{1,20}" required /><br />
+                    <div>Agency:</div><input name="agency" max="5" pattern="\d{1,5}" required /><br />
+                    <div>Agency check digit:</div><input name="agency_cd" max="1" pattern="\d" required /><br />
+                    <div>Account:</div><input name="account" max="11" pattern="\d{1,11}" required /><br />
+                    <div>Account check digit:</div><input name="account_cd" max="1" pattern="\d" required /><br />
+                    <div>EDI:</div><input name="edi" max="6" pattern="\d{1,6}" required /><br />
+                    <div>Logo:</div><input name="logo" max="30" /><br />
+                    <div>URL:</div><input name="url" type="url" max="30" />
+                </fieldset>
+                <br />
+                <button>Send</button>
+            </form>
         </section>
 
         <section id="generate_title">
