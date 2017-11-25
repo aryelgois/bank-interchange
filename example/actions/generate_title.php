@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/autoload.php';
+require_once __DIR__ . '/../autoload.php';
 
 use aryelgois\BankInterchange;
 
@@ -29,4 +29,4 @@ if (!$title->save()) {
     die('Error saving Title in the Database');
 }
 
-header('Location: .');
+header('Location: ..');

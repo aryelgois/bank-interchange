@@ -77,7 +77,7 @@ function list_titles()
                     <td>%s</td>
                     <td>%s</td>
                     <td>%s</td>
-                    <td><a href=\"generate_billet.php?id=%s\">pdf</a></td>
+                    <td><a href=\"actions/generate_billet.php?id=%s\">pdf</a></td>
                 </tr>\n";
 
     $iterator = new Medools\ModelIterator('aryelgois\BankInterchange\Models\Title', []);
@@ -109,8 +109,8 @@ function list_shipping_files()
                 <td>%s</td>
                 <td>%s</td>
                 <td>
-                    <a href=\"generate_cnab.php?cnab=240&id=%s\">CNAB240</a>
-                    <a href=\"generate_cnab.php?cnab=400&id=%s\">CNAB400</a>
+                    <a href=\"actions/generate_cnab.php?cnab=240&id=%s\">CNAB240</a>
+                    <a href=\"actions/generate_cnab.php?cnab=400&id=%s\">CNAB400</a>
                 </td>
             </tr>\n";
 
@@ -216,7 +216,8 @@ function element_enabled(id, enabled) {
                     server, then <a href="../data/database_populate.sql">populate it</a>.
                 </li>
                 <li>
-                    This example also provides provides <a href="database_populate_example.sql">some more data</a>
+                    This example also provides provides
+                    <a href="data/database_populate_example.sql">some more data</a>
                     for you.
                 </li>
                 <li>
@@ -232,7 +233,7 @@ function element_enabled(id, enabled) {
                 a customer register page, and the administrator would manage
                 the assignors.
             </p>
-            <form action="new_person.php" method="POST">
+            <form action="actions/new_person.php" method="POST">
                 <input id="person_type_assignor" name="person_type" type="radio" value="assignor" onchange="element_enabled('person_type_assignor_fields', true)" checked />
                 <label for="person_type_assignor">New Assignor</label>
                 <br />
@@ -282,7 +283,7 @@ function element_enabled(id, enabled) {
                 The client would log in, choose some products (the value below
                 is the sum) and the server would known the assignor.
             </p>
-            <form action="generate_title.php" method="POST">
+            <form action="actions/generate_title.php" method="POST">
                 <table>
                     <tr>
                         <td>The customer</td>
@@ -343,7 +344,7 @@ protected_example('list_titles');
 
 ?>
                 </table>
-                <button formaction="generate_shipping_file.php">Ok</button>
+                <button formaction="actions/generate_shipping_file.php">Ok</button>
                 <p>
                     Remember that, in production, you have to generate and send the
                     Shipping File before outputing the Billet.
@@ -378,7 +379,7 @@ protected_example('list_shipping_files');
             <p>
                 Enter a Return File sent by a Bank to process it
             </p>
-            <form action="process_return_file.php" method="POST">
+            <form action="actions/process_return_file.php" method="POST">
                 <textarea name="return_file" required></textarea>
                 <p>
                     <label><input name="apply" type="checkbox" />Apply in the Database</label>
