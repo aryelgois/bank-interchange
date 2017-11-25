@@ -170,7 +170,12 @@ function select_all(source, name) {
         </header>
 
         <nav>
-            [links]
+            <a href="#intro">Intro</a>
+            <a href="#setup">Setup</a>
+            <a href="#generate_title">Generate Title</a>
+            <a href="#generate_shipping_file">Generate Shipping File</a>
+            <a href="#generate_cnab">Generate Cnab</a>
+            <a href="#process_return_file">Return File</a>
         </nav>
     </aside>
 
