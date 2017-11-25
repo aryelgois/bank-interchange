@@ -151,6 +151,7 @@ function list_shipping_files()
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="UTF-8" />
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script>
 function select_all(source, name) {
     checkboxes = document.getElementsByName(name);
@@ -388,5 +389,7 @@ protected_example('list_shipping_files');
             </form>
         </section>
     </main>
+
+    <script src="main.js"></script>
 </body>
 </html>

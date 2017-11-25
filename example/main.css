@@ -60,6 +60,12 @@ aside nav a {
 aside nav a:hover {
   border-left-color: #00adff;
 }
+aside nav a.selected {
+  background: rgba(0, 0, 0, 0.1);
+  border-left-color: transparent;
+  color: #fff;
+  pointer-events: none;
+}
 
 
 main {
@@ -70,7 +76,7 @@ main > section {
   padding: 1em 6em 3em 6em;
 }
 main > section + section {
-  border-top: 2px dashed #ccc;
+  display: none;
 }
 
 main > section > h2 {
