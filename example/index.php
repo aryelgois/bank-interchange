@@ -169,6 +169,8 @@ function select_all(source, name) {
             <em>example</em>
         </header>
 
+        <label for="aside-menu">Menu</label>
+        <input id="aside-menu" type="checkbox" />
         <nav>
             <a href="#intro">Intro</a>
             <a href="#setup">Setup</a>

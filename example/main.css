@@ -8,6 +8,7 @@ body {
   font-size: 14px;
   line-height: 1.5em;
   margin: 0;
+  min-width: 280px;
 }
 
 
@@ -40,6 +41,15 @@ aside header em {
   padding: 0.5em 0;
 }
 
+aside > input  {
+  display: none;
+}
+
+aside > label {
+  display: none;
+  padding: 0.4em;
+}
+
 aside nav a {
   color: #00adff;
   border-left: 0.3em solid transparent;
@@ -67,6 +77,43 @@ main > section > h2 {
   color: #444;
   font-size: 2.5em;
   margin: 0.6em 0 0.3em;
+}
+
+
+/*
+ * Responsive
+ */
+
+@media screen and (max-width:800px) {
+  aside {
+    position: static;
+    width: 100%;
+  }
+
+  aside > label {
+    display: block;
+    text-align: center;
+  }
+
+  aside nav {
+    display: none;
+  }
+  aside > input:checked + nav {
+    display: block;
+  }
+
+  aside nav a {
+    display: inline-block;
+    width: 16em;
+  }
+
+  main {
+    padding-left: 0;
+  }
+
+  main > section {
+    padding: 1em 0.5em 1.5em 0.5em;
+  }
 }
 
 
