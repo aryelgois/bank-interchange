@@ -6,18 +6,54 @@ body {
   margin: 0;
 }
 
-body > section {
+
+main {
+  padding-left: 16em;
+}
+
+main > section {
   padding: 1em 6em 3em 6em;
 }
-body > section + section {
+main > section + section {
   border-top: 2px dashed #ccc;
 }
 
-section > h2 {
+main > section > h2 {
   color: #444;
   font-size: 2.5em;
   margin: 0.6em 0 0.3em;
 }
+
+
+aside {
+  background: #e8e8e8;
+  position: fixed;
+    top: 0;
+  height: 100%;
+  width: 16em;
+  overflow-y: hidden;
+}
+aside:hover {
+overflow-y: auto;
+}
+
+aside header {
+  padding: 0.8em 0.2em 0.4em;
+  text-align: center;
+}
+
+aside header h2 {
+  color: #444;
+  font-size: 1.5em;
+  margin: 0;
+}
+
+aside header em {
+  color: #888;
+  display: block;
+  padding: 0.5em 0;
+}
+
 
 code {
   background: rgba(255, 255, 255, 0.6);

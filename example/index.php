@@ -147,9 +147,10 @@ function list_shipping_files()
 <!doctype html>
 <html>
 <head>
-    <meta charset="UTF-8" />
     <title>Example - BankInterchange</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <script>
 function select_all(source, name) {
     checkboxes = document.getElementsByName(name);
@@ -158,8 +159,22 @@ function select_all(source, name) {
     }
 }
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+    <link rel="stylesheet" href="main.css" />
 </head>
 <body>
+    <aside>
+        <header>
+            <h2>BankInterchange</h2>
+            <em>example</em>
+        </header>
+
+        <nav>
+            [links]
+        </nav>
+    </aside>
+
+    <main>
     <section id="intro">
         <h2>Intro</h2>
         <p>
@@ -294,5 +309,6 @@ protected_example('list_shipping_files');
             <button>Send</button>
         </form>
     </section>
+    </main>
 </body>
 </html>
