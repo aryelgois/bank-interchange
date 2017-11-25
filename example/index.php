@@ -183,17 +183,35 @@ function select_all(source, name) {
         <section id="intro">
             <h2>Intro</h2>
             <p>
-                This example represents a fictional e-Comerce
+                BankInterchange is suitable to use in a e-Commerce. You just
+                need to adapt your website a little bit and provide some
+                operations for who is going to use it.
+            </p>
+            <p>
+                Explore this example source code to see how these basic
+                operations are implemented. Of course, you will want some data
+                validation to protect your customers.
             </p>
         </section>
 
         <section id="setup">
             <h2>Setup</h2>
+            <p>
+                In order to use BankInterchange, you need the Database schema it
+                uses.
+            </p>
             <ol>
                 <li>
+                    First, you need the Address Database provided
+                    <a href="https://github.com/aryelgois/databases">here</a>.
+                </li>
+                <li>
                     Create <a href="../data/database.sql">this database</a> in your
-                    server, then populate it with <a href="../data/database_populate.sql">this</a>
-                    and <a href="database_populate_example.sql">this</a>.
+                    server, then <a href="../data/database_populate.sql">populate it</a>.
+                </li>
+                <li>
+                    This example also provides provides <a href="database_populate_example.sql">some more data</a>
+                    for you.
                 </li>
                 <li>
                     Configure the database options in <code>../config/medools.php</code>
@@ -204,16 +222,16 @@ function select_all(source, name) {
         <section id="generate_title">
             <h2>Generate Title</h2>
             <p>
-                It represents the client interaction in the Website.
+                When the customer buys something, this is what is happening.
             </p>
             <p>
-                The client would log in, choose some products (the value below is the
-                sum) and the server would known from who.
+                The client would log in, choose some products (the value below
+                is the sum) and the server would known the assignor.
             </p>
             <form action="generate_title.php" method="POST">
                 <table>
                     <tr>
-                        <td>The client</td>
+                        <td>The customer</td>
                         <td>
                             <select name="payer" required>
 <?php
