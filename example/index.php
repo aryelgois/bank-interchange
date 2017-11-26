@@ -5,6 +5,8 @@ require_once 'autoload.php';
 use aryelgois\BankInterchange;
 use aryelgois\Medools;
 
+$select_placeholder = '<option value="" selected disabled>(Select)</option>';
+
 /*
  * helper functions
  */
@@ -235,10 +237,10 @@ function element_enabled(id, enabled) {
                 the assignors.
             </p>
             <form action="actions/new_person.php" method="POST">
-                <input id="person_type_assignor" name="person_type" type="radio" value="assignor" onchange="element_enabled('person_type_assignor_fields', true)" checked />
+                <input id="person_type_assignor" name="person_type" type="radio" value="assignor" onchange="element_enabled('assignor_fields', true)" checked />
                 <label for="person_type_assignor">New Assignor</label>
                 <br />
-                <input id="person_type_customer" name="person_type" type="radio" value="customer" onchange="element_enabled('person_type_assignor_fields', false)" />
+                <input id="person_type_customer" name="person_type" type="radio" value="customer" onchange="element_enabled('assignor_fields', false)" />
                 <label for="person_type_customer">New Customer</label>
                 <br />
                 <br />
@@ -253,14 +255,14 @@ function element_enabled(id, enabled) {
                     <div>Detail:</div><input name="detail" max="60" /><br />
                     <div>Neighborhood:</div><input name="neighborhood" max="60" required /><br />
                     <div>Zipcode:</div><input name="zipcode" pattern="\d{2}\.?\d{3}-?\d{3}" required /><br />
-                    <div>Country:</div><select id="address_country"></select><br />
-                    <div>State:</div><select id="address_state"></select><br />
-                    <div>County:</div><select id="address_county" name="county"></select>
+                    <div>Country:</div><select id="address_country"><?php echo $select_placeholder; ?></select><br />
+                    <div>State:</div><select id="address_state"><?php echo $select_placeholder; ?></select><br />
+                    <div>County:</div><select id="address_county" name="county"><?php echo $select_placeholder; ?></select>
                 </fieldset>
-                <fieldset id="person_type_assignor_fields">
+                <fieldset id="assignor_fields">
                     <h3>Assignor</h3>
-                    <div>Bank:</div><select name="bank"></select><br />
-                    <div>Wallet:</div><select name="wallet"></select><br />
+                    <div>Bank:</div><select name="bank"><?php echo $select_placeholder; ?></select><br />
+                    <div>Wallet:</div><select name="wallet"><?php echo $select_placeholder; ?></select><br />
                     <div>Covenant:</div><input name="covenant" max="20" pattern="\d{1,20}" required /><br />
                     <div>Agency:</div><input name="agency" max="5" pattern="\d{1,5}" required /><br />
                     <div>Agency check digit:</div><input name="agency_cd" max="1" pattern="\d" required /><br />

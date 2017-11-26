@@ -170,9 +170,9 @@ textarea {
   white-space: pre;
 }
 
-#person_type_assignor_fields {
+#assignor_fields {
   display: none;
 }
-#person_type_assignor:checked ~ #person_type_assignor_fields {
+#person_type_assignor:checked ~ #assignor_fields {
   display: block;
 }
