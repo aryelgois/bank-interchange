@@ -42,6 +42,8 @@ function element_enabled(id, enabled) {
             <a href="#generate_shipping_file">Generate Shipping File</a>
             <a href="#generate_cnab">Generate Cnab</a>
             <a href="#process_return_file">Return File</a>
+            <br/>
+            <a href="https://github.com/aryelgois/bank-interchange">Contribute on GitHub</a>
         </nav>
     </aside>
 
