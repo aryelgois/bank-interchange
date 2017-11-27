@@ -8,42 +8,113 @@ $return_file = BankInterchange\Controllers\ReturnFile::process($_POST['return_fi
 
 $messages = $return_file->getMessages();
 
-$info = "<ul>\n";
+$tab = '                ';
+
+$template = $tab . "    <tr>\n"
+          . str_repeat($tab . "        <td>%s</td>\n", 4)
+          . $tab . "    </tr>\n";
+
+/*
+ * Result info
+ */
+$info = '';
 foreach ($messages['info'] as $m) {
-    $text = implode("<br />\n", array_filter([
-        'Our Number: ' . $m['our_number'],
-        (isset($m['movement']) ? 'Movement: ' . $m['movement'] : ''),
-        'Occurrence: ' . $m['occurrence'],
-        (isset($m['occurrence_date']) ? 'Occurrence date: ' . $m['occurrence_date'] : ''),
-    ]));
-    $info .= '<li><p>' . $text . "</p></li>\n";
+    $info .= sprintf(
+        $template,
+        $m['our_number'],
+        $m['movement'] ?? '',
+        $m['occurrence'],
+        $m['occurrence_date'] ?? ''
+    );
 }
-$info .= "</ul>\n\n";
 
+/*
+ * Errors
+ */
 $count = count($messages['error']);
-$error = '<strong>' . $count . ' errors' . ($count > 0 ? ':' : '') . "</strong>\n<ul>\n";
-if ($count) {
-    $error .= '<li>' . implode("</li>\n<li>", $messages['error']) . "</li>\n";
-}
-$error .= "</ul>\n\n";
+$error_title = $count . ' errors' . ($count > 0 ? ':' : '');
+$error = ($count)
+       ? $tab . "<ul>\n"
+       . $tab . '    <li>'
+       . implode("</li>\n" . $tab . '    <li>', $messages['error'])
+       . "</li>\n"
+       . $tab . "</ul>"
+       : '';
 
+/*
+ * Warnings
+ */
 $count = count($messages['warning']);
-$warning = '<strong>' . $count . ' warnings' . ($count > 0 ? ':' : '') . "</strong>\n<ul>\n";
-if ($count) {
-    $warning .= '<li>' . implode("</li>\n<li>", $messages['warning']) . "</li>\n";
-}
-$warning .= "</ul>\n\n";
+$warning_title = $count . ' warnings' . ($count > 0 ? ':' : '');
+$warning = ($count)
+         ? $tab . "<ul>\n"
+         . $tab . '    <li>'
+         . implode("</li>\n" . $tab . '    <li>', $messages['warning'])
+         . "</li>\n"
+         . $tab . "</ul>"
+         : '';
 
-echo "<h2>Result:</h2>\n\n" . $info . $error . $warning;
-
+/*
+ * Applying
+ */
 if (isset($_POST['apply'])) {
-    echo "<h2>Applying...</h2>\n";
     $result = $return_file->apply();
     if ($result === false) {
-        echo 'Nothing to apply';
+        $apply = 'Nothing to apply';
     } elseif ($result === true) {
-        echo 'Applied successfully';
+        $apply = 'Applied successfully';
     } else {
-        echo 'Titles which failed: ' . implode(', ', $result);
+        $apply = 'Titles which failed: ' . implode(', ', $result);
     }
 }
+
+?>
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="../main.css" />
+        <style>
+
+main {
+  padding: 0;
+}
+
+table.table-list td + td {
+    border-left: 1px solid #ddd;
+}
+
+        </style>
+    </head>
+    <body>
+        <main>
+            <section>
+                <h2>Result:</h2>
+                <table class="table-list">
+                    <tr>
+                        <th>Our Number</th>
+                        <th>Movement</th>
+                        <th>Ocurrence</th>
+                        <th>Ocurrence date</th>
+                    </tr>
+<?php echo $info; ?>
+                </table>
+
+                <h3><?php echo $error_title ?></h3>
+<?php echo $error; ?>
+
+                <h3><?php echo $warning_title ?></h3>
+<?php echo $warning; ?>
+
+<?php if (isset($_POST['apply'])): ?>
+
+                <h2>Applying...</h2>
+                <p>
+                    <?php echo $apply; ?>
+
+                </p>
+<?php endif; ?>
+            </section>
+        </main>
+    </body>
+</html>
