@@ -27,7 +27,7 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
             <a href="#intro">Intro</a>
             <a href="#setup">Setup</a>
             <a href="#new_person">New Person</a>
-            <a href="#generate_title">Generate Title</a>
+            <a href="#new_title">New Title</a>
             <a href="#generate_shipping_file">Generate Shipping File</a>
             <a href="#generate_cnab">Generate Cnab</a>
             <a href="#process_return_file">Return File</a>
@@ -120,8 +120,8 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
             </form>
         </section>
 
-        <section id="generate_title">
-            <h2>Generate Title</h2>
+        <section id="new_title">
+            <h2>New Title</h2>
             <p>
                 When the customer buys something, this is what is happening.
             </p>
@@ -129,7 +129,7 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
                 The client would log in, choose some products (the value below
                 is the sum) and the server would known the assignor.
             </p>
-            <form action="actions/generate_title.php" method="POST" class="pretty">
+            <form action="actions/new_title.php" method="POST" class="pretty">
                 <table>
                     <tr>
                         <td>The customer</td>
@@ -149,7 +149,7 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
                     </tr>
                     <tr>
                         <td></td>
-                        <td><button name="action" value="generate_title">Ok</button></td>
+                        <td><button>Ok</button></td>
                     </tr>
                 </table>
             </form>
