@@ -26,49 +26,9 @@ function protected_example(callable $callback)
     }
 }
 
-function format_model_pretty($model, $html = true)
-{
-    $person = $model->person;
-    $info = ($model instanceof BankInterchange\Models\Assignor)
-          ? 'Account: ' . $model->formatAgencyAccount(4, 11)
-          : $person->documentFormat(true);
-
-    $result = $person->name
-            . ($html ? '<br/><small>' : ' (')
-            . $info
-            . ($html ? '</small>' : ')');
-
-    return $result;
-}
-
-function select_option_foreign_person(Medools\ModelIterator $iterator)
-{
-    foreach ($iterator as $model) {
-        printf(
-            "                        <option value=\"%s\">%s</option>\n",
-            $model->id,
-            format_model_pretty($model, false)
-        );
-    }
-}
-
 /*
  * example functions
  */
-
-function list_payers()
-{
-    select_option_foreign_person(
-        new Medools\ModelIterator('aryelgois\BankInterchange\Models\Payer', [])
-    );
-}
-
-function list_assignors()
-{
-    select_option_foreign_person(
-        new Medools\ModelIterator('aryelgois\BankInterchange\Models\Assignor', [])
-    );
-}
 
 function list_titles()
 {
@@ -291,30 +251,18 @@ function element_enabled(id, enabled) {
                     <tr>
                         <td>The customer</td>
                         <td>
-                            <select name="payer" required>
-<?php
-
-protected_example('list_payers');
-
-?>
-                            </select>
+                            <select id="payer_list" name="payer" required><?php echo $select_placeholder; ?></select>
                         </td>
                     </tr>
                     <tr>
                         <td>is buying from</td>
                         <td>
-                            <select name="assignor" required>
-<?php
-
-protected_example('list_assignors');
-
-?>
-                            </select>
+                            <select id="assignor_list" name="assignor" required><?php echo $select_placeholder; ?></select>
                         </td>
                     </tr>
                     <tr>
                         <td>something of <span>R$</span></td>
-                        <td><input name="value" type="number" min="0.5" step="0.01" value="5" required /></td>
+                        <td><input name="value" type="number" min="0.5" step="0.01" required /></td>
                     </tr>
                     <tr>
                         <td></td>

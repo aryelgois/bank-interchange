@@ -52,4 +52,7 @@ $(document).ready(function () {
 
     main.ajax_get('#assignor_fields [name=bank]', 'get_banks.php');
     main.ajax_get('#assignor_fields [name=wallet]', 'get_wallets.php');
+
+    main.ajax_get('#payer_list', 'get_people.php', {'class': 'Payer'});
+    main.ajax_get('#assignor_list', 'get_people.php', {'class': 'Assignor'});
 });
