@@ -76,11 +76,6 @@ function element_enabled(id, enabled) {
                     server, then <a href="../data/database_populate.sql">populate it</a>.
                 </li>
                 <li>
-                    This example also provides provides
-                    <a href="data/database_populate_example.sql">some more data</a>
-                    for you.
-                </li>
-                <li>
                     Configure the database options in <code>../config/medools.php</code>
                 </li>
             </ol>
