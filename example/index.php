@@ -165,7 +165,7 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
             <p>
                 <strong>Note:</strong> Choose only Titles with the same assignor
             </p>
-            <form method="POST">
+            <form action="actions/generate_shipping_file.php" method="POST">
                 <table class="table-list">
                     <tr class="persistent">
                         <th><input id="check_all_titles" type="checkbox" /></th>
@@ -177,7 +177,8 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
                         <th>Billet</th>
                     </tr>
                 </table>
-                <button formaction="actions/generate_shipping_file.php">Ok</button>
+                <br />
+                <button>Ok</button>
                 <p>
                     Remember that, in production, you have to generate and send
                     the Shipping File before outputing the Billet.
