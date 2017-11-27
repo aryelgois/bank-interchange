@@ -12,11 +12,7 @@ var main = {
         $.get('/example/ajax/' + script, request, function (data) {
             var el = $(selector);
 
-            if (el.is('select')) {
-                el.children(':not([value=""])').remove();
-            } else {
-                el.empty();
-            }
+            el.children(':not(.persistent)').remove();
 
             el.append(data);
 
@@ -55,4 +51,7 @@ $(document).ready(function () {
 
     main.ajax_get('#payer_list', 'get_people.php', {'class': 'Payer'});
     main.ajax_get('#assignor_list', 'get_people.php', {'class': 'Assignor'});
+
+    main.ajax_get('#generate_shipping_file tbody', 'get_titles.php');
+    main.ajax_get('#generate_cnab tbody', 'get_shipping_files.php');
 });

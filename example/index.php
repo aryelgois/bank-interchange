@@ -1,109 +1,6 @@
 <?php
 
-require_once 'autoload.php';
-
-use aryelgois\BankInterchange;
-use aryelgois\Medools;
-
-$select_placeholder = '<option value="" selected disabled>(Select)</option>';
-
-/*
- * helper functions
- */
-
-function protected_example(callable $callback)
-{
-    try {
-        $callback();
-    } catch (Exception $e) {
-        if (strpos($e->getMessage(), 'Unknown database') === false) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
-        }
-        /*
-         * Silently skip error:
-         * User might not have configured config/medools.php yet
-         */
-    }
-}
-
-/*
- * example functions
- */
-
-function list_titles()
-{
-    $template = "                <tr>
-                    <td><input name=\"titles[]\" value=\"%s\" type=\"checkbox\" /></td>
-                    <td>%s</td>
-                    <td>%s</td>
-                    <td>%s</td>
-                    <td>%s</td>
-                    <td>%s</td>
-                    <td><a href=\"actions/generate_billet.php?id=%s\">pdf</a></td>
-                </tr>\n";
-
-    $iterator = new Medools\ModelIterator('aryelgois\BankInterchange\Models\Title', []);
-    foreach ($iterator as $model) {
-        $id = $model->id;
-        $payer = $model->payer;
-        $assignor = $model->assignor;
-        $value = $model->specie->format($model->value);
-
-        $data = [
-            $id,
-            $id,
-            format_model_pretty($payer),
-            format_model_pretty($assignor),
-            $value,
-            $model->stamp,
-            $id,
-        ];
-
-        printf($template, ...$data);
-    }
-}
-
-function list_shipping_files()
-{
-    $template = "            <tr>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>
-                    <a href=\"actions/generate_cnab.php?cnab=240&id=%s\">CNAB240</a>
-                    <a href=\"actions/generate_cnab.php?cnab=400&id=%s\">CNAB400</a>
-                </td>
-            </tr>\n";
-
-    $shipping_files = new Medools\ModelIterator('aryelgois\BankInterchange\Models\ShippingFile', []);
-    foreach ($shipping_files as $shipping_file) {
-        $id = $shipping_file->id;
-        $titles = [];
-        $total = 0.0;
-
-        $shipping_file_titles = new Medools\ModelIterator(
-            'aryelgois\BankInterchange\Models\ShippingFileTitle',
-            ['shipping_file' => $id]
-        );
-        foreach ($shipping_file_titles as $sft) {
-            $title = $sft->title;
-            $titles[] = $title->id;
-            $total += (float) $title->value;
-        }
-
-        $data = [
-            $id,
-            implode(', ', $titles),
-            $title->specie->format($total),
-            $shipping_file->stamp,
-            $id,
-            $id,
-        ];
-
-        printf($template, ...$data);
-    }
-}
+$select_placeholder = '<option class="persistent" value="" selected disabled>(Select)</option>';
 
 ?>
 <!doctype html>
@@ -275,12 +172,13 @@ function element_enabled(id, enabled) {
         <section id="generate_shipping_file">
             <h2>Generate Shipping File</h2>
             <p>
-                Below is a list of all titles in the database. Those not yet in a
-                shipping file have a checkbox.
+                Below is a list of all titles in the Database. Choose which ones
+                will be in the Shipping File. Those previously sent do not have
+                a checkbox.
             </p>
             <form method="POST">
                 <table class="table-list">
-                    <tr>
+                    <tr class="persistent">
                         <th><input type="checkbox" onchange="select_all(this, 'titles[]')" /></th>
                         <th>id</th>
                         <th>Client</th>
@@ -289,16 +187,11 @@ function element_enabled(id, enabled) {
                         <th>Date</th>
                         <th>Billet</th>
                     </tr>
-<?php
-
-protected_example('list_titles');
-
-?>
                 </table>
                 <button formaction="actions/generate_shipping_file.php">Ok</button>
                 <p>
-                    Remember that, in production, you have to generate and send the
-                    Shipping File before outputing the Billet.
+                    Remember that, in production, you have to generate and send
+                    the Shipping File before outputing the Billet.
                 </p>
             </form>
         </section>
@@ -306,22 +199,17 @@ protected_example('list_titles');
         <section id="generate_cnab">
             <h2>Generate CNAB</h2>
             <p>
-                Below is a list of all Shipping Files in the database. Choose how you
-                want to render them.
+                Below is a list of all Shipping Files in the database. Choose
+                how you want to render them.
             </p>
             <table class="table-list">
-                <tr>
+                <tr class="persistent">
                     <th>id</th>
                     <th>Titles</th>
                     <th>Total</th>
                     <th>Date</th>
                     <th>CNAB</th>
                 </tr>
-<?php
-
-protected_example('list_shipping_files');
-
-?>
             </table>
         </section>
 
