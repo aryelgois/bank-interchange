@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/autoload.php';
+require_once __DIR__ . '/../autoload.php';
 
 use aryelgois\Utils;
 use aryelgois\Medools;
@@ -66,4 +66,4 @@ if (!$model->save()) {
     die('Error saving ' . ($is_assignor ? 'Assignor' : 'Payer') . ' in the Database');
 }
 
-header('Location: .');
+header('Location: ..');
