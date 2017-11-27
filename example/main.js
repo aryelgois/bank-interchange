@@ -24,8 +24,16 @@ var main = {
 };
 
 $(document).ready(function () {
+    /*
+     * aside menu
+     */
     $('body > aside > nav').on('click', 'a', main.aside_menu)
       .children('a[href="' + window.location.hash + '"]').click();
+
+
+    /*
+     * ajax
+     */
 
     $('#address_country').change(function () {
         main.ajax_get(
@@ -54,4 +62,19 @@ $(document).ready(function () {
 
     main.ajax_get('#generate_shipping_file tbody', 'get_titles.php');
     main.ajax_get('#generate_cnab tbody', 'get_shipping_files.php');
+
+    /*
+     * New Person: toggle assignor fieldset
+     */
+    $('#person_type_assignor, #person_type_customer').change(function () {
+        $('#assignor_fields').prop('disabled', $(this).val() != 'assignor');
+    }).filter(':checked').change();
+
+    /*
+     * Generate Shipping File: check all titles available
+     */
+    $('#check_all_titles').change(function () {
+        $(this).closest('tr').siblings().find('input[name="titles[]"]')
+          .prop('checked', $(this).is(':checked'));
+    });
 });

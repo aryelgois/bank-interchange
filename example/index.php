@@ -11,17 +11,6 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
     <meta charset="UTF-8" />
     <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script>
-function select_all(source, name) {
-    checkboxes = document.getElementsByName(name);
-    for (let i = 0, n = checkboxes.length; i < n; i++) {
-        checkboxes[i].checked = source.checked;
-    }
-}
-function element_enabled(id, enabled) {
-    document.getElementById(id).disabled = !enabled;
-}
-    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
     <link rel="stylesheet" href="main.css" />
 </head>
@@ -91,10 +80,10 @@ function element_enabled(id, enabled) {
                 the assignors.
             </p>
             <form action="actions/new_person.php" method="POST" class="pretty">
-                <input id="person_type_assignor" name="person_type" type="radio" value="assignor" onchange="element_enabled('assignor_fields', true)" checked />
+                <input id="person_type_assignor" name="person_type" type="radio" value="assignor" checked />
                 <label for="person_type_assignor">New Assignor</label>
                 <br />
-                <input id="person_type_customer" name="person_type" type="radio" value="customer" onchange="element_enabled('assignor_fields', false)" />
+                <input id="person_type_customer" name="person_type" type="radio" value="customer" />
                 <label for="person_type_customer">New Customer</label>
                 <br />
                 <br />
@@ -179,7 +168,7 @@ function element_enabled(id, enabled) {
             <form method="POST">
                 <table class="table-list">
                     <tr class="persistent">
-                        <th><input type="checkbox" onchange="select_all(this, 'titles[]')" /></th>
+                        <th><input id="check_all_titles" type="checkbox" /></th>
                         <th>id</th>
                         <th>Client</th>
                         <th>Assignor</th>
