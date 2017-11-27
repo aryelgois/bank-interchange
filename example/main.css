@@ -145,11 +145,19 @@ fieldset {
   padding: 0;
 }
 
+form {
+  overflow: auto;
+}
+form.pretty {
+  background: #fbfbfb;
+  border: 1px solid #ddd;
+  padding: 0.25em;
+}
+
 table.table-list {
   background: #fff;
   border-collapse: collapse;
   border: 1px solid #e0e0e0;
-  margin: 1em 0;
 }
 
 table.table-list th {

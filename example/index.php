@@ -90,7 +90,7 @@ function element_enabled(id, enabled) {
                 a customer register page, and the administrator would manage
                 the assignors.
             </p>
-            <form action="actions/new_person.php" method="POST">
+            <form action="actions/new_person.php" method="POST" class="pretty">
                 <input id="person_type_assignor" name="person_type" type="radio" value="assignor" onchange="element_enabled('assignor_fields', true)" checked />
                 <label for="person_type_assignor">New Assignor</label>
                 <br />
@@ -140,7 +140,7 @@ function element_enabled(id, enabled) {
                 The client would log in, choose some products (the value below
                 is the sum) and the server would known the assignor.
             </p>
-            <form action="actions/generate_title.php" method="POST">
+            <form action="actions/generate_title.php" method="POST" class="pretty">
                 <table>
                     <tr>
                         <td>The customer</td>
@@ -218,7 +218,7 @@ function element_enabled(id, enabled) {
             <p>
                 Enter a Return File sent by a Bank to process it
             </p>
-            <form action="actions/process_return_file.php" method="POST">
+            <form action="actions/process_return_file.php" method="POST" class="pretty">
                 <textarea name="return_file" required></textarea>
                 <p>
                     <label><input name="apply" type="checkbox" />Apply in the Database</label>
