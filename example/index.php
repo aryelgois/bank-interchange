@@ -176,6 +176,9 @@ function element_enabled(id, enabled) {
                 will be in the Shipping File. Those previously sent do not have
                 a checkbox.
             </p>
+            <p>
+                <strong>Note:</strong> Choose only Titles with the same assignor
+            </p>
             <form method="POST">
                 <table class="table-list">
                     <tr class="persistent">
