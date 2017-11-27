@@ -130,7 +130,7 @@ function element_enabled(id, enabled) {
                     <div>URL:</div><input name="url" type="url" max="30" />
                 </fieldset>
                 <br />
-                <button>Send</button>
+                <button>Ok</button>
             </form>
         </section>
 
@@ -226,7 +226,7 @@ function element_enabled(id, enabled) {
                 <p>
                     <label><input name="apply" type="checkbox" />Apply in the Database</label>
                 </p>
-                <button>Send</button>
+                <button>Ok</button>
             </form>
         </section>
     </main>
