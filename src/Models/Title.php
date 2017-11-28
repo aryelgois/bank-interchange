@@ -128,7 +128,7 @@ class Title extends Medools\Model
     {
         $assignor = $this->assignor;
         if ($assignor === null) {
-            throw new LogicException('You MUST set `assignor` column first');
+            throw new \LogicException('You MUST set `assignor` column first');
         }
 
         $database = self::getDatabase();
@@ -136,7 +136,7 @@ class Title extends Medools\Model
             static::TABLE,
             'our_number',
             [
-                'assignor' => $assignor
+                'assignor' => $assignor->id
             ]
         );
 
