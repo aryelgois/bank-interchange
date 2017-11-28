@@ -85,7 +85,16 @@ main {
   padding: 0;
 }
 
-table.table-list td + td {
+#info_table {
+  font-size: 0.8em;
+}
+
+#info_table th:nth-child(n+2):nth-child(-n+6), #info_table th:nth-child(9),
+#info_table td:nth-child(n+2):nth-child(-n+6), #info_table td:nth-child(9) {
+  text-align: right;
+}
+
+#info_table td + td {
     border-left: 1px solid #ddd;
 }
 
@@ -95,7 +104,7 @@ table.table-list td + td {
         <main>
             <section>
                 <h2>Result:</h2>
-                <table class="table-list">
+                <table id="info_table" class="table-list">
                     <tr>
                         <th>Our Number</th>
                         <th>Due</th>
