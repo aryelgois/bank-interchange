@@ -109,7 +109,7 @@ abstract class Cnab
             $cnab,
             $assignor->edi,
             date('Ymd', strtotime($this->shipping_file->stamp)),
-            $this->shipping_file->id,
+            $this->shipping_file->counter,
             $assignor->covenant,
         ];
 

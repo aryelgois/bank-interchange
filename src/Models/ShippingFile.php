@@ -23,6 +23,7 @@ class ShippingFile extends Medools\Model
     const COLUMNS = [
         'id',
         'assignor',
+        'counter',
         'status',
         'stamp',
         'update',
@@ -40,4 +41,33 @@ class ShippingFile extends Medools\Model
             'id'
         ],
     ];
+
+    /**
+     * Sets the `counter` column based on current `assignor`
+     *
+     * Intended to be used only when creating a new entry
+     *
+     * NOTE:
+     * - Be sure to save() soon
+     *
+     * @throws \LogicException If assignor is not set
+     */
+    public function setCounter()
+    {
+        $assignor = $this->assignor;
+        if ($assignor === null) {
+            throw new \LogicException('You MUST set `assignor` column first');
+        }
+
+        $database = self::getDatabase();
+        $counter = $database->max(
+            static::TABLE,
+            'counter',
+            [
+                'assignor' => $assignor->id
+            ]
+        );
+
+        $this->counter = ++$counter;
+    }
 }

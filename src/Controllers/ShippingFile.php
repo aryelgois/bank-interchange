@@ -47,6 +47,7 @@ abstract class ShippingFile
         $shipping_file = new BankI\Models\ShippingFile;
         $shipping_file->assignor = $assignor;
         $shipping_file->status = 0;
+        $shipping_file->setCounter();
         $shipping_file->save();
         $id = $shipping_file->id;
 

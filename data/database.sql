@@ -124,11 +124,13 @@ CREATE TABLE `titles` (
 CREATE TABLE `shipping_files` (
     `id`            int(10)         UNSIGNED NOT NULL AUTO_INCREMENT,
     `assignor`      int(10)         UNSIGNED NOT NULL,
+    `counter`       int(10)         UNSIGNED NOT NULL,
     `status`        tinyint(1),
     `stamp`         timestamp       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `update`        datetime,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`assignor`) REFERENCES `assignors` (`id`)
+    FOREIGN KEY (`assignor`) REFERENCES `assignors` (`id`),
+    UNIQUE KEY `assignor__AND__counter`(`assignor`, `counter`)
 );
 
 CREATE TABLE `shipping_file_titles` (

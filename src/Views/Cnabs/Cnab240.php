@@ -182,7 +182,7 @@ class Cnab240 extends BankI\Views\Cnab
             '1',
             date('dmY'),
             date('His'),
-            $this->shipping_file->id,
+            $this->shipping_file->counter,
             self::VERSION_FILE_LAYOUT,
             '00000',
             '',
