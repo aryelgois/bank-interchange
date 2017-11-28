@@ -13,11 +13,7 @@ use aryelgois\BankInterchange;
 // Medools
 Medools\MedooConnection::loadConfig(__DIR__ . '/../config/medools.php');
 
-// session
-session_start();
-
 // common functions
-
 function format_model_pretty($model, $html = true)
 {
     $person = $model->person;
