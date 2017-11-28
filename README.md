@@ -39,18 +39,23 @@ Files, and the reading of Return Files in a webserver:
 
 # Example
 
-There is an example simulating an e-Comerce. You can choose between CNAB240 and
-CNAB400, and there are just minor differences between the required data.
+There is a well designed example you can explore! It shows a simple way to
+implement the package in a website.
+
+You can insert data in the Database, generate bank billets and shipping files.
+These shipping files can be viewed in both CNAB240 and CNAB400. Also, there is
+a simple Return File analyzer.
 
 
 # TODO
 
-I know, the script is not working yet.. It's under development.
+The script kinda works.. It's under development.
 
+- [ ] Code review
 - [ ] Real world test CNAB240 and CNAB400.
 - [x] Write the Return File interpreter for CNAB240 and CNAB400.
-  - [ ] Make it interact with the Database
+  - [x] Make it interact with the Database
   - [ ] It should receive the data somehow.. fetch from the bank's site or
-    provide as local files?
+    provide a user input?
 - [ ] Create hooks for Return Files.
   - [ ] A nice interface to integrate with one's website.
