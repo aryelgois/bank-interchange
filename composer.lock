@@ -4,30 +4,31 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3230a3bf0bbb5196a17558edd3d718a9",
+    "content-hash": "29a6cc3ccbad2db70d2089c6b0536735",
     "packages": [
         {
-            "name": "aryelgois/objects",
-            "version": "dev-master",
+            "name": "aryelgois/medools",
+            "version": "v2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/aryelgois/Objects.git",
-                "reference": "f89c9dbaebc01bac16698e0f825f2e95922601d9"
+                "url": "https://github.com/aryelgois/Medools.git",
+                "reference": "f011521c1c8a092cb6042a0d72dc7b61db158968"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/Objects/zipball/f89c9dbaebc01bac16698e0f825f2e95922601d9",
-                "reference": "f89c9dbaebc01bac16698e0f825f2e95922601d9",
+                "url": "https://api.github.com/repos/aryelgois/Medools/zipball/f011521c1c8a092cb6042a0d72dc7b61db158968",
+                "reference": "f011521c1c8a092cb6042a0d72dc7b61db158968",
                 "shasum": ""
             },
             "require": {
-                "aryelgois/utils": "dev-master",
+                "aryelgois/utils": "^0.2",
+                "catfan/medoo": "^1.4",
                 "php": "^7.0"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "aryelgois\\Objects\\": "src/"
+                    "aryelgois\\Medools\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -40,21 +41,25 @@
                     "role": "Developer"
                 }
             ],
-            "description": "General purpose instantiable classes",
-            "time": "2017-09-11T19:25:34+00:00"
+            "description": "Wrapper on catfan/Medoo",
+            "keywords": [
+                "database",
+                "medoo"
+            ],
+            "time": "2017-11-18T19:36:58+00:00"
         },
         {
             "name": "aryelgois/utils",
-            "version": "dev-master",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/aryelgois/Utils.git",
-                "reference": "38c7c8b7b689f3323c0f70771eb5826f90c75ce8"
+                "url": "https://github.com/aryelgois/utils.git",
+                "reference": "dcd2d5bd5866e4feaa1ad1e1a83c9b4f4217c3b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/Utils/zipball/38c7c8b7b689f3323c0f70771eb5826f90c75ce8",
-                "reference": "38c7c8b7b689f3323c0f70771eb5826f90c75ce8",
+                "url": "https://api.github.com/repos/aryelgois/utils/zipball/dcd2d5bd5866e4feaa1ad1e1a83c9b4f4217c3b0",
+                "reference": "dcd2d5bd5866e4feaa1ad1e1a83c9b4f4217c3b0",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +85,66 @@
             "keywords": [
                 "utils"
             ],
-            "time": "2017-09-11T03:28:25+00:00"
+            "time": "2017-11-19T12:27:56+00:00"
+        },
+        {
+            "name": "catfan/medoo",
+            "version": "v1.4.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/catfan/Medoo.git",
+                "reference": "8ee8ae1c4df0fee3822a01333eab88893e548fcc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/catfan/Medoo/zipball/8ee8ae1c4df0fee3822a01333eab88893e548fcc",
+                "reference": "8ee8ae1c4df0fee3822a01333eab88893e548fcc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": ">=5.4"
+            },
+            "suggest": {
+                "ext-pdo_dblib": "For MSSQL or Sybase database on Linux/UNIX platform",
+                "ext-pdo_mysql": "For MySQL or MariaDB database",
+                "ext-pdo_oci": "For Oracle database",
+                "ext-pdo_oci8": "For Oracle version 8 database",
+                "ext-pdo_pqsql": "For PostgreSQL database",
+                "ext-pdo_sqlite": "For SQLite database",
+                "ext-pdo_sqlsrv": "For MSSQL database on Windows platform"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Medoo\\": "/src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Angel Lai",
+                    "email": "angel@catfan.me"
+                }
+            ],
+            "description": "The lightest PHP database framework to accelerate development",
+            "homepage": "https://medoo.in",
+            "keywords": [
+                "database",
+                "lightweight",
+                "mariadb",
+                "mssql",
+                "mysql",
+                "oracle",
+                "php framework",
+                "postgresql",
+                "sql",
+                "sqlite"
+            ],
+            "time": "2017-06-24T14:43:07+00:00"
         },
         {
             "name": "setasign/fpdf",
@@ -173,10 +237,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "aryelgois/utils": 20,
-        "aryelgois/objects": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

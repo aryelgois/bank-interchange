@@ -1,0 +1,192 @@
+/*
+ * Layout
+ */
+
+body {
+  background: #f6f6f6;
+  font-family: sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
+  margin: 0;
+  min-width: 280px;
+}
+
+
+aside {
+  background: #e8e8e8;
+  position: fixed;
+    top: 0;
+  height: 100%;
+  width: 16em;
+  overflow-y: hidden;
+}
+aside:hover {
+overflow-y: auto;
+}
+
+aside header {
+  padding: 0.8em 0.2em 0.4em;
+  text-align: center;
+}
+
+aside header h2 {
+  color: #444;
+  font-size: 1.5em;
+  margin: 0;
+}
+
+aside header em {
+  color: #888;
+  display: block;
+  padding: 0.5em 0;
+}
+
+aside > input  {
+  display: none;
+}
+
+aside > label {
+  display: none;
+  padding: 0.4em;
+}
+
+aside nav a {
+  color: #0f94e9;
+  border-left: 0.3em solid transparent;
+  display: block;
+  padding: 0.6em;
+  text-decoration: none;
+}
+aside nav a:hover {
+  border-left-color: #549cda;
+}
+aside nav a.selected {
+  background: rgba(0, 0, 0, 0.1);
+  border-left-color: transparent;
+  color: #fff;
+  pointer-events: none;
+}
+
+
+main {
+  padding-left: 16em;
+}
+
+main > section {
+  padding: 1em 6em 3em 6em;
+}
+main > section + section {
+  display: none;
+}
+
+main > section > h2 {
+  color: #444;
+  font-size: 2.5em;
+  line-height: 1.2em;
+  margin: 0.6em 0 0.3em;
+}
+
+
+/*
+ * Responsive
+ */
+
+@media screen and (max-width:800px) {
+  body {
+    font-size: 12px;
+  }
+
+  aside {
+    position: static;
+    width: 100%;
+  }
+
+  aside > label {
+    display: block;
+    text-align: center;
+  }
+
+  aside nav {
+    display: none;
+  }
+  aside > input:checked + nav {
+    display: block;
+  }
+
+  aside nav a {
+    display: inline-block;
+    width: 16em;
+  }
+
+  main {
+    padding-left: 0;
+  }
+
+  main > section {
+    padding: 1em 0.5em 1.5em 0.5em;
+  }
+}
+
+
+/*
+ * Elements
+ */
+
+code {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.125em;
+}
+
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+form {
+  overflow: auto;
+}
+form.pretty {
+  background: #fbfbfb;
+  border: 1px solid #ddd;
+  padding: 0.25em;
+}
+
+table.table-list {
+  background: #fff;
+  border-collapse: collapse;
+  border: 1px solid #e0e0e0;
+  width: 100%;
+}
+
+table.table-list th {
+  background: #549cda;
+  color: #fff;
+}
+
+table.table-list td, table.table-list th {
+  padding: 0.5em;
+}
+
+table.table-list tr + tr td {
+  border-top: 1px solid #ddd;
+}
+
+table.table-list tr:nth-child(odd) td {
+  background: #f0f0f0;
+}
+
+textarea {
+  height: 200px;
+  width: 700px;
+  white-space: pre;
+}
+
+#assignor_fields {
+  display: none;
+}
+#person_type_assignor:checked ~ #assignor_fields {
+  display: block;
+}

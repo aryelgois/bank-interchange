@@ -1,9 +1,0 @@
-{
-    "host": "localhost",
-    "user": "root",
-    "password": "",
-    "databases": {
-        "address": "address",
-        "banki": "bank_interchange"
-    }
-}

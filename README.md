@@ -47,11 +47,10 @@ CNAB400, and there are just minor differences between the required data.
 
 I know, the script is not working yet.. It's under development.
 
-- [x] Write the Shipping File generator for CNAB400.
 - [ ] Real world test CNAB240 and CNAB400.
-- [ ] Write the Return File interpreter for CNAB240 and CNAB400.
+- [x] Write the Return File interpreter for CNAB240 and CNAB400.
+  - [ ] Make it interact with the Database
   - [ ] It should receive the data somehow.. fetch from the bank's site or
     provide as local files?
 - [ ] Create hooks for Return Files.
   - [ ] A nice interface to integrate with one's website.
-- [x] Configure packagist.

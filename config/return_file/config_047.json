@@ -1,0 +1,12 @@
+{
+    "400": {
+        "fields": {
+            "occurrence": {
+                "06": "Liquidação efetuada em qualquer agência do BANESE.",
+                "10": "Título baixado sem liquidação a pedido do cliente ou por decurso de prazo.",
+                "16": "Liquidação efetuada em outros bancos participantes do Sistema de Compensação"
+            },
+            "error_table": null
+        }
+    }
+}

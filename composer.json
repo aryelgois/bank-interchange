@@ -11,8 +11,8 @@
     ],
     "require": {
         "php": "^7.0",
-        "aryelgois/utils": "dev-master",
-        "aryelgois/objects": "dev-master",
+        "aryelgois/utils": "^0.2",
+        "aryelgois/medools": "^2.0",
         "vria/nodiacritic": "0.*",
         "setasign/fpdf": "^1.8"
     },

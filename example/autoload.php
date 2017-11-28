@@ -1,7 +1,5 @@
 <?php
 
-use aryelgois\BankInterchange\example\Database as Db;
-
 // debug
 ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
@@ -9,8 +7,28 @@ error_reporting(E_ALL | E_STRICT);
 // autoload
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// connect to databases
-include __DIR__ . '/Database.php';
-$db_config = __DIR__ . '/database_config.json';
-$db_address = new Db($db_config, 'address');
-$db_banki = new Db($db_config, 'banki');
+use aryelgois\Medools;
+use aryelgois\BankInterchange;
+
+// Medools
+Medools\MedooConnection::loadConfig(__DIR__ . '/../config/medools.php');
+
+// session
+session_start();
+
+// common functions
+
+function format_model_pretty($model, $html = true)
+{
+    $person = $model->person;
+    $info = ($model instanceof BankInterchange\Models\Assignor)
+          ? 'Account: ' . $model->formatAgencyAccount(4, 11)
+          : $person->documentFormat(true);
+
+    $result = $person->name
+            . ($html ? '<br/><small>' : ' (')
+            . $info
+            . ($html ? '</small>' : ')');
+
+    return $result;
+}
