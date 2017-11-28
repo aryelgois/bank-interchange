@@ -11,7 +11,7 @@ $messages = $return_file->getMessages();
 $tab = '                ';
 
 $template = $tab . "    <tr>\n"
-          . str_repeat($tab . "        <td>%s</td>\n", 4)
+          . str_repeat($tab . "        <td>%s</td>\n", 9)
           . $tab . "    </tr>\n";
 
 /*
@@ -22,6 +22,11 @@ foreach ($messages['info'] as $m) {
     $info .= sprintf(
         $template,
         $m['our_number'],
+        $m['due'],
+        $m['value'],
+        $m['value_paid'],
+        $m['receiver_bank'],
+        $m['receiver_agency'],
         $m['movement'] ?? '',
         $m['occurrence'],
         $m['occurrence_date'] ?? ''
@@ -93,6 +98,11 @@ table.table-list td + td {
                 <table class="table-list">
                     <tr>
                         <th>Our Number</th>
+                        <th>Due</th>
+                        <th>Value</th>
+                        <th>Value paid</th>
+                        <th>Receiver Bank</th>
+                        <th>Receiver Agency</th>
                         <th>Movement</th>
                         <th>Ocurrence</th>
                         <th>Ocurrence date</th>

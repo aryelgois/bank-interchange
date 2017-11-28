@@ -496,13 +496,49 @@ class ReturnFile
             foreach ($lot['data'] as $registry_id => $registry) {
                 $message = [
                     'our_number' => $registry['our_number'],
+                    'receiver_bank' => $registry['receiver_bank'],
+                    'receiver_agency' => $registry['receiver_agency'] . (isset($registry['receiver_agency_cd']) ? '-' . $registry['receiver_agency_cd'] : ''),
                 ];
-                $date = [
-                    'format' => '',
-                    'value' => null
+
+                /*
+                 * Format Monetary values
+                 */
+                $data = [
+                    'value' => $registry['value'],
+                    'value_paid' => $registry['value_paid'] ?? null,
                 ];
+                foreach ($data as $i => $v) {
+                    if (isset($registry['title'])) {
+                        if ($v !== null) {
+                            $v = $registry['title']->specie->format($v);
+                        }
+                    } else {
+                        $v = ltrim($v, '0');
+                        if ($v === '') {
+                            $v = '0';
+                        }
+                    }
+                    $message[$i] = $v;
+                }
+
+                /*
+                 * Prepare Dates
+                 */
+                $date_format = '';
+                $dates = [];
+                if ($registry['due'] > 0) {
+                    $dates['due'] = $registry['due'];
+                } else {
+                    $message['due'] = '0000-00-00';
+                }
+
+                /*
+                 * Main block
+                 */
                 switch ($this->cnab) {
                     case 240:
+                        $date_format = 'dmY';
+
                         $movement = $registry['movement'];
                         $occurrence = $registry['occurrence'];
 
@@ -522,8 +558,7 @@ class ReturnFile
                         }
 
                         if (isset($registry['occurrence_date'])) {
-                            $date['format'] = 'dmY';
-                            $date['value'] = $registry['occurrence_date'];
+                            $dates['occurrence_date'] = $registry['occurrence_date'];
                         }
 
                         if (isset($registry['title'])) {
@@ -544,13 +579,14 @@ class ReturnFile
                         break;
 
                     case 400:
+                        $date_format = 'dmy';
+
                         $occurrence = $registry['occurrence'];
 
                         $message['occurrence'] = $this->config['fields']['occurrence'][$occurrence];
 
                         if (isset($registry['occurrence_date'])) {
-                            $date['format'] = 'dmy';
-                            $date['value'] = $registry['occurrence_date'];
+                            $dates['occurrence_date'] = $registry['occurrence_date'];
                         }
 
                         if (isset($registry['title'])) {
@@ -569,12 +605,20 @@ class ReturnFile
                         }
                         break;
                 }
-                if ($date['value']) {
-                    $date = \DateTime::createFromFormat(...array_values($date));
-                    if ($date) {
-                        $message['occurrence_date'] = $date->format('Y-m-d');
+
+                /*
+                 * Format Dates
+                 */
+                foreach ($dates as $k => $v) {
+                    if ($date_format) {
+                        $date = \DateTime::createFromFormat($date_format, $v);
+                        if ($date) {
+                            $v = $date->format('Y-m-d');
+                        }
                     }
+                    $message[$k] = $v;
                 }
+
                 $this->messages['info'][] = $message;
             }
         }
