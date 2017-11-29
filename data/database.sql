@@ -106,7 +106,7 @@ CREATE TABLE `titles` (
     `fine_type`     tinyint(1)      NOT NULL DEFAULT 3,
     `fine_date`     date,
     `fine_value`    decimal(17,4),
-    `discount_type` tinyint(1)      NOT NULL DEFAULT 3,
+    `discount_type` enum('1','2')   NOT NULL DEFAULT '1',
     `discount_date` date,
     `discount_value` decimal(17,4),
     `description`   varchar(25)     NOT NULL,

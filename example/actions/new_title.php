@@ -19,7 +19,7 @@ $title->setMultiple([
     'iof'           => 0,
     'rebate'        => 0,
     'fine_type'     => 3,
-    'discount_type' => 3,
+    'discount_type' => 1,
     'description'   => 'Teste de Boleto',
     'due'           => $due,
 ]);
