@@ -510,7 +510,8 @@ class ReturnFile
                 foreach ($data as $i => $v) {
                     if (isset($registry['title'])) {
                         if ($v !== null) {
-                            $v = $registry['title']->specie->format($v);
+                            $specie = $registry['title']->specie;
+                            $v = $specie->format($v / 10 ** $specie->decimals);
                         }
                     } else {
                         $v = ltrim($v, '0');
