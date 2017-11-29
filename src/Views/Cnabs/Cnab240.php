@@ -115,7 +115,7 @@ class Cnab240 extends BankI\Views\Cnab
         $this->lots[$this->lot]['lines'] += 2;
         $this->lots[$this->lot]['titles']++;
         $this->lots[$this->lot]['total'] += $title->value;
-        $this->registry_count += 2; // the amount of segments (type 3)
+        $this->increment(999998); // run once for each additional segment other than 'P'
 
         return true;
     }
