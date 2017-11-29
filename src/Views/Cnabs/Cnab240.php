@@ -319,7 +319,7 @@ class Cnab240 extends BankI\Views\Cnab
         $data = [
             $bank->code,
             $this->lot,
-            '0',
+            '3',
             $this->lots[$this->lot]['registries'],
             'Q',
             '',
