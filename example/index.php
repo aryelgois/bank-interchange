@@ -28,9 +28,9 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
             <a href="#setup">Setup</a>
             <a href="#new_person">New Person</a>
             <a href="#new_title">New Title</a>
-            <a href="#generate_shipping_file">Generate Shipping File</a>
+            <a href="#generate_shipping_file">Generate Shipping File and Bank Billet</a>
             <a href="#generate_cnab">Generate Cnab</a>
-            <a href="#process_return_file">Return File</a>
+            <a href="#process_return_file">Process Return File</a>
             <br/>
             <a href="https://github.com/aryelgois/bank-interchange">Contribute on GitHub</a>
         </nav>
@@ -156,7 +156,7 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
         </section>
 
         <section id="generate_shipping_file">
-            <h2>Generate Shipping File</h2>
+            <h2>Generate Shipping File and Bank Billet</h2>
             <p>
                 Below is a list of all titles in the Database. Choose which ones
                 will be in the Shipping File. Those previously sent do not have
@@ -164,6 +164,9 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
             </p>
             <p>
                 <strong>Note:</strong> Choose only Titles with the same assignor
+            </p>
+            <p>
+                Use the last column to render the Billet
             </p>
             <form action="actions/generate_shipping_file.php" method="POST">
                 <table class="table-list">
@@ -204,7 +207,7 @@ $select_placeholder = '<option class="persistent" value="" selected disabled>(Se
         </section>
 
         <section id="process_return_file">
-            <h2>Return File</h2>
+            <h2>Process Return File</h2>
             <p>
                 Enter a Return File sent by a Bank to process it
             </p>
