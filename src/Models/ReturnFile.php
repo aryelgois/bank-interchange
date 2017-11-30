@@ -553,7 +553,9 @@ class ReturnFile
                         }
 
                         if ($occurrence_group) {
-                            $message['occurrence'] = $occurrences[$occurrence_group][$occurrence];
+                            $message['occurrence'] = (empty($occurrence))
+                                ? ''
+                                : $occurrences[$occurrence_group][$occurrence];
                         } else {
                             $this->messages['warning'][] = 'Unknown occurrence in registry ' . $registry_id . ' (lot ' . $lot_id . ')';
                         }
