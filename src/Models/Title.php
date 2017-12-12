@@ -89,23 +89,26 @@ class Title extends Medools\Model
     /**
      * Calculates this model's `our_number` check digit
      *
+     * @param integer $base @see aryelgois\Utils\Validation::mod11() $base
+     *
      * @return string
      */
-    public function checkDigitOurNumber()
+    public function checkDigitOurNumber($base = 9)
     {
-        return self::checkDigitOurNumberAlgorithm($this->our_number);
+        return self::checkDigitOurNumberAlgorithm($this->our_number, $base);
     }
 
     /**
      * Calculates Our number check digit
      *
-     * @param string $our_number Value to calculate the check digit
+     * @param string  $our_number Value to calculate the check digit
+     * @param integer $base       @see aryelgois\Utils\Validation::mod11() $base
      *
      * @return string
      */
-    public static function checkDigitOurNumberAlgorithm($our_number)
+    public static function checkDigitOurNumberAlgorithm($our_number, $base = 9)
     {
-        $digit = Utils\Validation::mod11($our_number);
+        $digit = Utils\Validation::mod11($our_number, $base);
 
         $digit = ($digit > 1)
                ? $digit - 11

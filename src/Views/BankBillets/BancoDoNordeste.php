@@ -34,6 +34,18 @@ class BancoDoNordeste extends CaixaEconomicaFederal
     const SPECIE_DOC = 'RC';
 
     /**
+     * Calculates Our number's check digit
+     *
+     * @return string
+     */
+    protected function checkDigitOurNumber()
+    {
+        $our_number = BankI\Utils::padNumber($this->title->our_number, 7);
+
+        return $this->title->checkDigitOurNumberAlgorithm($our_number, 8);
+    }
+
+    /**
      * Free space, defined by Bank.
      *
      * Here: Agency/Assignor's code . Our number . Wallet operation . '000'
