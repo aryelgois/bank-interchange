@@ -85,7 +85,6 @@ class Banese extends BankI\Views\BankBillet
         $this->dictionary = array_replace(
             $this->dictionary,
             [
-                'assignor'      => 'Beneficiário',
                 'agency_code'   => 'Agência/Cod. Beneficiário',
                 'date_process'  => 'Data do processameto',
                 'doc_number_sh' => 'Nº do documento',
@@ -95,8 +94,6 @@ class Banese extends BankI\Views\BankBillet
                 'fine'          => '(+) Mora/Multa',
                 'guarantor'     => 'Sacador/Avalista: ',
                 'instructions'  => 'Instruções',
-                'payer'         => 'Pagador',
-                'payer_receipt' => 'Recibo do Pagador',
                 'specie'        => 'Moeda',
                 'specie_doc'    => 'Espécie doc',
             ]
