@@ -12,10 +12,9 @@ INSERT INTO `species` (`id`, `symbol`, `name`, `name_plural`, `febraban`, `thous
 INSERT INTO `wallets` (`id`, `febraban`, `operation`, `symbol`, `name`) VALUES
 (1, 0, 51, 'SR', 'Sem Registro'),
 (2, 1, 21, 'CS', 'Cobrança Simples'),
-(3, 2, 41, 'CV', 'Cobrança Vinculada');
--- (4, 3, ??, 'CC', 'Cobrança Caucionada'),
--- (5, 4, 00, 'CD', 'Cobrança Descontada'),
--- (6, 5, 00, 'CV', 'Cobrança Vendor');
+(3, 2, 41, 'CV', 'Cobrança Vinculada'),
+(4, 4, 21, 'CS', 'Cobrança Simples'),   -- used by BancoDoNordeste
+(5, 5, 41, 'CV', 'Cobrança Vinculada'); -- ditto
 
 
 -- Banks
