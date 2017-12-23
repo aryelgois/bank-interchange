@@ -301,7 +301,7 @@ class Cnab240 extends BankI\Views\Cnab
             '0', // Protest deadline
             '1', // low/return code
             '0', // low/return deadline
-            $title->specie->febraban,
+            $title->specie->cnab240 ?? $title->specie->febraban,
             '0', // Contract number
             '1', // Free use: it's defining partial payment isn't allowed
         ];

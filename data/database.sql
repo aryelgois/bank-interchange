@@ -30,6 +30,8 @@ CREATE TABLE `species` (
     `name`          varchar(30)     NOT NULL,
     `name_plural`   varchar(30),
     `febraban`      char(2)         NOT NULL,
+    `cnab240`       char(2),
+    `cnab400`       char(2),
     `decimals`      tinyint(2)      NOT NULL DEFAULT 2,
     `thousand`      char(1)         NOT NULL,
     `decimal`       char(1)         NOT NULL,

@@ -2,8 +2,8 @@ USE bank_interchange;
 
 -- Species
 
-INSERT INTO `species` (`id`, `symbol`, `name`, `name_plural`, `febraban`, `thousand`, `decimal`) VALUES
-(1, 'R$', 'Real', 'Reais', 9, '', ',');
+INSERT INTO `species` (`id`, `symbol`, `name`, `name_plural`, `febraban`, `cnab240`, `cnab400`, `thousand`, `decimal`) VALUES
+(1, 'R$', 'Real', 'Reais', 9, null, 0, '', ',');
 
 
 -- Wallets

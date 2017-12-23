@@ -26,6 +26,8 @@ class Specie extends Medools\Model
         'name',
         'name_plural',
         'febraban',
+        'cnab240',
+        'cnab400',
         'decimals',
         'thousand',
         'decimal',
@@ -33,6 +35,8 @@ class Specie extends Medools\Model
 
     const OPTIONAL_COLUMNS = [
         'name_plural',
+        'cnab240',
+        'cnab400',
     ];
 
     /**

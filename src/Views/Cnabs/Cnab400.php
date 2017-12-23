@@ -118,7 +118,7 @@ class Cnab400 extends BankI\Views\Cnab
             $payer_address->county->state->code,
             '', // message or guarantor name
             '99', // protest deadline
-            $title->specie->febraban,
+            $title->specie->cnab400 ?? $title->specie->febraban,
             $this->registry_count,
         ];
 
