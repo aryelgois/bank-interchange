@@ -1,0 +1,124 @@
+database:
+  name: bank_interchange
+  project: aryelgois/bank-interchange
+  license: MIT
+
+definitions:
+  pk: int PRIMARY KEY
+  pk_auto: pk AUTO_INCREMENT
+  name: varchar(60)
+
+tables:
+
+  # Basic Tables
+  #
+  # Low level Tables containing very basic data
+
+  full_addresses:
+    id: pk_auto
+    county: int # -> address counties.id
+    neighborhood: name
+    place: name
+    number: varchar(20)
+    zipcode: varchar(8)
+    detail: name DEFAULT ''
+    update: timestamp
+
+  people:
+    id: pk_auto
+    name: name
+    document: varchar(14)
+
+  species:
+    id: tinyint(3) PRIMARY KEY AUTO_INCREMENT
+    symbol: varchar(5)
+    name: varchar(30)
+    name_plural: varchar(30) NULLABLE
+    febraban: char(2)
+    cnab240: char(2) NULLABLE
+    cnab400: char(2) NULLABLE
+    decimals: tinyint(2)  DEFAULT 2
+    thousand: char(1)
+    decimal: char(1)
+
+  wallets:
+    id: tinyint(3) PRIMARY KEY AUTO_INCREMENT
+    febraban: tinyint(2)
+    operation: tinyint(2)
+    symbol: char(2)
+    name: varchar(60)
+
+  # Main Tables
+  #
+  # Tables with most important data for this package
+
+  banks:
+    id: pk_auto
+    code: char(3)
+    name: varchar(60)
+    view: varchar(30)
+    logo: varchar(30) NULLABLE
+    tax: decimal(6,4)
+
+  assignors:
+    id: pk_auto
+    person: int -> people.id
+    address: int -> full_addresses.id
+    bank: int -> banks.id
+    wallet: tinyint(3) -> wallets.id
+    covenant: char(20)
+    agency: char(5)
+    agency_cd: char(1)
+    account: char(11)
+    account_cd: char(1)
+    edi: char(6)
+    logo: varchar(30) NULLABLE
+    url: varchar(30) NULLABLE
+
+  payers:
+    id: pk_auto
+    person: int -> people.id
+    address: int -> full_addresses.id
+
+  titles:
+    id: pk_auto
+    assignor: int -> assignors.id
+    payer: int -> payers.id
+    guarantor: int -> payers.id NULLABLE
+    specie: tinyint -> species.id
+    our_number: int
+    status: tinyint(1) NULLABLE
+    doc_type: char(1) DEFAULT 1
+    kind: tinyint(2)
+    value: decimal(17,4)
+    value_paid: decimal(17,4) DEFAULT 0
+    iof: decimal(17,4)
+    rebate: decimal(17,4)
+    tax: decimal(6,4)
+    fine_type: tinyint(1) DEFAULT 3
+    fine_date: date NULLABLE
+    fine_value: decimal(17,4) NULLABLE
+    discount_type: enum('1','2') DEFAULT '1'
+    discount_date: date NULLABLE
+    discount_value: decimal(17,4) NULLABLE
+    description: varchar(25)
+    due: date
+    stamp: timestamp DEFAULT CURRENT_TIMESTAMP
+    update: datetime NULLABLE
+
+  shipping_files:
+    id: pk_auto
+    assignor: int -> assignors.id
+    counter: int(10)
+    status: tinyint(1) NULLABLE
+    stamp: timestamp DEFAULT CURRENT_TIMESTAMP
+    update: datetime NULLABLE
+
+  shipping_file_titles:
+    shipping_file: int -> shipping_files.id
+    title: int -> titles.id
+
+composite:
+  - UNIQUE titles assignor our_number
+  - UNIQUE shipping_files assignor counter
+  - PRIMARY shipping_file_titles shipping_file title
