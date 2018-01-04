@@ -1,10 +1,7 @@
-USE bank_interchange;
-
 -- Species
 
 INSERT INTO `species` (`id`, `symbol`, `name`, `name_plural`, `febraban`, `cnab240`, `cnab400`, `thousand`, `decimal`) VALUES
 (1, 'R$', 'Real', 'Reais', 9, null, 0, '', ',');
-
 
 -- Wallets
 -- @todo verify data
@@ -15,7 +12,6 @@ INSERT INTO `wallets` (`id`, `febraban`, `operation`, `symbol`, `name`) VALUES
 (3, 2, 41, 'CV', 'Cobrança Vinculada'),
 (4, 4, 21, 'CS', 'Cobrança Simples'),   -- used by BancoDoNordeste
 (5, 5, 41, 'CV', 'Cobrança Vinculada'); -- ditto
-
 
 -- Banks
 -- @todo verify `tax`

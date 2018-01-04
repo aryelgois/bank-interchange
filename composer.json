@@ -21,5 +21,8 @@
         "psr-4": {
             "aryelgois\\BankInterchange\\": "src/"
         }
+    },
+    "scripts": {
+        "yasql-builder" : "aryelgois\\YaSql\\Controller::build"
     }
 }
