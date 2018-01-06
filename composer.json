@@ -13,7 +13,7 @@
         "php": "^7.0",
         "aryelgois/utils": "^0.2",
         "aryelgois/medools": "^2.0",
-        "aryelgois/yasql-php": "^0.2.0",
+        "aryelgois/yasql-php": "^0.3",
         "setasign/fpdf": "^1.8",
         "vria/nodiacritic": "0.*"
     },
