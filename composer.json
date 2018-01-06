@@ -24,6 +24,7 @@
         }
     },
     "scripts": {
-        "yasql-builder" : "aryelgois\\YaSql\\Controller::build"
+        "yasql-build": "aryelgois\\YaSql\\Composer::build",
+        "yasql-generate": "aryelgois\\YaSql\\Composer::generate"
     }
 }
