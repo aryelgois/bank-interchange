@@ -16,6 +16,7 @@
         "aryelgois/medools": "^2.0",
         "aryelgois/yasql-php": "^0.3",
         "setasign/fpdf": "^1.8",
+        "symfony/yaml": "^3.4",
         "vria/nodiacritic": "0.*"
     },
     "autoload": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8ad095956a7f3355acbd0e1a8ea9950",
+    "content-hash": "e1faa00ca0a86138e24b73beb1a176c8",
     "packages": [
         {
             "name": "aryelgois/databases",
