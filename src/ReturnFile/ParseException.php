@@ -18,16 +18,23 @@ use aryelgois\Utils\Format;
  */
 class ParseException extends \RuntimeException
 {
-    public function __construct(
+    public static function pregMismatch(
         string $cnab,
         array $registries,
-        int $line,
-        Throwable $previous = null
+        int $line
     ) {
         $message = "Invalid registry at line $line. Expecting "
             . Format::naturalLanguageJoin(array_keys($registries), 'or')
             . " ($cnab)";
 
-        parent::__construct($message, 0, $previous);
+        return new self($message);
+    }
+
+    public static function undefinedLayout($layouts)
+    {
+        $message = 'Could not identify Return File layout, tried '
+            . Format::naturalLanguageJoin($layouts);
+
+        return new self($message);
     }
 }

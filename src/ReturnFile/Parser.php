@@ -24,7 +24,7 @@ class Parser
     /**
      * Creates a new Parser Object
      *
-     * @param string $config YAML with Return File registry definitions
+     * @param string $config YAML with Return File layouts
      *                       (length, structure, patterns, maps)
      */
     public function __construct(string $config)
@@ -38,6 +38,8 @@ class Parser
      * @param string $return_file The contents of a Return File
      *
      * @return array With (array nested) Registry instances
+     *
+     * @throws ParseException If can not identify $return_file layout
      */
     public function parse(string $return_file)
     {
@@ -46,17 +48,28 @@ class Parser
         $offset = 0;
 
         foreach ($this->config as $cnab => $config) {
-            $result = self::doParse(
-                $cnab,
-                array_slice($config['structure'], 0, 1),
-                $return_file
-            );
+            try {
+                $result = self::doParse(
+                    $cnab,
+                    array_slice($config['structure'], 0, 1),
+                    $return_file
+                );
 
-            if (!empty($result['registries'])) {
-                $registries = $result['registries'];
-                $offset = $result['offset'];
-                break;
+                if (!empty($result['registries'])) {
+                    $registries = $result['registries'];
+                    $offset = $result['offset'];
+                    break;
+                }
+            } catch (ParseException $e) {
+                /*
+                 * Ignore the Exception. We are trying to figure out which
+                 * layout $return_file has
+                 */
             }
+        }
+
+        if (empty($registries)) {
+            throw ParseException::undefinedLayout(array_keys($this->config));
         }
 
         $result = self::doParse(
@@ -135,7 +148,7 @@ class Parser
                         $result[] = $registry;
                         $offset++;
                     } elseif ($amount == 'unique') {
-                        throw new ParseException(
+                        throw ParseException::pregMismatch(
                             $cnab,
                             $registries,
                             $offset + 1
