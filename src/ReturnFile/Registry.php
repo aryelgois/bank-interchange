@@ -56,6 +56,26 @@ class Registry
     }
 
     /**
+     * Returns a field stored in $data
+     *
+     * @param string $field A valid $data key
+     *
+     * @return mixed Almost always string, but may have a numeric value
+     *
+     * @throws \DomainException If the field is not found
+     */
+    public function __get($field)
+    {
+        if (array_key_exists($field, $this->data)) {
+            return $this->data[$field];
+        } else {
+            $message = "Invalid Registry field '$field' for a "
+                . "$this->type ($this->cnab)";
+            throw new \DomainException($message);
+        }
+    }
+
+    /**
      * Returns the stored CNAB
      *
      * @return string
