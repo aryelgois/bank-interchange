@@ -143,10 +143,10 @@ CNAB400:
 
   registries:
     FILE_HEADER:
-      pattern: /^02RETORNO(\d{2}).{15}(\d{20})(.{30})(\d{3})(.{15})(\d{6})(\d{2})(\d{14}) {273}(\d{5})(\d{6})$/
+      pattern: /^02RETORNO(\d{2}).{15}(.{20})(.{30})(\d{3})(.{15})(\d{6})(\d{2})(\d{14}) {273}(\d{5})(\d{6})$/
       map:
         - service_code
-        - agency_account
+        - assignor_agency_account
         - assignor_name
         - bank_code
         - bank_name
@@ -157,11 +157,11 @@ CNAB400:
         - registry
 
     TITLE:
-      pattern: /^1(\d{2})(\d{14})(\d{20})(.{25})(\d{20}) {25}(\d{1})(\d{2})(\d{6})(.{10}) {20}(\d{6})(\d{13})(\d{3})(\d{5})(\d{2})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13}) {9}(.)(\d{12})(\d{6})(\d{13})(\d{2})(\d{2}) {54}(\d{2})(\d)(\d{6})$/
+      pattern: /^1(\d{2})(\d{14})(.{20})(.{25})(\d{20}) {25}(\d)(\d{2})(\d{6})(.{10}) {20}(\d{6})(\d{13})(.{3})(\d{5})(\d{2})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13}) {9}(.)(\d{12})(\d{6})(\d{13})(\d{2})(\d{2}) {54}(\d{2})(\d)(\d{6})$/
       map:
         - assignor_document_type
         - assignor_document
-        - agency_account
+        - assignor_agency_account
         - assignor_use
         - our_number
         - wallet
@@ -182,13 +182,13 @@ CNAB400:
         - value_paid
         - late_fine
         - credits
-        - late_confirm
-        - late_confirm_charge
-        - discount_confirm
-        - discount_value_confirm
-        - instruction1_confirm
-        - instruction2_confirm
-        - protest_confirm
+        - confirm_late
+        - confirm_late_charge
+        - confirm_discount
+        - confirm_discount_value
+        - confirm_instruction1
+        - confirm_instruction2
+        - confirm_protest
         - specie
         - registry
 
