@@ -137,12 +137,12 @@ CNAB400_BANESE:
   registry_length: 400
 
   structure:
-    - unique: FILE_HEADER
-    - multiple: TITLE
-    - unique: FILE_TRAILER
+    - unique: HEADER
+    - multiple: TRANSACTION
+    - unique: TRAILER
 
   registries:
-    FILE_HEADER:
+    HEADER:
       pattern: /^02RETORNO(\d{2}).{15}(.{20})(.{30})(.{3})(.{15})(\d{6})(\d{2})(\d{14}) {273}(\d{5})(\d{6})$/
       map:
         - service_code
@@ -156,7 +156,7 @@ CNAB400_BANESE:
         - file_sequence
         - registry
 
-    TITLE:
+    TRANSACTION:
       pattern: /^1(\d{2})(\d{14})(.{20})(.{25})(\d{20}) {25}(\d)(\d{2})(\d{6})(.{10}) {20}(\d{6})(\d{13})(.{3})(\d{5})(\d{2})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13}) {9}(.)(\d{12})(\d{6})(\d{13})(\d{2})(\d{2}) {54}(\d{2})(\d)(\d{6})$/
       map:
         - assignor_document_type
@@ -192,7 +192,7 @@ CNAB400_BANESE:
         - specie
         - registry
 
-    FILE_TRAILER:
+    TRAILER:
       pattern: /^92(\d{2})(.{3}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{8})(\d{14})(\d{8}) {10}(\d{14})(\d{3})(\d{14})(\d{14})(\d{14})(\d{14}) {144}(\d{6})$/
       map:
         - service_code
@@ -221,12 +221,12 @@ CNAB400_BNB:
   registry_length: 400
 
   structure:
-    - unique: FILE_HEADER
-    - multiple: TITLE
-    - unique: FILE_TRAILER
+    - unique: HEADER
+    - multiple: TRANSACTION
+    - unique: TRAILER
 
   registries:
-    FILE_HEADER:
+    HEADER:
       pattern: /^02RETORNO(\d{2}).{15}(\d{14}) {6}(.{30})(.{3})(.{15})(\d{6})(.{8})(\d{5}) {6}(\d{6}) {269}(\d{6})$/
       map:
         - service_code
@@ -240,7 +240,7 @@ CNAB400_BNB:
         - credit_date
         - registry
 
-    TITLE:
+    TRANSACTION:
       pattern: /^1(\d{2})(\d{14})(\d{14}) {6}(.{25})(\d{8})(\d{10}) {27}(\d)(\d{2})(\d{6})(.{10})(\d{8}) {12}(\d{6})(\d{13})(.{3})(\d{4}) (\d{2})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(.{115})(\d{6})$/
       map:
         - assignor_document_type
@@ -270,7 +270,7 @@ CNAB400_BNB:
         - error_table
         - registry
 
-    FILE_TRAILER:
+    TRAILER:
       pattern: /^92(\d{2})(.{3}) {10}(\d{8})(\d{14})(\d{8}) {347}(\d{6})$/
       map:
         - service_code
