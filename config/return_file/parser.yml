@@ -133,7 +133,7 @@ CNAB240:
         - registry_count
         - reconciliation_accounts_count
 
-CNAB400:
+CNAB400_BANESE:
   registry_length: 400
 
   structure:
@@ -215,4 +215,67 @@ CNAB400:
         - loan_limit
         - loan_balance
         - loan_fine
+        - registry
+
+CNAB400_BNB:
+  registry_length: 400
+
+  structure:
+    - unique: FILE_HEADER
+    - multiple: TITLE
+    - unique: FILE_TRAILER
+
+  registries:
+    FILE_HEADER:
+      pattern: /^02RETORNO(\d{2}).{15}(\d{14}) {6}(.{30})(\d{3})(.{15})(\d{6})(.{8})(\d{5}) {6}(\d{6}) {269}(\d{6})$/
+      map:
+        - service_code
+        - assignor_agency_account
+        - assignor_name
+        - bank_code
+        - bank_name
+        - record_date
+        - record_density
+        - file_sequence
+        - credit_date
+        - registry
+
+    TITLE:
+      pattern: /^1(\d{2})(\d{14})(\d{14}) {6}(.{25})(\d{8})(\d{10}) {27}(\d)(\d{2})(\d{6})(.{10})(\d{8}) {12}(\d{6})(\d{13})(.{3})(\d{4}) (\d{2})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(.{115})(\d{6})$/
+      map:
+        - assignor_document_type
+        - assignor_document
+        - assignor_agency_account
+        - assignor_use
+        - our_number
+        - contract
+        - wallet
+        - occurrence
+        - occurrence_date
+        - your_number
+        - confirm_our_number
+        - due
+        - value
+        - receiver_bank
+        - receiver_agency
+        - kind
+        - tax
+        - expenses
+        - fine
+        - ioc
+        - rebate
+        - discount_value
+        - value_paid
+        - late_fine
+        - error_table
+        - registry
+
+    FILE_TRAILER:
+      pattern: /^92(\d{2})(\d{3}) {10}(\d{8})(\d{14})(\d{8}) {347}(\d{6})$/
+      map:
+        - service_code
+        - bank_code
+        - title_cs_count
+        - title_cs_total
+        - warning_cs
         - registry
