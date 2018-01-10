@@ -95,7 +95,7 @@ CNAB240:
         - discount_value
         - rebate
         - iof
-        - value_paid
+        - value_received
         - value_net
         - expenses
         - credits
@@ -179,7 +179,7 @@ CNAB400_BANESE:
         - iof
         - rebate
         - discount_value
-        - value_paid
+        - value_received
         - late_fine
         - credits
         - confirm_late
@@ -265,7 +265,7 @@ CNAB400_BNB:
         - ioc
         - rebate
         - discount_value
-        - value_paid
+        - value_received
         - late_fine
         - error_table
         - registry
