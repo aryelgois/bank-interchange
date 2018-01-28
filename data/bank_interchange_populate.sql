@@ -1,5 +1,5 @@
 -- Banks
--- @todo verify `tax`
+-- TODO verify `tax`
 
 INSERT INTO `banks` (`id`, `code`, `name`, `view`, `logo`, `tax`) VALUES
 (1, '104', 'Caixa Econômica Federal', 'CaixaEconomicaFederal', 'caixa.jpg', '2.0000'),
@@ -17,7 +17,7 @@ INSERT INTO `currency_codes` (`bank`, `cnab240`, `cnab400`) VALUES
 (3, '??', '0');
 
 -- Wallets
--- @todo verify data
+-- TODO verify data
 
 INSERT INTO `wallets` (`id`, `febraban`, `operation`, `symbol`, `name`) VALUES
 (1, 0, 51, 'SR', 'Sem Registro'),
