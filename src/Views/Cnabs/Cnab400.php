@@ -95,7 +95,7 @@ class Cnab400 extends BankI\Views\Cnab
             $config['service'] ?? '1',
             $title->id,
             date('dmy', strtotime($title->due)),
-            number_format($title->value, 2, '', ''), // Specie raw format
+            number_format($title->value, 2, '', ''), // Currency raw format
             '0', // Charging bank
             '0', // Charging agency
             '',
@@ -118,7 +118,7 @@ class Cnab400 extends BankI\Views\Cnab
             $payer_address->county->state->code,
             '', // message or guarantor name
             '99', // protest deadline
-            $title->specie->cnab400 ?? $title->specie->febraban,
+            $title->currency->cnab400 ?? $title->currency->febraban,
             $this->registry_count,
         ];
 

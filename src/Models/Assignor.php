@@ -25,14 +25,6 @@ class Assignor extends Medools\Model
         'id',
         'person',
         'address',
-        'bank',
-        'wallet',
-        'covenant',   // Covenant provided by the Bank. Max 20 digits, but should have up to 6
-        'agency',     // Bank Agency. max 5 digits
-        'agency_cd',  // check digit
-        'account',    // Bank Account. max 12 digits
-        'account_cd', // check digit
-        'edi',        // EDI code informed by the Bank
         'logo',       // Absolut path to Assignor's logo
         'url',        // URL to be embeded into Assignor's logo, in the Bank Billet
     ];
@@ -51,41 +43,5 @@ class Assignor extends Medools\Model
             __NAMESPACE__ . '\FullAddress',
             'id'
         ],
-        'bank' => [
-            __NAMESPACE__ . '\Bank',
-            'id'
-        ],
-        'wallet' => [
-            __NAMESPACE__ . '\Wallet',
-            'id'
-        ],
     ];
-
-    /**
-     * Formats Agency/Assignor's code
-     *
-     * @param integer $agency_length
-     * @param integer $account_length
-     * @param boolean $symbols        If should include symbols
-     *
-     * @return string
-     *
-     * @throws \LengthException @see Utils::padNumber()
-     */
-    public function formatAgencyAccount(
-        $agency_length,
-        $account_length,
-        $symbols = true
-    ) {
-        $tmp = [
-            BankI\Utils::padNumber($this->agency, $agency_length),
-            BankI\Utils::padNumber($this->account, $account_length)
-        ];
-        $check_digit = $this->account_cd;
-
-        if ($symbols) {
-            return implode(' / ', $tmp) . '-' . $check_digit;
-        }
-        return implode('', $tmp) . $check_digit;
-    }
 }

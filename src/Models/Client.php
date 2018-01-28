@@ -17,14 +17,15 @@ use aryelgois\Medools;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Payer extends Medools\Model
+class Client extends Medools\Model
 {
-    const TABLE = 'payers';
+    const TABLE = 'clients';
 
     const COLUMNS = [
         'id',
         'person',
         'address',
+        'assignor',
     ];
 
     const FOREIGN_KEYS = [
@@ -34,6 +35,10 @@ class Payer extends Medools\Model
         ],
         'address' => [
             __NAMESPACE__ . '\FullAddress',
+            'id'
+        ],
+        'assignor' => [
+            __NAMESPACE__ . '\Assignor',
             'id'
         ],
     ];

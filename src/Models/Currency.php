@@ -16,18 +16,15 @@ use aryelgois\Medools;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Specie extends Medools\Model
+class Currency extends Medools\Model
 {
-    const TABLE = 'species';
+    const TABLE = 'currencies';
 
     const COLUMNS = [
         'id',
         'symbol',
         'name',
         'name_plural',
-        'febraban',
-        'cnab240',
-        'cnab400',
         'decimals',
         'thousand',
         'decimal',
@@ -35,8 +32,6 @@ class Specie extends Medools\Model
 
     const OPTIONAL_COLUMNS = [
         'name_plural',
-        'cnab240',
-        'cnab400',
     ];
 
     /**

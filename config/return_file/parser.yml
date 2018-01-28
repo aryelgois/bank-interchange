@@ -76,7 +76,7 @@ CNAB240:
         - receiver_agency
         - receiver_agency_cd
         - assignor_use
-        - specie
+        - currency
         - payer_document_type
         - payer_document
         - payer_name
@@ -189,7 +189,7 @@ CNAB400_BANESE:
         - confirm_instruction1
         - confirm_instruction2
         - confirm_protest
-        - specie
+        - currency
         - registry
 
     TRAILER:

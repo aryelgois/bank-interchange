@@ -11,12 +11,13 @@ use aryelgois\Utils;
 use aryelgois\Medools;
 
 /**
- * A Title represents something a Payer got from an Assignor.
+ * A Title represents something a Client got from its Assignor
  *
  * It might be one or products/services
  *
  * NOTE:
- * - The pair `assignor` and `our_number` must be UNIQUE
+ * - `assignment` must be valid for the client's assignor
+ * - The pair `assignment` and `our_number` must be UNIQUE
  *
  * @author Aryel Mota Góis
  * @license MIT
@@ -28,10 +29,10 @@ class Title extends Medools\Model
 
     const COLUMNS = [
         'id',
-        'assignor',
-        'payer',          // Who the Title is destined
-        'guarantor',      // Someone that would be charged if the Payer could not pay
-        'specie',
+        'assignment',
+        'client',         // Who the Title is destined
+        'guarantor',      // Someone that would be charged if the Client could not pay
+        'currency',
         'our_number',
         'status',
         'doc_type',
@@ -40,6 +41,7 @@ class Title extends Medools\Model
         'value_paid',     // (float)
         'iof',            // (float) A Brazilian tax
         'rebate',         // (float)
+        'tax',
         'fine_type',
         'fine_date',
         'fine_value',     // (float)
@@ -68,20 +70,20 @@ class Title extends Medools\Model
     ];
 
     const FOREIGN_KEYS = [
-        'assignor' => [
-            __NAMESPACE__ . '\Assignor',
+        'assignment' => [
+            __NAMESPACE__ . '\Assignment',
             'id'
         ],
-        'payer' => [
-            __NAMESPACE__ . '\Payer',
+        'client' => [
+            __NAMESPACE__ . '\Client',
             'id'
         ],
         'guarantor' => [
-            __NAMESPACE__ . '\Payer',
+            __NAMESPACE__ . '\Client',
             'id'
         ],
-        'specie' => [
-            __NAMESPACE__ . '\Specie',
+        'currency' => [
+            __NAMESPACE__ . '\Currency',
             'id'
         ],
     ];

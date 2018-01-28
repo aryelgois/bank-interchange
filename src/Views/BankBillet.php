@@ -110,7 +110,7 @@ abstract class BankBillet extends FPDF
         'payer'         => 'Pagador',
         'payer_receipt' => 'Recibo do Pagador',
         'payment_place' => 'Local de pagamento',
-        'specie'        => 'Espécie',
+        'currency'      => 'Espécie',
         'specie_doc'    => 'Espécie doc.',
         'wallet'        => 'Carteira'
     ];
@@ -175,7 +175,7 @@ abstract class BankBillet extends FPDF
         $ref['payer.address']    = $ref['payer']->address;
         $ref['guarantor']        = $title->guarantor;
         $ref['guarantor.person'] = $ref['guarantor']->person ?? null;
-        $ref['specie']           = $title->specie;
+        $ref['currency']         = $title->currency;
         $ref['wallet']           = $ref['assignor']->wallet;
         $this->ref = $ref;
 
@@ -252,7 +252,7 @@ abstract class BankBillet extends FPDF
     {
         $barcode = [
             $this->ref['bank']->code,
-            $this->ref['specie']->febraban,
+            $this->ref['currency']->febraban,
             '', // Check digit
             $this->dueFactor(),
             BankI\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
@@ -547,7 +547,7 @@ abstract class BankBillet extends FPDF
      * Formats the barcode into a Digitable line
      *
      * @param string $bank   Bank code (3 digits)
-     * @param string $specie Specie Code (1 digit)
+     * @param string $currency Currency Code (1 digit)
      * @param string $cd     Check digit (1 digit)
      * @param string $due    Due Factor (4 digits)
      * @param string $value  Document Value (10 digits: 8 integers and 2 decimals)
@@ -556,7 +556,7 @@ abstract class BankBillet extends FPDF
      */
     protected static function formatDigitable(
         $bank_code,
-        $specie_code,
+        $currency_code,
         $check_digit,
         $due_factor,
         $value,
@@ -568,11 +568,11 @@ abstract class BankBillet extends FPDF
          * Field #0
          *
          * - $bank_code
-         * - $specie_code
+         * - $currency_code
          * - 5 first digits from $free_space
          * - Check digit for this field
          */
-        $tmp = $bank_code . $specie_code . substr($free_space, 0, 5);
+        $tmp = $bank_code . $currency_code . substr($free_space, 0, 5);
         $tmp .= Utils\Validation::mod10($tmp);
         $fields[] = implode('.', str_split($tmp, 5));
 
@@ -618,13 +618,13 @@ abstract class BankBillet extends FPDF
      * Formats a numeric value as monetary value
      *
      * @param number  $value  Value to be formated
-     * @param string  $format @see Models/Specie::format()
+     * @param string  $format @see Models/Currency::format()
      *
      * @return string
      */
     protected function formatMoney($value, $format = 'symbol')
     {
-        return $this->ref['specie']->format($value, $format);
+        return $this->ref['currency']->format($value, $format);
     }
 
     /**

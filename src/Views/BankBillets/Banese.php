@@ -94,7 +94,7 @@ class Banese extends BankI\Views\BankBillet
                 'fine'          => '(+) Mora/Multa',
                 'guarantor'     => 'Sacador/Avalista: ',
                 'instructions'  => 'Instruções',
-                'specie'        => 'Moeda',
+                'currency'      => 'Moeda',
                 'specie_doc'    => 'Espécie doc',
             ]
         );
@@ -103,7 +103,7 @@ class Banese extends BankI\Views\BankBillet
             'bank_use', 'charged', 'date_due', 'date_document', 'date_process',
             'deduction', 'demonstrative', 'discount', 'doc_number_sh',
             'doc_value', 'doc_value=', 'fine', 'guarantor', 'instructions',
-            'mech_auth', 'our_number', 'payer', 'payment_place', 'specie',
+            'mech_auth', 'our_number', 'payer', 'payment_place', 'currency',
             'specie_doc', 'wallet'
         ];
         foreach ($keys as $key) {
@@ -168,7 +168,7 @@ class Banese extends BankI\Views\BankBillet
          * Payment place
          * Assignor
          * Document Date | Document number | Document specie | Accept | Processing Date
-         * Bank's use | Wallet | Specie | Amount | Document value UN
+         * Bank's use | Wallet | Currency | Amount | Document value UN
          * Payer
          */
         $table = [
@@ -188,7 +188,7 @@ class Banese extends BankI\Views\BankBillet
             [
                 ['w' =>  32,   'title' => $dict['bank_use'],      'data' => ''],                                            //$data['misc']['bank_use']
                 ['w' =>  16,   'title' => $dict['wallet'],        'data' => $wallet->symbol],
-                ['w' =>  11,   'title' => $dict['specie'],        'data' => $this->ref['specie']->symbol],
+                ['w' =>  11,   'title' => $dict['currency'],      'data' => $this->ref['currency']->symbol],
                 ['w' =>  32,   'title' => $dict['amount'],        'data' => ''],                                            //$data['misc']['amount']
                 ['w' =>  36.2, 'title' => $dict['doc_value'],     'data' => '']                                             //$data['misc']['value_un']
             ]

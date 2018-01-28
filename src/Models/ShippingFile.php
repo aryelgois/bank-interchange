@@ -22,7 +22,7 @@ class ShippingFile extends Medools\Model
 
     const COLUMNS = [
         'id',
-        'assignor',
+        'assignment',
         'counter',
         'status',
         'stamp',
@@ -36,8 +36,8 @@ class ShippingFile extends Medools\Model
     ];
 
     const FOREIGN_KEYS = [
-        'assignor' => [
-            __NAMESPACE__ . '\Assignor',
+        'assignment' => [
+            __NAMESPACE__ . '\Assignment',
             'id'
         ],
     ];
