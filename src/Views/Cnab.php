@@ -33,7 +33,7 @@ abstract class Cnab
      *
      * @const string
      */
-    const FILE_END = "\u{1a}";
+    const FILE_END = "";
 
     /**
      * CNAB Shipping File registries
