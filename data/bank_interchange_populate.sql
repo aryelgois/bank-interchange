@@ -10,7 +10,7 @@ INSERT INTO `banks` (`id`, `code`, `name`, `view`, `logo`, `tax`) VALUES
 -- TODO verify `currency_codes`
 
 INSERT INTO `currencies` (`id`, `symbol`, `name`, `name_plural`, `decimals`, `thousand`, `decimal`) VALUES
-(1, 'R$', 'Real', 'Reais', null, '', ',');
+(1, 'R$', 'Real', 'Reais', 2, '', ',');
 
 INSERT INTO `currency_codes` (`currency`, `bank`, `cnab240`, `cnab400`) VALUES
 (1, 1, '09', '?'),
