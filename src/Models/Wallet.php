@@ -22,9 +22,18 @@ class Wallet extends Medools\Model
 
     const COLUMNS = [
         'id',
+        'bank',
+        'cnab',
+        'code',
+        'operation',
         'symbol',
         'name',
-        'febraban',
-        'operation',
+    ];
+
+    const FOREIGN_KEYS = [
+        'bank' => [
+            __NAMESPACE__ . '\Bank',
+            'id'
+        ],
     ];
 }
