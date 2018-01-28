@@ -7,6 +7,8 @@ definitions:
   pk: int PRIMARY KEY
   pk_auto: pk AUTO_INCREMENT
   name: varchar(60)
+  money: decimal(17,4)
+  money_small: decimal(6,4)
 
 tables:
 
@@ -75,7 +77,7 @@ tables:
     name: varchar(60)
     view: varchar(30)
     logo: varchar(30) NULLABLE
-    tax: decimal(6,4)
+    tax: money_small
 
   clients:
     id: pk_auto
@@ -93,17 +95,17 @@ tables:
     status: tinyint(1) NULLABLE
     doc_type: char(1) DEFAULT 1
     kind: tinyint(2)
-    value: decimal(17,4)
-    value_paid: decimal(17,4) DEFAULT 0
-    iof: decimal(17,4)
-    rebate: decimal(17,4)
-    tax: decimal(6,4)
+    value: money
+    value_paid: money DEFAULT 0
+    iof: money
+    rebate: money
+    tax: money_small
     fine_type: tinyint(1) DEFAULT 3
     fine_date: date NULLABLE
-    fine_value: decimal(17,4) NULLABLE
+    fine_value: money NULLABLE
     discount_type: enum('1','2') DEFAULT '1'
     discount_date: date NULLABLE
-    discount_value: decimal(17,4) NULLABLE
+    discount_value: money NULLABLE
     description: varchar(25)
     due: date
     stamp: timestamp DEFAULT CURRENT_TIMESTAMP
