@@ -25,9 +25,6 @@ class Currency extends Medools\Model
         'symbol',
         'name',
         'name_plural',
-        'febraban',
-        'cnab240',
-        'cnab400',
         'decimals',
         'thousand',
         'decimal',
@@ -35,8 +32,6 @@ class Currency extends Medools\Model
 
     const OPTIONAL_COLUMNS = [
         'name_plural',
-        'cnab240',
-        'cnab400',
     ];
 
     /**

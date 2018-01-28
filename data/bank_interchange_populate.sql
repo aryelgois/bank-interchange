@@ -1,7 +1,12 @@
 -- Currencies
 
-INSERT INTO `currencies` (`id`, `symbol`, `name`, `name_plural`, `febraban`, `cnab240`, `cnab400`, `thousand`, `decimal`) VALUES
-(1, 'R$', 'Real', 'Reais', 9, null, 0, '', ',');
+INSERT INTO `currencies` (`id`, `symbol`, `name`, `name_plural`, `decimals`, `thousand`, `decimal`) VALUES
+(1, 'R$', 'Real', 'Reais', null, '', ',');
+
+INSERT INTO `currency_codes` (`bank`, `cnab240`, `cnab400`) VALUES
+(1, '09', '?');
+(2, '09', '1');
+(3, '??', '0');
 
 -- Wallets
 -- @todo verify data

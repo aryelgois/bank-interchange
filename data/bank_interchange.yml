@@ -34,12 +34,14 @@ tables:
     symbol: varchar(5)
     name: varchar(30)
     name_plural: varchar(30) NULLABLE
-    febraban: char(2)
-    cnab240: char(2) NULLABLE
-    cnab400: char(2) NULLABLE
     decimals: tinyint(2)  DEFAULT 2
     thousand: char(1)
     decimal: char(1)
+
+  currency_codes:
+    bank: int -> banks.id UNIQUE
+    cnab240: char(2)
+    cnab400: char(1)
 
   wallets:
     id: tinyint(3) PRIMARY KEY AUTO_INCREMENT
