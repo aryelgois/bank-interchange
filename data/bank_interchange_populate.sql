@@ -13,8 +13,8 @@ INSERT INTO `currencies` (`id`, `symbol`, `name`, `name_plural`, `decimals`, `th
 (1, 'R$', 'Real', 'Reais', null, '', ',');
 
 INSERT INTO `currency_codes` (`currency`, `bank`, `cnab240`, `cnab400`) VALUES
-(1, 1, '09', '?');
-(1, 2, '09', '1');
+(1, 1, '09', '?'),
+(1, 2, '09', '1'),
 (1, 3, '??', '0');
 
 -- Wallets
@@ -29,4 +29,4 @@ INSERT INTO `wallets` (`id`, `bank`, `cnab`, `code`, `operation`, `symbol`, `nam
 (6, 3, '400', '2', '41', 'CV', 'Cobrança Vinculada – Boleto Emitido Pelo Banco'),
 (7, 3, '400', '4', '21', 'CS', 'Cobrança Simples - Boleto Emitido Pelo Cliente'),
 (8, 3, '400', '5', '41', 'CV', 'Cobrança Vinculada - Boleto Emitido Pelo Cliente'),
-(9, 3, '400', 'I', '51', 'SR', 'Cobrança Simplificada (Sem Registro)'),
+(9, 3, '400', 'I', '51', 'SR', 'Cobrança Simplificada (Sem Registro)');
