@@ -52,14 +52,6 @@ tables:
   #
   # Tables with most important data for this package
 
-  banks:
-    id: pk_auto
-    code: char(3)
-    name: varchar(60)
-    view: varchar(30)
-    logo: varchar(30) NULLABLE
-    tax: decimal(6,4)
-
   assignors:
     id: pk_auto
     person: int -> people.id UNIQUE
@@ -78,6 +70,14 @@ tables:
     account: char(11)
     account_cd: char(1)
     edi: char(6)
+
+  banks:
+    id: pk_auto
+    code: char(3)
+    name: varchar(60)
+    view: varchar(30)
+    logo: varchar(30) NULLABLE
+    tax: decimal(6,4)
 
   clients:
     id: pk_auto
