@@ -87,7 +87,6 @@ tables:
 
   titles:
     id: pk_auto
-    assignor: int -> assignors.id
     specie: tinyint -> species.id
     client: int -> clients.id
     guarantor: int -> clients.id NULLABLE

@@ -11,7 +11,7 @@ use aryelgois\Utils;
 use aryelgois\Medools;
 
 /**
- * A Title represents something a Client got from an Assignor.
+ * A Title represents something a Client got from its Assignor
  *
  * It might be one or products/services
  *
@@ -28,7 +28,6 @@ class Title extends Medools\Model
 
     const COLUMNS = [
         'id',
-        'assignor',
         'client',         // Who the Title is destined
         'guarantor',      // Someone that would be charged if the Client could not pay
         'specie',
@@ -68,10 +67,6 @@ class Title extends Medools\Model
     ];
 
     const FOREIGN_KEYS = [
-        'assignor' => [
-            __NAMESPACE__ . '\Assignor',
-            'id'
-        ],
         'client' => [
             __NAMESPACE__ . '\Client',
             'id'
