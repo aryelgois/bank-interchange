@@ -25,6 +25,7 @@ class Client extends Medools\Model
         'id',
         'person',
         'address',
+        'assignor',
     ];
 
     const FOREIGN_KEYS = [
@@ -34,6 +35,10 @@ class Client extends Medools\Model
         ],
         'address' => [
             __NAMESPACE__ . '\FullAddress',
+            'id'
+        ],
+        'assignor' => [
+            __NAMESPACE__ . '\Assignor',
             'id'
         ],
     ];

@@ -83,6 +83,7 @@ tables:
     id: pk_auto
     person: int -> people.id
     address: int -> full_addresses.id
+    assignor: int -> assignors.id
 
   titles:
     id: pk_auto
@@ -123,6 +124,7 @@ tables:
     title: int -> titles.id
 
 composite:
+  - UNIQUE clients person assignor
   - UNIQUE titles assignor our_number
   - UNIQUE shipping_files assignor counter
   - PRIMARY shipping_file_titles shipping_file title
