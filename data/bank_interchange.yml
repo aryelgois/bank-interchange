@@ -113,7 +113,7 @@ tables:
 
   shipping_files:
     id: pk_auto
-    assignor: int -> assignors.id
+    assignment: int -> assignments.id
     counter: int(10)
     status: tinyint(1) NULLABLE
     stamp: timestamp DEFAULT CURRENT_TIMESTAMP
@@ -126,5 +126,5 @@ tables:
 composite:
   - UNIQUE clients person assignor
   - UNIQUE titles assignment our_number
-  - UNIQUE shipping_files assignor counter
+  - UNIQUE shipping_files assignment counter
   - PRIMARY shipping_file_titles shipping_file title
