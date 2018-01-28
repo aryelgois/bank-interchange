@@ -30,11 +30,11 @@ tables:
     document: varchar(14)
 
   currencies:
-    id: tinyint(3) PRIMARY KEY AUTO_INCREMENT
+    id: tinyint PRIMARY KEY AUTO_INCREMENT
     symbol: varchar(5)
     name: varchar(30)
     name_plural: varchar(30) NULLABLE
-    decimals: tinyint(2) DEFAULT 2
+    decimals: tinyint DEFAULT 2
     thousand: char(1)
     decimal: char(1)
 
@@ -44,7 +44,7 @@ tables:
     cnab400: char(1)
 
   wallets:
-    id: tinyint(3) PRIMARY KEY AUTO_INCREMENT
+    id: tinyint PRIMARY KEY AUTO_INCREMENT
     febraban: tinyint(2)
     operation: tinyint(2)
     symbol: char(2)
@@ -63,7 +63,7 @@ tables:
     id: pk_auto
     assignor: int -> assignors.id
     bank: int -> banks.id
-    wallet: tinyint(3) -> wallets.id
+    wallet: tinyint -> wallets.id
     covenant: char(20)
     agency: char(5)
     agency_cd: char(1)
@@ -90,7 +90,7 @@ tables:
     assignment: int -> assignments.id
     client: int -> clients.id
     guarantor: int -> clients.id NULLABLE
-    currency: tinyint(3) -> currencies.id
+    currency: tinyint -> currencies.id
     our_number: int
     status: tinyint(1) NULLABLE
     doc_type: char(1) DEFAULT 1
@@ -114,7 +114,7 @@ tables:
   shipping_files:
     id: pk_auto
     assignment: int -> assignments.id
-    counter: int(10)
+    counter: int
     status: tinyint(1) NULLABLE
     stamp: timestamp DEFAULT CURRENT_TIMESTAMP
     update: datetime NULLABLE
