@@ -79,7 +79,7 @@ tables:
     account_cd: char(1)
     edi: char(6)
 
-  payers:
+  clients:
     id: pk_auto
     person: int -> people.id
     address: int -> full_addresses.id
@@ -87,9 +87,9 @@ tables:
   titles:
     id: pk_auto
     assignor: int -> assignors.id
-    payer: int -> payers.id
-    guarantor: int -> payers.id NULLABLE
     specie: tinyint -> species.id
+    client: int -> clients.id
+    guarantor: int -> clients.id NULLABLE
     our_number: int
     status: tinyint(1) NULLABLE
     doc_type: char(1) DEFAULT 1
