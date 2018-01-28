@@ -34,7 +34,7 @@ tables:
     symbol: varchar(5)
     name: varchar(30)
     name_plural: varchar(30) NULLABLE
-    decimals: tinyint(2)  DEFAULT 2
+    decimals: tinyint(2) DEFAULT 2
     thousand: char(1)
     decimal: char(1)
 
