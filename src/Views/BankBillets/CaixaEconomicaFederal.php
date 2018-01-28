@@ -70,7 +70,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
         /*
          * Structure:
          *
-         * Assignor | Agency/Assignor's code | Specie | Amount | Our number
+         * Assignor | Agency/Assignor's code | Currency | Amount | Our number
          * Document number | CPF/CNPJ | Due | Document value
          * (-) Discount/Rebates | (-) Other deductions | (+) "Mora"/Fine | (+) Other additions | (=) Amount charged
          * Payer
@@ -79,7 +79,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
             [
                 ['w' =>  80.8, 'title' => $dict['assignor'],      'data' => $assignor_person->name],
                 ['w' =>  35.4, 'title' => $dict['agency_code'],   'data' => $this->formatAgencyAccount()],
-                ['w' =>  11,   'title' => $dict['specie'],        'data' => $this->ref['specie']->symbol],
+                ['w' =>  11,   'title' => $dict['currency'],      'data' => $this->ref['currency']->symbol],
                 ['w' =>  16,   'title' => $dict['amount'],        'data' => ''],                                          // $data['misc']['amount']
                 ['w' =>  33.8, 'title' => $dict['our_number'],    'data' => $this->formatOurNumber(),                   'data_align' => 'R']
             ],
@@ -140,7 +140,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
          * Payment place
          * Assignor
          * Document Date | Document number | Document specie | Accept | Processing Date
-         * Bank's use | Wallet | Specie | Amount | Document value UN
+         * Bank's use | Wallet | Currency | Amount | Document value UN
          */
         $table = [
             [
@@ -159,7 +159,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
             [
                 ['w' =>  32,   'title' => $dict['bank_use'],      'data' => ''],                                          //$data['misc']['bank_use']
                 ['w' =>  24,   'title' => $dict['wallet'],        'data' => $wallet->symbol],
-                ['w' =>  16,   'title' => $dict['specie'],        'data' => $this->ref['specie']->symbol],
+                ['w' =>  16,   'title' => $dict['currency'],      'data' => $this->ref['currency']->symbol],
                 ['w' =>  34.2, 'title' => $dict['amount'],        'data' => ''],                                          //$data['misc']['amount']
                 ['w' =>  21,   'title' => $dict['doc_value'],     'data' => '']                                           //$data['misc']['value_un']
             ]

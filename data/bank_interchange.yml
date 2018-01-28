@@ -29,7 +29,7 @@ tables:
     name: name
     document: varchar(14)
 
-  species:
+  currencies:
     id: tinyint(3) PRIMARY KEY AUTO_INCREMENT
     symbol: varchar(5)
     name: varchar(30)
@@ -90,7 +90,7 @@ tables:
     assignment: int -> assignments.id
     client: int -> clients.id
     guarantor: int -> clients.id NULLABLE
-    specie: tinyint(3) -> species.id
+    currency: tinyint(3) -> currencies.id
     our_number: int
     status: tinyint(1) NULLABLE
     doc_type: char(1) DEFAULT 1

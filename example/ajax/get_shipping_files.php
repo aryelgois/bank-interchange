@@ -30,7 +30,7 @@ foreach ($iterator as $shipping_file) {
     $data = [
         $id,
         implode(', ', $titles),
-        $title->specie->format($total),
+        $title->currency->format($total),
         $shipping_file->stamp,
         $links,
     ];

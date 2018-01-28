@@ -1,6 +1,6 @@
--- Species
+-- Currencies
 
-INSERT INTO `species` (`id`, `symbol`, `name`, `name_plural`, `febraban`, `cnab240`, `cnab400`, `thousand`, `decimal`) VALUES
+INSERT INTO `currencies` (`id`, `symbol`, `name`, `name_plural`, `febraban`, `cnab240`, `cnab400`, `thousand`, `decimal`) VALUES
 (1, 'R$', 'Real', 'Reais', 9, null, 0, '', ',');
 
 -- Wallets

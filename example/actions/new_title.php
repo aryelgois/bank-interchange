@@ -12,7 +12,7 @@ $due = date('Y-m-d', strtotime($due . ' + 30 days'));
 $title->setMultiple([
     'assignor'      => $_POST['assignor'],
     'payer'         => $_POST['payer'],
-    'specie'        => 1,
+    'currency'      => 1,
     'doc_type'      => 1,
     'kind'          => 99,
     'value'         => $_POST['value'],

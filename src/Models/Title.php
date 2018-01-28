@@ -32,7 +32,7 @@ class Title extends Medools\Model
         'assignment',
         'client',         // Who the Title is destined
         'guarantor',      // Someone that would be charged if the Client could not pay
-        'specie',
+        'currency',
         'our_number',
         'status',
         'doc_type',
@@ -82,8 +82,8 @@ class Title extends Medools\Model
             __NAMESPACE__ . '\Client',
             'id'
         ],
-        'specie' => [
-            __NAMESPACE__ . '\Specie',
+        'currency' => [
+            __NAMESPACE__ . '\Currency',
             'id'
         ],
     ];

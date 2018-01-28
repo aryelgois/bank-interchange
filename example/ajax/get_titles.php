@@ -22,7 +22,7 @@ foreach ($iterator as $model) {
         $id,
         format_model_pretty($model->payer),
         format_model_pretty($model->assignor),
-        $model->specie->format($model->value),
+        $model->currency->format($model->value),
         $model->stamp,
         '<a href="actions/generate_billet.php?id=' . $id . '">pdf</a>',
     ];

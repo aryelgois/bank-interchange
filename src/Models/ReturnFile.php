@@ -285,7 +285,7 @@ class ReturnFile
                                 'receiver_agency',
                                 'receiver_agency_cd',
                                 'assignor_use',
-                                'specie',
+                                'currency',
                                 'contract',
                                 'tax',
                                 'occurrence',
@@ -429,7 +429,7 @@ class ReturnFile
                                 'instruction1_confirm',
                                 'instruction2_confirm',
                                 'protest_confirm',
-                                'specie',
+                                'currency',
                             ]
                         );
 
@@ -510,8 +510,8 @@ class ReturnFile
                 foreach ($data as $i => $v) {
                     if (isset($registry['title'])) {
                         if ($v !== null) {
-                            $specie = $registry['title']->specie;
-                            $v = $specie->format($v / 10 ** $specie->decimals);
+                            $currency = $registry['title']->currency;
+                            $v = $currency->format($v / 10 ** $currency->decimals);
                         }
                     } else {
                         $v = ltrim($v, '0');
@@ -572,7 +572,7 @@ class ReturnFile
                             } elseif (array_key_exists($movement, $movements['info'])) {
                                 $data = ['status' => 0];
                                 if (isset($registry['value_paid'])) {
-                                    $data['value_paid'] = ($registry['value_paid'] / 10 ** $registry['title']->specie->decimals);
+                                    $data['value_paid'] = ($registry['value_paid'] / 10 ** $registry['title']->currency->decimals);
                                 }
                                 $this->changes[$registry['title']->id] = $data;
                             } else {
@@ -599,7 +599,7 @@ class ReturnFile
                                 ];
                             } else {
                                 $data = ['status' => 0];
-                                $value_paid = $registry['value_paid'] / 10 ** $registry['title']->specie->decimals;
+                                $value_paid = $registry['value_paid'] / 10 ** $registry['title']->currency->decimals;
                                 if ($value_paid > 0) {
                                     $data['value_paid'] = $value_paid;
                                 }
