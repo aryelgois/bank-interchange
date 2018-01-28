@@ -24,12 +24,17 @@ class CurrencyCode extends Medools\Model
     const TABLE = 'currency_codes';
 
     const COLUMNS = [
+        'currency',
         'bank',
         'cnab240',
         'cnab400',
     ];
 
     const FOREIGN_KEYS = [
+        'currency' => [
+            __NAMESPACE__ . '\Currency',
+            'id'
+        ],
         'bank' => [
             __NAMESPACE__ . '\Bank',
             'id'

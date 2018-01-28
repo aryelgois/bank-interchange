@@ -7,14 +7,15 @@ INSERT INTO `banks` (`id`, `code`, `name`, `view`, `logo`, `tax`) VALUES
 (3, '004', 'B. do Nordeste', 'BancoDoNordeste', 'banco_do_nordeste.jpg', '2.0000');
 
 -- Currencies
+-- TODO verify `currency_codes`
 
 INSERT INTO `currencies` (`id`, `symbol`, `name`, `name_plural`, `decimals`, `thousand`, `decimal`) VALUES
 (1, 'R$', 'Real', 'Reais', null, '', ',');
 
-INSERT INTO `currency_codes` (`bank`, `cnab240`, `cnab400`) VALUES
-(1, '09', '?');
-(2, '09', '1');
-(3, '??', '0');
+INSERT INTO `currency_codes` (`currency`, `bank`, `cnab240`, `cnab400`) VALUES
+(1, 1, '09', '?');
+(1, 2, '09', '1');
+(1, 3, '??', '0');
 
 -- Wallets
 -- TODO verify data
