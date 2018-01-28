@@ -49,7 +49,7 @@ tables:
     febraban: tinyint(2)
     operation: tinyint(2)
     symbol: char(2)
-    name: varchar(60)
+    name: name
 
   # Main Tables
 
@@ -75,7 +75,7 @@ tables:
   banks:
     id: pk_auto
     code: char(3)
-    name: varchar(60)
+    name: name
     view: varchar(30)
     logo: varchar(30) NULLABLE
     tax: money_small
