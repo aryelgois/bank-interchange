@@ -46,8 +46,10 @@ tables:
 
   wallets:
     id: tinyint PRIMARY KEY AUTO_INCREMENT
-    febraban: tinyint(2)
-    operation: tinyint(2)
+    bank: int -> banks.id
+    cnab: char(3)
+    code: varchar(2)      # used in cnab
+    operation: varchar(2) # used in billets barcode
     symbol: char(2)
     name: name
 
