@@ -10,9 +10,7 @@ definitions:
 
 tables:
 
-  # Basic Tables
-  #
-  # Low level Tables containing very basic data
+  # Helper Tables
 
   full_addresses:
     id: pk_auto
@@ -51,8 +49,6 @@ tables:
     name: varchar(60)
 
   # Main Tables
-  #
-  # Tables with most important data for this package
 
   assignors:
     id: pk_auto
