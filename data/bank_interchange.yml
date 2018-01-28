@@ -87,9 +87,9 @@ tables:
 
   titles:
     id: pk_auto
-    specie: tinyint -> species.id
     client: int -> clients.id
     guarantor: int -> clients.id NULLABLE
+    specie: tinyint(3) -> species.id
     our_number: int
     status: tinyint(1) NULLABLE
     doc_type: char(1) DEFAULT 1
