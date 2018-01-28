@@ -87,6 +87,7 @@ tables:
 
   titles:
     id: pk_auto
+    assignment: int -> assignments.id
     client: int -> clients.id
     guarantor: int -> clients.id NULLABLE
     specie: tinyint(3) -> species.id
@@ -124,6 +125,6 @@ tables:
 
 composite:
   - UNIQUE clients person assignor
-  - UNIQUE titles assignor our_number
+  - UNIQUE titles assignment our_number
   - UNIQUE shipping_files assignor counter
   - PRIMARY shipping_file_titles shipping_file title

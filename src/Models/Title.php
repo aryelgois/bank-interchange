@@ -16,7 +16,8 @@ use aryelgois\Medools;
  * It might be one or products/services
  *
  * NOTE:
- * - The pair `assignor` and `our_number` must be UNIQUE
+ * - `assignment` must be valid for the client's assignor
+ * - The pair `assignment` and `our_number` must be UNIQUE
  *
  * @author Aryel Mota Góis
  * @license MIT
@@ -28,6 +29,7 @@ class Title extends Medools\Model
 
     const COLUMNS = [
         'id',
+        'assignment',
         'client',         // Who the Title is destined
         'guarantor',      // Someone that would be charged if the Client could not pay
         'specie',
@@ -68,6 +70,10 @@ class Title extends Medools\Model
     ];
 
     const FOREIGN_KEYS = [
+        'assignment' => [
+            __NAMESPACE__ . '\Assignment',
+            'id'
+        ],
         'client' => [
             __NAMESPACE__ . '\Client',
             'id'
