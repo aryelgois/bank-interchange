@@ -62,8 +62,14 @@ tables:
 
   assignors:
     id: pk_auto
-    person: int -> people.id
+    person: int -> people.id UNIQUE
     address: int -> full_addresses.id
+    logo: varchar(30) NULLABLE
+    url: varchar(30) NULLABLE
+
+  assignments:
+    id: pk_auto
+    assignor: int -> assignors.id
     bank: int -> banks.id
     wallet: tinyint(3) -> wallets.id
     covenant: char(20)
@@ -72,8 +78,6 @@ tables:
     account: char(11)
     account_cd: char(1)
     edi: char(6)
-    logo: varchar(30) NULLABLE
-    url: varchar(30) NULLABLE
 
   payers:
     id: pk_auto
