@@ -17,7 +17,7 @@ use aryelgois\Medools;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class FullAddress extends Medools\Models\Address\FullAddress
+class FullAddress extends aryelgois\Databases\Models\Address\FullAddress
 {
     /**
      * Outputs Model's data in a long format
