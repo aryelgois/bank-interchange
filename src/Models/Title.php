@@ -71,19 +71,19 @@ class Title extends Medools\Model
 
     const FOREIGN_KEYS = [
         'assignment' => [
-            __NAMESPACE__ . '\Assignment',
+            __NAMESPACE__ . '\\Assignment',
             'id'
         ],
         'client' => [
-            __NAMESPACE__ . '\Client',
+            __NAMESPACE__ . '\\Client',
             'id'
         ],
         'guarantor' => [
-            __NAMESPACE__ . '\Client',
+            __NAMESPACE__ . '\\Client',
             'id'
         ],
         'currency' => [
-            __NAMESPACE__ . '\Currency',
+            __NAMESPACE__ . '\\Currency',
             'id'
         ],
     ];

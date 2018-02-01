@@ -32,11 +32,11 @@ class CurrencyCode extends Medools\Model
 
     const FOREIGN_KEYS = [
         'currency' => [
-            __NAMESPACE__ . '\Currency',
+            __NAMESPACE__ . '\\Currency',
             'id'
         ],
         'bank' => [
-            __NAMESPACE__ . '\Bank',
+            __NAMESPACE__ . '\\Bank',
             'id'
         ],
     ];

@@ -38,15 +38,15 @@ class Assignment extends Medools\Model
 
     const FOREIGN_KEYS = [
         'assignor' => [
-            __NAMESPACE__ . '\Assignor',
+            __NAMESPACE__ . '\\Assignor',
             'id'
         ],
         'bank' => [
-            __NAMESPACE__ . '\Bank',
+            __NAMESPACE__ . '\\Bank',
             'id'
         ],
         'wallet' => [
-            __NAMESPACE__ . '\Wallet',
+            __NAMESPACE__ . '\\Wallet',
             'id'
         ],
     ];

@@ -34,11 +34,11 @@ class ShippingFileTitle extends Medools\Model
 
     const FOREIGN_KEYS = [
         'shipping_file' => [
-            __NAMESPACE__ . '\ShippingFile',
+            __NAMESPACE__ . '\\ShippingFile',
             'id'
         ],
         'title' => [
-            __NAMESPACE__ . '\Title',
+            __NAMESPACE__ . '\\Title',
             'id'
         ],
     ];

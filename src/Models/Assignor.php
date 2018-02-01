@@ -36,11 +36,11 @@ class Assignor extends Medools\Model
 
     const FOREIGN_KEYS = [
         'person' => [
-            'aryelgois\Medools\Models\Person',
+            'aryelgois\\Medools\\Models\\Person',
             'id'
         ],
         'address' => [
-            'aryelgois\Databases\Models\Address\FullAddress',
+            'aryelgois\\Databases\\Models\\Address\\FullAddress',
             'id'
         ],
     ];

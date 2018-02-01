@@ -72,7 +72,7 @@ abstract class Cnab
         $title_list = array_column($title_list, 'title');
 
         $shipping_file_titles = new Medools\ModelIterator(
-            'aryelgois\BankInterchange\Models\Title',
+            'aryelgois\\BankInterchange\\Models\\Title',
             ['id' => $title_list]
         );
 

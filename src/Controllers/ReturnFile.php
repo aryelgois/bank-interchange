@@ -32,7 +32,7 @@ abstract class ReturnFile
      *
      * @const string
      */
-    const MODEL_CLASS = 'aryelgois\BankInterchange\Models\ReturnFile';
+    const MODEL_CLASS = 'aryelgois\\BankInterchange\\Models\\ReturnFile';
 
     /**
      * Loads config files and creates a new ReturnFile Model
