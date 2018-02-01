@@ -16,8 +16,8 @@ $data = aryelgois\BankInterchange\Models\Wallet::dump(
 $result = '';
 foreach ($data as $wallet) {
     $result .= '<option value="' . $wallet['id'] . '">'
-             . $wallet['symbol'] . ' - '
-             . $wallet['name']
-             . '</option>';
+        . $wallet['symbol'] . ' - '
+        . $wallet['name']
+        . '</option>';
 }
 die($result);

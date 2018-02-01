@@ -17,9 +17,9 @@ $data = aryelgois\Medools\Models\Address\Country::dump(
 $result = '';
 foreach ($data as $country) {
     $result .= '<option value="' . $country['id'] . '"'
-             . ($country['name_en'] == 'Brazil' ? ' selected' : '') . '>'
-             . $country['code_a2'] . ' - '
-             . ($country['name_local'] ?? $country['name_en'])
-             . '</option>';
+        . ($country['name_en'] == 'Brazil' ? ' selected' : '') . '>'
+        . $country['code_a2'] . ' - '
+        . ($country['name_local'] ?? $country['name_en'])
+        . '</option>';
 }
 die($result);

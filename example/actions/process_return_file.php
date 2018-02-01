@@ -11,8 +11,8 @@ $messages = $return_file->getMessages();
 $tab = '                ';
 
 $template = $tab . "    <tr>\n"
-          . str_repeat($tab . "        <td>%s</td>\n", 9)
-          . $tab . "    </tr>\n";
+    . str_repeat($tab . "        <td>%s</td>\n", 9)
+    . $tab . "    </tr>\n";
 
 /*
  * Result info
@@ -39,12 +39,12 @@ foreach ($messages['info'] as $m) {
 $count = count($messages['error']);
 $error_title = $count . ' errors' . ($count > 0 ? ':' : '');
 $error = ($count)
-       ? $tab . "<ul>\n"
-       . $tab . '    <li>'
-       . implode("</li>\n" . $tab . '    <li>', $messages['error'])
-       . "</li>\n"
-       . $tab . "</ul>"
-       : '';
+    ? $tab . "<ul>\n"
+    . $tab . '    <li>'
+    . implode("</li>\n" . $tab . '    <li>', $messages['error'])
+    . "</li>\n"
+    . $tab . "</ul>"
+    : '';
 
 /*
  * Warnings
@@ -52,12 +52,12 @@ $error = ($count)
 $count = count($messages['warning']);
 $warning_title = $count . ' warnings' . ($count > 0 ? ':' : '');
 $warning = ($count)
-         ? $tab . "<ul>\n"
-         . $tab . '    <li>'
-         . implode("</li>\n" . $tab . '    <li>', $messages['warning'])
-         . "</li>\n"
-         . $tab . "</ul>"
-         : '';
+    ? $tab . "<ul>\n"
+    . $tab . '    <li>'
+    . implode("</li>\n" . $tab . '    <li>', $messages['warning'])
+    . "</li>\n"
+    . $tab . "</ul>"
+    : '';
 
 /*
  * Applying

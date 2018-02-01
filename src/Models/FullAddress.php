@@ -27,12 +27,12 @@ class FullAddress extends aryelgois\Databases\Models\Address\FullAddress
     public function outputLong()
     {
         $result = $this->place . ', '
-                . $this->number . ', '
-                . ($this->detail != '' ? ', ' . $this->detail : '')
-                . $this->neighborhood . "\n"
-                . $this->county->name . '/'
-                . $this->county->state->code . ' - '
-                . 'CEP: ' . Validation::cep($this->zipcode);
+            . $this->number . ', '
+            . ($this->detail != '' ? ', ' . $this->detail : '')
+            . $this->neighborhood . "\n"
+            . $this->county->name . '/'
+            . $this->county->state->code . ' - '
+            . 'CEP: ' . Validation::cep($this->zipcode);
 
         return $result;
     }
@@ -45,11 +45,11 @@ class FullAddress extends aryelgois\Databases\Models\Address\FullAddress
     public function outputShort()
     {
         $result = $this->place . ', '
-                . $this->number . ', '
-                . $this->neighborhood . ', '
-                . $this->county->name . '/'
-                . $this->county->state->code . ' '
-                . Validation::cep($this->zipcode);
+            . $this->number . ', '
+            . $this->neighborhood . ', '
+            . $this->county->name . '/'
+            . $this->county->state->code . ' '
+            . Validation::cep($this->zipcode);
 
         return $result;
     }

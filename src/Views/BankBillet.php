@@ -207,7 +207,7 @@ abstract class BankBillet extends FPDF
     protected function checkDigitOurNumber()
     {
         $our_number = BankI\Utils::padNumber($this->ref['assignor']->agency, 3)
-                    . BankI\Utils::padNumber($this->title->our_number, 8);
+            . BankI\Utils::padNumber($this->title->our_number, 8);
 
         return $this->title->checkDigitOurNumberAlgorithm($our_number);
     }
@@ -311,8 +311,8 @@ abstract class BankBillet extends FPDF
     {
         $this->Ln(2);
         $logo = $this->logos
-              . '/assignors/'
-              . $this->ref['assignor']->logo;
+            . '/assignors/'
+            . $this->ref['assignor']->logo;
 
         if ($this->logos !== null && is_file($logo)) {
             $y = $this->GetY();
@@ -584,7 +584,7 @@ abstract class BankBillet extends FPDF
          */
         $tmp = substr($free_space, 5, 10);
         $fields[] = implode('.', str_split($tmp, 5))
-                  . Utils\Validation::mod10($tmp);
+            . Utils\Validation::mod10($tmp);
 
         /*
          * Field #2
@@ -594,7 +594,7 @@ abstract class BankBillet extends FPDF
          */
         $tmp = substr($free_space, 15, 10);
         $fields[] = implode('.', str_split($tmp, 5))
-                  . Utils\Validation::mod10($tmp);
+            . Utils\Validation::mod10($tmp);
 
         /*
          * Field #3
@@ -642,8 +642,8 @@ abstract class BankBillet extends FPDF
         );
 
         $result = $our_number
-                . ($dash ? '-' : '')
-                . $this->checkDigitOurNumber();
+            . ($dash ? '-' : '')
+            . $this->checkDigitOurNumber();
 
         return $result;
     }

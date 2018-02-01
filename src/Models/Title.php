@@ -113,8 +113,8 @@ class Title extends Medools\Model
         $digit = Utils\Validation::mod11($our_number, $base);
 
         $digit = ($digit > 1)
-               ? $digit - 11
-               : 0;
+            ? $digit - 11
+            : 0;
 
         return abs($digit);
     }

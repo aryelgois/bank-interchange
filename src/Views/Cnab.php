@@ -91,7 +91,7 @@ abstract class Cnab
     final public function output()
     {
         return implode(static::LINE_END, $this->registries)
-             . static::LINE_END . static::FILE_END;
+            . static::LINE_END . static::FILE_END;
     }
 
     /**

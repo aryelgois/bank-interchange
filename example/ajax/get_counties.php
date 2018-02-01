@@ -20,7 +20,7 @@ $data = aryelgois\Medools\Models\Address\County::dump(
 $result = '';
 foreach ($data as $county) {
     $result .= '<option value="' . $county['id'] . '">'
-             . $county['name']
-             . '</option>';
+        . $county['name']
+        . '</option>';
 }
 die($result);

@@ -21,8 +21,8 @@ $data = aryelgois\Medools\Models\Address\State::dump(
 $result = '';
 foreach ($data as $state) {
     $result .= '<option value="' . $state['id'] . '">'
-             . $state['code'] . ' - '
-             . $state['name']
-             . '</option>';
+        . $state['code'] . ' - '
+        . $state['name']
+        . '</option>';
 }
 die($result);

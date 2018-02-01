@@ -56,9 +56,9 @@ class Banese extends BankI\Views\BankBillet
     protected function generateFreeSpace()
     {
         $key = BankI\Utils::padNumber($this->ref['assignor']->agency, 2, true)
-             . BankI\Utils::padNumber($this->ref['assignor']->account, 9, true)
-             . $this->formatOurNumber(false)
-             . BankI\Utils::padNumber($this->ref['bank']->code, 3, true);
+            . BankI\Utils::padNumber($this->ref['assignor']->account, 9, true)
+            . $this->formatOurNumber(false)
+            . BankI\Utils::padNumber($this->ref['bank']->code, 3, true);
         $cd1 = Validation::mod10($key);
         $cd2 = Validation::mod11($key . $cd1, 7);
 
@@ -263,9 +263,9 @@ class Banese extends BankI\Views\BankBillet
         // Guarantor
 
         $guarantor = ($this->ref['guarantor'] !== null)
-                   ? $this->ref['guarantor.person']->name . '     '
-                   . $this->ref['guarantor.address']->outputShort()
-                   : '';
+            ? $this->ref['guarantor.person']->name . '     '
+            . $this->ref['guarantor.address']->outputShort()
+            : '';
         $this->billetSetFont('cell_title');
         $this->Cell(24, 3.5, $dict['guarantor']);
         $this->billetSetFont('cell_data');

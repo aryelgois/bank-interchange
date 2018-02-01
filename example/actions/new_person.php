@@ -41,8 +41,8 @@ if (!$address->save()) {
  */
 $is_assignor = $_POST['person_type'] == 'assignor';
 $model = ($is_assignor)
-       ? new BankInterchange\Models\Assignor
-       : new BankInterchange\Models\Payer;
+    ? new BankInterchange\Models\Assignor
+    : new BankInterchange\Models\Payer;
 
 $model->person = $person;
 $model->address = $address;

@@ -44,7 +44,7 @@ class BankBillet
         $bank = $title->assignor->bank;
 
         $view_class = '\\aryelgois\\BankInterchange\\Views\\BankBillets\\'
-                    . $bank->view;
+            . $bank->view;
 
         $this->view = new $view_class($title, $data, $logos);
     }

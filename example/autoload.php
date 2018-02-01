@@ -18,13 +18,13 @@ function format_model_pretty($model, $html = true)
 {
     $person = $model->person;
     $info = ($model instanceof BankInterchange\Models\Assignor)
-          ? 'Account: ' . $model->formatAgencyAccount(4, 11)
-          : $person->documentFormat(true);
+        ? 'Account: ' . $model->formatAgencyAccount(4, 11)
+        : $person->documentFormat(true);
 
     $result = $person->name
-            . ($html ? '<br/><small>' : ' (')
-            . $info
-            . ($html ? '</small>' : ')');
+        . ($html ? '<br/><small>' : ' (')
+        . $info
+        . ($html ? '</small>' : ')');
 
     return $result;
 }

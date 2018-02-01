@@ -25,7 +25,7 @@ foreach ($iterator as $shipping_file) {
     }
 
     $links = '<a target="_blank" href="actions/generate_cnab.php?cnab=240&id=' . $id . '">CNAB240</a> '
-           . '<a target="_blank" href="actions/generate_cnab.php?cnab=400&id=' . $id . '">CNAB400</a>';
+        . '<a target="_blank" href="actions/generate_cnab.php?cnab=400&id=' . $id . '">CNAB400</a>';
 
     $data = [
         $id,

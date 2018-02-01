@@ -16,8 +16,8 @@ $data = aryelgois\BankInterchange\Models\Bank::dump(
 $result = '';
 foreach ($data as $bank) {
     $result .= '<option value="' . $bank['id'] . '">'
-             . $bank['code'] . ' - '
-             . $bank['name']
-             . '</option>';
+        . $bank['code'] . ' - '
+        . $bank['name']
+        . '</option>';
 }
 die($result);

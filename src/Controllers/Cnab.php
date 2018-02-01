@@ -61,7 +61,7 @@ class Cnab
         $shipping_file = new BankI\Models\ShippingFile($where);
 
         $view_class = '\\aryelgois\\BankInterchange\\Views\\Cnabs\\'
-                    . 'Cnab' . $cnab;
+            . 'Cnab' . $cnab;
 
         $this->view = new $view_class($shipping_file);
 
