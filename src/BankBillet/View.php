@@ -168,15 +168,15 @@ abstract class View extends FPDF
         $ref = [];
         $ref['assignment']       = $title->assignment;
         $ref['assignor']         = $ref['assignment']->assignor;
-        $ref['assignor.person']  = $ref['assignor']->person;
         $ref['assignor.address'] = $ref['assignor']->address;
+        $ref['assignor.person']  = $ref['assignor']->person;
         $ref['bank']             = $ref['assignment']->bank;
         $ref['client']           = $title->client;
-        $ref['client.person']    = $ref['client']->person;
         $ref['client.address']   = $ref['client']->address;
+        $ref['client.person']    = $ref['client']->person;
+        $ref['currency']         = $title->currency;
         $ref['guarantor']        = $title->guarantor;
         $ref['guarantor.person'] = $ref['guarantor']->person ?? null;
-        $ref['currency']         = $title->currency;
         $ref['wallet']           = $ref['assignment']->wallet;
         $this->ref = $ref;
 
