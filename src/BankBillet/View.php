@@ -156,10 +156,6 @@ abstract class View extends FPDF
         $data,
         $logos
     ) {
-        parent::__construct();
-        $this->AliasNbPages('{{ total_pages }}');
-        $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
-
         $this->billet = $data;
         if (file_exists($logos) && is_dir($logos)) {
             $this->logos = realpath($logos);
@@ -181,6 +177,9 @@ abstract class View extends FPDF
         $models['wallet']           = $models['assignment']->wallet;
         $this->models = $models;
 
+        parent::__construct();
+        $this->AliasNbPages('{{ total_pages }}');
+        $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
         $this->beforeDraw();
         $this->drawBillet();
     }
