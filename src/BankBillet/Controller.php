@@ -43,8 +43,7 @@ class Controller
 
         $bank = $title->assignment->bank;
 
-        $view_class = '\\aryelgois\\BankInterchange\\Views\\BankBillets\\'
-            . $bank->view;
+        $view_class = __NAMESPACE__ . '\\Views\\' . $bank->view;
 
         $this->view = new $view_class($title, $data, $logos);
     }
