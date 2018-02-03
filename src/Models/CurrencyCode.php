@@ -31,6 +31,8 @@ class CurrencyCode extends Medools\Model
         'cnab400',
     ];
 
+    const PRIMARY_KEY = ['currency', 'bank'];
+
     const FOREIGN_KEYS = [
         'currency' => [
             __NAMESPACE__ . '\\Currency',
