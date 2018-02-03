@@ -21,7 +21,7 @@ use aryelgois\BankInterchange as BankI;
  */
 class Assignment extends Medools\Model
 {
-    const TABLE = 'assignment';
+    const TABLE = 'assignments';
 
     const COLUMNS = [
         'id',
