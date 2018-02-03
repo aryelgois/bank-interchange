@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views\BankBillets;
+namespace aryelgois\BankInterchange\BankBillet\Views;
 
 use aryelgois\Utils\Validation;
 use aryelgois\BankInterchange as BankI;
@@ -17,7 +17,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Banese extends BankI\Views\BankBillet
+class Banese extends BankI\BankBillet\View
 {
     /**
      * Font presets of family, weight, size and color

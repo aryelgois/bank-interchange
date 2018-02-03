@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views\BankBillets;
+namespace aryelgois\BankInterchange\BankBillet\Views;
 
 use aryelgois\BankInterchange as BankI;
 
@@ -16,7 +16,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class CaixaEconomicaFederal extends BankI\Views\BankBillet
+class CaixaEconomicaFederal extends BankI\BankBillet\View
 {
     /**
      * Procedurally draws the bank billet using FPDF methods

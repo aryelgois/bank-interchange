@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views;
+namespace aryelgois\BankInterchange\BankBillet;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
@@ -23,7 +23,7 @@ use FPDF;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-abstract class BankBillet extends FPDF
+abstract class View extends FPDF
 {
     /**
      * Length used to zero-pad "Our Number"
