@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Controllers;
+namespace aryelgois\BankInterchange\BankBillet;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
@@ -19,7 +19,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class BankBillet
+class Controller
 {
     /**
      * Holds the FPDF object with the bank billet
