@@ -52,7 +52,7 @@ class BancoDoNordeste extends CaixaEconomicaFederal
      */
     protected function generateFreeSpace()
     {
-        $result = $this->formatAgencyAccount(false)
+        $result = $this->formatAgencyAccount()
             . $this->formatOurNumber()
             . '21'
             . '000';

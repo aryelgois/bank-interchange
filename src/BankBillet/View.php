@@ -281,7 +281,7 @@ abstract class View extends FPDF
      */
     protected function generateFreeSpace()
     {
-        return $this->formatOurNumber() . $this->formatAgencyAccount(false);
+        return $this->formatOurNumber() . $this->formatAgencyAccount();
     }
 
     /*
@@ -509,7 +509,7 @@ abstract class View extends FPDF
      *
      * @return string
      */
-    protected function formatAgencyAccount($symbol = true)
+    protected function formatAgencyAccount($symbol = false)
     {
         return $this->models['assignment']->formatAgencyAccount(
             static::AGENCY_LENGTH,

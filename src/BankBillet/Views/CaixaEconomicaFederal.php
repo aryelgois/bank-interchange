@@ -78,7 +78,7 @@ class CaixaEconomicaFederal extends BankI\BankBillet\View
         $table = [
             [
                 ['w' =>  80.8, 'title' => $dict['assignor'],      'data' => $assignor_person->name],
-                ['w' =>  35.4, 'title' => $dict['agency_code'],   'data' => $this->formatAgencyAccount()],
+                ['w' =>  35.4, 'title' => $dict['agency_code'],   'data' => $this->formatAgencyAccount(true)],
                 ['w' =>  11,   'title' => $dict['currency'],      'data' => $this->models['currency']->symbol],
                 ['w' =>  16,   'title' => $dict['amount'],        'data' => ''],                                          // $data['misc']['amount']
                 ['w' =>  33.8, 'title' => $dict['our_number'],    'data' => $this->formatOurNumber(true),                   'data_align' => 'R']
@@ -194,7 +194,7 @@ class CaixaEconomicaFederal extends BankI\BankBillet\View
         $this->SetY($y);
         $table = [
             ['title' => $dict['date_due'],    'data' => self::formatDate($title->due),       'data_align' => 'R'],
-            ['title' => $dict['agency_code'], 'data' => $this->formatAgencyAccount(),               'data_align' => 'R'],
+            ['title' => $dict['agency_code'], 'data' => $this->formatAgencyAccount(true),           'data_align' => 'R'],
             ['title' => $dict['our_number'],  'data' => $this->formatOurNumber(true),               'data_align' => 'R'],
             ['title' => $dict['doc_value='],  'data' => $this->formatMoney($this->billet['value']), 'data_align' => 'R'],
             ['title' => $dict['discount'],    'data' => '',                                         'data_align' => 'R'], //$data['misc']['discount']
