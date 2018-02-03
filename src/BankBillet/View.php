@@ -137,11 +137,11 @@ abstract class View extends FPDF
     protected $logos;
 
     /**
-     * Contains quick references to $title's foreign models
+     * Holds model instances from different tables
      *
-     * @var Model[]
+     * @var Medools\Model[]
      */
-    protected $ref = [];
+    protected $models = [];
 
     /**
      * Creates a new Billet View object
@@ -165,21 +165,21 @@ abstract class View extends FPDF
             $this->logos = realpath($logos);
         }
 
-        $ref = [];
-        $ref['assignment']       = $title->assignment;
-        $ref['assignor']         = $ref['assignment']->assignor;
-        $ref['assignor.address'] = $ref['assignor']->address;
-        $ref['assignor.person']  = $ref['assignor']->person;
-        $ref['bank']             = $ref['assignment']->bank;
-        $ref['client']           = $title->client;
-        $ref['client.address']   = $ref['client']->address;
-        $ref['client.person']    = $ref['client']->person;
-        $ref['currency']         = $title->currency;
-        $ref['guarantor']        = $title->guarantor;
-        $ref['guarantor.person'] = $ref['guarantor']->person ?? null;
-        $ref['title']            = $title;
-        $ref['wallet']           = $ref['assignment']->wallet;
-        $this->ref = $ref;
+        $models = [];
+        $models['assignment']       = $title->assignment;
+        $models['assignor']         = $models['assignment']->assignor;
+        $models['assignor.address'] = $models['assignor']->address;
+        $models['assignor.person']  = $models['assignor']->person;
+        $models['bank']             = $models['assignment']->bank;
+        $models['client']           = $title->client;
+        $models['client.address']   = $models['client']->address;
+        $models['client.person']    = $models['client']->person;
+        $models['currency']         = $title->currency;
+        $models['guarantor']        = $title->guarantor;
+        $models['guarantor.person'] = $models['guarantor']->person ?? null;
+        $models['title']            = $title;
+        $models['wallet']           = $models['assignment']->wallet;
+        $this->models = $models;
 
         $this->beforeDraw();
         $this->drawBillet();
@@ -195,7 +195,7 @@ abstract class View extends FPDF
      */
     protected function beforeDraw()
     {
-        $value = $this->title->value + $this->ref['bank']->tax;
+        $value = $this->models['title']->value + $this->models['bank']->tax;
         $this->billet['value'] = (float) $value;
 
         $this->generateBarcode();
@@ -208,10 +208,10 @@ abstract class View extends FPDF
      */
     protected function checkDigitOurNumber()
     {
-        $our_number = BankI\Utils::padNumber($this->ref['assignor']->agency, 3)
-            . BankI\Utils::padNumber($this->title->our_number, 8);
+        $our_number = BankI\Utils::padNumber($this->models['assignor']->agency, 3)
+            . BankI\Utils::padNumber($this->models['title']->our_number, 8);
 
-        return $this->title->checkDigitOurNumberAlgorithm($our_number);
+        return $this->models['title']->checkDigitOurNumberAlgorithm($our_number);
     }
 
     /**
@@ -238,7 +238,7 @@ abstract class View extends FPDF
      */
     protected function dueFactor()
     {
-        $date = \DateTime::createFromFormat('Y-m-d', $this->title->due);
+        $date = \DateTime::createFromFormat('Y-m-d', $this->models['title']->due);
         $epoch = new \DateTime('1997-10-07');
         if ($date && $date > $epoch) {
             $diff = substr($date->diff($epoch)->format('%a'), -4);
@@ -253,8 +253,8 @@ abstract class View extends FPDF
     protected function generateBarcode()
     {
         $barcode = [
-            $this->ref['bank']->code,
-            $this->ref['currency']->febraban,
+            $this->models['bank']->code,
+            $this->models['currency']->febraban,
             '', // Check digit
             $this->dueFactor(),
             BankI\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
@@ -314,16 +314,16 @@ abstract class View extends FPDF
         $this->Ln(2);
         $logo = $this->logos
             . '/assignors/'
-            . $this->ref['assignor']->logo;
+            . $this->models['assignor']->logo;
 
         if ($this->logos !== null && is_file($logo)) {
             $y = $this->GetY();
-            $this->Image($logo, null, null, 40, 0, '', $this->ref['assignor']->url);
+            $this->Image($logo, null, null, 40, 0, '', $this->models['assignor']->url);
             $y1 = $this->GetY();
             $this->SetXY(50, $y);
         }
         $this->billetSetFont('billhead');
-        $this->MultiCell(103.2, 2.5, utf8_decode($this->ref['assignor.person']->name . "\n" . $this->ref['assignor.person']->documentFormat() . "\n" . $this->ref['assignor.address']->outputLong()));
+        $this->MultiCell(103.2, 2.5, utf8_decode($this->models['assignor.person']->name . "\n" . $this->models['assignor.person']->documentFormat() . "\n" . $this->models['assignor.address']->outputLong()));
         $this->SetY(max($y1 ?? 0, $this->GetY()));
     }
 
@@ -368,7 +368,7 @@ abstract class View extends FPDF
         $digitable_align = 'R',
         $line_width_factor = 2
     ) {
-        $bank = $this->ref['bank'];
+        $bank = $this->models['bank'];
         $logo = $this->logos . '/banks/' . $bank->logo;
 
         $this->Ln(3);
@@ -504,7 +504,7 @@ abstract class View extends FPDF
      */
     protected function formatAgencyAccount($symbol = true)
     {
-        return $this->ref['assignor']->formatAgencyAccount(
+        return $this->models['assignor']->formatAgencyAccount(
             static::AGENCY_LENGTH,
             static::ACCOUNT_LENGTH,
             $symbol
@@ -518,7 +518,7 @@ abstract class View extends FPDF
      */
     protected function formatBankCode()
     {
-        $code = $this->ref['bank']->code;
+        $code = $this->models['bank']->code;
 
         $checksum = Utils\Validation::mod11Pre($code);
         $digit = $checksum * 10 % 11;
@@ -626,7 +626,7 @@ abstract class View extends FPDF
      */
     protected function formatMoney($value, $format = 'symbol')
     {
-        return $this->ref['currency']->format($value, $format);
+        return $this->models['currency']->format($value, $format);
     }
 
     /**
@@ -639,7 +639,7 @@ abstract class View extends FPDF
     protected function formatOurNumber($dash = true)
     {
         $our_number = BankI\Utils::padNumber(
-            $this->title->our_number,
+            $this->models['title']->our_number,
             static::OUR_NUMBER_LENGTH
         );
 
