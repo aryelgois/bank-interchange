@@ -8,6 +8,7 @@
 namespace aryelgois\BankInterchange\BankBillet;
 
 use aryelgois\Utils;
+use aryelgois\Medools;
 use aryelgois\BankInterchange as BankI;
 use FPDF;
 
@@ -171,6 +172,13 @@ abstract class View extends FPDF
         $models['client.address']   = $models['client']->address;
         $models['client.person']    = $models['client']->person;
         $models['currency']         = $title->currency;
+        $models['currency_code']    = Medools\ModelManager::getInstance(
+            BankI\Models\CurrencyCode::class,
+            [
+                'currency' => $models['currency']->id,
+                'bank' => $models['bank']->id
+            ]
+        );
         $models['guarantor']        = $title->guarantor;
         $models['guarantor.person'] = $models['guarantor']->person ?? null;
         $models['title']            = $title;
@@ -253,7 +261,7 @@ abstract class View extends FPDF
     {
         $barcode = [
             $this->models['bank']->code,
-            $this->models['currency']->febraban,
+            $this->models['currency_code']->billet,
             '', // Check digit
             $this->dueFactor(),
             BankI\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
