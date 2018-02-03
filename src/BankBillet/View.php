@@ -27,21 +27,29 @@ abstract class View extends FPDF
 {
     /**
      * Length used to zero-pad "Our Number"
+     *
+     * @const integer
      */
     const OUR_NUMBER_LENGTH = 8;
 
     /**
      * Length used to zero-pad the assignor's agency (WITHOUT the checkdigit)
+     *
+     * @const integer
      */
     const AGENCY_LENGTH = 4;
 
     /**
      * Length used to zero-pad the assignor's account (WITHOUT the checkdigit)
+     *
+     * @const integer
      */
     const ACCOUNT_LENGTH = 11;
 
     /**
      * Temporary way to set the document specie
+     *
+     * @const string
      */
     const SPECIE_DOC = '11';
 
