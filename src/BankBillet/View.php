@@ -650,11 +650,7 @@ abstract class View extends FPDF
             static::OUR_NUMBER_LENGTH
         );
 
-        $result = $our_number
-            . ($mask ? '-' : '')
-            . $this->checkDigitOurNumber();
-
-        return $result;
+        return $our_number . ($mask ? '-' : '') . $this->checkDigitOurNumber();
     }
 
     /*
