@@ -18,14 +18,8 @@ use aryelgois\BankInterchange as BankI;
  */
 class BancoDoNordeste extends CaixaEconomicaFederal
 {
-    /**
-     * Length used to zero-pad "Our Number"
-     */
     const OUR_NUMBER_LENGTH = 7;
 
-    /**
-     * Length used to zero-pad the account
-     */
     const ACCOUNT_LENGTH = 7;
 
     /**

@@ -19,11 +19,6 @@ use aryelgois\BankInterchange as BankI;
  */
 class Banese extends BankI\BankBillet\View
 {
-    /**
-     * Font presets of family, weight, size and color
-     *
-     * @const array[]
-     */
     const FONTS = [
         'digitable'  => ['Arial', 'B',  8, [ 0,  0,  0]],
         'digitable1' => ['Arial', 'B', 10, [ 0,  0,  0]],
@@ -34,18 +29,8 @@ class Banese extends BankI\BankBillet\View
         'footer'     => ['Arial', '',   9, [ 0,  0,  0]]
     ];
 
-    /**
-     * Size of dashes: black, white
-     *
-     * @const integer[]
-     */
     const DASH_STYLE = [0.625, 0.75];
 
-    /**
-     * Default line width for borders
-     *
-     * @const numeric
-     */
     const DEFAULT_LINE_WIDTH = 0.3;
 
     /**
