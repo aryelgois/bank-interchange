@@ -12,7 +12,7 @@ use aryelgois\BankInterchange as BankI;
 use FPDF;
 
 /**
- * Generates Bank Billets to be sent to clients/payers
+ * Generates Bank Billets to be sent to clients
  *
  * Extends FPDF by Olivier Plathey
  *
@@ -107,8 +107,8 @@ abstract class View extends FPDF
         'instructions'  => 'Instruções (Texto de responsabilidade do beneficiário)',
         'mech_auth'     => 'Autenticação mecânica',
         'our_number'    => 'Nosso número',
-        'payer'         => 'Pagador',
-        'payer_receipt' => 'Recibo do Pagador',
+        'client'        => 'Pagador',
+        'client_receipt' => 'Recibo do Pagador',
         'payment_place' => 'Local de pagamento',
         'currency'      => 'Espécie',
         'specie_doc'    => 'Espécie doc.',
