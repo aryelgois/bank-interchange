@@ -34,7 +34,7 @@ class Controller
      * Generates the Bank Billet from data in the Title
      *
      * @param mixed[]  $where \Medoo\Medoo $where clause for Models\Title
-     * @param string[] $data  Additional data for the view @see Views\BankBillet
+     * @param string[] $data  Additional data for the View
      * @param string   $logos Path to directory with logos
      */
     public function __construct($where, $data, $logos)

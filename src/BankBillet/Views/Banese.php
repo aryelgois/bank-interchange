@@ -11,7 +11,7 @@ use aryelgois\Utils\Validation;
 use aryelgois\BankInterchange as BankI;
 
 /**
- * Generates Bank Billets in Banese's layout
+ * Generates bank billets for Banese
  *
  * @author Aryel Mota Góis
  * @license MIT

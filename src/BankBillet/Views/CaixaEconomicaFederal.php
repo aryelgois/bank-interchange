@@ -10,7 +10,7 @@ namespace aryelgois\BankInterchange\BankBillet\Views;
 use aryelgois\BankInterchange as BankI;
 
 /**
- * Generates Bank Billets in Caixa Econômica Federal's layout
+ * Generates bank billets for Caixa Econômica Federal
  *
  * @author Aryel Mota Góis
  * @license MIT

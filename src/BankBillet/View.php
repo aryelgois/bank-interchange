@@ -17,7 +17,7 @@ use FPDF;
  *
  * Extends FPDF by Olivier Plathey
  *
- * NOTES:
+ * NOTE:
  * - Every occurency of '{{ total_pages }}' in the pdf will be replaced
  *
  * @author Aryel Mota Góis
@@ -277,7 +277,7 @@ abstract class View extends FPDF
     /**
      * Free space, defined by Bank.
      *
-     * Here: Our number . Agency/Assignor's code
+     * Here: Our number . Agency/Assignor
      */
     protected function generateFreeSpace()
     {

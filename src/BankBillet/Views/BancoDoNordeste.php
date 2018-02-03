@@ -10,7 +10,7 @@ namespace aryelgois\BankInterchange\BankBillet\Views;
 use aryelgois\BankInterchange as BankI;
 
 /**
- * Generates Bank Billets in banco do Nordeste's layout
+ * Generates bank billets for Banco do Nordeste
  *
  * @author Aryel Mota Góis
  * @license MIT
@@ -48,7 +48,7 @@ class BancoDoNordeste extends CaixaEconomicaFederal
     /**
      * Free space, defined by Bank.
      *
-     * Here: Agency/Assignor's code . Our number . Wallet operation . '000'
+     * Here: Agency/Assignor . Our number . Wallet operation . '000'
      */
     protected function generateFreeSpace()
     {
