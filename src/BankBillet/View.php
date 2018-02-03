@@ -137,7 +137,7 @@ abstract class View extends FPDF
     protected $logos;
 
     /**
-     * Contains quick references to $titles' foreign models
+     * Contains quick references to $title's foreign models
      *
      * @var Model[]
      */
@@ -166,17 +166,18 @@ abstract class View extends FPDF
         }
 
         $ref = [];
-        $ref['assignor']         = $title->assignor;
+        $ref['assignment']       = $title->assignment;
+        $ref['assignor']         = $ref['assignment']->assignor;
         $ref['assignor.person']  = $ref['assignor']->person;
         $ref['assignor.address'] = $ref['assignor']->address;
-        $ref['bank']             = $ref['assignor']->bank;
-        $ref['payer']            = $title->payer;
-        $ref['payer.person']     = $ref['payer']->person;
-        $ref['payer.address']    = $ref['payer']->address;
+        $ref['bank']             = $ref['assignment']->bank;
+        $ref['client']           = $title->client;
+        $ref['client.person']    = $ref['client']->person;
+        $ref['client.address']   = $ref['client']->address;
         $ref['guarantor']        = $title->guarantor;
         $ref['guarantor.person'] = $ref['guarantor']->person ?? null;
         $ref['currency']         = $title->currency;
-        $ref['wallet']           = $ref['assignor']->wallet;
+        $ref['wallet']           = $ref['assignment']->wallet;
         $this->ref = $ref;
 
         $this->beforeDraw();
