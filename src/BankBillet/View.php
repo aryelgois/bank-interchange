@@ -503,7 +503,7 @@ abstract class View extends FPDF
      */
 
     /**
-     * Formats Assignor's Agency/Account
+     * Formats Agency/Account
      *
      * @param boolean $symbol If shoud include symbols
      *
@@ -511,7 +511,7 @@ abstract class View extends FPDF
      */
     protected function formatAgencyAccount($symbol = true)
     {
-        return $this->models['assignor']->formatAgencyAccount(
+        return $this->models['assignment']->formatAgencyAccount(
             static::AGENCY_LENGTH,
             static::ACCOUNT_LENGTH,
             $symbol
