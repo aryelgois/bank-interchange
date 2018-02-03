@@ -55,10 +55,10 @@ class Banese extends BankI\BankBillet\View
      */
     protected function generateFreeSpace()
     {
-        $key = BankI\Utils::padNumber($this->ref['assignor']->agency, 2, true)
-            . BankI\Utils::padNumber($this->ref['assignor']->account, 9, true)
+        $key = BankI\Utils::padNumber($this->models['assignor']->agency, 2, true)
+            . BankI\Utils::padNumber($this->models['assignor']->account, 9, true)
             . $this->formatOurNumber(false)
-            . BankI\Utils::padNumber($this->ref['bank']->code, 3, true);
+            . BankI\Utils::padNumber($this->models['bank']->code, 3, true);
         $cd1 = Validation::mod10($key);
         $cd2 = Validation::mod11($key . $cd1, 7);
 
@@ -153,12 +153,12 @@ class Banese extends BankI\BankBillet\View
     protected function drawTable($big_cell = 'instructions')
     {
         $dict = $this->dictionary;
-        $title = $this->title;
-        $assignor = $this->ref['assignor'];
-        $assignor_person = $this->ref['assignor.person'];
-        $bank = $this->ref['bank'];
-        $payer_person = $this->ref['payer.person'];
-        $wallet = $this->ref['wallet'];
+        $title = $this->models['title'];
+        $assignor = $this->models['assignor'];
+        $assignor_person = $this->models['assignor.person'];
+        $bank = $this->models['bank'];
+        $payer_person = $this->models['payer.person'];
+        $wallet = $this->models['wallet'];
 
         $y = $this->GetY(); // get Y to come back and add the aside column
 
@@ -188,7 +188,7 @@ class Banese extends BankI\BankBillet\View
             [
                 ['w' =>  32,   'title' => $dict['bank_use'],      'data' => ''],                                            //$data['misc']['bank_use']
                 ['w' =>  16,   'title' => $dict['wallet'],        'data' => $wallet->symbol],
-                ['w' =>  11,   'title' => $dict['currency'],      'data' => $this->ref['currency']->symbol],
+                ['w' =>  11,   'title' => $dict['currency'],      'data' => $this->models['currency']->symbol],
                 ['w' =>  32,   'title' => $dict['amount'],        'data' => ''],                                            //$data['misc']['amount']
                 ['w' =>  36.2, 'title' => $dict['doc_value'],     'data' => '']                                             //$data['misc']['value_un']
             ]
@@ -254,7 +254,7 @@ class Banese extends BankI\BankBillet\View
         $this->Cell(10, 3.5, $dict['payer']);
         $this->SetXY($this->GetX() + 5, $y);
         $this->billetSetFont('cell_data');
-        $this->MultiCell(112.2, 3.5, utf8_decode($payer_person->name . "\n" . $this->ref['payer.address']->outputLong()));
+        $this->MultiCell(112.2, 3.5, utf8_decode($payer_person->name . "\n" . $this->models['payer.address']->outputLong()));
         $y1 = $this->GetY();
         $this->SetXY(119.2, $y);
         $this->Cell(36, 3.5, $payer_person->documentFormat(true), 0, 0, 'C');
@@ -262,9 +262,9 @@ class Banese extends BankI\BankBillet\View
 
         // Guarantor
 
-        $guarantor = ($this->ref['guarantor'] !== null)
-            ? $this->ref['guarantor.person']->name . '     '
-            . $this->ref['guarantor.address']->outputShort()
+        $guarantor = ($this->models['guarantor'] !== null)
+            ? $this->models['guarantor.person']->name . '     '
+            . $this->models['guarantor.address']->outputShort()
             : '';
         $this->billetSetFont('cell_title');
         $this->Cell(24, 3.5, $dict['guarantor']);
