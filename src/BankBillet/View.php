@@ -70,7 +70,7 @@ abstract class View extends FPDF
     /**
      * Default line width for borders
      *
-     * @const integer
+     * @const numeric
      */
     const DEFAULT_LINE_WIDTH = 0.2;
 

@@ -44,7 +44,7 @@ class Banese extends BankI\BankBillet\View
     /**
      * Default line width for borders
      *
-     * @const integer
+     * @const numeric
      */
     const DEFAULT_LINE_WIDTH = 0.3;
 
