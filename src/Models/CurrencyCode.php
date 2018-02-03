@@ -26,6 +26,7 @@ class CurrencyCode extends Medools\Model
     const COLUMNS = [
         'currency',
         'bank',
+        'billet',
         'cnab240',
         'cnab400',
     ];
