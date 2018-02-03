@@ -103,7 +103,7 @@ class Banese extends BankI\BankBillet\View
             'bank_use', 'charged', 'date_due', 'date_document', 'date_process',
             'deduction', 'demonstrative', 'discount', 'doc_number_sh',
             'doc_value', 'doc_value=', 'fine', 'guarantor', 'instructions',
-            'mech_auth', 'our_number', 'payer', 'payment_place', 'currency',
+            'mech_auth', 'our_number', 'client', 'payment_place', 'currency',
             'specie_doc', 'wallet'
         ];
         foreach ($keys as $key) {
@@ -117,7 +117,7 @@ class Banese extends BankI\BankBillet\View
         $this->drawPageHeader();
 
         $this->billetSetFont('cell_data');
-        $this->drawDash($dict['payer_receipt']);
+        $this->drawDash($dict['client_receipt']);
 
         $this->drawBillhead();
 
@@ -157,7 +157,7 @@ class Banese extends BankI\BankBillet\View
         $assignor = $this->models['assignor'];
         $assignor_person = $this->models['assignor.person'];
         $bank = $this->models['bank'];
-        $payer_person = $this->models['payer.person'];
+        $client_person = $this->models['client.person'];
         $wallet = $this->models['wallet'];
 
         $y = $this->GetY(); // get Y to come back and add the aside column
@@ -169,7 +169,7 @@ class Banese extends BankI\BankBillet\View
          * Assignor
          * Document Date | Document number | Document specie | Accept | Processing Date
          * Bank's use | Wallet | Currency | Amount | Document value UN
-         * Payer
+         * Client
          */
         $table = [
             [
@@ -248,16 +248,16 @@ class Banese extends BankI\BankBillet\View
             $this->SetY($y3);
         }
 
-        // Payer
+        // Client
         $y = $this->GetY();
         $this->billetSetFont('cell_title');
-        $this->Cell(10, 3.5, $dict['payer']);
+        $this->Cell(10, 3.5, $dict['client']);
         $this->SetXY($this->GetX() + 5, $y);
         $this->billetSetFont('cell_data');
-        $this->MultiCell(112.2, 3.5, utf8_decode($payer_person->name . "\n" . $this->models['payer.address']->outputLong()));
+        $this->MultiCell(112.2, 3.5, utf8_decode($client_person->name . "\n" . $this->models['client.address']->outputLong()));
         $y1 = $this->GetY();
         $this->SetXY(119.2, $y);
-        $this->Cell(36, 3.5, $payer_person->documentFormat(true), 0, 0, 'C');
+        $this->Cell(36, 3.5, $client_person->documentFormat(true), 0, 0, 'C');
         $this->setY($y1);
 
         // Guarantor
@@ -273,7 +273,7 @@ class Banese extends BankI\BankBillet\View
         $x = $this->GetX();
         $y1 = $this->GetY();
 
-        // Payer / Guarantor border
+        // Client / Guarantor border
         $this->Line($x, $y, $x, $y1);
         $this->Line($x, $y1, 187, $y1);
         $this->Line(187, $y, 187, $y1);
