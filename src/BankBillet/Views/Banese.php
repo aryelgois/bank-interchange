@@ -55,8 +55,8 @@ class Banese extends BankI\BankBillet\View
      */
     protected function generateFreeSpace()
     {
-        $key = BankI\Utils::padNumber($this->models['assignor']->agency, 2, true)
-            . BankI\Utils::padNumber($this->models['assignor']->account, 9, true)
+        $key = BankI\Utils::padNumber($this->models['assignment']->agency, 2, true)
+            . BankI\Utils::padNumber($this->models['assignment']->account, 9, true)
             . $this->formatOurNumber(false)
             . BankI\Utils::padNumber($this->models['bank']->code, 3, true);
         $cd1 = Validation::mod10($key);

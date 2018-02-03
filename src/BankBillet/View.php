@@ -215,7 +215,7 @@ abstract class View extends FPDF
      */
     protected function checkDigitOurNumber()
     {
-        $our_number = BankI\Utils::padNumber($this->models['assignor']->agency, 3)
+        $our_number = BankI\Utils::padNumber($this->models['assignment']->agency, 3)
             . BankI\Utils::padNumber($this->models['title']->our_number, 8);
 
         return $this->models['title']->checkDigitOurNumberAlgorithm($our_number);
