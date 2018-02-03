@@ -57,7 +57,7 @@ class Banese extends BankI\BankBillet\View
     {
         $key = BankI\Utils::padNumber($this->models['assignment']->agency, 2, true)
             . BankI\Utils::padNumber($this->models['assignment']->account, 9, true)
-            . $this->formatOurNumber(false)
+            . $this->formatOurNumber()
             . BankI\Utils::padNumber($this->models['bank']->code, 3, true);
         $cd1 = Validation::mod10($key);
         $cd2 = Validation::mod11($key . $cd1, 7);
@@ -228,7 +228,7 @@ class Banese extends BankI\BankBillet\View
         $table = [
             ['title' => $dict['date_due'],    'data' => self::formatDate($title->due),       'data_align' => 'R'],
             ['title' => $dict['agency_code'], 'data' => $this->formatAgencyAccount(),               'data_align' => 'R'],
-            ['title' => $dict['our_number'],  'data' => $this->formatOurNumber(),                   'data_align' => 'R'],
+            ['title' => $dict['our_number'],  'data' => $this->formatOurNumber(true),               'data_align' => 'R'],
             ['title' => $dict['doc_value='],  'data' => $this->formatMoney($this->billet['value']), 'data_align' => 'R'],
             ['title' => $dict['discount'],    'data' => '',                                         'data_align' => 'R'], //$data['misc']['discount']
             ['title' => $dict['deduction'],   'data' => '',                                         'data_align' => 'R'], //$data['misc']['deduction']

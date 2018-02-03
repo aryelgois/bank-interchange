@@ -281,7 +281,7 @@ abstract class View extends FPDF
      */
     protected function generateFreeSpace()
     {
-        return $this->formatOurNumber(false) . $this->formatAgencyAccount(false);
+        return $this->formatOurNumber() . $this->formatAgencyAccount(false);
     }
 
     /*
@@ -639,11 +639,11 @@ abstract class View extends FPDF
     /**
      * Calculates Our number's check digit and formats it
      *
-     * @param boolean $dash If should add a dash between number and check digit
+     * @param boolean $mask If should add a dash between number and check digit
      *
      * @return string
      */
-    protected function formatOurNumber($dash = true)
+    protected function formatOurNumber($mask = false)
     {
         $our_number = BankI\Utils::padNumber(
             $this->models['title']->our_number,
@@ -651,7 +651,7 @@ abstract class View extends FPDF
         );
 
         $result = $our_number
-            . ($dash ? '-' : '')
+            . ($mask ? '-' : '')
             . $this->checkDigitOurNumber();
 
         return $result;
