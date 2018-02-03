@@ -41,7 +41,7 @@ class Controller
     {
         $title = new BankI\Models\Title($where);
 
-        $bank = $title->assignor->bank;
+        $bank = $title->assignment->bank;
 
         $view_class = '\\aryelgois\\BankInterchange\\Views\\BankBillets\\'
             . $bank->view;
