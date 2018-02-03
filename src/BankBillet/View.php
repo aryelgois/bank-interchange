@@ -116,13 +116,6 @@ abstract class View extends FPDF
     ];
 
     /**
-     * Holds data from database and manipulates some tables
-     *
-     * @var Models\Title
-     */
-    protected $title;
-
-    /**
      * Contains extra data for the billet
      *
      * @var string[]
@@ -159,7 +152,6 @@ abstract class View extends FPDF
         $this->AliasNbPages('{{ total_pages }}');
         $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
 
-        $this->title = $title;
         $this->billet = $data;
         if (file_exists($logos) && is_dir($logos)) {
             $this->logos = realpath($logos);
