@@ -177,6 +177,7 @@ abstract class View extends FPDF
         $ref['currency']         = $title->currency;
         $ref['guarantor']        = $title->guarantor;
         $ref['guarantor.person'] = $ref['guarantor']->person ?? null;
+        $ref['title']            = $title;
         $ref['wallet']           = $ref['assignment']->wallet;
         $this->ref = $ref;
 
