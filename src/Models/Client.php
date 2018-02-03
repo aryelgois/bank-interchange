@@ -34,7 +34,7 @@ class Client extends Medools\Model
             'id'
         ],
         'address' => [
-            'aryelgois\\Databases\\Models\\Address\\FullAddress',
+            __NAMESPACE__ . '\\FullAddress',
             'id'
         ],
         'assignor' => [

@@ -12,10 +12,10 @@ INSERT INTO `banks` (`id`, `code`, `name`, `view`, `logo`, `tax`) VALUES
 INSERT INTO `currencies` (`id`, `symbol`, `name`, `name_plural`, `decimals`, `thousand`, `decimal`) VALUES
 (1, 'R$', 'Real', 'Reais', 2, '', ',');
 
-INSERT INTO `currency_codes` (`currency`, `bank`, `cnab240`, `cnab400`) VALUES
-(1, 1, '09', '?'),
-(1, 2, '09', '1'),
-(1, 3, '??', '0');
+INSERT INTO `currency_codes` (`currency`, `bank`, `billet`, `cnab240`, `cnab400`) VALUES
+(1, 1, '9', '09', '?'),
+(1, 2, '9', '09', '1'),
+(1, 3, '9', '??', '0');
 
 -- Wallets
 -- TODO verify data

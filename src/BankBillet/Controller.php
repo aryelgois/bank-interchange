@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Controllers;
+namespace aryelgois\BankInterchange\BankBillet;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange as BankI;
@@ -19,7 +19,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class BankBillet
+class Controller
 {
     /**
      * Holds the FPDF object with the bank billet
@@ -34,17 +34,16 @@ class BankBillet
      * Generates the Bank Billet from data in the Title
      *
      * @param mixed[]  $where \Medoo\Medoo $where clause for Models\Title
-     * @param string[] $data  Additional data for the view @see Views\BankBillet
+     * @param string[] $data  Additional data for the View
      * @param string   $logos Path to directory with logos
      */
     public function __construct($where, $data, $logos)
     {
         $title = new BankI\Models\Title($where);
 
-        $bank = $title->assignor->bank;
+        $bank = $title->assignment->bank;
 
-        $view_class = '\\aryelgois\\BankInterchange\\Views\\BankBillets\\'
-            . $bank->view;
+        $view_class = __NAMESPACE__ . '\\Views\\' . $bank->view;
 
         $this->view = new $view_class($title, $data, $logos);
     }

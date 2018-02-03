@@ -5,18 +5,18 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views\BankBillets;
+namespace aryelgois\BankInterchange\BankBillet\Views;
 
 use aryelgois\BankInterchange as BankI;
 
 /**
- * Generates Bank Billets in Caixa Econômica Federal's layout
+ * Generates bank billets for Caixa Econômica Federal
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class CaixaEconomicaFederal extends BankI\Views\BankBillet
+class CaixaEconomicaFederal extends BankI\BankBillet\View
 {
     /**
      * Procedurally draws the bank billet using FPDF methods
@@ -30,7 +30,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
         $this->drawPageHeader();
 
         $this->billetSetFont('cell_data');
-        $this->drawDash($dict['payer_receipt']);
+        $this->drawDash($dict['client_receipt']);
 
         $this->drawBillhead();
 
@@ -52,7 +52,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
     }
 
     /**
-     * Table 1, stays with the Payer
+     * Table 1, stays with the Client
      *
      * NOTES:
      * - '{{ tax }}' is replaced by the money-formated tax in the demonstrative
@@ -60,12 +60,12 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
     protected function drawTable1()
     {
         $dict = $this->dictionary;
-        $title = $this->title;
-        $assignor = $this->ref['assignor'];
-        $assignor_person = $this->ref['assignor.person'];
-        $bank = $this->ref['bank'];
-        $payer_person = $this->ref['payer.person'];
-        $wallet = $this->ref['wallet'];
+        $title = $this->models['title'];
+        $assignor = $this->models['assignor'];
+        $assignor_person = $this->models['assignor.person'];
+        $bank = $this->models['bank'];
+        $client_person = $this->models['client.person'];
+        $wallet = $this->models['wallet'];
 
         /*
          * Structure:
@@ -73,15 +73,15 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
          * Assignor | Agency/Assignor's code | Currency | Amount | Our number
          * Document number | CPF/CNPJ | Due | Document value
          * (-) Discount/Rebates | (-) Other deductions | (+) "Mora"/Fine | (+) Other additions | (=) Amount charged
-         * Payer
+         * Client
          */
         $table = [
             [
                 ['w' =>  80.8, 'title' => $dict['assignor'],      'data' => $assignor_person->name],
-                ['w' =>  35.4, 'title' => $dict['agency_code'],   'data' => $this->formatAgencyAccount()],
-                ['w' =>  11,   'title' => $dict['currency'],      'data' => $this->ref['currency']->symbol],
+                ['w' =>  35.4, 'title' => $dict['agency_code'],   'data' => $this->formatAgencyAccount(true)],
+                ['w' =>  11,   'title' => $dict['currency'],      'data' => $this->models['currency']->symbol],
                 ['w' =>  16,   'title' => $dict['amount'],        'data' => ''],                                          // $data['misc']['amount']
-                ['w' =>  33.8, 'title' => $dict['our_number'],    'data' => $this->formatOurNumber(),                   'data_align' => 'R']
+                ['w' =>  33.8, 'title' => $dict['our_number'],    'data' => $this->formatOurNumber(true),                   'data_align' => 'R']
             ],
             [
                 ['w' =>  52.8, 'title' => $dict['doc_number'],    'data' => BankI\Utils::padNumber($title->id, 10)],
@@ -97,7 +97,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
                 ['w' =>  49.8, 'title' => $dict['charged'],       'data' => '',                                         'data_align' => 'R']  //$data['misc']['charged']
             ],
             [
-                ['w' => 177,   'title' => $dict['payer'],         'data' => $payer_person->name]
+                ['w' => 177,   'title' => $dict['client'],        'data' => $client_person->name]
             ]
         ];
         foreach ($table as $row) {
@@ -125,12 +125,12 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
     protected function drawTable2()
     {
         $dict = $this->dictionary;
-        $title = $this->title;
-        $assignor = $this->ref['assignor'];
-        $assignor_person = $this->ref['assignor.person'];
-        $bank = $this->ref['bank'];
-        $payer_person = $this->ref['payer.person'];
-        $wallet = $this->ref['wallet'];
+        $title = $this->models['title'];
+        $assignor = $this->models['assignor'];
+        $assignor_person = $this->models['assignor.person'];
+        $bank = $this->models['bank'];
+        $client_person = $this->models['client.person'];
+        $wallet = $this->models['wallet'];
 
         $y = $this->GetY(); // get Y to come back and add the aside column
 
@@ -159,7 +159,7 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
             [
                 ['w' =>  32,   'title' => $dict['bank_use'],      'data' => ''],                                          //$data['misc']['bank_use']
                 ['w' =>  24,   'title' => $dict['wallet'],        'data' => $wallet->symbol],
-                ['w' =>  16,   'title' => $dict['currency'],      'data' => $this->ref['currency']->symbol],
+                ['w' =>  16,   'title' => $dict['currency'],      'data' => $this->models['currency']->symbol],
                 ['w' =>  34.2, 'title' => $dict['amount'],        'data' => ''],                                          //$data['misc']['amount']
                 ['w' =>  21,   'title' => $dict['doc_value'],     'data' => '']                                           //$data['misc']['value_un']
             ]
@@ -194,8 +194,8 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
         $this->SetY($y);
         $table = [
             ['title' => $dict['date_due'],    'data' => self::formatDate($title->due),       'data_align' => 'R'],
-            ['title' => $dict['agency_code'], 'data' => $this->formatAgencyAccount(),               'data_align' => 'R'],
-            ['title' => $dict['our_number'],  'data' => $this->formatOurNumber(),                   'data_align' => 'R'],
+            ['title' => $dict['agency_code'], 'data' => $this->formatAgencyAccount(true),           'data_align' => 'R'],
+            ['title' => $dict['our_number'],  'data' => $this->formatOurNumber(true),               'data_align' => 'R'],
             ['title' => $dict['doc_value='],  'data' => $this->formatMoney($this->billet['value']), 'data_align' => 'R'],
             ['title' => $dict['discount'],    'data' => '',                                         'data_align' => 'R'], //$data['misc']['discount']
             ['title' => $dict['deduction'],   'data' => '',                                         'data_align' => 'R'], //$data['misc']['deduction']
@@ -215,11 +215,11 @@ class CaixaEconomicaFederal extends BankI\Views\BankBillet
             $this->SetY($y3);
         }
 
-        // Payer
+        // Client
         $this->billetSetFont('cell_title');
-        $this->Cell(127.2, 7, $dict['payer'], 'L', 1);
+        $this->Cell(127.2, 7, $dict['client'], 'L', 1);
         $this->billetSetFont('cell_data');
-        $this->MultiCell(127.2, 3.5, utf8_decode($payer_person->name . "\n" . $this->ref['payer.address']->outputLong()), 'LB');
+        $this->MultiCell(127.2, 3.5, utf8_decode($client_person->name . "\n" . $this->models['client.address']->outputLong()), 'LB');
         $this->SetXY(137.2, $this->GetY() - 3.5);
         $this->billetSetFont('cell_title');
         $this->Cell(49.8, 3.5, utf8_decode($dict['cod_down']), 'LB', 1);

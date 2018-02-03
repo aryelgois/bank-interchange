@@ -5,12 +5,12 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views\BankBillets;
+namespace aryelgois\BankInterchange\BankBillet\Views;
 
 use aryelgois\BankInterchange as BankI;
 
 /**
- * Generates Bank Billets in banco do Nordeste's layout
+ * Generates bank billets for Banco do Nordeste
  *
  * @author Aryel Mota Góis
  * @license MIT
@@ -18,14 +18,8 @@ use aryelgois\BankInterchange as BankI;
  */
 class BancoDoNordeste extends CaixaEconomicaFederal
 {
-    /**
-     * Length used to zero-pad "Our Number"
-     */
     const OUR_NUMBER_LENGTH = 7;
 
-    /**
-     * Length used to zero-pad the account
-     */
     const ACCOUNT_LENGTH = 7;
 
     /**
@@ -40,20 +34,20 @@ class BancoDoNordeste extends CaixaEconomicaFederal
      */
     protected function checkDigitOurNumber()
     {
-        $our_number = BankI\Utils::padNumber($this->title->our_number, 7);
+        $our_number = BankI\Utils::padNumber($this->models['title']->our_number, 7);
 
-        return $this->title->checkDigitOurNumberAlgorithm($our_number, 8);
+        return $this->models['title']->checkDigitOurNumberAlgorithm($our_number, 8);
     }
 
     /**
      * Free space, defined by Bank.
      *
-     * Here: Agency/Assignor's code . Our number . Wallet operation . '000'
+     * Here: Agency/Assignor . Our number . Wallet operation . '000'
      */
     protected function generateFreeSpace()
     {
-        $result = $this->formatAgencyAccount(false)
-            . $this->formatOurNumber(false)
+        $result = $this->formatAgencyAccount()
+            . $this->formatOurNumber()
             . '21'
             . '000';
         return $result;
@@ -66,7 +60,7 @@ class BancoDoNordeste extends CaixaEconomicaFederal
      */
     protected function beforeDraw()
     {
-        $this->ref['wallet']->symbol = $this->ref['wallet']->operation;
+        $this->models['wallet']->symbol = $this->models['wallet']->operation;
         parent::beforeDraw();
     }
 }

@@ -5,43 +5,52 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views;
+namespace aryelgois\BankInterchange\BankBillet;
 
 use aryelgois\Utils;
+use aryelgois\Medools;
 use aryelgois\BankInterchange as BankI;
 use FPDF;
 
 /**
- * Generates Bank Billets to be sent to clients/payers
+ * Generates Bank Billets to be sent to clients
  *
  * Extends FPDF by Olivier Plathey
  *
- * NOTES:
+ * NOTE:
  * - Every occurency of '{{ total_pages }}' in the pdf will be replaced
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-abstract class BankBillet extends FPDF
+abstract class View extends FPDF
 {
     /**
      * Length used to zero-pad "Our Number"
+     *
+     * @const integer
      */
     const OUR_NUMBER_LENGTH = 8;
 
     /**
      * Length used to zero-pad the assignor's agency (WITHOUT the checkdigit)
+     *
+     * @const integer
      */
     const AGENCY_LENGTH = 4;
 
     /**
      * Length used to zero-pad the assignor's account (WITHOUT the checkdigit)
+     *
+     * @const integer
      */
     const ACCOUNT_LENGTH = 11;
 
     /**
      * Temporary way to set the document specie
+     *
+     * @const string
      */
     const SPECIE_DOC = '11';
 
@@ -70,7 +79,7 @@ abstract class BankBillet extends FPDF
     /**
      * Default line width for borders
      *
-     * @const integer
+     * @const numeric
      */
     const DEFAULT_LINE_WIDTH = 0.2;
 
@@ -80,47 +89,40 @@ abstract class BankBillet extends FPDF
      * @var string[]
      */
     protected $dictionary = [
-        'accept'        => 'Aceite',
-        'addition'      => '(+) Outros acréscimos',
-        'agency_code'   => 'Agência/Código do Beneficiário',
-        'amount'        => 'Quantidade',
-        'assignor'      => 'Beneficiário',
-        'bank_use'      => 'Uso do banco',
-        'charged'       => '(=) Valor cobrado',
-        'cod_down'      => 'Cód. baixa',
-        'compensation'  => 'Ficha de Compensação',
-        'cpf_cnpj'      => 'CPF/CNPJ',
-        'cut_here'      => 'Corte na linha pontilhada',
-        'date_due'      => 'Vencimento',
-        'date_document' => 'Data do documento',
-        'date_process'  => 'Data processameto',
-        'deduction'     => '(-) Outras deduções',
-        'demonstrative' => 'Demonstrativo',
-        'discount'      => '(-) Desconto / Abatimentos',
-        'doc_number'    => 'Número do documento',
-        'doc_number_sh' => 'Nº documento',
-        'doc_value'     => 'Valor documento',
-        'doc_value='    => '(=) Valor documento',
-        'fine'          => '(+) Mora / Multa',
-        'guarantor'     => 'Sacador/Avalista',
-        'header_info'   => "    Linha Digitável:  %s\n    Valor:   %s",
-        'instructions'  => 'Instruções (Texto de responsabilidade do beneficiário)',
-        'mech_auth'     => 'Autenticação mecânica',
-        'our_number'    => 'Nosso número',
-        'payer'         => 'Pagador',
-        'payer_receipt' => 'Recibo do Pagador',
-        'payment_place' => 'Local de pagamento',
-        'currency'      => 'Espécie',
-        'specie_doc'    => 'Espécie doc.',
-        'wallet'        => 'Carteira'
+        'accept'         => 'Aceite',
+        'addition'       => '(+) Outros acréscimos',
+        'agency_code'    => 'Agência/Código do Beneficiário',
+        'amount'         => 'Quantidade',
+        'assignor'       => 'Beneficiário',
+        'bank_use'       => 'Uso do banco',
+        'charged'        => '(=) Valor cobrado',
+        'cod_down'       => 'Cód. baixa',
+        'compensation'   => 'Ficha de Compensação',
+        'cpf_cnpj'       => 'CPF/CNPJ',
+        'cut_here'       => 'Corte na linha pontilhada',
+        'date_due'       => 'Vencimento',
+        'date_document'  => 'Data do documento',
+        'date_process'   => 'Data processameto',
+        'deduction'      => '(-) Outras deduções',
+        'demonstrative'  => 'Demonstrativo',
+        'discount'       => '(-) Desconto / Abatimentos',
+        'doc_number'     => 'Número do documento',
+        'doc_number_sh'  => 'Nº documento',
+        'doc_value'      => 'Valor documento',
+        'doc_value='     => '(=) Valor documento',
+        'fine'           => '(+) Mora / Multa',
+        'guarantor'      => 'Sacador/Avalista',
+        'header_info'    => "    Linha Digitável:  %s\n    Valor:   %s",
+        'instructions'   => 'Instruções (Texto de responsabilidade do beneficiário)',
+        'mech_auth'      => 'Autenticação mecânica',
+        'our_number'     => 'Nosso número',
+        'client'         => 'Pagador',
+        'client_receipt' => 'Recibo do Pagador',
+        'payment_place'  => 'Local de pagamento',
+        'currency'       => 'Espécie',
+        'specie_doc'     => 'Espécie doc.',
+        'wallet'         => 'Carteira'
     ];
-
-    /**
-     * Holds data from database and manipulates some tables
-     *
-     * @var Models\Title
-     */
-    protected $title;
 
     /**
      * Contains extra data for the billet
@@ -137,11 +139,11 @@ abstract class BankBillet extends FPDF
     protected $logos;
 
     /**
-     * Contains quick references to $titles' foreign models
+     * Holds model instances from different tables
      *
-     * @var Model[]
+     * @var Medools\Model[]
      */
-    protected $ref = [];
+    protected $models = [];
 
     /**
      * Creates a new Billet View object
@@ -155,30 +157,37 @@ abstract class BankBillet extends FPDF
         $data,
         $logos
     ) {
-        parent::__construct();
-        $this->AliasNbPages('{{ total_pages }}');
-        $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
-
-        $this->title = $title;
         $this->billet = $data;
         if (file_exists($logos) && is_dir($logos)) {
             $this->logos = realpath($logos);
         }
 
-        $ref = [];
-        $ref['assignor']         = $title->assignor;
-        $ref['assignor.person']  = $ref['assignor']->person;
-        $ref['assignor.address'] = $ref['assignor']->address;
-        $ref['bank']             = $ref['assignor']->bank;
-        $ref['payer']            = $title->payer;
-        $ref['payer.person']     = $ref['payer']->person;
-        $ref['payer.address']    = $ref['payer']->address;
-        $ref['guarantor']        = $title->guarantor;
-        $ref['guarantor.person'] = $ref['guarantor']->person ?? null;
-        $ref['currency']         = $title->currency;
-        $ref['wallet']           = $ref['assignor']->wallet;
-        $this->ref = $ref;
+        $models = [];
+        $models['assignment']       = $title->assignment;
+        $models['assignor']         = $models['assignment']->assignor;
+        $models['assignor.address'] = $models['assignor']->address;
+        $models['assignor.person']  = $models['assignor']->person;
+        $models['bank']             = $models['assignment']->bank;
+        $models['client']           = $title->client;
+        $models['client.address']   = $models['client']->address;
+        $models['client.person']    = $models['client']->person;
+        $models['currency']         = $title->currency;
+        $models['currency_code']    = Medools\ModelManager::getInstance(
+            BankI\Models\CurrencyCode::class,
+            [
+                'currency' => $models['currency']->id,
+                'bank' => $models['bank']->id
+            ]
+        );
+        $models['guarantor']        = $title->guarantor;
+        $models['guarantor.person'] = $models['guarantor']->person ?? null;
+        $models['title']            = $title;
+        $models['wallet']           = $models['assignment']->wallet;
+        $this->models = $models;
 
+        parent::__construct();
+        $this->AliasNbPages('{{ total_pages }}');
+        $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
         $this->beforeDraw();
         $this->drawBillet();
     }
@@ -193,7 +202,7 @@ abstract class BankBillet extends FPDF
      */
     protected function beforeDraw()
     {
-        $value = $this->title->value + $this->ref['bank']->tax;
+        $value = $this->models['title']->value + $this->models['bank']->tax;
         $this->billet['value'] = (float) $value;
 
         $this->generateBarcode();
@@ -206,10 +215,10 @@ abstract class BankBillet extends FPDF
      */
     protected function checkDigitOurNumber()
     {
-        $our_number = BankI\Utils::padNumber($this->ref['assignor']->agency, 3)
-            . BankI\Utils::padNumber($this->title->our_number, 8);
+        $our_number = BankI\Utils::padNumber($this->models['assignment']->agency, 3)
+            . BankI\Utils::padNumber($this->models['title']->our_number, 8);
 
-        return $this->title->checkDigitOurNumberAlgorithm($our_number);
+        return $this->models['title']->checkDigitOurNumberAlgorithm($our_number);
     }
 
     /**
@@ -236,7 +245,7 @@ abstract class BankBillet extends FPDF
      */
     protected function dueFactor()
     {
-        $date = \DateTime::createFromFormat('Y-m-d', $this->title->due);
+        $date = \DateTime::createFromFormat('Y-m-d', $this->models['title']->due);
         $epoch = new \DateTime('1997-10-07');
         if ($date && $date > $epoch) {
             $diff = substr($date->diff($epoch)->format('%a'), -4);
@@ -251,8 +260,8 @@ abstract class BankBillet extends FPDF
     protected function generateBarcode()
     {
         $barcode = [
-            $this->ref['bank']->code,
-            $this->ref['currency']->febraban,
+            $this->models['bank']->code,
+            $this->models['currency_code']->billet,
             '', // Check digit
             $this->dueFactor(),
             BankI\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
@@ -268,11 +277,11 @@ abstract class BankBillet extends FPDF
     /**
      * Free space, defined by Bank.
      *
-     * Here: Our number . Agency/Assignor's code
+     * Here: Our number . Agency/Assignor
      */
     protected function generateFreeSpace()
     {
-        return $this->formatOurNumber(false) . $this->formatAgencyAccount(false);
+        return $this->formatOurNumber() . $this->formatAgencyAccount();
     }
 
     /*
@@ -312,16 +321,16 @@ abstract class BankBillet extends FPDF
         $this->Ln(2);
         $logo = $this->logos
             . '/assignors/'
-            . $this->ref['assignor']->logo;
+            . $this->models['assignor']->logo;
 
         if ($this->logos !== null && is_file($logo)) {
             $y = $this->GetY();
-            $this->Image($logo, null, null, 40, 0, '', $this->ref['assignor']->url);
+            $this->Image($logo, null, null, 40, 0, '', $this->models['assignor']->url);
             $y1 = $this->GetY();
             $this->SetXY(50, $y);
         }
         $this->billetSetFont('billhead');
-        $this->MultiCell(103.2, 2.5, utf8_decode($this->ref['assignor.person']->name . "\n" . $this->ref['assignor.person']->documentFormat() . "\n" . $this->ref['assignor.address']->outputLong()));
+        $this->MultiCell(103.2, 2.5, utf8_decode($this->models['assignor.person']->name . "\n" . $this->models['assignor.person']->documentFormat() . "\n" . $this->models['assignor.address']->outputLong()));
         $this->SetY(max($y1 ?? 0, $this->GetY()));
     }
 
@@ -366,7 +375,7 @@ abstract class BankBillet extends FPDF
         $digitable_align = 'R',
         $line_width_factor = 2
     ) {
-        $bank = $this->ref['bank'];
+        $bank = $this->models['bank'];
         $logo = $this->logos . '/banks/' . $bank->logo;
 
         $this->Ln(3);
@@ -494,15 +503,15 @@ abstract class BankBillet extends FPDF
      */
 
     /**
-     * Formats Assignor's Agency/Account
+     * Formats Agency/Account
      *
      * @param boolean $symbol If shoud include symbols
      *
      * @return string
      */
-    protected function formatAgencyAccount($symbol = true)
+    protected function formatAgencyAccount($symbol = false)
     {
-        return $this->ref['assignor']->formatAgencyAccount(
+        return $this->models['assignment']->formatAgencyAccount(
             static::AGENCY_LENGTH,
             static::ACCOUNT_LENGTH,
             $symbol
@@ -516,7 +525,7 @@ abstract class BankBillet extends FPDF
      */
     protected function formatBankCode()
     {
-        $code = $this->ref['bank']->code;
+        $code = $this->models['bank']->code;
 
         $checksum = Utils\Validation::mod11Pre($code);
         $digit = $checksum * 10 % 11;
@@ -624,28 +633,24 @@ abstract class BankBillet extends FPDF
      */
     protected function formatMoney($value, $format = 'symbol')
     {
-        return $this->ref['currency']->format($value, $format);
+        return $this->models['currency']->format($value, $format);
     }
 
     /**
      * Calculates Our number's check digit and formats it
      *
-     * @param boolean $dash If should add a dash between number and check digit
+     * @param boolean $mask If should add a dash between number and check digit
      *
      * @return string
      */
-    protected function formatOurNumber($dash = true)
+    protected function formatOurNumber($mask = false)
     {
         $our_number = BankI\Utils::padNumber(
-            $this->title->our_number,
+            $this->models['title']->our_number,
             static::OUR_NUMBER_LENGTH
         );
 
-        $result = $our_number
-            . ($dash ? '-' : '')
-            . $this->checkDigitOurNumber();
-
-        return $result;
+        return $our_number . ($mask ? '-' : '') . $this->checkDigitOurNumber();
     }
 
     /*
