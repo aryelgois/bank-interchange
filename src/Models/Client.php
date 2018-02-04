@@ -7,7 +7,6 @@
 
 namespace aryelgois\BankInterchange\Models;
 
-use aryelgois\BankInterchange as BankI;
 use aryelgois\Medools;
 
 /**

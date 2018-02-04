@@ -7,7 +7,7 @@
 
 namespace aryelgois\BankInterchange\BankBillet\Views;
 
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 
 /**
  * Generates bank billets for Caixa Econômica Federal
@@ -16,7 +16,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class CaixaEconomicaFederal extends BankI\BankBillet\View
+class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
 {
     /**
      * Procedurally draws the bank billet using FPDF methods
@@ -84,7 +84,7 @@ class CaixaEconomicaFederal extends BankI\BankBillet\View
                 ['w' =>  33.8, 'title' => $dict['our_number'],    'data' => $this->formatOurNumber(true),                   'data_align' => 'R']
             ],
             [
-                ['w' =>  52.8, 'title' => $dict['doc_number'],    'data' => BankI\Utils::padNumber($title->id, 10)],
+                ['w' =>  52.8, 'title' => $dict['doc_number'],    'data' => BankInterchange\Utils::padNumber($title->id, 10)],
                 ['w' =>  37,   'title' => $dict['cpf_cnpj'],      'data' => $assignor_person->documentFormat()],
                 ['w' =>  37.4, 'title' => $dict['date_due'],      'data' => self::formatDate($title->due)],
                 ['w' =>  49.8, 'title' => $dict['doc_value'],     'data' => $this->formatMoney($this->billet['value']), 'data_align' => 'R']
@@ -151,7 +151,7 @@ class CaixaEconomicaFederal extends BankI\BankBillet\View
             ],
             [
                 ['w' =>  32,   'title' => $dict['date_document'], 'data' => self::formatDate($title->stamp)],
-                ['w' =>  42.2, 'title' => $dict['doc_number_sh'], 'data' => BankI\Utils::padNumber($title->id, 10)],
+                ['w' =>  42.2, 'title' => $dict['doc_number_sh'], 'data' => BankInterchange\Utils::padNumber($title->id, 10)],
                 ['w' =>  18,   'title' => $dict['specie_doc'],    'data' => static::SPECIE_DOC],                          //$data['misc']['specie_doc']
                 ['w' =>  11,   'title' => $dict['accept'],        'data' => ''],                                          //$data['misc']['accept']
                 ['w' =>  24,   'title' => $dict['date_process'],  'data' => date('d/m/Y')]

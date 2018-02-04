@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\BankBillet;
 
 use aryelgois\Utils;
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 
 /**
  * Controller class for Bank Billets
@@ -39,7 +39,7 @@ class Controller
      */
     public function __construct($where, $data, $logos)
     {
-        $title = new BankI\Models\Title($where);
+        $title = new BankInterchange\Models\Title($where);
 
         $bank = $title->assignment->bank;
 

@@ -9,7 +9,7 @@ namespace aryelgois\BankInterchange\Views;
 
 use aryelgois\Utils;
 use aryelgois\Medools;
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 use VRia\Utils\NoDiacritic;
 
 /**
@@ -62,11 +62,11 @@ abstract class Cnab
      * @param Models\ShippingFile $shipping_file A Shipping File whose Titles
      *                                           will be used
      */
-    public function __construct(BankI\Models\ShippingFile $shipping_file)
+    public function __construct(BankInterchange\Models\ShippingFile $shipping_file)
     {
         $this->shipping_file = $shipping_file;
 
-        $title_list = BankI\Models\ShippingFileTitle::dump([
+        $title_list = BankInterchange\Models\ShippingFileTitle::dump([
             'shipping_file' => $shipping_file->id
         ]);
         $title_list = array_column($title_list, 'title');
@@ -137,7 +137,7 @@ abstract class Cnab
      *
      * @throws OverflowException If there are too many registries
      */
-    protected function add(BankI\Models\Title $title)
+    protected function add(BankInterchange\Models\Title $title)
     {
         $this->increment(999998);
         $this->addTitle($title);
@@ -184,7 +184,7 @@ abstract class Cnab
      *
      * @param Models\Title $title ...
      */
-    abstract protected function addTitle(BankI\Models\Title $title);
+    abstract protected function addTitle(BankInterchange\Models\Title $title);
 
     /**
      * ...

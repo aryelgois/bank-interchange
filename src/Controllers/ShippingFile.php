@@ -7,7 +7,7 @@
 
 namespace aryelgois\BankInterchange\Controllers;
 
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 
 /**
  * Controller class for Shipping Files
@@ -37,14 +37,14 @@ abstract class ShippingFile
             throw new \InvalidArgumentException('Title list is empty');
         }
 
-        $check = BankI\Models\Title::dump(['id' => array_values($title_list)]);
+        $check = BankInterchange\Models\Title::dump(['id' => array_values($title_list)]);
         $assignor = array_unique(array_column($check, 'assignor'));
         if (count($assignor) != 1) {
             throw new \InvalidArgumentException('Title list is invalid');
         }
         $assignor = $assignor[0];
 
-        $shipping_file = new BankI\Models\ShippingFile;
+        $shipping_file = new BankInterchange\Models\ShippingFile;
         $shipping_file->assignor = $assignor;
         $shipping_file->status = 0;
         $shipping_file->setCounter();
@@ -52,7 +52,7 @@ abstract class ShippingFile
         $id = $shipping_file->id;
 
         foreach ($title_list as $title_id) {
-            $sft = new BankI\Models\ShippingFileTitle;
+            $sft = new BankInterchange\Models\ShippingFileTitle;
             $sft->shipping_file = $id;
             $sft->title = $title_id;
             $sft->save();

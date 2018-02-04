@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\Models;
 
 use aryelgois\Medools;
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 
 /**
  * The relation between an assignor and a Bank
@@ -68,8 +68,8 @@ class Assignment extends Medools\Model
         $symbols = true
     ) {
         $tmp = [
-            BankI\Utils::padNumber($this->agency, $agency_length),
-            BankI\Utils::padNumber($this->account, $account_length)
+            BankInterchange\Utils::padNumber($this->agency, $agency_length),
+            BankInterchange\Utils::padNumber($this->account, $account_length)
         ];
         $check_digit = $this->account_cd;
 

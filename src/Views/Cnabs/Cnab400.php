@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\Views\Cnabs;
 
 use aryelgois\Utils;
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 
 /**
  * Generates CNAB400 Shipping Files to be sent to banks
@@ -17,7 +17,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Cnab400 extends BankI\Views\Cnab
+class Cnab400 extends BankInterchange\Views\Cnab
 {
     /**
      * Adds a File Header
@@ -60,7 +60,7 @@ class Cnab400 extends BankI\Views\Cnab
      * @param integer $movement ...
      * @param Title   $title    Holds data about the title and the related payer
      */
-    protected function addTitle(BankI\Models\Title $title)
+    protected function addTitle(BankInterchange\Models\Title $title)
     {
         $assignor = $title->assignor;
         $assignor_person = $assignor->person;

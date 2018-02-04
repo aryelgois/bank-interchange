@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\BankBillet\Views;
 
 use aryelgois\Utils\Validation;
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 
 /**
  * Generates bank billets for Banese
@@ -17,7 +17,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Banese extends BankI\BankBillet\View
+class Banese extends BankInterchange\BankBillet\View
 {
     const FONTS = [
         'digitable'  => ['Arial', 'B',  8, [ 0,  0,  0]],
@@ -40,10 +40,10 @@ class Banese extends BankI\BankBillet\View
      */
     protected function generateFreeSpace()
     {
-        $key = BankI\Utils::padNumber($this->models['assignment']->agency, 2, true)
-            . BankI\Utils::padNumber($this->models['assignment']->account, 9, true)
+        $key = BankInterchange\Utils::padNumber($this->models['assignment']->agency, 2, true)
+            . BankInterchange\Utils::padNumber($this->models['assignment']->account, 9, true)
             . $this->formatOurNumber()
-            . BankI\Utils::padNumber($this->models['bank']->code, 3, true);
+            . BankInterchange\Utils::padNumber($this->models['bank']->code, 3, true);
         $cd1 = Validation::mod10($key);
         $cd2 = Validation::mod11($key . $cd1, 7);
 
@@ -165,7 +165,7 @@ class Banese extends BankI\BankBillet\View
             ],
             [
                 ['w' =>  32,   'title' => $dict['date_document'], 'data' => self::formatDate($title->stamp)],
-                ['w' =>  27,   'title' => $dict['doc_number_sh'], 'data' => BankI\Utils::padNumber($title->id, 10)],
+                ['w' =>  27,   'title' => $dict['doc_number_sh'], 'data' => BankInterchange\Utils::padNumber($title->id, 10)],
                 ['w' =>  20,   'title' => $dict['specie_doc'],    'data' => '5'],                                           //$data['misc']['specie_doc']
                 ['w' =>  12,   'title' => $dict['accept'],        'data' => 'A'],                                           //$data['misc']['accept']
                 ['w' =>  36.2, 'title' => $dict['date_process'],  'data' => date('d/m/Y')]

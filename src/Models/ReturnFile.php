@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\Models;
 
 use aryelgois\Utils;
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 use VRia\Utils\NoDiacritic;
 
 /**
@@ -167,7 +167,7 @@ class ReturnFile
         $failed = [];
 
         foreach($this->changes as $title_id => $data) {
-            $title = new BankI\Models\Title($title_id);
+            $title = new BankInterchange\Models\Title($title_id);
             $title->setMultiple($data);
             if (!$title->update(array_keys($data))) {
                 $failed[] = $title_id;
@@ -634,7 +634,7 @@ class ReturnFile
 
     protected function findAssignor($line, $match)
     {
-        $assignor = new BankI\Models\Assignor;
+        $assignor = new BankInterchange\Models\Assignor;
         $database = $assignor->getDatabase();
 
         // Find based on document and covenant
@@ -664,7 +664,7 @@ class ReturnFile
 
     protected function findTitle($line, $match)
     {
-        $title = new BankI\Models\Title;
+        $title = new BankInterchange\Models\Title;
 
         $loaded = $title->load(
             ['our_number[~]' => (int) $match['our_number']]

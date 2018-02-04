@@ -7,7 +7,7 @@
 
 namespace aryelgois\BankInterchange\BankBillet\Views;
 
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 
 /**
  * Generates bank billets for Banco do Nordeste
@@ -34,7 +34,7 @@ class BancoDoNordeste extends CaixaEconomicaFederal
      */
     protected function checkDigitOurNumber()
     {
-        $our_number = BankI\Utils::padNumber($this->models['title']->our_number, 7);
+        $our_number = BankInterchange\Utils::padNumber($this->models['title']->our_number, 7);
 
         return $this->models['title']->checkDigitOurNumberAlgorithm($our_number, 8);
     }

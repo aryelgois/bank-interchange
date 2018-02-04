@@ -7,8 +7,6 @@
 
 namespace aryelgois\BankInterchange\Controllers;
 
-use aryelgois\BankInterchange as BankI;
-
 /**
  * Controller class for Return Files
  *

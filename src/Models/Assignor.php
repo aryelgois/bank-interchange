@@ -8,7 +8,6 @@
 namespace aryelgois\BankInterchange\Models;
 
 use aryelgois\Medools;
-use aryelgois\BankInterchange as BankI;
 
 /**
  * It's who made a covenant with the Bank and has to emit bank billets.

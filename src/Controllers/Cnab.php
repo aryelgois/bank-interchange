@@ -9,7 +9,7 @@ namespace aryelgois\BankInterchange\Controllers;
 
 use aryelgois\Utils;
 use aryelgois\Medools;
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 
 /**
  * CNAB is a document sent to the Bank
@@ -58,7 +58,7 @@ class Cnab
             throw new \InvalidArgumentException('Invalid CNAB');
         }
 
-        $shipping_file = new BankI\Models\ShippingFile($where);
+        $shipping_file = new BankInterchange\Models\ShippingFile($where);
 
         $view_class = '\\aryelgois\\BankInterchange\\Views\\Cnabs\\'
             . 'Cnab' . $cnab;

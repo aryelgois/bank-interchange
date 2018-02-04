@@ -9,7 +9,7 @@ namespace aryelgois\BankInterchange\BankBillet;
 
 use aryelgois\Utils;
 use aryelgois\Medools;
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 use FPDF;
 
 /**
@@ -153,7 +153,7 @@ abstract class View extends FPDF
      * @param string       $logos Path to directory with logos
      */
     public function __construct(
-        BankI\Models\Title $title,
+        BankInterchange\Models\Title $title,
         $data,
         $logos
     ) {
@@ -173,7 +173,7 @@ abstract class View extends FPDF
         $models['client.person']    = $models['client']->person;
         $models['currency']         = $title->currency;
         $models['currency_code']    = Medools\ModelManager::getInstance(
-            BankI\Models\CurrencyCode::class,
+            BankInterchange\Models\CurrencyCode::class,
             [
                 'currency' => $models['currency']->id,
                 'bank' => $models['bank']->id
@@ -215,8 +215,8 @@ abstract class View extends FPDF
      */
     protected function checkDigitOurNumber()
     {
-        $our_number = BankI\Utils::padNumber($this->models['assignment']->agency, 3)
-            . BankI\Utils::padNumber($this->models['title']->our_number, 8);
+        $our_number = BankInterchange\Utils::padNumber($this->models['assignment']->agency, 3)
+            . BankInterchange\Utils::padNumber($this->models['title']->our_number, 8);
 
         return $this->models['title']->checkDigitOurNumberAlgorithm($our_number);
     }
@@ -264,7 +264,7 @@ abstract class View extends FPDF
             $this->models['currency_code']->billet,
             '', // Check digit
             $this->dueFactor(),
-            BankI\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
+            BankInterchange\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
             $this->generateFreeSpace()
         ];
         $barcode[2] = self::checkDigitBarcode(implode('', $barcode));
@@ -645,7 +645,7 @@ abstract class View extends FPDF
      */
     protected function formatOurNumber($mask = false)
     {
-        $our_number = BankI\Utils::padNumber(
+        $our_number = BankInterchange\Utils::padNumber(
             $this->models['title']->our_number,
             static::OUR_NUMBER_LENGTH
         );

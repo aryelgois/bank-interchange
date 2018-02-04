@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\Views\Cnabs;
 
 use aryelgois\Utils;
-use aryelgois\BankInterchange as BankI;
+use aryelgois\BankInterchange;
 
 /**
  * Generates CNAB240 Shipping Files to be sent to banks
@@ -17,7 +17,7 @@ use aryelgois\BankInterchange as BankI;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Cnab240 extends BankI\Views\Cnab
+class Cnab240 extends BankInterchange\Views\Cnab
 {
     /**
      * FEBRABAN's version of file layout
@@ -90,7 +90,7 @@ class Cnab240 extends BankI\Views\Cnab
      *
      * @throws \OverflowException If there are too many lot registries
      */
-    protected function addTitle(BankI\Models\Title $title)
+    protected function addTitle(BankInterchange\Models\Title $title)
     {
         // Check if the file or the current log is closed
         if ($this->lots[$this->lot]['closed']) {
@@ -241,7 +241,7 @@ class Cnab240 extends BankI\Views\Cnab
      * @param Title   $title    Holds data about the title and the related payer
      * @param integer $movement ...
      */
-    protected function addLotDetail(BankI\Models\Title $title, $movement = 1)
+    protected function addLotDetail(BankInterchange\Models\Title $title, $movement = 1)
     {
         $assignor = $title->assignor;
         $assignor_person = $assignor->person;
