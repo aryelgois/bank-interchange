@@ -194,87 +194,6 @@ abstract class View extends FPDF
     }
 
     /*
-     * Helper
-     * =========================================================================
-     */
-
-    /**
-     * Calculates Our number's check digit
-     *
-     * @return string
-     */
-    protected function checkDigitOurNumber()
-    {
-        $our_number = BankInterchange\Utils::padNumber($this->models['assignment']->agency, 3)
-            . BankInterchange\Utils::padNumber($this->models['title']->our_number, 8);
-
-        return $this->models['title']->checkDigitOurNumberAlgorithm($our_number);
-    }
-
-    /**
-     * Calculates the check digit for Barcode
-     *
-     * @param string $code 43 digits
-     * @return string
-     */
-    protected static function checkDigitBarcode($code)
-    {
-        $tmp = Utils\Validation::mod11($code);
-
-        $cd = ($tmp == 0 || $tmp == 1 || $tmp == 10)
-            ? 1
-            : 11 - $tmp;
-
-        return $cd;
-    }
-
-    /**
-     * Calculate the amount of days since 1997-10-07
-     *
-     * @return string Four digits
-     */
-    protected function dueFactor()
-    {
-        $date = \DateTime::createFromFormat('Y-m-d', $this->models['title']->due);
-        $epoch = new \DateTime('1997-10-07');
-        if ($date && $date > $epoch) {
-            $diff = substr($date->diff($epoch)->format('%a'), -4);
-            return str_pad($diff, 4, '0', STR_PAD_LEFT);
-        }
-        return '0000';
-    }
-
-    /**
-     * Generates the barcode data and it's digitable line
-     */
-    protected function generateBarcode()
-    {
-        $barcode = [
-            $this->models['bank']->code,
-            $this->models['currency_code']->billet,
-            '', // Check digit
-            $this->dueFactor(),
-            BankInterchange\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
-            $this->generateFreeSpace()
-        ];
-        $barcode[2] = self::checkDigitBarcode(implode('', $barcode));
-
-        $this->billet['barcode'] = implode('', $barcode);
-
-        $this->billet['digitable'] = static::formatDigitable(...$barcode);
-    }
-
-    /**
-     * Free space, defined by Bank.
-     *
-     * Here: Our number . Agency/Assignor
-     */
-    protected function generateFreeSpace()
-    {
-        return $this->formatOurNumber() . $this->formatAgencyAccount();
-    }
-
-    /*
      * Drawing
      * =========================================================================
      */
@@ -661,6 +580,52 @@ abstract class View extends FPDF
     }
 
     /**
+     * Calculates the check digit for Barcode
+     *
+     * @param string $code 43 digits
+     * @return string
+     */
+    protected static function checkDigitBarcode($code)
+    {
+        $tmp = Utils\Validation::mod11($code);
+
+        $cd = ($tmp == 0 || $tmp == 1 || $tmp == 10)
+            ? 1
+            : 11 - $tmp;
+
+        return $cd;
+    }
+
+    /**
+     * Calculates Our number's check digit
+     *
+     * @return string
+     */
+    protected function checkDigitOurNumber()
+    {
+        $our_number = BankInterchange\Utils::padNumber($this->models['assignment']->agency, 3)
+            . BankInterchange\Utils::padNumber($this->models['title']->our_number, 8);
+
+        return $this->models['title']->checkDigitOurNumberAlgorithm($our_number);
+    }
+
+    /**
+     * Calculate the amount of days since 1997-10-07
+     *
+     * @return string Four digits
+     */
+    protected function dueFactor()
+    {
+        $date = \DateTime::createFromFormat('Y-m-d', $this->models['title']->due);
+        $epoch = new \DateTime('1997-10-07');
+        if ($date && $date > $epoch) {
+            $diff = substr($date->diff($epoch)->format('%a'), -4);
+            return str_pad($diff, 4, '0', STR_PAD_LEFT);
+        }
+        return '0000';
+    }
+
+    /**
      * Finds a file in a list of paths
      *
      * @param string $file  [description]
@@ -680,6 +645,36 @@ abstract class View extends FPDF
                 return $test_file;
             }
         }
+    }
+
+    /**
+     * Generates the barcode data and it's digitable line
+     */
+    protected function generateBarcode()
+    {
+        $barcode = [
+            $this->models['bank']->code,
+            $this->models['currency_code']->billet,
+            '', // Check digit
+            $this->dueFactor(),
+            BankInterchange\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
+            $this->generateFreeSpace()
+        ];
+        $barcode[2] = self::checkDigitBarcode(implode('', $barcode));
+
+        $this->billet['barcode'] = implode('', $barcode);
+
+        $this->billet['digitable'] = static::formatDigitable(...$barcode);
+    }
+
+    /**
+     * Free space, defined by Bank.
+     *
+     * Here: Our number . Agency/Assignor
+     */
+    protected function generateFreeSpace()
+    {
+        return $this->formatOurNumber() . $this->formatAgencyAccount();
     }
 
     /*
