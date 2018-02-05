@@ -75,13 +75,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [0.1]: https://github.com/aryelgois/bank-interchange/compare/288be2a584bca48feab56f750fe8c51804f0e7ab...v0.1
 
 [aryelgois/databases]: https://github.com/aryelgois/databases
-[aryelgois/utils]: https://github.com/aryelgois/utils
 [aryelgois/Medools]: https://github.com/aryelgois/Medools
+[aryelgois/utils]: https://github.com/aryelgois/utils
 [aryelgois/yasql]: https://github.com/aryelgois/yasql
 [aryelgois/yasql-php]: https://github.com/aryelgois/yasql-php
-[vria/nodiacritic]: https://github.com/vria/nodiacritic
 [setasign/fpdf]: https://github.com/setasign/fpdf
 [symfony/yaml]: https://github.com/symfony/yaml
 [twig/twig]: https://github.com/twig/twig
+[vria/nodiacritic]: https://github.com/vria/nodiacritic
 
 [YAML]: http://yaml.org/
