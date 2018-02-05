@@ -52,7 +52,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Model ReturnFile `analyze()`: CNAB240 occurrence is empty on success
 - Our Number check digit for Banco do Nordeste has a different length and base
 - Specie code for different banks or the cnabs
-- Removed EOF character `0x1A` in shipping files
+- Remove EOF character `0x1A` in shipping files
 - Rename `B. do Nordeste` to `Banco do Nordeste`
 
 ### Security
