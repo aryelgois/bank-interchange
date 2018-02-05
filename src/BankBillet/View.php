@@ -183,28 +183,20 @@ abstract class View extends FPDF
         $models['wallet']           = $models['assignment']->wallet;
         $this->models = $models;
 
+        $value = $models['title']->value + $models['bank']->tax;
+        $this->billet['value'] = (float) $value;
+        $this->generateBarcode();
+
         parent::__construct();
         $this->AliasNbPages('{{ total_pages }}');
         $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
-        $this->beforeDraw();
         $this->drawBillet();
     }
 
     /*
-     * Before Drawing / Helper
+     * Helper
      * =========================================================================
      */
-
-    /**
-     * Prepare some data to be used during Draw
-     */
-    protected function beforeDraw()
-    {
-        $value = $this->models['title']->value + $this->models['bank']->tax;
-        $this->billet['value'] = (float) $value;
-
-        $this->generateBarcode();
-    }
 
     /**
      * Calculates Our number's check digit
