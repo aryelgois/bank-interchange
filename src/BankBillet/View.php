@@ -158,9 +158,7 @@ abstract class View extends FPDF
         $logos
     ) {
         $this->billet = $data;
-        if (file_exists($logos) && is_dir($logos)) {
-            $this->logos = realpath($logos);
-        }
+        $this->logos = (array) $logos;
 
         $models = [];
         $models['assignment']       = $title->assignment;
@@ -319,11 +317,9 @@ abstract class View extends FPDF
     protected function drawBillhead()
     {
         $this->Ln(2);
-        $logo = $this->logos
-            . '/assignors/'
-            . $this->models['assignor']->logo;
+        $logo = self::findFile('assignors/' . $this->models['assignor']->logo, $this->logos);
 
-        if ($this->logos !== null && is_file($logo)) {
+        if ($logo !== null) {
             $y = $this->GetY();
             $this->Image($logo, null, null, 40, 0, '', $this->models['assignor']->url);
             $y1 = $this->GetY();
@@ -376,10 +372,10 @@ abstract class View extends FPDF
         $line_width_factor = 2
     ) {
         $bank = $this->models['bank'];
-        $logo = $this->logos . '/banks/' . $bank->logo;
+        $logo = self::findFile('banks/' . $bank->logo, $this->logos);
 
         $this->Ln(3);
-        if ($this->logos !== null && is_file($logo)) {
+        if ($logo !== null) {
             $this->Image($logo, null, null, 40);
             $this->SetXY(50, $this->GetY() - 7);
         } else {
@@ -669,6 +665,28 @@ abstract class View extends FPDF
         $this->SetFont($f[0], $f[1], $f[2]);
         if (count($f) > 3) {
             $this->SetTextColor(...$f[3]);
+        }
+    }
+
+    /**
+     * Finds a file in a list of paths
+     *
+     * @param string $file  [description]
+     * @param array  $paths [description]
+     *
+     * @return string If file was found
+     * @return null   If file was not found
+     */
+    protected static function findFile($file, array $paths)
+    {
+        if ($file === null) {
+            return null;
+        }
+        foreach ($paths as $path) {
+            $test_file = "$path/$file";
+            if (is_file($test_file)) {
+                return $test_file;
+            }
         }
     }
 
