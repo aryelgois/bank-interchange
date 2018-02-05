@@ -56,7 +56,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - README
 
 
-[Unreleased]: https://github.com/aryelgois/bank-interchange/compare/v0.1...develop
+[Unreleased]: https://github.com/aryelgois/bank-interchange/compare/v0.1...v0.x
 [0.1]: https://github.com/aryelgois/bank-interchange/compare/288be2a584bca48feab56f750fe8c51804f0e7ab...v0.1
 
 [aryelgois/utils]: https://github.com/aryelgois/utils
