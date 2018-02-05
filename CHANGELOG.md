@@ -9,12 +9,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
+- Year 2018 in LICENSE
+- Dependencies [aryelgois/databases], [aryelgois/yasql-php] and [symfony/yaml]
+- Composer scripts and Builder config for [aryelgois/yasql-php]
 - Wallets for Banco do Nordeste
+- Namespace `aryelgois\BankInterchange\ReturnFile`
+- Rewrite ReturnFile config files in [YAML]
+- Configurations for matching Banco do Nordeste CNAB400 schema
 
 ### Changed
+- Bump [aryelgois/medools] version
 - Example generate_cnab: now it forces the file download
 - Example index: rename sections and add text
 - Assignor and Payer names
+- Convert database.sql to [YASQL][aryelgois/yasql]
+- Update ReturnFile config file: improved patterns, renamed some fields
+- Split assignors table into `assignors` and `assignments`
+- Rename payers to clients and bound them to assignors
+- Replace assignor column with assignment in titles table
+- Split currencies table into `currencies` and `currency_codes`
+- Update wallets
 
 ### Deprecated
 
@@ -30,6 +44,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Model ReturnFile `analyze()`: CNAB240 occurrence is empty on success
 - Our Number check digit for Banco do Nordeste has a different length and base
 - Specie code for different banks or the cnabs
+- Removed EOF character `0x1A` in shipping files
 
 ### Security
 
@@ -59,8 +74,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [Unreleased]: https://github.com/aryelgois/bank-interchange/compare/v0.1...v0.x
 [0.1]: https://github.com/aryelgois/bank-interchange/compare/288be2a584bca48feab56f750fe8c51804f0e7ab...v0.1
 
+[aryelgois/databases]: https://github.com/aryelgois/databases
 [aryelgois/utils]: https://github.com/aryelgois/utils
 [aryelgois/Medools]: https://github.com/aryelgois/Medools
+[aryelgois/yasql]: https://github.com/aryelgois/yasql
+[aryelgois/yasql-php]: https://github.com/aryelgois/yasql-php
 [vria/nodiacritic]: https://github.com/vria/nodiacritic
 [setasign/fpdf]: https://github.com/setasign/fpdf
+[symfony/yaml]: https://github.com/symfony/yaml
 [twig/twig]: https://github.com/twig/twig
+
+[YAML]: http://yaml.org/
