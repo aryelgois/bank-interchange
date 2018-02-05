@@ -55,4 +55,20 @@ abstract class Utils
         }
         return $result;
     }
+
+    /**
+     * Converts a string to PascalCase
+     *
+     * @param string $string To be converted
+     *
+     * @return string
+     */
+    public static function toPascalCase(string $string)
+    {
+        return str_replace(
+            [' ', '_', '.', '-'],
+            '',
+            ucwords(NoDiacritic::filter($string), ' _.-')
+        );
+    }
 }
