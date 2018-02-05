@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Namespace `aryelgois\BankInterchange\ReturnFile`
 - Rewrite ReturnFile config files in [YAML]
 - Configurations for matching Banco do Nordeste CNAB400 schema
+- Billet column in currency_codes table
+- Add Utils `toPascalCase()`
+- Changelog file
 
 ### Changed
 - Bump [aryelgois/medools] version
@@ -29,11 +32,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replace assignor column with assignment in titles table
 - Split currencies table into `currencies` and `currency_codes`
 - Update wallets
+- Move BankBillet classes to its own namespace
+- BankBillet view keeps a plain array with most models extracted from a Title
+- Invert default parameter value for some methods in BankBillet view
+- Use bank name in PascalCase to select the BankBillet view
 
 ### Deprecated
 
 ### Removed
 - Accidentally committed lines
+- Alias 'BankI' for `aryelgois\BankInterchange`
 
 ### Fixed
 - Fix model Title `setOurNumber()` and `discount_type`
@@ -45,6 +53,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Our Number check digit for Banco do Nordeste has a different length and base
 - Specie code for different banks or the cnabs
 - Removed EOF character `0x1A` in shipping files
+- Rename `B. do Nordeste` to `Banco do Nordeste`
 
 ### Security
 
