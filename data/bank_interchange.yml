@@ -79,7 +79,6 @@ tables:
     id: pk_auto
     code: char(3)
     name: name
-    view: varchar(30)
     logo: varchar(30) NULLABLE
     tax: money_small
 
