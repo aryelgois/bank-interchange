@@ -43,7 +43,8 @@ class Controller
 
         $bank = $title->assignment->bank;
 
-        $view_class = __NAMESPACE__ . '\\Views\\' . $bank->view;
+        $view_class = __NAMESPACE__ . '\\Views\\'
+            . BankInterchange\Utils::toPascalCase($bank->name);
 
         $this->view = new $view_class($title, $data, $logos);
     }
