@@ -690,6 +690,11 @@ abstract class View extends FPDF
         }
     }
 
+    /*
+     * For FPDF
+     * =========================================================================
+     */
+
     /**
      * This extension allows to set a dash pattern and draw dashed lines or rectangles.
      *
