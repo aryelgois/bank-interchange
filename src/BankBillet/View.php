@@ -156,7 +156,7 @@ abstract class View extends FPDF
         );
         $this->data = $data;
 
-        $this->fields = $this->generateFields($data);
+        $this->fields = $this->generateFields();
 
         parent::__construct();
         $this->AliasNbPages('{{ total_pages }}');
@@ -643,12 +643,11 @@ abstract class View extends FPDF
     /**
      * Generates fields to be drawn in the billet
      *
-     * @param array $data Data for the bank billet
-     *
      * @return array[]
      */
-    protected function generateFields(array $data)
+    protected function generateFields()
     {
+        $data = $this->data;
         $models = $this->models;
         $doc_number = BankInterchange\Utils::padNumber($models['title']->id, 10);
         $value = $this->formatMoney($data['value']);
