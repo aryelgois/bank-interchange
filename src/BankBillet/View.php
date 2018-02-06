@@ -84,47 +84,6 @@ abstract class View extends FPDF
     const DEFAULT_LINE_WIDTH = 0.2;
 
     /**
-     * Dictionary of terms used in the billet
-     *
-     * @var string[]
-     */
-    protected $dictionary = [
-        'accept'         => 'Aceite',
-        'addition'       => '(+) Outros acréscimos',
-        'agency_code'    => 'Agência/Código do Beneficiário',
-        'amount'         => 'Quantidade',
-        'assignor'       => 'Beneficiário',
-        'bank_use'       => 'Uso do banco',
-        'charged'        => '(=) Valor cobrado',
-        'cod_down'       => 'Cód. baixa',
-        'compensation'   => 'Ficha de Compensação',
-        'cpf_cnpj'       => 'CPF/CNPJ',
-        'cut_here'       => 'Corte na linha pontilhada',
-        'date_due'       => 'Vencimento',
-        'date_document'  => 'Data do documento',
-        'date_process'   => 'Data processameto',
-        'deduction'      => '(-) Outras deduções',
-        'demonstrative'  => 'Demonstrativo',
-        'discount'       => '(-) Desconto / Abatimentos',
-        'doc_number'     => 'Número do documento',
-        'doc_number_sh'  => 'Nº documento',
-        'doc_value'      => 'Valor documento',
-        'doc_value='     => '(=) Valor documento',
-        'fine'           => '(+) Mora / Multa',
-        'guarantor'      => 'Sacador/Avalista',
-        'header_info'    => "    Linha Digitável:  %s\n    Valor:   %s",
-        'instructions'   => 'Instruções (Texto de responsabilidade do beneficiário)',
-        'mech_auth'      => 'Autenticação mecânica',
-        'our_number'     => 'Nosso número',
-        'client'         => 'Pagador',
-        'client_receipt' => 'Recibo do Pagador',
-        'payment_place'  => 'Local de pagamento',
-        'currency'       => 'Espécie',
-        'specie_doc'     => 'Espécie doc.',
-        'wallet'         => 'Carteira'
-    ];
-
-    /**
      * Contains extra data for the billet
      *
      * @var string[]
