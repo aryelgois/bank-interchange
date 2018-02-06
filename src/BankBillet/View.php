@@ -126,27 +126,27 @@ abstract class View extends FPDF
         $this->logos = (array) $logos;
 
         $models = [];
-        $models['assignment']       = $title->assignment;
-        $models['assignor']         = $models['assignment']->assignor;
-        $models['assignor.address'] = $models['assignor']->address;
-        $models['assignor.person']  = $models['assignor']->person;
-        $models['bank']             = $models['assignment']->bank;
-        $models['client']           = $title->client;
-        $models['client.address']   = $models['client']->address;
-        $models['client.person']    = $models['client']->person;
-        $models['currency']         = $title->currency;
-        $models['currency_code']    = Medools\ModelManager::getInstance(
+        $models['assignment']        = $title->assignment;
+        $models['assignor']          = $models['assignment']->assignor;
+        $models['assignor.address']  = $models['assignor']->address;
+        $models['assignor.person']   = $models['assignor']->person;
+        $models['bank']              = $models['assignment']->bank;
+        $models['client']            = $title->client;
+        $models['client.address']    = $models['client']->address;
+        $models['client.person']     = $models['client']->person;
+        $models['currency']          = $title->currency;
+        $models['currency_code']     = Medools\ModelManager::getInstance(
             BankInterchange\Models\CurrencyCode::class,
             [
                 'currency' => $models['currency']->id,
                 'bank' => $models['bank']->id
             ]
         );
-        $models['guarantor']        = $title->guarantor;
-        $models['guarantor.person'] = $models['guarantor']->person ?? null;
+        $models['guarantor']         = $title->guarantor;
+        $models['guarantor.person']  = $models['guarantor']->person ?? null;
         $models['guarantor.address'] = $models['guarantor']->address ?? null;
-        $models['title']            = $title;
-        $models['wallet']           = $models['assignment']->wallet;
+        $models['title']             = $title;
+        $models['wallet']            = $models['assignment']->wallet;
         $this->models = $models;
 
         $value = $models['title']->value + $models['bank']->tax;
