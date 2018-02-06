@@ -389,11 +389,11 @@ abstract class View extends FPDF
         foreach ($cells as $cell) {
             $fields = (array) $cell['field'];
             $count = count($fields);
+            $align = $cell['align'] ?? 'L';
             $width = $cell['width'];
             foreach ($fields as $field) {
-                $align = $field['align'] ?? 'L';
                 $border = (--$count > 0 ? 'B' : 0);
-                $field = $this->fields[$field['name'] ?? $field];
+                $field = $this->fields[$field];
                 $title = $field['text'] ?? '';
                 $data = $field['value'] ?? '';
                 $this->billetSetFont('cell_title');
