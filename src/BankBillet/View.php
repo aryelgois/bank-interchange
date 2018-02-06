@@ -84,11 +84,11 @@ abstract class View extends FPDF
     const DEFAULT_LINE_WIDTH = 0.2;
 
     /**
-     * Contains extra data for the billet
+     * Contains some data for the billet
      *
-     * @var string[]
+     * @var mixed[]
      */
-    protected $billet = [];
+    protected $data = [];
 
     /**
      * Contains fields to be drawn in the billet
@@ -154,7 +154,7 @@ abstract class View extends FPDF
             ['value' => (float) $value],
             $this->generateBarcode($value)
         );
-        $this->billet = $data;
+        $this->data = $data;
 
         $this->fields = $this->generateFields($data);
 
@@ -266,7 +266,7 @@ abstract class View extends FPDF
         $this->billetSetFont('bank_code');
         $this->Cell(15, 7, $this->formatBankCode(), 'LR', 0, 'C');
         $this->billetSetFont('digitable1');
-        $this->Cell(122, 7, $this->billet['digitable'], 0, 1, $digitable_align);
+        $this->Cell(122, 7, $this->data['digitable'], 0, 1, $digitable_align);
         $y = $this->GetY();
         $this->Line(10, $y, 187, $y);
         $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
@@ -327,7 +327,7 @@ abstract class View extends FPDF
      */
     protected function drawBarCode($baseline = 0.8, $height = 13)
     {
-        $data = $this->billet['barcode'];
+        $data = $this->data['barcode'];
         $wide = $baseline;
         $narrow = $baseline / 3;
         $map = [
