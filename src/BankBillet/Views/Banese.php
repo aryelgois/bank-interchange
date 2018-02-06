@@ -40,6 +40,7 @@ class Banese extends BankInterchange\BankBillet\View
      */
     protected function drawBillet()
     {
+        // Change some fields
         $rename_fields = [
             'agency_code'   => ['text' => 'Agência/Cod. Beneficiário'],
             'date_process'  => ['text' => 'Data do processameto'],
@@ -63,6 +64,7 @@ class Banese extends BankInterchange\BankBillet\View
             $rename_fields
         );
 
+        // Make most fields upper case
         $keys = [
             'accept', 'addition', 'agency_code', 'amount', 'assignor',
             'bank_use', 'charged', 'client', 'currency', 'date_document',
@@ -76,9 +78,11 @@ class Banese extends BankInterchange\BankBillet\View
             $this->fields[$key]['text'] = utf8_decode($text);
         }
 
+        // Add document to assignor
         $this->fields['assignor']['value'] .= '     '
             . $this->models['assignor.person']->documentFormat(true);
 
+        // Draw billet
         $fields = $this->fields;
 
         $this->AddPage();
