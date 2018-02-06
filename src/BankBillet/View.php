@@ -774,7 +774,11 @@ abstract class View extends FPDF
             ],
             'demonstrative' => [
                 'text' => 'Demonstrativo',
-                'value' => $data['demonstrative'] ?? '',
+                'value' => str_replace(
+                    '{{ tax }}',
+                    $this->formatMoney($models['bank']->tax),
+                    $data['demonstrative'] ?? ''
+                ),
             ],
             'discount' => [
                 'text' => '(-) Desconto / Abatimentos',
