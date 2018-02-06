@@ -179,17 +179,14 @@ abstract class View extends FPDF
      */
     protected function drawPageHeader()
     {
+        $fields = $this->fields;
         $this->billetSetFont('cell_data');
-        $this->Cell(177, 3, utf8_decode($this->billet['header_title'] ?? ''), 0, 1, 'C');
+        $this->Cell(177, 3, $fields['header_title']['text'], 0, 1, 'C');
         $this->Ln(2);
-        $this->MultiCell(177, 3, utf8_decode($this->billet['header_body'] ?? ''));
+        $this->MultiCell(177, 3, $fields['header_body']['text']);
         $this->Ln(2);
         $this->billetSetFont('digitable');
-        $this->MultiCell(177, 3.5, utf8_decode(sprintf(
-            $this->dictionary['header_info'],
-            $this->billet['digitable'],
-            $this->formatMoney($this->billet['value'])
-        )));
+        $this->MultiCell(177, 3.5, $fields['header_info']['text']);
         $this->Ln(4);
     }
 
