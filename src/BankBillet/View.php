@@ -157,7 +157,6 @@ abstract class View extends FPDF
         $data,
         $logos
     ) {
-        $this->billet = $data;
         $this->logos = (array) $logos;
 
         $models = [];
@@ -184,8 +183,12 @@ abstract class View extends FPDF
         $this->models = $models;
 
         $value = $models['title']->value + $models['bank']->tax;
-        $this->billet['value'] = (float) $value;
-        $this->generateBarcode();
+        $data = array_merge(
+            $data,
+            ['value' => (float) $value],
+            $this->generateBarcode($value)
+        );
+        $this->billet = $data;
 
         parent::__construct();
         $this->AliasNbPages('{{ total_pages }}');
@@ -649,22 +652,27 @@ abstract class View extends FPDF
 
     /**
      * Generates the barcode data and it's digitable line
+     *
+     * @param numeric $value Billet value
+     *
+     * @return string[]
      */
-    protected function generateBarcode()
+    protected function generateBarcode($value)
     {
         $barcode = [
             $this->models['bank']->code,
             $this->models['currency_code']->billet,
             '', // Check digit
             $this->dueFactor(),
-            BankInterchange\Utils::padNumber(number_format($this->billet['value'], 2, '', ''), 10),
+            BankInterchange\Utils::padNumber(number_format($value, 2, '', ''), 10),
             $this->generateFreeSpace()
         ];
         $barcode[2] = self::checkDigitBarcode(implode('', $barcode));
 
-        $this->billet['barcode'] = implode('', $barcode);
-
-        $this->billet['digitable'] = static::formatDigitable(...$barcode);
+        return [
+            'barcode' => implode('', $barcode),
+            'digitable' => self::formatDigitable(...$barcode),
+        ];
     }
 
     /**
