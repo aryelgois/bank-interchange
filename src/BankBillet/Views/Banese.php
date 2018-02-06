@@ -123,15 +123,15 @@ class Banese extends BankInterchange\BankBillet\View
         /*
          * Structure:
          *
-         * Payment place                                                                | Due
-         * Assignor                                                                     | Agency/Assignor
-         * Document Date | Document number | Document specie | Accept | Processing Date | Our number
-         * Bank's use | Wallet | Currency | Amount | Document value UN                  | (=) Document value
-         * Instructions or Demonstrative                                                | (-) Discount/Rebates
-         *                                                                              | (-) Other deductions
-         *                                                                              | (+) "Mora"/Fine
-         *                                                                              | (+) Other additions
-         *                                                                              | (=) Amount charged
+         * payment_place                                                      | date_due
+         * assignor                                                           | agency_code
+         * date_document | doc_number_sh | specie_doc | accept | date_process | our_number
+         * bank_use | wallet | currency | amount | doc_valueU                 | doc_value=
+         * demonstrative or instructions                                      | discount
+         *                                                                    | deduction
+         *                                                                    | fine
+         *                                                                    | additions
+         *                                                                    | charged
          */
         $table = [
             [
