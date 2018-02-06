@@ -144,6 +144,7 @@ abstract class View extends FPDF
         );
         $models['guarantor']        = $title->guarantor;
         $models['guarantor.person'] = $models['guarantor']->person ?? null;
+        $models['guarantor.address'] = $models['guarantor']->address ?? null;
         $models['title']            = $title;
         $models['wallet']           = $models['assignment']->wallet;
         $this->models = $models;
