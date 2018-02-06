@@ -419,7 +419,7 @@ abstract class View extends FPDF
         }
 
         $this->SetXY($origin['x'], $origin['y']);
-        $this->Cell($width, $height, '', $row_border);
+        $this->Cell($width, $height, '', $row_border, 1);
     }
 
     /*
