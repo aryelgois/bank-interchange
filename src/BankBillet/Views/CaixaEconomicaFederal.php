@@ -186,7 +186,12 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
         $this->Cell(49.8, 3.5, $fields['cod_down']['text'], 'LB', 1);
 
         // Guarantor
-        $this->Cell(110, 3.5, $fields['guarantor']['text']);
+        $this->Cell(17, 3.5, $fields['guarantor']['text']);
+        $this->billetSetFont('cell_data');
+        $this->Cell(93, 3.5, $fields['guarantor']['value']);
+
+        // Mechanical authentication
+        $this->billetSetFont('cell_title');
         $this->Cell(39.5, 3.5, $fields['mech_auth']['text'] . ' - ', 0, 0, 'R');
         $this->billetSetFont('cell_data');
         $this->Cell(27.5, 3.5, $fields['compensation']['text'], 0, 1, 'R');
