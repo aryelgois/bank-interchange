@@ -372,6 +372,56 @@ abstract class View extends FPDF
         $this->Ln($height);
     }
 
+    /**
+     * Inserts row of cells
+     *
+     * Each cell has a field (or multiple fields) and a width. Each field is a
+     * key in $this->fields, and optionally tells its alignment.
+     *
+     * @param array[] $cells      List of cells to bew draw
+     * @param mixed   $row_border Row border @see FPDF::Cell() border
+     */
+    protected function drawRow($cells, $row_border = 1)
+    {
+        $origin = ['x' => $this->GetX(), 'y' => $this->GetY()];
+        $coords = [];
+        $x = $origin['x'];
+        foreach ($cells as $cell) {
+            $fields = (array) $cell['field'];
+            $count = count($fields);
+            $width = $cell['width'];
+            foreach ($fields as $field) {
+                $align = $field['align'] ?? 'L';
+                $border = (--$count > 0 ? 'B' : 0);
+                $field = $this->fields[$field['name'] ?? $field];
+                $title = $field['text'] ?? '';
+                $data = $field['value'] ?? '';
+                $this->billetSetFont('cell_title');
+                $this->Cell($width, 3.5, $title, 0, 2);
+                $this->billetSetFont('cell_data');
+                if (strpos($data, "\n")) {
+                    $this->MultiCell($width, 3.5, $data, $border, $align);
+                } else {
+                    $this->Cell($width, 3.5, $data, $border, 2, $align);
+                }
+            }
+            $x += $width;
+            $coords[] = ['x' => $x, 'y' => $this->GetY()];
+            $this->SetXY($x, $origin['y']);
+        }
+
+        $height = max(array_column($coords, 'y')) - $origin['y'];
+        $width = $coords[count($coords) - 1]['x'] - $origin['x'];
+
+        for ($i = count($cells) - 2; $i >= 0; $i--) {
+            $x = $coords[$i]['x'];
+            $this->Line($x, $origin['y'], $x, $origin['y'] + $height);
+        }
+
+        $this->SetXY($origin['x'], $origin['y']);
+        $this->Cell($width, $height, '', $row_border);
+    }
+
     /*
      * Formatting
      * =========================================================================
