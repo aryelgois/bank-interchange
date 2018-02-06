@@ -36,35 +36,6 @@ class Banese extends BankInterchange\BankBillet\View
     const DEFAULT_LINE_WIDTH = 0.3;
 
     /**
-     * Free space: Asbace key
-     *
-     * Here: Agency . Account . Our number . Bank code . 2 check digits
-     */
-    protected function generateFreeSpace()
-    {
-        $key = BankInterchange\Utils::padNumber($this->models['assignment']->agency, 2, true)
-            . BankInterchange\Utils::padNumber($this->models['assignment']->account, 9, true)
-            . $this->formatOurNumber()
-            . BankInterchange\Utils::padNumber($this->models['bank']->code, 3, true);
-        $cd1 = Validation::mod10($key);
-        $cd2 = Validation::mod11($key . $cd1, 7);
-
-        if ($cd2 == 1) {
-            if ($cd1 < 9) {
-                $cd1++;
-                $cd2 = Validation::mod11($key . $cd1, 7);
-            } elseif ($cd1 == 9) {
-                $cd1 = 0;
-                $cd2 = Validation::mod11($key . $cd1, 7);
-            }
-        } elseif ($cd2 > 1) {
-            $cd2 = 11 - $cd2;
-        }
-
-        return $key . $cd1 . $cd2;
-    }
-
-    /**
      * Procedurally draws the bank billet using FPDF methods
      */
     protected function drawBillet()
@@ -237,5 +208,34 @@ class Banese extends BankInterchange\BankBillet\View
         $this->billetSetFont('cell_title');
         $this->Cell(67.8, 3.5, $fields['mech_auth']['text'] . '/' . utf8_decode($models['wallet']->name));
         $this->Ln(3.5);
+    }
+
+    /**
+     * Free space: Asbace key
+     *
+     * Here: Agency . Account . Our number . Bank code . 2 check digits
+     */
+    protected function generateFreeSpace()
+    {
+        $key = BankInterchange\Utils::padNumber($this->models['assignment']->agency, 2, true)
+            . BankInterchange\Utils::padNumber($this->models['assignment']->account, 9, true)
+            . $this->formatOurNumber()
+            . BankInterchange\Utils::padNumber($this->models['bank']->code, 3, true);
+        $cd1 = Validation::mod10($key);
+        $cd2 = Validation::mod11($key . $cd1, 7);
+
+        if ($cd2 == 1) {
+            if ($cd1 < 9) {
+                $cd1++;
+                $cd2 = Validation::mod11($key . $cd1, 7);
+            } elseif ($cd1 == 9) {
+                $cd1 = 0;
+                $cd2 = Validation::mod11($key . $cd1, 7);
+            }
+        } elseif ($cd2 > 1) {
+            $cd2 = 11 - $cd2;
+        }
+
+        return $key . $cd1 . $cd2;
     }
 }
