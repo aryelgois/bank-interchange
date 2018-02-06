@@ -75,6 +75,7 @@ class Banese extends BankInterchange\BankBillet\View
             'doc_number_sh' => ['text' => 'Nº do documento'],
             'discount'      => ['text' => '(-) Desconto/ Abatimento'],
             'doc_value'     => ['text' => 'Valor'],
+            'doc_valueU'    => ['text' => 'Valor'],
             'doc_value='    => ['text' => '(=) Valor do documento'],
             'fine'          => ['text' => '(+) Mora/Multa'],
             'guarantor'     => ['text' => 'Sacador/Avalista: '],
@@ -97,7 +98,7 @@ class Banese extends BankInterchange\BankBillet\View
             'deduction', 'demonstrative', 'discount', 'doc_number_sh',
             'doc_value', 'doc_value=', 'fine', 'guarantor', 'instructions',
             'mech_auth', 'our_number', 'client', 'payment_place', 'currency',
-            'specie_doc', 'wallet'
+            'specie_doc', 'wallet', 'doc_valueU'
         ];
         foreach ($keys as $key) {
             $text = mb_strtoupper(utf8_encode($this->fields[$key]['text']));
@@ -183,7 +184,7 @@ class Banese extends BankInterchange\BankBillet\View
                 ['width' =>  16,   'field' => 'wallet'],
                 ['width' =>  11,   'field' => 'currency'],
                 ['width' =>  32,   'field' => 'amount'],
-                ['width' =>  36.2, 'field' => 'doc_value'],
+                ['width' =>  36.2, 'field' => 'doc_valueU'],
                 ['width' =>  49.8, 'field' => 'doc_value=', 'align' => 'R'],
             ],
             [

@@ -801,6 +801,10 @@ abstract class View extends FPDF
                 'text' => '(=) Valor documento',
                 'value' => $value,
             ],
+            'doc_valueU' => [
+                'text' => 'Valor documento',
+                'value' => $data['doc_valueU'] ?? '',
+            ],
             'fine' => [
                 'text' => '(+) Mora / Multa',
                 'value' => $data['fine'] ?? '',
