@@ -67,22 +67,28 @@ class Banese extends BankInterchange\BankBillet\View
      */
     protected function drawBillet()
     {
-        $this->dictionary = array_replace(
-            $this->dictionary,
-            [
-                'agency_code'   => 'Agência/Cod. Beneficiário',
-                'date_process'  => 'Data do processameto',
-                'doc_number_sh' => 'Nº do documento',
-                'discount'      => '(-) Desconto/ Abatimento',
-                'doc_value'     => 'Valor',
-                'doc_value='    => '(=) Valor do documento',
-                'fine'          => '(+) Mora/Multa',
-                'guarantor'     => 'Sacador/Avalista: ',
-                'instructions'  => 'Instruções',
-                'currency'      => 'Moeda',
-                'specie_doc'    => 'Espécie doc',
-            ]
+        $rename_fields = [
+            'agency_code'   => ['text' => 'Agência/Cod. Beneficiário'],
+            'date_process'  => ['text' => 'Data do processameto'],
+            'doc_number_sh' => ['text' => 'Nº do documento'],
+            'discount'      => ['text' => '(-) Desconto/ Abatimento'],
+            'doc_value'     => ['text' => 'Valor'],
+            'doc_value='    => ['text' => '(=) Valor do documento'],
+            'fine'          => ['text' => '(+) Mora/Multa'],
+            'guarantor'     => ['text' => 'Sacador/Avalista: '],
+            'instructions'  => ['text' => 'Instruções'],
+            'currency'      => ['text' => 'Moeda'],
+            'specie_doc'    => ['text' => 'Espécie doc'],
+        ];
+        foreach ($rename_fields as &$field) {
+            $field['text'] = utf8_decode($field['text']);
+        }
+        unset($field);
+        $this->fields = array_replace_recursive(
+            $this->fields,
+            $rename_fields
         );
+
         $keys = [
             'accept', 'addition', 'agency_code', 'amount', 'assignor',
             'bank_use', 'charged', 'date_due', 'date_document', 'date_process',
@@ -92,17 +98,18 @@ class Banese extends BankInterchange\BankBillet\View
             'specie_doc', 'wallet'
         ];
         foreach ($keys as $key) {
-            $this->dictionary[$key] = mb_strtoupper($this->dictionary[$key]);
+            $text = mb_strtoupper(utf8_encode($this->fields[$key]['text']));
+            $this->fields[$key]['text'] = utf8_decode($text);
         }
 
-        $dict = $this->dictionary;
+        $fields = $this->fields;
 
         $this->AddPage();
 
         $this->drawPageHeader();
 
         $this->billetSetFont('cell_data');
-        $this->drawDash($dict['client_receipt']);
+        $this->drawDash($fields['client_receipt']['text']);
 
         $this->drawBillhead();
 
@@ -113,7 +120,7 @@ class Banese extends BankInterchange\BankBillet\View
         $this->Ln(4);
 
         $this->billetSetFont('cell_title');
-        $this->drawDash($dict['compensation']);
+        $this->drawDash($fields['compensation']['text']);
 
         $this->SetY($this->GetY() - 3);
 
