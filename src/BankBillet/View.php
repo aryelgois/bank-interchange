@@ -222,7 +222,7 @@ abstract class View extends FPDF
     protected function drawDash($text = '', $text_first = false, $align = 'R')
     {
         $cell = function ($text, $align) {
-            $this->Cell(177, 4, utf8_decode($text), 0, 1, $align);
+            $this->Cell(177, 4, $text, 0, 1, $align);
         };
 
         if ($text_first) {
