@@ -114,73 +114,26 @@ class Banese extends BankInterchange\BankBillet\View
     }
 
     /**
-     * Generic Table
+     * Extends drawGenericTable2()
      *
-     * @param string $big_cell Tells which information goes in the big cell
-     *                         Domain: 'demonstrative', 'instructions'
+     * @param string $big_cell @see drawGenericTable2()
      */
     protected function drawTable($big_cell)
     {
         $fields = $this->fields;
         $models = $this->models;
 
-        /*
-         * Structure:
-         *
-         * payment_place                                                      | date_due
-         * assignor                                                           | agency_code
-         * date_document | doc_number_sh | specie_doc | accept | date_process | our_number
-         * bank_use | wallet | currency | amount | doc_valueU                 | doc_value=
-         * demonstrative or instructions                                      | discount
-         *                                                                    | deduction
-         *                                                                    | fine
-         *                                                                    | additions
-         *                                                                    | charged
-         */
-        $table = [
+        $this->drawGenericTable2(
+            $big_cell,
+            'LBR',
             [
-                ['width' => 127.2, 'field' => 'payment_place'],
-                ['width' =>  49.8, 'field' => 'date_due', 'align' => 'R'],
-            ],
-            [
-                ['width' => 127.2, 'field' => 'assignor'],
-                ['width' =>  49.8, 'field' => 'agency_code', 'align' => 'R'],
-            ],
-            [
-                ['width' =>  32,   'field' => 'date_document'],
-                ['width' =>  27,   'field' => 'doc_number_sh'],
-                ['width' =>  20,   'field' => 'specie_doc'],
-                ['width' =>  12,   'field' => 'accept'],
-                ['width' =>  36.2, 'field' => 'date_process'],
-                ['width' =>  49.8, 'field' => 'our_number', 'align' => 'R'],
-            ],
-            [
-                ['width' =>  32,   'field' => 'bank_use'],
-                ['width' =>  16,   'field' => 'wallet'],
-                ['width' =>  11,   'field' => 'currency'],
-                ['width' =>  32,   'field' => 'amount'],
-                ['width' =>  36.2, 'field' => 'doc_valueU'],
-                ['width' =>  49.8, 'field' => 'doc_value=', 'align' => 'R'],
-            ],
-            [
-                ['width' => 127.2, 'field' => $big_cell],
-                [
-                    'width' => 49.8,
-                    'field' => [
-                        'discount',
-                        'deduction',
-                        'fine',
-                        'addition',
-                        'charged',
-                    ],
-                    'align' => 'R'
-                ],
-
-            ],
-        ];
-        foreach ($table as $row) {
-            $this->drawRow($row, 'LBR');
-        }
+                127.2, 49.8,
+                127.2, 49.8,
+                 32  , 27  , 20, 12, 36.2, 49.8,
+                 32  , 16  , 11, 32, 36.2, 49.8,
+                127.2, 49.8
+            ]
+        );
 
         // Client
         $y = $this->GetY();

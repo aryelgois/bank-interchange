@@ -329,6 +329,126 @@ abstract class View extends FPDF
     }
 
     /**
+     * Draws a generic table
+     *
+     * Structure:
+     *
+     * ```
+     * assignor | agency_code | currency       | amount | our_number
+     * doc_number | cpf_cnpj | date_due        | doc_value
+     * discount | deduction | fine | additions | charged
+     * client
+     * ```
+     *
+     * @param mixed   $border Applied on each row @see FPDF::Cell() border
+     * @param float[] $widths List of widths for each cell (total: 15 cells)
+     */
+    protected function drawGenericTable1($border, array $widths)
+    {
+        $table = [
+            [
+                ['width' => $widths[0], 'field' => 'assignor'],
+                ['width' => $widths[1], 'field' => 'agency_code'],
+                ['width' => $widths[2], 'field' => 'currency'],
+                ['width' => $widths[3], 'field' => 'amount'],
+                ['width' => $widths[4], 'field' => 'our_number', 'align' => 'R'],
+            ],
+            [
+                ['width' => $widths[5], 'field' => 'doc_number'],
+                ['width' => $widths[6], 'field' => 'cpf_cnpj'],
+                ['width' => $widths[7], 'field' => 'date_due'],
+                ['width' => $widths[8], 'field' => 'doc_value', 'align' => 'R'],
+            ],
+            [
+                ['width' => $widths[9], 'field' => 'discount',  'align' => 'R'],
+                ['width' => $widths[10], 'field' => 'deduction', 'align' => 'R'],
+                ['width' => $widths[11], 'field' => 'fine',      'align' => 'R'],
+                ['width' => $widths[12], 'field' => 'addition',  'align' => 'R'],
+                ['width' => $widths[13], 'field' => 'charged',   'align' => 'R'],
+            ],
+            [
+                ['width' => $widths[14], 'field' => 'client'],
+            ],
+        ];
+        foreach ($table as $row) {
+            $this->drawRow($row, $border);
+        }
+    }
+
+    /**
+     * Draws a generic table
+     *
+     * Structure:
+     *
+     * ```
+     * payment_place                                                      | date_due
+     * assignor                                                           | agency_code
+     * date_document | doc_number_sh | specie_doc | accept | date_process | our_number
+     * bank_use | wallet | currency | amount | doc_valueU                 | doc_value=
+     * demonstrative or instructions                                      | discount
+     *                                                                    | deduction
+     *                                                                    | fine
+     *                                                                    | additions
+     *                                                                    | charged
+     * ```
+     *
+     * @param string  $big_cell Tells which information goes in the big cell
+     *                          Domain: 'demonstrative' or 'instructions'
+     * @param mixed   $border   Applied on each row @see FPDF::Cell() border
+     * @param float[] $widths   List of widths for each cell (total: 18 cells)
+     */
+    protected function drawGenericTable2(
+        string $big_cell,
+        $border,
+        array $widths
+    ) {
+        $table = [
+            [
+                ['width' => $widths[0], 'field' => 'payment_place'],
+                ['width' => $widths[1], 'field' => 'date_due', 'align' => 'R'],
+            ],
+            [
+                ['width' => $widths[2], 'field' => 'assignor'],
+                ['width' => $widths[3], 'field' => 'agency_code', 'align' => 'R'],
+            ],
+            [
+                ['width' => $widths[4], 'field' => 'date_document'],
+                ['width' => $widths[5], 'field' => 'doc_number_sh'],
+                ['width' => $widths[6], 'field' => 'specie_doc'],
+                ['width' => $widths[7], 'field' => 'accept'],
+                ['width' => $widths[8], 'field' => 'date_process'],
+                ['width' => $widths[9], 'field' => 'our_number', 'align' => 'R'],
+            ],
+            [
+                ['width' => $widths[10], 'field' => 'bank_use'],
+                ['width' => $widths[11], 'field' => 'wallet'],
+                ['width' => $widths[12], 'field' => 'currency'],
+                ['width' => $widths[13], 'field' => 'amount'],
+                ['width' => $widths[14], 'field' => 'doc_valueU'],
+                ['width' => $widths[15], 'field' => 'doc_value=', 'align' => 'R'],
+            ],
+            [
+                ['width' => $widths[16], 'field' => $big_cell],
+                [
+                    'width' => $widths[17],
+                    'field' => [
+                        'discount',
+                        'deduction',
+                        'fine',
+                        'addition',
+                        'charged',
+                    ],
+                    'align' => 'R'
+                ],
+
+            ],
+        ];
+        foreach ($table as $row) {
+            $this->drawRow($row, $border);
+        }
+    }
+
+    /**
      * Inserts row of cells
      *
      * Each cell has a field (or multiple fields) and a width. Each field is a
