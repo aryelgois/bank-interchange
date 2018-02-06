@@ -132,6 +132,13 @@ abstract class View extends FPDF
     protected $billet = [];
 
     /**
+     * Contains fields to be drawn in the billet
+     *
+     * @var array[]
+     */
+    protected $fields = [];
+
+    /**
      * Path to directory with logos
      *
      * @var string
@@ -189,6 +196,8 @@ abstract class View extends FPDF
             $this->generateBarcode($value)
         );
         $this->billet = $data;
+
+        $this->fields = $this->generateFields($data);
 
         parent::__construct();
         $this->AliasNbPages('{{ total_pages }}');
@@ -673,6 +682,173 @@ abstract class View extends FPDF
             'barcode' => implode('', $barcode),
             'digitable' => self::formatDigitable(...$barcode),
         ];
+    }
+
+    /**
+     * Generates fields to be drawn in the billet
+     *
+     * @param array $data Data for the bank billet
+     *
+     * @return array[]
+     */
+    protected function generateFields(array $data)
+    {
+        $models = $this->models;
+        $doc_number = BankInterchange\Utils::padNumber($models['title']->id, 10);
+        $value = $this->formatMoney($data['value']);
+
+        $fields = [
+            'accept' => [
+                'text' => 'Aceite',
+                'value' => $data['accept'] ?? 'A',
+            ],
+            'addition' => [
+                'text' => '(+) Outros acréscimos',
+                'value' => $data['addition'] ?? '',
+            ],
+            'agency_code' => [
+                'text' => 'Agência/Código do Beneficiário',
+                'value' => $this->formatAgencyAccount(true),
+            ],
+            'amount' => [
+                'text' => 'Quantidade',
+                'value' => $data['amount'] ?? '',
+            ],
+            'assignor' => [
+                'text' => 'Beneficiário',
+                'value' => $models['assignor.person']->name,
+            ],
+            'bank_use' => [
+                'text' => 'Uso do banco',
+                'value' => $data['bank_use'] ?? '',
+            ],
+            'charged' => [
+                'text' => '(=) Valor cobrado',
+                'value' => $data['charged'] ?? '',
+            ],
+            'cod_down' => [
+                'text' => 'Cód. baixa',
+            ],
+            'compensation' => [
+                'text' => 'Ficha de Compensação',
+            ],
+            'cpf_cnpj' => [
+                'text' => 'CPF/CNPJ',
+                'value' => $models['assignor.person']->documentFormat(),
+            ],
+            'cut_here' => [
+                'text' => 'Corte na linha pontilhada',
+            ],
+            'date_due' => [
+                'text' => 'Vencimento',
+                'value' => self::formatDate($models['title']->due),
+            ],
+            'date_document' => [
+                'text' => 'Data do documento',
+                'value' => self::formatDate($models['title']->stamp),
+            ],
+            'date_process' => [
+                'text' => 'Data processameto',
+                'value' => date('d/m/Y'),
+            ],
+            'deduction' => [
+                'text' => '(-) Outras deduções',
+                'value' => $data['deduction'] ?? '',
+            ],
+            'demonstrative' => [
+                'text' => 'Demonstrativo',
+                'value' => $data['demonstrative'] ?? '',
+            ],
+            'discount' => [
+                'text' => '(-) Desconto / Abatimentos',
+                'value' => $data['discount'] ?? '',
+            ],
+            'doc_number' => [
+                'text' => 'Número do documento',
+                'value' => $doc_number,
+            ],
+            'doc_number_sh' => [
+                'text' => 'Nº documento',
+                'value' => $doc_number,
+            ],
+            'doc_value' => [
+                'text' => 'Valor documento',
+                'value' => $data['doc_value'] ?? '',
+                'value' => $value,
+            ],
+            'doc_value=' => [
+                'text' => '(=) Valor documento',
+                'value' => $value,
+            ],
+            'fine' => [
+                'text' => '(+) Mora / Multa',
+                'value' => $data['fine'] ?? '',
+            ],
+            'guarantor' => [
+                'text' => 'Sacador/Avalista',
+                'value' => ($models['guarantor'] !== null)
+                    ? $models['guarantor.person']->name . '     '
+                    . $models['guarantor.address']->outputShort()
+                    : '',
+            ],
+            'header_body' => [
+                'text' => $data['header_body'] ?? '',
+            ],
+            'header_info' => [
+                'text' => sprintf(
+                    "    Linha Digitável:  %s\n    Valor:   %s",
+                    $data['digitable'],
+                    $value
+                ),
+            ],
+            'header_title' => [
+                'text' => $data['header_title'] ?? '',
+            ],
+            'instructions' => [
+                'text' => 'Instruções (Texto de responsabilidade do beneficiário)',
+                'value' => $data['instructions'] ?? '',
+            ],
+            'mech_auth' => [
+                'text' => 'Autenticação mecânica',
+            ],
+            'our_number' => [
+                'text' => 'Nosso número',
+                'value' => $this->formatOurNumber(true),
+            ],
+            'client' => [
+                'text' => 'Pagador',
+                'value' => $models['client.person']->name,
+            ],
+            'client_receipt' => [
+                'text' => 'Recibo do Pagador',
+            ],
+            'payment_place' => [
+                'text' => 'Local de pagamento',
+                'value' => $data['payment_place'] ?? '',
+            ],
+            'currency' => [
+                'text' => 'Espécie',
+                'value' => $models['currency']->symbol,
+            ],
+            'specie_doc' => [
+                'text' => 'Espécie doc.',
+                'value' => static::SPECIE_DOC,
+            ],
+            'wallet' => [
+                'text' => 'Carteira',
+                'value' => $models['wallet']->symbol,
+            ],
+        ];
+
+        foreach ($fields as &$field) {
+            $field['text'] = utf8_decode($field['text']);
+            if (array_key_exists('value', $field)) {
+                $field['value'] = utf8_decode($field['value']);
+            }
+        }
+        unset($field);
+
+        return $fields;
     }
 
     /**
