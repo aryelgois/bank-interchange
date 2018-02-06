@@ -274,51 +274,6 @@ abstract class View extends FPDF
     }
 
     /**
-     * Inserts row of cells
-     *
-     * @param mixed[] $cells Data to be written
-     * @param boolean $close If the border should be closed in the left
-     */
-    protected function drawTableRow($cells, $close = false)
-    {
-        $write_row = function ($field, $border) use ($cells, $close)
-        {
-            $count = count($cells);
-            foreach ($cells as $cell) {
-                $this->Cell($cell['w'], 3.5, utf8_decode($cell[$field]), $border . ($close && $count == 1 ? 'R' : ''), ($count == 1 ? 1 : 0), $cell[$field . '_align'] ?? 'L');
-                $count--;
-            }
-        };
-        $this->billetSetFont('cell_title');
-        $write_row('title', 'L');
-        $this->billetSetFont('cell_data');
-        $write_row('data', 'LB');
-    }
-
-    /**
-     * Inserts column of cells
-     *
-     * @param mixed[] $cells Data to be written
-     * @param integer $x     Abscissa offset from page border
-     * @param integer $w     Column width
-     * @param boolean $close If the border should be closed in the left
-     */
-    protected function drawTableColumn($cells, $x, $w, $close = false)
-    {
-        $fields = [
-            'title' => ['font' => 'cell_title', 'border' => 'L'],
-            'data' => ['font' => 'cell_data', 'border' => 'LB']
-        ];
-        foreach ($cells as $cell) {
-            foreach ($fields as $field => $config) {
-                $this->SetX($x);
-                $this->billetSetFont($config['font']);
-                $this->Cell($w, 3.5, utf8_decode($cell[$field]), $config['border'] . ($close ? 'R' : ''), 1, $cell[$field . '_align'] ?? 'L');
-            }
-        }
-    }
-
-    /**
      * Produces a bar code from string of digits in style "2 of 5 intercalated"
      *
      * @param string $data     Data to be encoded
