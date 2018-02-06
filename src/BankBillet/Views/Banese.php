@@ -94,11 +94,11 @@ class Banese extends BankInterchange\BankBillet\View
 
         $keys = [
             'accept', 'addition', 'agency_code', 'amount', 'assignor',
-            'bank_use', 'charged', 'date_due', 'date_document', 'date_process',
-            'deduction', 'demonstrative', 'discount', 'doc_number_sh',
-            'doc_value', 'doc_value=', 'fine', 'guarantor', 'instructions',
-            'mech_auth', 'our_number', 'client', 'payment_place', 'currency',
-            'specie_doc', 'wallet', 'doc_valueU'
+            'bank_use', 'charged', 'client', 'currency', 'date_document',
+            'date_due', 'date_process', 'deduction', 'demonstrative',
+            'discount', 'doc_number_sh', 'doc_value', 'doc_value=',
+            'doc_valueU', 'fine', 'guarantor', 'instructions', 'mech_auth',
+            'our_number', 'payment_place', 'specie_doc', 'wallet',
         ];
         foreach ($keys as $key) {
             $text = mb_strtoupper(utf8_encode($this->fields[$key]['text']));
