@@ -985,7 +985,7 @@ abstract class View extends FPDF
     {
         $this->SetY(-15);
         $this->billetSetFont('footer');
-        $this->Cell(88.5, 5, $this->PageNo() . ' / {{ total_pages }}');
+        $this->Cell(88.5, 5, $this->PageNo() . " / $this->AliasNbPages");
         $this->Cell(88.5, 5, date('Y-m-d H:i:s O'), 0, 0, 'R');
     }
 }
