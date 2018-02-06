@@ -685,6 +685,13 @@ abstract class View extends FPDF
                 'text' => '(=) Valor cobrado',
                 'value' => $data['charged'] ?? '',
             ],
+            'client' => [
+                'text' => 'Pagador',
+                'value' => $models['client.person']->name,
+            ],
+            'client_receipt' => [
+                'text' => 'Recibo do Pagador',
+            ],
             'cod_down' => [
                 'text' => 'Cód. baixa',
             ],
@@ -695,16 +702,20 @@ abstract class View extends FPDF
                 'text' => 'CPF/CNPJ',
                 'value' => $models['assignor.person']->documentFormat(),
             ],
+            'currency' => [
+                'text' => 'Espécie',
+                'value' => $models['currency']->symbol,
+            ],
             'cut_here' => [
                 'text' => 'Corte na linha pontilhada',
-            ],
-            'date_due' => [
-                'text' => 'Vencimento',
-                'value' => self::formatDate($models['title']->due),
             ],
             'date_document' => [
                 'text' => 'Data do documento',
                 'value' => self::formatDate($models['title']->stamp),
+            ],
+            'date_due' => [
+                'text' => 'Vencimento',
+                'value' => self::formatDate($models['title']->due),
             ],
             'date_process' => [
                 'text' => 'Data processameto',
@@ -774,20 +785,9 @@ abstract class View extends FPDF
                 'text' => 'Nosso número',
                 'value' => $this->formatOurNumber(true),
             ],
-            'client' => [
-                'text' => 'Pagador',
-                'value' => $models['client.person']->name,
-            ],
-            'client_receipt' => [
-                'text' => 'Recibo do Pagador',
-            ],
             'payment_place' => [
                 'text' => 'Local de pagamento',
                 'value' => $data['payment_place'] ?? '',
-            ],
-            'currency' => [
-                'text' => 'Espécie',
-                'value' => $models['currency']->symbol,
             ],
             'specie_doc' => [
                 'text' => 'Espécie doc.',
