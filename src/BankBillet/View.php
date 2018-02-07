@@ -281,7 +281,6 @@ abstract class View extends FPDF
     /**
      * Produces a bar code from string of digits in style "2 of 5 intercalated"
      *
-     * @param string $data     Data to be encoded
      * @param float  $baseline Corresponds to the width of a wide bar
      * @param float  $height   Bar height
      */
