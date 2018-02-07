@@ -364,7 +364,7 @@ abstract class View extends FPDF
                 ['width' => $widths[8], 'field' => 'doc_value', 'align' => 'R'],
             ],
             [
-                ['width' => $widths[9], 'field' => 'discount',  'align' => 'R'],
+                ['width' => $widths[9],  'field' => 'discount',  'align' => 'R'],
                 ['width' => $widths[10], 'field' => 'deduction', 'align' => 'R'],
                 ['width' => $widths[11], 'field' => 'fine',      'align' => 'R'],
                 ['width' => $widths[12], 'field' => 'addition',  'align' => 'R'],
