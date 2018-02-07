@@ -98,11 +98,11 @@ abstract class View extends FPDF
     protected $fields = [];
 
     /**
-     * Path to directory with logos
+     * Paths to directories with logos
      *
-     * @var string
+     * @var string[]
      */
-    protected $logos;
+    protected $logos = [];
 
     /**
      * Holds model instances from different tables
@@ -115,16 +115,14 @@ abstract class View extends FPDF
      * Creates a new Billet View object
      *
      * @param Models\Title $title Holds data for the bank billet
-     * @param string[]     $data  Extra data for the bank billet
-     * @param string       $logos Path to directory with logos
+     * @param string[]     $data  Additional data for the bank billet
+     * @param string[]     $logos Paths to directories with logos
      */
     public function __construct(
         BankInterchange\Models\Title $title,
-        $data,
-        $logos
+        array $data,
+        array $logos
     ) {
-        $this->logos = (array) $logos;
-
         $models = [];
         $models['assignment']        = $title->assignment;
         $models['assignor']          = $models['assignment']->assignor;
@@ -155,9 +153,10 @@ abstract class View extends FPDF
             ['value' => (float) $value],
             $this->generateBarcode($value)
         );
-        $this->data = $data;
 
+        $this->data = $data;
         $this->fields = $this->generateFields();
+        $this->logos = $logos;
 
         parent::__construct();
         $this->AliasNbPages('{{ total_pages }}');
@@ -197,14 +196,15 @@ abstract class View extends FPDF
     protected function drawBillhead()
     {
         $this->Ln(2);
-        $logo = self::findFile('assignors/' . $this->models['assignor']->logo, $this->logos);
 
+        $logo = self::findFile('assignors/' . $this->models['assignor']->logo, $this->logos);
         if ($logo !== null) {
             $y = $this->GetY();
             $this->Image($logo, null, null, 40, 0, '', $this->models['assignor']->url);
             $y1 = $this->GetY();
             $this->SetXY(50, $y);
         }
+
         $this->billetSetFont('billhead');
         $this->MultiCell(103.2, 2.5, utf8_decode($this->models['assignor.person']->name . "\n" . $this->models['assignor.person']->documentFormat() . "\n" . $this->models['assignor.address']->outputLong()));
         $this->SetY(max($y1 ?? 0, $this->GetY()));
@@ -252,9 +252,9 @@ abstract class View extends FPDF
         $line_width_factor = 2
     ) {
         $bank = $this->models['bank'];
-        $logo = self::findFile('banks/' . $bank->logo, $this->logos);
-
         $this->Ln(3);
+
+        $logo = self::findFile('banks/' . $bank->logo, $this->logos);
         if ($logo !== null) {
             $this->Image($logo, null, null, 40);
             $this->SetXY(50, $this->GetY() - 7);
@@ -279,7 +279,6 @@ abstract class View extends FPDF
      * @param string $data     Data to be encoded
      * @param float  $baseline Corresponds to the width of a wide bar
      * @param float  $height   Bar height
-     * @return
      */
     protected function drawBarCode($baseline = 0.8, $height = 13)
     {
