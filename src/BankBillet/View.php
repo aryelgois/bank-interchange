@@ -195,18 +195,23 @@ abstract class View extends FPDF
      */
     protected function drawBillhead()
     {
+        $assignor = $this->models['assignor'];
         $this->Ln(2);
 
-        $logo = self::findFile('assignors/' . $this->models['assignor']->logo, $this->logos);
+        $logo = self::findFile('assignors/' . $assignor->logo, $this->logos);
         if ($logo !== null) {
             $y = $this->GetY();
-            $this->Image($logo, null, null, 40, 0, '', $this->models['assignor']->url);
+            $this->Image($logo, null, null, 40, 0, '', $assignor->url);
             $y1 = $this->GetY();
             $this->SetXY(50, $y);
         }
 
+        $text = $this->models['assignor.person']->name . "\n"
+            . $this->models['assignor.person']->documentFormat() . "\n"
+            . $this->models['assignor.address']->outputLong();
+
         $this->billetSetFont('billhead');
-        $this->MultiCell(103.2, 2.5, utf8_decode($this->models['assignor.person']->name . "\n" . $this->models['assignor.person']->documentFormat() . "\n" . $this->models['assignor.address']->outputLong()));
+        $this->MultiCell(103.2, 2.5, utf8_decode($text));
         $this->SetY(max($y1 ?? 0, $this->GetY()));
     }
 
@@ -305,7 +310,10 @@ abstract class View extends FPDF
         // Generate bits to be draw
         $code = '0000'; // Leading value
         for ($i = 0, $l = strlen($data); $i < $l; $i += 2) {
-            $code .= implode('', Utils\Utils::arrayInterpolate($map[$data[$i]], $map[$data[$i + 1]]));
+            $code .= implode('', Utils\Utils::arrayInterpolate(
+                $map[$data[$i]],
+                $map[$data[$i + 1]]
+            ));
         }
         $code .= '100'; // Trailing value
 
@@ -315,9 +323,7 @@ abstract class View extends FPDF
         $y = $this->GetY();
         $draw = true;
         foreach (str_split($code, 1) as $bit) {
-            $width = ($bit == '0')
-                ? $narrow
-                : $wide;
+            $width = ($bit == '0' ? $narrow : $wide);
             if ($draw) {
                 $this->Rect($x, $y, $width, $height, 'F');
             }
