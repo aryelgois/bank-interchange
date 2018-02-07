@@ -54,13 +54,11 @@ class BancoDoNordeste extends CaixaEconomicaFederal
     }
 
     /**
-     * Prepare some data to be used during Draw
-     *
-     * @param mixed[] $data Data for the bank billet
+     * Banco do Banese requires the wallet field to be the wallet operation
      */
-    protected function beforeDraw()
+    protected function drawBillet()
     {
-        $this->models['wallet']->symbol = $this->models['wallet']->operation;
-        parent::beforeDraw();
+        $this->fields['wallet']['value'] = $this->models['wallet']->operation;
+        parent::drawBillet();
     }
 }
