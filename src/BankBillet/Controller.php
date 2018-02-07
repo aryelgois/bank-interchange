@@ -7,8 +7,9 @@
 
 namespace aryelgois\BankInterchange\BankBillet;
 
-use aryelgois\Utils;
+use aryelgois\Medools;
 use aryelgois\BankInterchange;
+use aryelgois\BankInterchange\Utils;
 
 /**
  * Controller class for Bank Billets
@@ -22,40 +23,112 @@ use aryelgois\BankInterchange;
 class Controller
 {
     /**
-     * Holds the FPDF object with the bank billet
+     * Additional data for the bank billets
      *
-     * @var Views\BankBillet
+     * @var mixed[]
      */
-    protected $view;
+    protected $data;
+
+    /**
+     * Paths to directories with logos
+     *
+     * @var string[]
+     */
+    protected $logos;
+
+    /**
+     * Holds BankBillet View objects
+     *
+     * @var array[]
+     */
+    protected $views;
 
     /**
      * Creates a new BankBillet Controller object
      *
-     * Generates the Bank Billet from data in the Title
-     *
-     * @param mixed[]  $where \Medoo\Medoo $where clause for Models\Title
-     * @param string[] $data  Additional data for the View
-     * @param string   $logos Path to directory with logos
+     * @param string[]        $data  Additional data for the bank billets
+     * @param string|string[] $logos Paths to directories with logos
      */
-    public function __construct($where, $data, $logos)
+    public function __construct(array $data, $logos)
     {
-        $title = new BankInterchange\Models\Title($where);
+        $this->data = $data;
+        $this->logos = (array) $logos;
+    }
+
+    /**
+     * Generates the Bank Billet from data in a Title
+     *
+     * @param mixed  $where \Medoo\Medoo $where clause for Title or its instance
+     * @param string $name  Name for the generated PDF
+     */
+    public function generate($where, string $name = null)
+    {
+        $title_class = BankInterchange\Models\Title::class;
+        $title = ($where instanceof $title_class)
+            ? $where
+            : Medools\ModelManager::getInstance($title_class, $where);
 
         $bank = $title->assignment->bank;
 
         $view_class = __NAMESPACE__ . '\\Views\\'
-            . BankInterchange\Utils::toPascalCase($bank->name);
+            . Utils::toPascalCase($bank->name);
 
-        $this->view = new $view_class($title, $data, $logos);
+        $this->views[] = [
+            'file' => new $view_class($title, $this->data, $this->logos),
+            'name' => Utils::addExtension($name ?? $title->id, '.pdf'),
+        ];
     }
 
     /**
      * Echos the Bank Billet with headers
      *
-     * @param string $name The filename
+     * If there are more than one billet, it outputs a zip
+     *
+     * @throws \LogicException If there is no view to output
      */
-    public function output($name = '')
+    public function output()
     {
-        $this->view->Output('I', $name);
+        $count = count($this->views);
+        if ($count == 0) {
+            throw new \LogicException('You need to generate() first');
+        } elseif ($count > 1) {
+            return $this->zip();
+        }
+
+        $view = $this->views[0];
+        $view['file']->Output('I', $view['name']);
+    }
+
+    /**
+     * Echos a zip file containing all bank billets
+     *
+     * @param string $name Filename
+     *
+     * @throws \LogicException If there is no view to pack
+     */
+    public function zip(string $name = null)
+    {
+        if (count($this->views) == 0) {
+            throw new \LogicException('You need to generate() first');
+        }
+        Utils::checkOutput('ZIP');
+
+        $file = tmpfile();
+        $filepath = stream_get_meta_data($file)['uri'];
+
+        $zip = new \ZipArchive();
+        $zip->open($filepath, \ZipArchive::OVERWRITE);
+        foreach ($this->views as $view) {
+            $zip->addFromString($view['name'], $view['file']->Output('S'));
+        }
+        $zip->close();
+
+        $name = Utils::addExtension($name ?? 'download', '.zip');
+
+        header('Content-Type: application/zip');
+        header('Content-Length: ' . filesize($filepath));
+        header('Content-Disposition: attachment; filename="' . $name . '"');
+        readfile($filepath);
+        unlink($filepath);
     }
 }
