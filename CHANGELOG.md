@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Wallets for Banco do Nordeste
 - Namespace `aryelgois\BankInterchange\ReturnFile`
 - Rewrite ReturnFile config files in [YAML]
-- Configurations for matching Banco do Nordeste CNAB400 schema
+- Configurations for matching return files in Banco do Nordeste CNAB400 schema
 - Billet column in currency_codes table
 - Add Utils `addExtension()`, `checkOutput()` and `toPascalCase()`
 - Changelog file
@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Bump [aryelgois/medools] version
 - Example generate_cnab: now it forces the file download
 - Example index: rename sections and add text
-- Assignor and Payer names
+- Assignor and Payer names in BankBillet fields
 - Convert database.sql to [YASQL][aryelgois/yasql]
 - Update ReturnFile config file: improved patterns, renamed some fields
 - Split assignors table into `assignors` and `assignments`
