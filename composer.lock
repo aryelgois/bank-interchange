@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb05ee6d980f406592ff231691a6f00f",
+    "content-hash": "452a2a0fb79d5e271d47384e2c0988c2",
     "packages": [
         {
             "name": "aryelgois/databases",
@@ -139,16 +139,16 @@
         },
         {
             "name": "aryelgois/yasql-php",
-            "version": "v0.4.1",
+            "version": "v0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/yasql-php.git",
-                "reference": "8d413fbb47dd4888e61b8343b922f58dcaa6a95d"
+                "reference": "ebd3b7d335d4a6c95ad3cf5224c8e4eadce0a5ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/yasql-php/zipball/8d413fbb47dd4888e61b8343b922f58dcaa6a95d",
-                "reference": "8d413fbb47dd4888e61b8343b922f58dcaa6a95d",
+                "url": "https://api.github.com/repos/aryelgois/yasql-php/zipball/ebd3b7d335d4a6c95ad3cf5224c8e4eadce0a5ce",
+                "reference": "ebd3b7d335d4a6c95ad3cf5224c8e4eadce0a5ce",
                 "shasum": ""
             },
             "require": {
@@ -180,7 +180,7 @@
                 "yaml",
                 "yasql"
             ],
-            "time": "2018-02-08T00:30:50+00:00"
+            "time": "2018-02-08T01:26:23+00:00"
         },
         {
             "name": "catfan/medoo",

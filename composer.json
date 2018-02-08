@@ -16,7 +16,7 @@
         "aryelgois/utils": "^0.2",
         "aryelgois/databases": "^0.4.0",
         "aryelgois/medools": "^3.0",
-        "aryelgois/yasql-php": "^0.4.1",
+        "aryelgois/yasql-php": "^0.4.2",
         "setasign/fpdf": "^1.8",
         "symfony/yaml": "^3.4",
         "vria/nodiacritic": "0.*"
