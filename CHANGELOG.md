@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changelog file
 - Generic tables for BankBillet views
 - Can generate a `.zip` with multiple bank billets
+- Platform requirements (zlib and zip extensions)
+- Setup section
 
 ### Changed
 - Bump [aryelgois/medools] version
