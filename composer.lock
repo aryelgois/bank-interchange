@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f505e64fac7182eae3732f2c26852318",
+    "content-hash": "bb05ee6d980f406592ff231691a6f00f",
     "packages": [
         {
             "name": "aryelgois/databases",
-            "version": "v0.3.2",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/databases.git",
-                "reference": "ea4ba0246ba87643d4f20b65c38d3c24e1b89659"
+                "reference": "ad98378810a93fb1c26bb61a3cfe75d9eae169d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/databases/zipball/ea4ba0246ba87643d4f20b65c38d3c24e1b89659",
-                "reference": "ea4ba0246ba87643d4f20b65c38d3c24e1b89659",
+                "url": "https://api.github.com/repos/aryelgois/databases/zipball/ad98378810a93fb1c26bb61a3cfe75d9eae169d1",
+                "reference": "ad98378810a93fb1c26bb61a3cfe75d9eae169d1",
                 "shasum": ""
             },
             "require": {
                 "aryelgois/medools": "^3.0",
-                "aryelgois/yasql-php": "^0.3",
+                "aryelgois/yasql-php": "^0.4.1",
                 "php": "^7.0",
                 "symfony/yaml": "^3.4"
             },
@@ -49,7 +49,7 @@
                 "schema",
                 "yasql"
             ],
-            "time": "2018-01-31T20:01:09+00:00"
+            "time": "2018-02-08T00:47:15+00:00"
         },
         {
             "name": "aryelgois/medools",
@@ -139,16 +139,16 @@
         },
         {
             "name": "aryelgois/yasql-php",
-            "version": "v0.3.1",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/yasql-php.git",
-                "reference": "c32b1c130bdd9d0c10db5c97b4412744b6d49463"
+                "reference": "8d413fbb47dd4888e61b8343b922f58dcaa6a95d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/yasql-php/zipball/c32b1c130bdd9d0c10db5c97b4412744b6d49463",
-                "reference": "c32b1c130bdd9d0c10db5c97b4412744b6d49463",
+                "url": "https://api.github.com/repos/aryelgois/yasql-php/zipball/8d413fbb47dd4888e61b8343b922f58dcaa6a95d",
+                "reference": "8d413fbb47dd4888e61b8343b922f58dcaa6a95d",
                 "shasum": ""
             },
             "require": {
@@ -180,7 +180,7 @@
                 "yaml",
                 "yasql"
             ],
-            "time": "2018-01-06T01:40:38+00:00"
+            "time": "2018-02-08T00:30:50+00:00"
         },
         {
             "name": "catfan/medoo",
