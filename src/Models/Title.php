@@ -13,7 +13,7 @@ use aryelgois\Medools;
 /**
  * A Title represents something a Client got from its Assignor
  *
- * It might be one or products/services
+ * It might be a product or service
  *
  * NOTE:
  * - `assignment` must be valid for the client's assignor
