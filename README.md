@@ -37,6 +37,23 @@ Files, and the reading of Return Files in a webserver:
   besides other details, and would trigger some hooks in the server.
 
 
+# Setup
+
+1. Install this package with composer:
+
+  `composer require aryelgois/bank-interchange`
+
+2. Add the `yasql-build` script, as explained in [yasql-php] Setup
+
+3. Build the [yasql][] [databases] and run the generated SQL in your server:
+
+ ```bash
+composer yasql-build -- vendor=aryelgois/bank-interchange
+cd build
+ls
+ ```
+
+
 # Example
 
 There is a well designed example you can explore! It shows a simple way to
@@ -59,3 +76,9 @@ The script kinda works.. It's under development.
     provide a user input?
 - [ ] Create hooks for Return Files.
   - [ ] A nice interface to integrate with one's website.
+
+
+[databases]: config/databases.yml
+
+[yasql]: https://github.com/aryelgois/yasql
+[yasql-php]: https://github.com/aryelgois/yasql-php
