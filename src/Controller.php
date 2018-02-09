@@ -5,21 +5,16 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Controllers;
-
-use aryelgois\BankInterchange;
+namespace aryelgois\BankInterchange;
 
 /**
- * Controller class for Shipping Files
- *
- * A ShippingFile is a group of Titles to be sent to the Bank. It is sent in a
- * given format, called CNAB
+ * Controller class
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-abstract class ShippingFile
+abstract class Controller
 {
     /**
      * Creates a new ShippingFile Model
@@ -31,7 +26,7 @@ abstract class ShippingFile
      *
      * @throws \InvalidArgumentException If $title_list is empty or invalid
      */
-    public static function create(array $title_list)
+    public static function createShippingFile(array $title_list)
     {
         if (empty($title_list)) {
             throw new \InvalidArgumentException('Title list is empty');
