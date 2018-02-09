@@ -5,20 +5,20 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Controllers;
+namespace aryelgois\BankInterchange\ShippingFile;
 
 use aryelgois\Utils;
 use aryelgois\Medools;
 use aryelgois\BankInterchange;
 
 /**
- * CNAB is a document sent to the Bank
+ * Controller class for shipping files
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Cnab
+class Controller
 {
     /**
      * List of available CNABs
