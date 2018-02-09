@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views\Cnabs;
+namespace aryelgois\BankInterchange\ShippingFile\Views;
 
 use aryelgois\Utils;
 use aryelgois\BankInterchange;
@@ -17,7 +17,7 @@ use aryelgois\BankInterchange;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Cnab400 extends BankInterchange\Views\Cnab
+class Cnab400 extends BankInterchange\ShippingFile\View
 {
     /**
      * Adds a File Header

@@ -5,7 +5,7 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Views;
+namespace aryelgois\BankInterchange\ShippingFile;
 
 use aryelgois\Utils;
 use aryelgois\Medools;
@@ -19,7 +19,7 @@ use VRia\Utils\NoDiacritic;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-abstract class Cnab
+abstract class View
 {
     /**
      * Sequence added at the end of every line
