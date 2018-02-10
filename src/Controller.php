@@ -46,7 +46,6 @@ abstract class Controller
             'assignment' => $assignment,
             'status' => 0,
         ]);
-        $shipping_file->setCounter();
         $shipping_file->save();
         $id = $shipping_file->id;
 

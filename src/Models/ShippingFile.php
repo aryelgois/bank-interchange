@@ -43,20 +43,13 @@ class ShippingFile extends Medools\Model
     ];
 
     /**
-     * Sets the `counter` column based on current `assignor`
-     *
-     * Intended to be used only when creating a new entry
-     *
-     * NOTE:
-     * - Be sure to save() soon
-     *
-     * @throws \LogicException If assignor is not set
+     * Sets the `counter` column based on `assignment`
      */
-    public function setCounter()
+    protected function onFirstSaveHook()
     {
-        $assignor = $this->assignor;
-        if ($assignor === null) {
-            throw new \LogicException('You MUST set `assignor` column first');
+        $assignment = $this->__get('assignment');
+        if ($assignment === null) {
+            return false;
         }
 
         $database = self::getDatabase();
@@ -64,10 +57,11 @@ class ShippingFile extends Medools\Model
             static::TABLE,
             'counter',
             [
-                'assignor' => $assignor->id
+                'assignment' => $assignment->__get('id')
             ]
         );
 
         $this->counter = ++$counter;
+        return true;
     }
 }
