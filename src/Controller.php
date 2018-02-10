@@ -20,9 +20,9 @@ abstract class Controller
      * Creates a new ShippingFile Model
      *
      * @param integer[] $title_list A list of Models\Title `id`
-     *                  They all must be for the same assignor.
+     *                  They all must be for the same assignment.
      *
-     * @return integer The id for the new ShippingFile
+     * @return Models\ShippingFile
      *
      * @throws \InvalidArgumentException If $title_list is empty or invalid
      */
@@ -32,27 +32,32 @@ abstract class Controller
             throw new \InvalidArgumentException('Title list is empty');
         }
 
-        $check = BankInterchange\Models\Title::dump(['id' => array_values($title_list)]);
-        $assignor = array_unique(array_column($check, 'assignor'));
-        if (count($assignor) != 1) {
+        $check = Models\Title::dump(
+            ['id' => array_values($title_list)],
+            ['id', 'assignment']
+        );
+        $assignment = array_unique(array_column($check, 'assignment'));
+        if (count($assignment) != 1) {
             throw new \InvalidArgumentException('Title list is invalid');
         }
-        $assignor = $assignor[0];
+        $assignment = $assignment[0];
 
-        $shipping_file = new BankInterchange\Models\ShippingFile;
-        $shipping_file->assignor = $assignor;
-        $shipping_file->status = 0;
+        $shipping_file = (new Models\ShippingFile)->fill([
+            'assignment' => $assignment,
+            'status' => 0,
+        ]);
         $shipping_file->setCounter();
         $shipping_file->save();
         $id = $shipping_file->id;
 
         foreach ($title_list as $title_id) {
-            $sft = new BankInterchange\Models\ShippingFileTitle;
-            $sft->shipping_file = $id;
-            $sft->title = $title_id;
+            $sft = (new Models\ShippingFileTitle)->fill([
+                'shipping_file' => $id,
+                'title' => $title_id,
+            ]);
             $sft->save();
         }
 
-        return $id;
+        return $shipping_file;
     }
 }
