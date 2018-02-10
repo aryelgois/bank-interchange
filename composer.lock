@@ -53,16 +53,16 @@
         },
         {
             "name": "aryelgois/medools",
-            "version": "v3.1.0",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/Medools.git",
-                "reference": "8276f5e8b446032582c21f79a57f79198e0f3a2f"
+                "reference": "1ca912cd90c522405733a8c67dcba31211dd5320"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/Medools/zipball/8276f5e8b446032582c21f79a57f79198e0f3a2f",
-                "reference": "8276f5e8b446032582c21f79a57f79198e0f3a2f",
+                "url": "https://api.github.com/repos/aryelgois/Medools/zipball/1ca912cd90c522405733a8c67dcba31211dd5320",
+                "reference": "1ca912cd90c522405733a8c67dcba31211dd5320",
                 "shasum": ""
             },
             "require": {
@@ -96,7 +96,7 @@
                 "medoo",
                 "medools"
             ],
-            "time": "2018-02-09T22:33:49+00:00"
+            "time": "2018-02-10T01:50:34+00:00"
         },
         {
             "name": "aryelgois/utils",
