@@ -7,13 +7,11 @@
 
 namespace aryelgois\BankInterchange\ShippingFile;
 
-use aryelgois\Utils;
-use aryelgois\Medools;
-use aryelgois\BankInterchange;
+use aryelgois\BankInterchange\Models;
 use VRia\Utils\NoDiacritic;
 
 /**
- * Generates CNAB compliant Shipping Files to be sent to banks
+ * Generates CNAB compliant shipping files to be sent to banks
  *
  * @author Aryel Mota Góis
  * @license MIT
@@ -22,21 +20,21 @@ use VRia\Utils\NoDiacritic;
 abstract class View
 {
     /**
-     * Sequence added at the end of every line
+     * Added at the end of every line
      *
      * @const string
      */
-    const LINE_END = "\r\n";
+    const EOL = "\r\n";
 
     /**
-     * Character added at the file end
+     * Added at the file end
      *
      * @const string
      */
-    const FILE_END = "";
+    const EOF = "";
 
     /**
-     * CNAB Shipping File registries
+     * File registries
      *
      * @var string[]
      */
@@ -50,35 +48,25 @@ abstract class View
     protected $registry_count = 0;
 
     /**
-     * ...
+     * Model with data to be used
      *
      * @const Models\ShippingFile
      */
     protected $shipping_file;
 
     /**
-     * Creates a new ShippingFile view object
+     * Creates a new ShippingFile View object
      *
      * @param Models\ShippingFile $shipping_file A Shipping File whose Titles
      *                                           will be used
      */
-    public function __construct(BankInterchange\Models\ShippingFile $shipping_file)
+    public function __construct(Models\ShippingFile $shipping_file)
     {
         $this->shipping_file = $shipping_file;
 
-        $title_list = BankInterchange\Models\ShippingFileTitle::dump([
-            'shipping_file' => $shipping_file->id
-        ]);
-        $title_list = array_column($title_list, 'title');
-
-        $shipping_file_titles = new Medools\ModelIterator(
-            'aryelgois\\BankInterchange\\Models\\Title',
-            ['id' => $title_list]
-        );
-
         $this->open();
-        foreach ($shipping_file_titles as $title) {
-            $this->add($title);
+        foreach ($shipping_file->getShippedTitles() as $sft) {
+            $this->add($sft);
         }
         $this->close();
     }
@@ -86,31 +74,46 @@ abstract class View
     /**
      * Outputs the file contents in a multiline string
      *
-     * @return string
+     * @param string $name File name
+     *
+     * @return string If no name is passed
+     * @return null   If a name is passed (result is printed with header)
      */
-    final public function output()
+    final public function output(string $name = null)
     {
-        return implode(static::LINE_END, $this->registries)
-            . static::LINE_END . static::FILE_END;
+        $result = strtoupper(NoDiacritic::filter(
+            implode(static::EOL, $this->registries) . static::EOL . static::EOF
+        ));
+
+        if ($name === null) {
+            return $result;
+        }
+
+        Utils::checkOutput(pathinfo($name)['extension'] ?? '');
+
+        header('Content-Type: text/plain');
+        header('Content-Length: ' . strlen($result));
+        header('Content-Disposition: attachment; filename="' . $name . '"');
+        echo $result;
     }
 
     /**
-     * ...
+     * Generates a filename (without extension)
      *
      * @return string
      */
-    final public function filename($cnab)
+    public function filename()
     {
-        $assignor = $this->shipping_file->assignor;
+        $assignment = $this->shipping_file->assignment;
 
-        $format = 'COB.%03.3s.%06.6s.%08.8s.%05.5s.%05.5s.REM';
+        $format = 'COB.%03.3s.%06.6s.%08.8s.%05.5s.%05.5s';
 
         $data = [
             $cnab,
-            $assignor->edi,
+            $assignment->edi,
             date('Ymd', strtotime($this->shipping_file->stamp)),
             $this->shipping_file->counter,
-            $assignor->covenant,
+            $assignment->covenant,
         ];
 
         return sprintf($format, ...$data);
@@ -133,14 +136,14 @@ abstract class View
     /**
      * Adds a Title registry
      *
-     * @param Models\Title $title Contains data for the registry
+     * @param Models\ShippingFileTitle $sft Contains data for the registry
      *
-     * @throws OverflowException If there are too many registries
+     * @throws \OverflowException If there are too many registries
      */
-    protected function add(BankInterchange\Models\Title $title)
+    protected function add(Models\ShippingFileTitle $sft)
     {
         $this->increment(999998);
-        $this->addTitle($title);
+        $this->addTitle($sft->title);
     }
 
     /**
@@ -153,7 +156,6 @@ abstract class View
     {
         // data cleanup
         foreach ($data as $id => $value) {
-            $data[$id] = strtoupper(NoDiacritic::filter($value));
             $data[$id] = preg_replace('/:;,\.\/\\\?\$\*!#_-/', '', $data[$id]);
         }
 
@@ -184,7 +186,7 @@ abstract class View
      *
      * @param Models\Title $title ...
      */
-    abstract protected function addTitle(BankInterchange\Models\Title $title);
+    abstract protected function addTitle(Models\Title $title);
 
     /**
      * ...
