@@ -7,12 +7,13 @@
 
 namespace aryelgois\BankInterchange\ShippingFile;
 
-use aryelgois\Utils;
 use aryelgois\Medools;
 use aryelgois\BankInterchange;
 
 /**
  * Controller class for shipping files
+ *
+ * A shipping file is a data structure used by banks
  *
  * @author Aryel Mota Góis
  * @license MIT
@@ -21,74 +22,114 @@ use aryelgois\BankInterchange;
 class Controller
 {
     /**
-     * List of available CNABs
+     * Shipping file extension
      *
-     * @const string[]
+     * @const string
      */
-    const STANDARDS = [
-        '240',
-        '400',
-    ];
+    const EXTENSION = '.REM';
 
     /**
-     * Renders the Shipping File in a Cnab standard
-     *
-     * @var Views\Cnab
-     */
-    protected $view;
-
-    /**
-     * ...
+     * CNAB type to be used
      *
      * @var string
      */
-    protected $filename;
+    protected $cnab;
 
     /**
-     * Creates a new Cnab Controller object
+     * Holds ShippingFile View objects
      *
-     * @param integer  $cnab  Number of CNAB model
-     * @param mixed[]  $where \Medoo\Medoo $where clause for Models\ShippingFile
-     *
-     * @throws \InvalidArgumentException If $cnab is invalid
+     * @var array[]
      */
-    public function __construct($cnab, $where)
+    protected $views;
+
+    /**
+     * Creates a new ShippingFile Controller object
+     *
+     * @param string $cnab CNAB type to be used
+     */
+    public function __construct(string $cnab)
     {
-        if (!in_array($cnab, self::STANDARDS)) {
-            throw new \InvalidArgumentException('Invalid CNAB');
+        $this->cnab = $cnab;
+    }
+
+    /**
+     * Generates the CNAB shipping file from data in a ShippingFile
+     *
+     * @param mixed  $where \Medoo\Medoo $where clause or for ShippingFile or
+     *                      its instance
+     * @param string $name  Name for the generated shipping file
+     */
+    public function generate($where, string $name = null)
+    {
+        $model_class = BankInterchange\Models\ShippingFile::class;
+        $shipping_file = ($where instanceof $model_class)
+            ? $where
+            : Medools\ModelManager::getInstance($model_class, $where);
+
+        $view_class = __NAMESPACE__ . "\\Views\\$this->cnab\\"
+            . Utils::toPascalCase($shipping_file->assignment->bank->name);
+
+        $view = new $view_class($shipping_file);
+
+        $this->views[] = [
+            'file' => $view,
+            'name' => Utils::addExtension(
+                $name ?? $view->filename(),
+                static::EXTENSION
+            ),
+        ];
+    }
+
+    /**
+     * Echos the Shipping File with headers
+     *
+     * If there are more than one shipping file, it outputs a zip
+     *
+     * @throws \LogicException If there is no view to output
+     */
+    public function output()
+    {
+        $count = count($this->views);
+        if ($count == 0) {
+            throw new \LogicException('You need to generate() first');
+        } elseif ($count > 1) {
+            return $this->zip();
         }
 
-        $shipping_file = new BankInterchange\Models\ShippingFile($where);
-
-        $view_class = '\\aryelgois\\BankInterchange\\Views\\Cnabs\\'
-            . 'Cnab' . $cnab;
-
-        $this->view = new $view_class($shipping_file);
-
-        $this->filename = $this->view->filename($cnab);
+        $view = $this->views[0];
+        $view['file']->output($view['name']);
     }
 
     /**
-     * Outputs the generated Shipping File
+     * Echos a zip file containing all shipping files
      *
-     * @param string $directory Where to save the Shipping File.
-     *                          If empty, outputs to stdout.
+     * @param string $name Filename
      *
-     * @return string Name for generated Shipping File
-     * @return false  For failure
+     * @throws \LogicException If there is no view to pack
      */
-    public function output($directory = '')
+    public function zip(string $name = null)
     {
-        return $this->view->output();
-    }
+        if (count($this->views) == 0) {
+            throw new \LogicException('You need to generate() first');
+        }
+        Utils::checkOutput('ZIP');
 
-    /**
-     * ...
-     *
-     * @return string
-     */
-    public function filename()
-    {
-        return $this->filename;
+        $file = tmpfile();
+        $filepath = stream_get_meta_data($file)['uri'];
+
+        $zip = new \ZipArchive();
+        $zip->open($filepath, \ZipArchive::OVERWRITE);
+        foreach ($this->views as $view) {
+            $zip->addFromString($view['name'], $view['file']->output());
+        }
+        $zip->close();
+
+        $name = Utils::addExtension($name ?? 'download', '.zip');
+
+        header('Content-Type: application/zip');
+        header('Content-Length: ' . filesize($filepath));
+        header('Content-Disposition: attachment; filename="' . $name . '"');
+        readfile($filepath);
+        unlink($filepath);
     }
 }
