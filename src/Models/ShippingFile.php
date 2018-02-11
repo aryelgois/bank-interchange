@@ -43,6 +43,19 @@ class ShippingFile extends Medools\Model
     ];
 
     /**
+     * Returns a Iterator of ShippingFileTitle models for this object
+     *
+     * @return Medools\ModelIterator
+     */
+    public function getShippedTitles()
+    {
+        return new Medools\ModelIterator(
+            __NAMESPACE__ . '\\ShippingFileTitle',
+            ['shipping_file' => $this->__get('id')]
+        );
+    }
+
+    /**
      * Sets the `counter` column based on `assignment`
      */
     protected function onFirstSaveHook()
