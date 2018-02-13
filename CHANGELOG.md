@@ -51,6 +51,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Rename `tax` column to `billet_tax`
 - Rename `iof` column to `ioc_iof`
 - Use document_kinds in titles table
+- Replace `SPECIE_DOC` with title's `kind`
 
 ### Deprecated
 

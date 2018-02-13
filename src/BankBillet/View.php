@@ -48,13 +48,6 @@ abstract class View extends FPDF
     const ACCOUNT_LENGTH = 11;
 
     /**
-     * Temporary way to set the document specie
-     *
-     * @const string
-     */
-    const SPECIE_DOC = '11';
-
-    /**
      * Font presets of family, weight, size and color
      *
      * @const array[]
@@ -140,6 +133,7 @@ abstract class View extends FPDF
                 'bank' => $models['bank']->id
             ]
         );
+        $models['document_kind']     = $title->kind;
         $models['guarantor']         = $title->guarantor;
         $models['guarantor.person']  = $models['guarantor']->person ?? null;
         $models['guarantor.address'] = $models['guarantor']->address ?? null;
@@ -387,7 +381,7 @@ abstract class View extends FPDF
      * ```
      * payment_place                                                      | date_due
      * assignor                                                           | agency_code
-     * date_document | doc_number_sh | specie_doc | accept | date_process | our_number
+     * date_document | doc_number_sh | kind | accept | date_process | our_number
      * bank_use | wallet | currency | amount | doc_valueU                 | doc_value=
      * demonstrative or instructions                                      | discount
      *                                                                    | deduction
@@ -418,7 +412,7 @@ abstract class View extends FPDF
             [
                 ['width' => $widths[4], 'field' => 'date_document'],
                 ['width' => $widths[5], 'field' => 'doc_number_sh'],
-                ['width' => $widths[6], 'field' => 'specie_doc'],
+                ['width' => $widths[6], 'field' => 'kind'],
                 ['width' => $widths[7], 'field' => 'accept'],
                 ['width' => $widths[8], 'field' => 'date_process'],
                 ['width' => $widths[9], 'field' => 'our_number', 'align' => 'R'],
@@ -923,9 +917,9 @@ abstract class View extends FPDF
                 'text' => 'Local de pagamento',
                 'value' => $data['payment_place'] ?? '',
             ],
-            'specie_doc' => [
+            'kind' => [
                 'text' => 'Espécie doc.',
-                'value' => static::SPECIE_DOC,
+                'value' => $models['document_kind']->symbol,
             ],
             'wallet' => [
                 'text' => 'Carteira',
