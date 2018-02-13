@@ -102,9 +102,9 @@ tables:
     client: int -> clients.id
     guarantor: int -> clients.id NULLABLE
     currency: tinyint -> currencies.id
+    kind: tinyint -> document_kinds.id
     our_number: int
     status: tinyint(1) NULLABLE
-    kind: tinyint(2)
     value: money
     value_paid: money DEFAULT 0
     ioc_iof: money

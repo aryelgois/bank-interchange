@@ -33,9 +33,9 @@ class Title extends Medools\Model
         'client',         // Who the Title is destined
         'guarantor',      // Someone that would be charged if the Client could not pay
         'currency',
+        'kind',
         'our_number',
         'status',
-        'kind',
         'value',          // (float)
         'value_paid',     // (float)
         'ioc_iof',        // (float) A Brazilian tax
@@ -82,6 +82,10 @@ class Title extends Medools\Model
         ],
         'currency' => [
             __NAMESPACE__ . '\\Currency',
+            'id'
+        ],
+        'kind' => [
+            __NAMESPACE__ . '\\DocumentKind',
             'id'
         ],
     ];
