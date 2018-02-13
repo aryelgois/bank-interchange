@@ -52,7 +52,7 @@ tables:
     bank: int -> banks.id
     cnab: char(3)
     code: varchar(2)
-    symbol: char(2)
+    symbol: varchar(3)
     name: name
 
   wallets:
