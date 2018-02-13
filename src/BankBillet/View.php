@@ -726,8 +726,8 @@ abstract class View extends FPDF
     /**
      * Finds a file in a list of paths
      *
-     * @param string $file  [description]
-     * @param array  $paths [description]
+     * @param string $file  glob pattern to search inside each path
+     * @param array  $paths List of paths to search
      *
      * @return string If file was found
      * @return null   If file was not found
