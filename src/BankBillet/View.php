@@ -906,6 +906,10 @@ abstract class View extends FPDF
                 'text' => 'Instruções (Texto de responsabilidade do beneficiário)',
                 'value' => $data['instructions'] ?? '',
             ],
+            'kind' => [
+                'text' => 'Espécie doc.',
+                'value' => $models['document_kind']->symbol,
+            ],
             'mech_auth' => [
                 'text' => 'Autenticação mecânica',
             ],
@@ -916,10 +920,6 @@ abstract class View extends FPDF
             'payment_place' => [
                 'text' => 'Local de pagamento',
                 'value' => $data['payment_place'] ?? '',
-            ],
-            'kind' => [
-                'text' => 'Espécie doc.',
-                'value' => $models['document_kind']->symbol,
             ],
             'wallet' => [
                 'text' => 'Carteira',
