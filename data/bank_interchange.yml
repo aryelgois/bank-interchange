@@ -45,6 +45,14 @@ tables:
     cnab240: char(2)
     cnab400: char(1)
 
+  document_kinds:
+    id: tinyint PRIMARY KEY AUTO_INCREMENT
+    bank: int -> banks.id
+    cnab: char(3)
+    code: varchar(2)
+    symbol: char(2)
+    name: name
+
   wallets:
     id: tinyint PRIMARY KEY AUTO_INCREMENT
     bank: int -> banks.id

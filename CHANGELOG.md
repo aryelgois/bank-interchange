@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Can generate a `.zip` with multiple bank billets
 - Platform requirements (zlib and zip extensions)
 - Setup section
+- Table `document_kinds`
 
 ### Changed
 - Bump [aryelgois/medools] version
