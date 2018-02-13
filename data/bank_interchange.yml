@@ -6,6 +6,8 @@ database:
 definitions:
   pk: int PRIMARY KEY
   pk_auto: pk AUTO_INCREMENT
+  tiny_pk: tinyint PRIMARY KEY
+  tiny_pk_auto: tiny_pk AUTO_INCREMENT
   name: varchar(60)
   money: decimal(17,4)
   money_small: decimal(6,4)
@@ -30,7 +32,7 @@ tables:
     document: varchar(14)
 
   currencies:
-    id: tinyint PRIMARY KEY AUTO_INCREMENT
+    id: tiny_pk_auto
     symbol: varchar(5)
     name: varchar(30)
     name_plural: varchar(30) NULLABLE
@@ -46,7 +48,7 @@ tables:
     cnab400: char(1)
 
   document_kinds:
-    id: tinyint PRIMARY KEY AUTO_INCREMENT
+    id: tiny_pk_auto
     bank: int -> banks.id
     cnab: char(3)
     code: varchar(2)
@@ -54,7 +56,7 @@ tables:
     name: name
 
   wallets:
-    id: tinyint PRIMARY KEY AUTO_INCREMENT
+    id: tiny_pk_auto
     bank: int -> banks.id
     cnab: char(3)
     code: varchar(2)      # used in cnab
