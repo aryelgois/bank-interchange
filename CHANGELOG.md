@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Platform requirements (zlib and zip extensions)
 - Setup section
 - Table `document_kinds`
+- Default assignment's document kind
 
 ### Changed
 - Bump [aryelgois/medools] version

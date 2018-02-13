@@ -27,6 +27,7 @@ class Assignment extends Medools\Model
         'id',
         'assignor',
         'bank',
+        'document_kind',
         'wallet',
         'covenant',   // Covenant provided by the Bank. Max 20 digits, but should have up to 6
         'agency',     // Bank Agency. max 5 digits
@@ -43,6 +44,10 @@ class Assignment extends Medools\Model
         ],
         'bank' => [
             __NAMESPACE__ . '\\Bank',
+            'id'
+        ],
+        'document_kind' => [
+            __NAMESPACE__ . '\\DocumentKind',
             'id'
         ],
         'wallet' => [
