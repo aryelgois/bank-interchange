@@ -24,11 +24,6 @@ class Bank extends Medools\Model
         'id',
         'code', // Defined by a government entity, 3 digits
         'name', // Bank's name, 30 characters, left-padded with spaces
-        'logo', // Filename for Bank's logo
         'tax',  // (float) Bank's tax for billets
-    ];
-
-    const OPTIONAL_COLUMNS = [
-        'logo',
     ];
 }

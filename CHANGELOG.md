@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Invert default parameter value for some methods in BankBillet view
 - Use bank name in PascalCase to select the BankBillet view
 - Allow multiple paths to be searched for logos
+- Use model id to select logo file
 - Replace `$dictionary` with `$fields`
 - Rename `$billet` to `$data`
 - Replace `drawTableRow()` and `drawTableColumn()` with `drawRow()`

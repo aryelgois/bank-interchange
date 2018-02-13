@@ -198,7 +198,7 @@ abstract class View extends FPDF
         $assignor = $this->models['assignor'];
         $this->Ln(2);
 
-        $logo = self::findFile('assignors/' . $assignor->logo, $this->logos);
+        $logo = self::findFile("assignors/$assignor->id.*", $this->logos);
         if ($logo !== null) {
             $y = $this->GetY();
             $this->Image($logo, null, null, 40, 0, '', $assignor->url);
@@ -259,7 +259,7 @@ abstract class View extends FPDF
         $bank = $this->models['bank'];
         $this->Ln(3);
 
-        $logo = self::findFile('banks/' . $bank->logo, $this->logos);
+        $logo = self::findFile("banks/$bank->id.*", $this->logos);
         if ($logo !== null) {
             $this->Image($logo, null, null, 40);
             $this->SetXY(50, $this->GetY() - 7);
@@ -738,9 +738,9 @@ abstract class View extends FPDF
             return null;
         }
         foreach ($paths as $path) {
-            $test_file = "$path/$file";
-            if (is_file($test_file)) {
-                return $test_file;
+            $files = glob("$path/$file");
+            if (!empty($files)) {
+                return $files[0];
             }
         }
     }

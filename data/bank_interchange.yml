@@ -60,7 +60,6 @@ tables:
     id: pk_auto
     person: int -> people.id UNIQUE
     address: int -> full_addresses.id
-    logo: varchar(30) NULLABLE
     url: varchar(30) NULLABLE
 
   assignments:
@@ -79,7 +78,6 @@ tables:
     id: pk_auto
     code: char(3)
     name: name
-    logo: varchar(30) NULLABLE
     tax: money_small
 
   clients:
