@@ -35,7 +35,6 @@ class Title extends Medools\Model
         'currency',
         'our_number',
         'status',
-        'doc_type',
         'kind',
         'value',          // (float)
         'value_paid',     // (float)
@@ -57,7 +56,6 @@ class Title extends Medools\Model
     const OPTIONAL_COLUMNS = [
         'guarantor',
         'status',
-        'doc_type',
         'value_paid',
         'fine_type',
         'fine_date',

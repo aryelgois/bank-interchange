@@ -57,6 +57,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Alias 'BankI' for `aryelgois\BankInterchange`
 - Remove `beforeDraw()`
 - Example assignor logos
+- Column `doc_type`
 
 ### Fixed
 - Fix model Title `setOurNumber()` and `discount_type`

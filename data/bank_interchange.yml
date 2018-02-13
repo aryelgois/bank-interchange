@@ -94,7 +94,6 @@ tables:
     currency: tinyint -> currencies.id
     our_number: int
     status: tinyint(1) NULLABLE
-    doc_type: char(1) DEFAULT 1
     kind: tinyint(2)
     value: money
     value_paid: money DEFAULT 0
