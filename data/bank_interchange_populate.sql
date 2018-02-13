@@ -45,7 +45,7 @@ INSERT INTO `document_kinds` (`id`, `bank`, `cnab`, `code`, `symbol`, `name`) VA
 (23, 2, '400', '04', 'CR', 'Carnê'), -- Dummy symbol
 (24, 2, '400', '05', 'RC', 'Recibo'),
 (25, 2, '400', '06', 'DS', 'Duplicata Prest. Serviços'),
-(26, 2, '400', '19', 'OU', 'Outros').
+(26, 2, '400', '19', 'OU', 'Outros');
 
 -- Wallets
 -- TODO verify data
