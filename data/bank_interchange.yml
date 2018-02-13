@@ -98,7 +98,7 @@ tables:
     kind: tinyint(2)
     value: money
     value_paid: money DEFAULT 0
-    iof: money
+    ioc_iof: money
     rebate: money
     billet_tax: money_small
     fine_type: tinyint(1) DEFAULT 3
