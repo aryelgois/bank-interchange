@@ -35,6 +35,7 @@ class Title extends Medools\Model
         'currency',
         'kind',
         'our_number',
+        'accept',
         'status',
         'value',          // (float)
         'value_paid',     // (float)

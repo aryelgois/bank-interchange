@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Setup section
 - Table `document_kinds`
 - Default assignment's document kind
+- Column `accept` in `titles` table
 
 ### Changed
 - Bump [aryelgois/medools] version

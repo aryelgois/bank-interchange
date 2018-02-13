@@ -105,6 +105,7 @@ tables:
     currency: tinyint -> currencies.id
     kind: tinyint -> document_kinds.id
     our_number: int
+    accept: enum('A','N') DEFAULT 'N'
     status: tinyint(1) NULLABLE
     value: money
     value_paid: money DEFAULT 0

@@ -779,7 +779,7 @@ abstract class View extends FPDF
         $fields = [
             'accept' => [
                 'text' => 'Aceite',
-                'value' => $data['accept'] ?? 'A',
+                'value' => $models['title']->accept,
             ],
             'addition' => [
                 'text' => '(+) Outros acréscimos',
