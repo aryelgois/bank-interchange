@@ -379,15 +379,15 @@ abstract class View extends FPDF
      * Structure:
      *
      * ```
-     * payment_place                                                      | date_due
-     * assignor                                                           | agency_code
+     * payment_place                                                | date_due
+     * assignor                                                     | agency_code
      * date_document | doc_number_sh | kind | accept | date_process | our_number
-     * bank_use | wallet | currency | amount | doc_valueU                 | doc_value=
-     * demonstrative or instructions                                      | discount
-     *                                                                    | deduction
-     *                                                                    | fine
-     *                                                                    | additions
-     *                                                                    | charged
+     * bank_use | wallet | currency | amount | doc_valueU           | doc_value=
+     * demonstrative or instructions                                | discount
+     *                                                              | deduction
+     *                                                              | fine
+     *                                                              | additions
+     *                                                              | charged
      * ```
      *
      * @param string  $big_cell Tells which information goes in the big cell
