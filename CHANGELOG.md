@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Rename `$billet` to `$data`
 - Replace `drawTableRow()` and `drawTableColumn()` with `drawRow()`
 - Rewrite BankBillet Controller
+- Move resource files to assets
 
 ### Deprecated
 
@@ -53,6 +54,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Accidentally committed lines
 - Alias 'BankI' for `aryelgois\BankInterchange`
 - Remove `beforeDraw()`
+- Example assignor logos
 
 ### Fixed
 - Fix model Title `setOurNumber()` and `discount_type`
