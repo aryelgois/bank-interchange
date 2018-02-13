@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Remove `beforeDraw()`
 - Example assignor logos
 - Column `doc_type`
+- Defaults for `fine_type` and `discount_type`
 
 ### Fixed
 - Fix model Title `setOurNumber()` and `discount_type`
