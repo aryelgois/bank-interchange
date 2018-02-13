@@ -45,6 +45,9 @@ class Title extends Medools\Model
         'fine_type',
         'fine_date',
         'fine_value',     // (float)
+        'interest_type',
+        'interest_date',
+        'interest_value',  // (float)
         'discount_type',
         'discount_date',
         'discount_value', // (float)
@@ -58,6 +61,8 @@ class Title extends Medools\Model
         'guarantor',
         'status',
         'value_paid',
+        'interest_date',
+        'interest_value',
         'fine_type',
         'fine_date',
         'fine_value',

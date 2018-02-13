@@ -115,6 +115,9 @@ tables:
     fine_type: tinyint(1) DEFAULT 3
     fine_date: date NULLABLE
     fine_value: money NULLABLE
+    interest_type: tinyint(1)
+    interest_date: date NULLABLE
+    interest_value: money NULLABLE
     discount_type: enum('1','2') DEFAULT '1'
     discount_date: date NULLABLE
     discount_value: money NULLABLE
