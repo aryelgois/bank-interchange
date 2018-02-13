@@ -147,7 +147,7 @@ abstract class View extends FPDF
         $models['wallet']            = $models['assignment']->wallet;
         $this->models = $models;
 
-        $value = $models['title']->value + $models['bank']->tax;
+        $value = $title->value + $title->billet_tax;
         $data = array_merge(
             $data,
             ['value' => (float) $value],
@@ -855,7 +855,7 @@ abstract class View extends FPDF
                 'text' => 'Demonstrativo',
                 'value' => str_replace(
                     '{{ tax }}',
-                    $this->formatMoney($models['bank']->tax),
+                    $this->formatMoney($models['title']->billet_tax),
                     $data['demonstrative'] ?? ''
                 ),
             ],

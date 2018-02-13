@@ -78,7 +78,7 @@ tables:
     id: pk_auto
     code: char(3)
     name: name
-    tax: money_small
+    billet_tax: money_small
 
   clients:
     id: pk_auto
@@ -100,7 +100,7 @@ tables:
     value_paid: money DEFAULT 0
     iof: money
     rebate: money
-    tax: money_small
+    billet_tax: money_small
     fine_type: tinyint(1) DEFAULT 3
     fine_date: date NULLABLE
     fine_value: money NULLABLE

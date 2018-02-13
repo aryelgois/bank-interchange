@@ -41,7 +41,7 @@ class Title extends Medools\Model
         'value_paid',     // (float)
         'iof',            // (float) A Brazilian tax
         'rebate',         // (float)
-        'tax',
+        'billet_tax',
         'fine_type',
         'fine_date',
         'fine_value',     // (float)

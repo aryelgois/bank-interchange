@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replace `drawTableRow()` and `drawTableColumn()` with `drawRow()`
 - Rewrite BankBillet Controller
 - Move resource files to assets
+- Rename `tax` column to `billet_tax`
 
 ### Deprecated
 
