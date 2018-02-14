@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Can generate a `.zip` with multiple bank billets
 - Platform requirements (zlib and zip extensions)
 - Setup section
+- General Controller
+- ShippingFile `getShippedTitles()`
 
 ### Changed
 - Bump [aryelgois/medools] version
@@ -45,6 +47,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Rename `$billet` to `$data`
 - Replace `drawTableRow()` and `drawTableColumn()` with `drawRow()`
 - Rewrite BankBillet Controller
+- Move ShippingFile classes to its own namespace
+- Replace `setCounter()` in ShippingFile model with `onFirstSaveHook()`
+- Rewrite ShippingFile Controller
+- Update ShippingFile View
 
 ### Deprecated
 
