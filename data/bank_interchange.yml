@@ -83,6 +83,7 @@ tables:
     agency_cd: char(1)
     account: char(11)
     account_cd: char(1)
+    agency_account_cd: char(1)
     edi: char(6)
 
   banks:

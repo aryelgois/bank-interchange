@@ -34,6 +34,7 @@ class Assignment extends Medools\Model
         'agency_cd',  // check digit
         'account',    // Bank Account. max 12 digits
         'account_cd', // check digit
+        'agency_account_cd', // check digit for both agency and account
         'edi',        // EDI code informed by the Bank
     ];
 

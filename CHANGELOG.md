@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Default assignment's document kind
 - Column `accept` in `titles` table
 - Columns for `interest`
+- Column `agency_account_cd`
 
 ### Changed
 - Bump [aryelgois/medools] version
