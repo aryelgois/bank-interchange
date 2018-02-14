@@ -37,14 +37,14 @@ class Title extends Medools\Model
         'our_number',
         'accept',
         'status',
-        'value',          // (float)
-        'value_paid',     // (float)
-        'ioc_iof',        // (float) A Brazilian tax
-        'rebate',         // (float)
+        'value',           // (float)
+        'value_paid',      // (float)
+        'ioc_iof',         // (float) A Brazilian tax
+        'rebate',          // (float)
         'billet_tax',
         'fine_type',
         'fine_date',
-        'fine_value',     // (float)
+        'fine_value',      // (float)
         'interest_type',
         'interest_date',
         'interest_value',  // (float)
@@ -58,8 +58,8 @@ class Title extends Medools\Model
         'discount3_date',
         'discount3_value', // (float)
         'description',
-        'due',            // Must be between 1997-10-07 and 2025-02-21, inclusives; or should be empty/with a message
-        'stamp',          // When Title was generated
+        'due',             // Must be between 1997-10-07 and 2025-02-21, inclusives; or should be empty/with a message
+        'stamp',           // When Title was generated
         'update',
     ];
 
