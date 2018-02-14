@@ -6,9 +6,12 @@ database:
 definitions:
   pk: int PRIMARY KEY
   pk_auto: pk AUTO_INCREMENT
+  tiny_pk: tinyint PRIMARY KEY
+  tiny_pk_auto: tiny_pk AUTO_INCREMENT
   name: varchar(60)
   money: decimal(17,4)
   money_small: decimal(6,4)
+  1_or_2: enum('1','2')
 
 tables:
 
@@ -30,7 +33,7 @@ tables:
     document: varchar(14)
 
   currencies:
-    id: tinyint PRIMARY KEY AUTO_INCREMENT
+    id: tiny_pk_auto
     symbol: varchar(5)
     name: varchar(30)
     name_plural: varchar(30) NULLABLE
@@ -45,8 +48,16 @@ tables:
     cnab240: char(2)
     cnab400: char(1)
 
+  document_kinds:
+    id: tiny_pk_auto
+    bank: int -> banks.id
+    cnab: char(3)
+    code: varchar(2)
+    symbol: varchar(3)
+    name: name
+
   wallets:
-    id: tinyint PRIMARY KEY AUTO_INCREMENT
+    id: tiny_pk_auto
     bank: int -> banks.id
     cnab: char(3)
     code: varchar(2)      # used in cnab
@@ -60,27 +71,27 @@ tables:
     id: pk_auto
     person: int -> people.id UNIQUE
     address: int -> full_addresses.id
-    logo: varchar(30) NULLABLE
     url: varchar(30) NULLABLE
 
   assignments:
     id: pk_auto
     assignor: int -> assignors.id
     bank: int -> banks.id
+    document_kind: tinyint -> document_kinds.id
     wallet: tinyint -> wallets.id
     covenant: char(20)
     agency: char(5)
     agency_cd: char(1)
     account: char(11)
     account_cd: char(1)
+    agency_account_cd: char(1)
     edi: char(6)
 
   banks:
     id: pk_auto
     code: char(3)
     name: name
-    logo: varchar(30) NULLABLE
-    tax: money_small
+    billet_tax: money_small
 
   clients:
     id: pk_auto
@@ -94,21 +105,30 @@ tables:
     client: int -> clients.id
     guarantor: int -> clients.id NULLABLE
     currency: tinyint -> currencies.id
+    kind: tinyint -> document_kinds.id
     our_number: int
+    accept: enum('A','N') DEFAULT 'N'
     status: tinyint(1) NULLABLE
-    doc_type: char(1) DEFAULT 1
-    kind: tinyint(2)
     value: money
     value_paid: money DEFAULT 0
-    iof: money
+    ioc_iof: money
     rebate: money
-    tax: money_small
-    fine_type: tinyint(1) DEFAULT 3
+    billet_tax: money_small
+    fine_type: 1_or_2
     fine_date: date NULLABLE
     fine_value: money NULLABLE
-    discount_type: enum('1','2') DEFAULT '1'
-    discount_date: date NULLABLE
-    discount_value: money NULLABLE
+    interest_type: enum('1','2','3')
+    interest_date: date NULLABLE
+    interest_value: money NULLABLE
+    discount1_type: 1_or_2
+    discount1_date: date NULLABLE
+    discount1_value: money NULLABLE
+    discount2_type: 1_or_2
+    discount2_date: date NULLABLE
+    discount2_value: money NULLABLE
+    discount3_type: 1_or_2
+    discount3_date: date NULLABLE
+    discount3_value: money NULLABLE
     description: varchar(25)
     due: date
     stamp: timestamp DEFAULT CURRENT_TIMESTAMP

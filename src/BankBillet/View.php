@@ -48,13 +48,6 @@ abstract class View extends FPDF
     const ACCOUNT_LENGTH = 11;
 
     /**
-     * Temporary way to set the document specie
-     *
-     * @const string
-     */
-    const SPECIE_DOC = '11';
-
-    /**
      * Font presets of family, weight, size and color
      *
      * @const array[]
@@ -140,6 +133,7 @@ abstract class View extends FPDF
                 'bank' => $models['bank']->id
             ]
         );
+        $models['document_kind']     = $title->kind;
         $models['guarantor']         = $title->guarantor;
         $models['guarantor.person']  = $models['guarantor']->person ?? null;
         $models['guarantor.address'] = $models['guarantor']->address ?? null;
@@ -147,7 +141,7 @@ abstract class View extends FPDF
         $models['wallet']            = $models['assignment']->wallet;
         $this->models = $models;
 
-        $value = $models['title']->value + $models['bank']->tax;
+        $value = $title->value + $title->billet_tax;
         $data = array_merge(
             $data,
             ['value' => (float) $value],
@@ -198,7 +192,7 @@ abstract class View extends FPDF
         $assignor = $this->models['assignor'];
         $this->Ln(2);
 
-        $logo = self::findFile('assignors/' . $assignor->logo, $this->logos);
+        $logo = self::findFile("assignors/$assignor->id.*", $this->logos);
         if ($logo !== null) {
             $y = $this->GetY();
             $this->Image($logo, null, null, 40, 0, '', $assignor->url);
@@ -259,7 +253,7 @@ abstract class View extends FPDF
         $bank = $this->models['bank'];
         $this->Ln(3);
 
-        $logo = self::findFile('banks/' . $bank->logo, $this->logos);
+        $logo = self::findFile("banks/$bank->id.*", $this->logos);
         if ($logo !== null) {
             $this->Image($logo, null, null, 40);
             $this->SetXY(50, $this->GetY() - 7);
@@ -385,15 +379,15 @@ abstract class View extends FPDF
      * Structure:
      *
      * ```
-     * payment_place                                                      | date_due
-     * assignor                                                           | agency_code
-     * date_document | doc_number_sh | specie_doc | accept | date_process | our_number
-     * bank_use | wallet | currency | amount | doc_valueU                 | doc_value=
-     * demonstrative or instructions                                      | discount
-     *                                                                    | deduction
-     *                                                                    | fine
-     *                                                                    | additions
-     *                                                                    | charged
+     * payment_place                                                | date_due
+     * assignor                                                     | agency_code
+     * date_document | doc_number_sh | kind | accept | date_process | our_number
+     * bank_use | wallet | currency | amount | doc_valueU           | doc_value=
+     * demonstrative or instructions                                | discount
+     *                                                              | deduction
+     *                                                              | fine
+     *                                                              | additions
+     *                                                              | charged
      * ```
      *
      * @param string  $big_cell Tells which information goes in the big cell
@@ -418,7 +412,7 @@ abstract class View extends FPDF
             [
                 ['width' => $widths[4], 'field' => 'date_document'],
                 ['width' => $widths[5], 'field' => 'doc_number_sh'],
-                ['width' => $widths[6], 'field' => 'specie_doc'],
+                ['width' => $widths[6], 'field' => 'kind'],
                 ['width' => $widths[7], 'field' => 'accept'],
                 ['width' => $widths[8], 'field' => 'date_process'],
                 ['width' => $widths[9], 'field' => 'our_number', 'align' => 'R'],
@@ -726,8 +720,8 @@ abstract class View extends FPDF
     /**
      * Finds a file in a list of paths
      *
-     * @param string $file  [description]
-     * @param array  $paths [description]
+     * @param string $file  glob pattern to search inside each path
+     * @param array  $paths List of paths to search
      *
      * @return string If file was found
      * @return null   If file was not found
@@ -738,9 +732,9 @@ abstract class View extends FPDF
             return null;
         }
         foreach ($paths as $path) {
-            $test_file = "$path/$file";
-            if (is_file($test_file)) {
-                return $test_file;
+            $files = glob("$path/$file");
+            if (!empty($files)) {
+                return $files[0];
             }
         }
     }
@@ -785,7 +779,7 @@ abstract class View extends FPDF
         $fields = [
             'accept' => [
                 'text' => 'Aceite',
-                'value' => $data['accept'] ?? 'A',
+                'value' => $models['title']->accept,
             ],
             'addition' => [
                 'text' => '(+) Outros acréscimos',
@@ -855,7 +849,7 @@ abstract class View extends FPDF
                 'text' => 'Demonstrativo',
                 'value' => str_replace(
                     '{{ tax }}',
-                    $this->formatMoney($models['bank']->tax),
+                    $this->formatMoney($models['title']->billet_tax),
                     $data['demonstrative'] ?? ''
                 ),
             ],
@@ -912,6 +906,10 @@ abstract class View extends FPDF
                 'text' => 'Instruções (Texto de responsabilidade do beneficiário)',
                 'value' => $data['instructions'] ?? '',
             ],
+            'kind' => [
+                'text' => 'Espécie doc.',
+                'value' => $models['document_kind']->symbol,
+            ],
             'mech_auth' => [
                 'text' => 'Autenticação mecânica',
             ],
@@ -922,10 +920,6 @@ abstract class View extends FPDF
             'payment_place' => [
                 'text' => 'Local de pagamento',
                 'value' => $data['payment_place'] ?? '',
-            ],
-            'specie_doc' => [
-                'text' => 'Espécie doc.',
-                'value' => static::SPECIE_DOC,
             ],
             'wallet' => [
                 'text' => 'Carteira',

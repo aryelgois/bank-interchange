@@ -56,12 +56,12 @@ abstract class Utils
     public static function checkOutput(string $type)
     {
         $message = "Some data has already been output, can't send $type file";
-        if (PHP_SAPI != 'cli' && headers_sent($file,$line)) {
+        if (PHP_SAPI != 'cli' && headers_sent($file, $line)) {
             throw new \Exception($message . " (output started at $file:$line)");
         }
         if (ob_get_length()) {
             // The output buffer is not empty
-            if (preg_match('/^(\xEF\xBB\xBF)?\s*$/',ob_get_contents())) {
+            if (preg_match('/^(\xEF\xBB\xBF)?\s*$/', ob_get_contents())) {
                 // It contains only a UTF-8 BOM and/or whitespace
                 ob_clean();
             } else {

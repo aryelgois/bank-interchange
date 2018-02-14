@@ -19,8 +19,6 @@ use aryelgois\BankInterchange;
  */
 class Banese extends BankInterchange\BankBillet\View
 {
-    const SPECIE_DOC = 5;
-
     const FONTS = [
         'digitable'  => ['Arial', 'B',  8, [ 0,  0,  0]],
         'digitable1' => ['Arial', 'B', 10, [ 0,  0,  0]],
@@ -52,8 +50,8 @@ class Banese extends BankInterchange\BankBillet\View
             'fine'          => ['text' => '(+) Mora/Multa'],
             'guarantor'     => ['text' => 'Sacador/Avalista: '],
             'instructions'  => ['text' => 'Instruções'],
+            'kind'          => ['text' => 'Espécie doc'],
             'currency'      => ['text' => 'Moeda'],
-            'specie_doc'    => ['text' => 'Espécie doc'],
         ];
         foreach ($rename_fields as &$field) {
             $field['text'] = utf8_decode($field['text']);
@@ -70,8 +68,8 @@ class Banese extends BankInterchange\BankBillet\View
             'bank_use', 'charged', 'client', 'currency', 'date_document',
             'date_due', 'date_process', 'deduction', 'demonstrative',
             'discount', 'doc_number_sh', 'doc_value', 'doc_value=',
-            'doc_valueU', 'fine', 'guarantor', 'instructions', 'mech_auth',
-            'our_number', 'payment_place', 'specie_doc', 'wallet',
+            'doc_valueU', 'fine', 'guarantor', 'instructions', 'kind',
+            'mech_auth', 'our_number', 'payment_place', 'wallet',
         ];
         foreach ($keys as $key) {
             $text = mb_strtoupper(utf8_encode($this->fields[$key]['text']));

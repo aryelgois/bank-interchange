@@ -25,6 +25,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Setup section
 - General Controller
 - ShippingFile `getShippedTitles()`
+- Table `document_kinds`
+- Default assignment's document kind
+- Column `accept` in `titles` table
+- Columns for `interest`
+- Column `agency_account_cd`
 
 ### Changed
 - Bump [aryelgois/medools] version
@@ -43,6 +48,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Invert default parameter value for some methods in BankBillet view
 - Use bank name in PascalCase to select the BankBillet view
 - Allow multiple paths to be searched for logos
+- Use model id to select logo file
 - Replace `$dictionary` with `$fields`
 - Rename `$billet` to `$data`
 - Replace `drawTableRow()` and `drawTableColumn()` with `drawRow()`
@@ -51,6 +57,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replace `setCounter()` in ShippingFile model with `onFirstSaveHook()`
 - Rewrite ShippingFile Controller
 - Update ShippingFile View
+- Move resource files to assets directory
+- Rename `tax` column to `billet_tax`
+- Rename `iof` column to `ioc_iof`
+- Use document_kinds in titles table
+- Replace `SPECIE_DOC` with title's `kind`
+- Split discount columns into multiple discounts
 
 ### Deprecated
 
@@ -58,6 +70,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Accidentally committed lines
 - Alias 'BankI' for `aryelgois\BankInterchange`
 - Remove `beforeDraw()`
+- Example assignor logos
+- Column `doc_type`
+- Defaults for `fine_type` and `discount_type`
 
 ### Fixed
 - Fix model Title `setOurNumber()` and `discount_type`
@@ -67,7 +82,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Model ReturnFile `analyze()`: monetary values weren't turned into float
 - Model ReturnFile `analyze()`: CNAB240 occurrence is empty on success
 - Our Number check digit for Banco do Nordeste has a different length and base
-- Specie code for different banks or the cnabs
+- Currency code for different banks or the cnabs
 - Remove EOF character `0x1A` in shipping files
 - Rename `B. do Nordeste` to `Banco do Nordeste`
 - BankBillet views

@@ -10,20 +10,29 @@ namespace aryelgois\BankInterchange\Models;
 use aryelgois\Medools;
 
 /**
- * A Bank has to keep our money safe!
+ * Identifies the title's billing kind
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Bank extends Medools\Model
+class DocumentKind extends Medools\Model
 {
-    const TABLE = 'banks';
+    const TABLE = 'document_kinds';
 
     const COLUMNS = [
         'id',
-        'code', // Defined by a government entity, 3 digits
-        'name', // Bank's name, 30 characters, left-padded with spaces
-        'billet_tax',
+        'bank',
+        'cnab',
+        'code',
+        'symbol',
+        'name',
+    ];
+
+    const FOREIGN_KEYS = [
+        'bank' => [
+            __NAMESPACE__ . '\\Bank',
+            'id'
+        ],
     ];
 }

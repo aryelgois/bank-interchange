@@ -33,38 +33,50 @@ class Title extends Medools\Model
         'client',         // Who the Title is destined
         'guarantor',      // Someone that would be charged if the Client could not pay
         'currency',
-        'our_number',
-        'status',
-        'doc_type',
         'kind',
-        'value',          // (float)
-        'value_paid',     // (float)
-        'iof',            // (float) A Brazilian tax
-        'rebate',         // (float)
-        'tax',
+        'our_number',
+        'accept',
+        'status',
+        'value',           // (float)
+        'value_paid',      // (float)
+        'ioc_iof',         // (float) A Brazilian tax
+        'rebate',          // (float)
+        'billet_tax',
         'fine_type',
         'fine_date',
-        'fine_value',     // (float)
-        'discount_type',
-        'discount_date',
-        'discount_value', // (float)
+        'fine_value',      // (float)
+        'interest_type',
+        'interest_date',
+        'interest_value',  // (float)
+        'discount1_type',
+        'discount1_date',
+        'discount1_value', // (float)
+        'discount2_type',
+        'discount2_date',
+        'discount2_value', // (float)
+        'discount3_type',
+        'discount3_date',
+        'discount3_value', // (float)
         'description',
-        'due',            // Must be between 1997-10-07 and 2025-02-21, inclusives; or should be empty/with a message
-        'stamp',          // When Title was generated
+        'due',             // Must be between 1997-10-07 and 2025-02-21, inclusives; or should be empty/with a message
+        'stamp',           // When Title was generated
         'update',
     ];
 
     const OPTIONAL_COLUMNS = [
         'guarantor',
         'status',
-        'doc_type',
         'value_paid',
-        'fine_type',
+        'interest_date',
+        'interest_value',
         'fine_date',
         'fine_value',
-        'discount_type',
-        'discount_date',
-        'discount_value',
+        'discount1_date',
+        'discount1_value',
+        'discount2_date',
+        'discount2_value',
+        'discount3_date',
+        'discount3_value',
         'stamp',
         'update',
     ];
@@ -84,6 +96,10 @@ class Title extends Medools\Model
         ],
         'currency' => [
             __NAMESPACE__ . '\\Currency',
+            'id'
+        ],
+        'kind' => [
+            __NAMESPACE__ . '\\DocumentKind',
             'id'
         ],
     ];

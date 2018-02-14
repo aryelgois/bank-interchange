@@ -23,11 +23,6 @@ class BancoDoNordeste extends CaixaEconomicaFederal
     const ACCOUNT_LENGTH = 7;
 
     /**
-     * Temporary way to set the document specie
-     */
-    const SPECIE_DOC = 'RC';
-
-    /**
      * Calculates Our number's check digit
      *
      * @return string

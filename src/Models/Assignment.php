@@ -27,13 +27,15 @@ class Assignment extends Medools\Model
         'id',
         'assignor',
         'bank',
+        'document_kind',
         'wallet',
-        'covenant',   // Covenant provided by the Bank. Max 20 digits, but should have up to 6
-        'agency',     // Bank Agency. max 5 digits
-        'agency_cd',  // check digit
-        'account',    // Bank Account. max 12 digits
-        'account_cd', // check digit
-        'edi',        // EDI code informed by the Bank
+        'covenant',          // Covenant provided by the Bank. Max 20 digits, but should have up to 6
+        'agency',            // Bank Agency. max 5 digits
+        'agency_cd',         // check digit
+        'account',           // Bank Account. max 12 digits
+        'account_cd',        // check digit
+        'agency_account_cd', // check digit for both agency and account
+        'edi',               // EDI code informed by the Bank
     ];
 
     const FOREIGN_KEYS = [
@@ -43,6 +45,10 @@ class Assignment extends Medools\Model
         ],
         'bank' => [
             __NAMESPACE__ . '\\Bank',
+            'id'
+        ],
+        'document_kind' => [
+            __NAMESPACE__ . '\\DocumentKind',
             'id'
         ],
         'wallet' => [

@@ -24,12 +24,10 @@ class Assignor extends Medools\Model
         'id',
         'person',
         'address',
-        'logo',    // Filename for Assignor's logo
         'url',     // URL to be embeded into Assignor's logo, in the Bank Billet
     ];
 
     const OPTIONAL_COLUMNS = [
-        'logo',
         'url',
     ];
 
