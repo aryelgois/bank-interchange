@@ -48,9 +48,15 @@ class Title extends Medools\Model
         'interest_type',
         'interest_date',
         'interest_value',  // (float)
-        'discount_type',
-        'discount_date',
-        'discount_value', // (float)
+        'discount1_type',
+        'discount1_date',
+        'discount1_value', // (float)
+        'discount2_type',
+        'discount2_date',
+        'discount2_value', // (float)
+        'discount3_type',
+        'discount3_date',
+        'discount3_value', // (float)
         'description',
         'due',            // Must be between 1997-10-07 and 2025-02-21, inclusives; or should be empty/with a message
         'stamp',          // When Title was generated
@@ -65,8 +71,12 @@ class Title extends Medools\Model
         'interest_value',
         'fine_date',
         'fine_value',
-        'discount_date',
-        'discount_value',
+        'discount1_date',
+        'discount1_value',
+        'discount2_date',
+        'discount2_value',
+        'discount3_date',
+        'discount3_value',
         'stamp',
         'update',
     ];
