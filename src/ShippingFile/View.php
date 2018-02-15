@@ -49,7 +49,7 @@ abstract class View
     protected $registries = [];
 
     /**
-     * Total registries in the file
+     * Count registries in the file
      *
      * @var integer
      */
