@@ -57,7 +57,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Move ShippingFile classes to its own namespace
 - Replace `setCounter()` in ShippingFile model with `onFirstSaveHook()`
 - Rewrite ShippingFile Controller
-- Update ShippingFile View
+- Rewrite ShippingFile View
 - Move resource files to assets directory
 - Rename `tax` column to `billet_tax`
 - Rename `iof` column to `ioc_iof`

@@ -140,78 +140,26 @@ abstract class View
     }
 
     /*
-     * Main methods
-     * =========================================================================
-     */
-
-    /**
-     * Adds a File Header
-     */
-    protected function open()
-    {
-        $this->registry_count++;
-        $this->addFileHeader();
-    }
-
-    /**
-     * Adds a Title registry
-     *
-     * @param Models\ShippingFileTitle $sft Contains data for the registry
-     *
-     * @throws \OverflowException If there are too many registries
-     */
-    protected function add(Models\ShippingFileTitle $sft)
-    {
-        $this->increment(999998);
-        $this->addTitle($sft->title);
-    }
-
-    /**
-     * Actually inserts the registry in $this->registries
-     *
-     * @param string   $format A sprintf() format
-     * @param string[] $data   Registry data to be inserted
-     */
-    final protected function register($format, $data)
-    {
-        // data cleanup
-        foreach ($data as $id => $value) {
-            $data[$id] = preg_replace('/:;,\.\/\\\?\$\*!#_-/', '', $data[$id]);
-        }
-
-        $this->registries[] = sprintf($format, ...$data);
-    }
-
-    /**
-     * Adds a File Trailer
-     */
-    protected function close()
-    {
-        $this->increment(999999);
-        $this->addFileTrailer();
-    }
-
-    /*
      * Abstracts
      * =========================================================================
      */
 
     /**
-     * ...
+     * Does initial steps for creating a shipping file
      */
-    abstract protected function addFileHeader();
+    abstract protected function open();
 
     /**
-     * ...
+     * Adds a Title registry
      *
-     * @param Models\Title $title ...
+     * @param Models\ShippingFileTitle $sft Contains data for the registry
      */
-    abstract protected function addTitle(Models\Title $title);
+    abstract protected function add(Models\ShippingFileTitle $sft);
 
     /**
-     * ...
+     * Does final steps for creating a shipping file
      */
-    abstract protected function addFileTrailer();
+    abstract protected function close();
 
     /*
      * Helper
@@ -219,17 +167,16 @@ abstract class View
      */
 
     /**
-     * Increments the Registries counter
+     * Remove unwanted characters
      *
-     * @param integer $limit Defines the overflow limit
-     *
-     * @throws \OverflowException If there are too many registries
+     * @param string[] $data Data to be filtered
      */
-    protected function increment($limit)
+    protected function filter($data)
     {
-        if ($this->registry_count > $limit) {
-            throw new \OverflowException('The File got too many registries');
+        foreach ($data as $id => $value) {
+            $data[$id] = preg_replace('/:;,\.\/\\\?\$\*!#_-/', '', $data[$id]);
         }
-        $this->registry_count++;
+        return $data;
     }
+
 }
