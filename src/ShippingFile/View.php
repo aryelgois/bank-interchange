@@ -50,7 +50,7 @@ abstract class View
     /**
      * Total registries in the file
      *
-     * integer
+     * @var integer
      */
     protected $registry_count = 0;
 
