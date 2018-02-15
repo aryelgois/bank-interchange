@@ -57,6 +57,12 @@ tables:
     symbol: varchar(3)
     name: name
 
+  shipping_file_movements:
+    id: tiny_pk_auto
+    cnab: cnab
+    code: char(2)
+    name: name
+
   wallets:
     id: tiny_pk_auto
     bank: int -> banks.id
@@ -151,6 +157,7 @@ tables:
 
 composite:
   - PRIMARY currency_codes currency bank
+  - UNIQUE shipping_file_movements cnab code
   - UNIQUE clients person assignor
   - UNIQUE titles assignment our_number
   - UNIQUE shipping_files assignment counter
