@@ -100,7 +100,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             '0', // second discount value
             '',
             $assignment->wallet->code,
-            $sft->movement,
+            $sft->movement->code,
             $title->id,
             date('dmy', strtotime($title->due)),
             number_format($title->value, 2, '', ''),
