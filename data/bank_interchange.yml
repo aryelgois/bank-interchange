@@ -80,6 +80,7 @@ tables:
     bank: int -> banks.id
     document_kind: tinyint -> document_kinds.id
     wallet: tinyint -> wallets.id
+    cnab: cnab
     covenant: char(20)
     agency: char(5)
     agency_cd: char(1)

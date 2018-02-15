@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - ShippingFile View `TITLE_LIMIT`
 - Bank specific ShippingFile views
 - Title `getCurrencyCode()`
-- Column `cnab` in `shipping_files` table
+- Column `cnab` in `assignment` and `shipping_files` tables
 
 ### Changed
 - Bump [aryelgois/medools] version
