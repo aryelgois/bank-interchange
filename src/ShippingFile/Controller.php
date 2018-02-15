@@ -30,28 +30,11 @@ class Controller
     const EXTENSION = '.REM';
 
     /**
-     * CNAB type to be used
-     *
-     * @var string
-     */
-    protected $cnab;
-
-    /**
      * Holds ShippingFile View objects
      *
      * @var array[]
      */
     protected $views;
-
-    /**
-     * Creates a new ShippingFile Controller object
-     *
-     * @param string $cnab CNAB type to be used
-     */
-    public function __construct(string $cnab)
-    {
-        $this->cnab = $cnab;
-    }
 
     /**
      * Generates the CNAB shipping file from data in a ShippingFile
@@ -67,7 +50,7 @@ class Controller
             ? $where
             : Medools\ModelManager::getInstance($model_class, $where);
 
-        $view_class = __NAMESPACE__ . "\\Views\\$this->cnab\\"
+        $view_class = __NAMESPACE__ . "\\Views\\Cnab$shipping_file->cnab\\"
             . Utils::toPascalCase($shipping_file->assignment->bank->name);
 
         $view = new $view_class($shipping_file);
