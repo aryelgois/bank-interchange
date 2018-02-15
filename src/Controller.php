@@ -20,14 +20,17 @@ abstract class Controller
      * Creates a new ShippingFile Model
      *
      * @param integer[] $title_list A list of Models\Title `id`
-     *                  They all must be for the same assignment.
+     *                              They all must be for the same assignment.
+     * @param string    $cnab       Specify which Cnab to use
      *
      * @return Models\ShippingFile
      *
      * @throws \InvalidArgumentException If $title_list is empty or invalid
      */
-    public static function createShippingFile(array $title_list)
-    {
+    public static function createShippingFile(
+        array $title_list,
+        string $cnab = null
+    ) {
         if (empty($title_list)) {
             throw new \InvalidArgumentException('Title list is empty');
         }
@@ -44,6 +47,7 @@ abstract class Controller
 
         $shipping_file = (new Models\ShippingFile)->fill([
             'assignment' => $assignment,
+            'cnab' => $cnab ?? $assignment->cnab,
             'status' => 0,
         ]);
         $shipping_file->save();
