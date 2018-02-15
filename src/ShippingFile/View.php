@@ -8,6 +8,7 @@
 namespace aryelgois\BankInterchange\ShippingFile;
 
 use aryelgois\BankInterchange\Models;
+use aryelgois\BankInterchange\Utils;
 use VRia\Utils\NoDiacritic;
 
 /**

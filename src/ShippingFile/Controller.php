@@ -8,7 +8,8 @@
 namespace aryelgois\BankInterchange\ShippingFile;
 
 use aryelgois\Medools;
-use aryelgois\BankInterchange;
+use aryelgois\BankInterchange\Models;
+use aryelgois\BankInterchange\Utils;
 
 /**
  * Controller class for shipping files
@@ -61,7 +62,7 @@ class Controller
      */
     public function generate($where, string $name = null)
     {
-        $model_class = BankInterchange\Models\ShippingFile::class;
+        $model_class = Models\ShippingFile::class;
         $shipping_file = ($where instanceof $model_class)
             ? $where
             : Medools\ModelManager::getInstance($model_class, $where);
