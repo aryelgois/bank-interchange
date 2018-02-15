@@ -136,7 +136,7 @@ abstract class View
             $assignment->covenant,
         ];
 
-        return sprintf($format, ...$data);
+        return vsprintf($format, $data);
     }
 
     /*
