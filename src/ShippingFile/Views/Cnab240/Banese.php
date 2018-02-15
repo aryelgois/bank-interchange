@@ -61,7 +61,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '',
         ];
 
-        return vsprintf($format, $this->filter($data));
+        return vsprintf($format, static::normalize($data));
     }
 
     /**
@@ -105,7 +105,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '',
         ];
 
-        return vsprintf($format, $this->filter($data));
+        return vsprintf($format, static::normalize($data));
     }
 
     /**
@@ -187,7 +187,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '1', // Free use: it's defining partial payment isn't allowed
         ];
 
-        $result[] = vsprintf($format, $this->filter($data));
+        $result[] = vsprintf($format, static::normalize($data));
 
         /*
          * 'Q' Segment
@@ -208,7 +208,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $client_person->documentValidate()['type'],
             $client_person->document,
             $client_person->name,
-            $client_address->place,
+            static::filter($client_address->place),
             $client_address->neighborhood,
             $client_address->zipcode,
             $client_address->county->name,
@@ -221,7 +221,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '',
         ];
 
-        $result[] = vsprintf($format, $this->filter($data));
+        $result[] = vsprintf($format, static::normalize($data));
 
         return $result;
     }
@@ -254,7 +254,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '',
         ];
 
-        return vsprintf($format, $this->filter($data));
+        return vsprintf($format, static::normalize($data));
     }
 
     /**
@@ -277,6 +277,6 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '',
         ];
 
-        return vsprintf($format, $this->filter($data));
+        return vsprintf($format, static::normalize($data));
     }
 }

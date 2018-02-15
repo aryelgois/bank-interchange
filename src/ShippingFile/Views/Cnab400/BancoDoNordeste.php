@@ -53,7 +53,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $this->registry_count,
         ];
 
-        return vsprintf($format, $this->filter($data));
+        return vsprintf($format, static::normalize($data));
     }
 
     /**
@@ -119,7 +119,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $client_person->documentValidate()['type'] ?? '',
             $client_person->document,
             $client_person->name,
-            implode(' ', [$client_address->place, $client_address->number, $client_address->neighborhood]),
+            implode(' ', [static::filter($client_address->place), $client_address->number, $client_address->neighborhood]),
             $client_address->detail,
             $client_address->zipcode,
             $client_address->county->name,
@@ -130,7 +130,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $this->registry_count,
         ];
 
-        return vsprintf($format, $this->filter($data));
+        return vsprintf($format, static::normalize($data));
     }
 
     /**
@@ -148,6 +148,6 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $this->registry_count,
         ];
 
-        return vsprintf($format, $this->filter($data));
+        return vsprintf($format, static::normalize($data));
     }
 }

@@ -167,16 +167,27 @@ abstract class View
      */
 
     /**
-     * Remove unwanted characters
+     * Removes diacritics and convert to upper case
      *
-     * @param string[] $data Data to be filtered
+     * @param string[] $data Data to be normalized
      */
-    protected function filter($data)
+    protected static function normalize($data)
     {
         foreach ($data as $id => $value) {
             $data[$id] = strtoupper(NoDiacritic::filter($value));
-            $data[$id] = preg_replace('/:;,\.\/\\\?\$\*!#_-/', '', $data[$id]);
         }
         return $data;
+    }
+
+    /**
+     * Remove unwanted characters
+     *
+     * @param string $field Field to be filtered
+     */
+    protected static function filter($field)
+    {
+        $field = preg_replace('/[\.\/\\:;,?$*!#_-]/', '', $field);
+        $field = preg_replace('/  +/', ' ', $field);
+        return $field;
     }
 }
