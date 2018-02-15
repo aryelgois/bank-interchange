@@ -136,6 +136,24 @@ class Title extends Medools\Model
     }
 
     /**
+     * Returns the correct CurrencyCode
+     *
+     * @return CurrencyCode
+     * @return null         If foreigns aren't set
+     */
+    public function getCurrencyCode()
+    {
+        if (!isset($this->currency, $this->assignment->bank)) {
+            return null;
+        }
+
+        return CurrencyCode::getInstance([
+            'currency' => $this->currency->id,
+            'bank' => $this->assignment->bank->id
+        ]);
+    }
+
+    /**
      * Sets the `our_number` column based on current `assignor`
      *
      * Intended to be used only when creating a new entry

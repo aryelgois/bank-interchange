@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Column `agency_account_cd`
 - ShippingFile View `TITLE_LIMIT`
 - Bank specific ShippingFile views
+- Title `getCurrencyCode()`
 
 ### Changed
 - Bump [aryelgois/medools] version
