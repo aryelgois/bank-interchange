@@ -47,10 +47,10 @@ INSERT INTO `document_kinds` (`id`, `bank`, `cnab`, `code`, `symbol`, `name`) VA
 (25, 3, '400', '06', 'DS', 'Duplicata Prest. Serviços'),
 (26, 3, '400', '19', 'OU', 'Outros');
 
--- Movements
+-- Shipping File Movements
 -- TODO check if missing for cnab 400
 
-INSERT INTO `movements` (`id`, `cnab`, `code`, `name`) VALUES
+INSERT INTO `shipping_file_movements` (`id`, `cnab`, `code`, `name`) VALUES
 (1, '240', '01', 'Entrada de Títulos'),
 (2, '240', '02', 'Pedido de Baixa'),
 (3, '240', '03', 'Protesto para Fins Falimentares'),
