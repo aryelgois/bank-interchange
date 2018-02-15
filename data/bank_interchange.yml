@@ -12,6 +12,7 @@ definitions:
   money: decimal(17,4)
   money_small: decimal(6,4)
   1_or_2: enum('1','2')
+  cnab: enum('240','400')
 
 tables:
 
@@ -51,7 +52,7 @@ tables:
   document_kinds:
     id: tiny_pk_auto
     bank: int -> banks.id
-    cnab: char(3)
+    cnab: cnab
     code: varchar(2)
     symbol: varchar(3)
     name: name
@@ -59,7 +60,7 @@ tables:
   wallets:
     id: tiny_pk_auto
     bank: int -> banks.id
-    cnab: char(3)
+    cnab: cnab
     code: varchar(2)      # used in cnab
     operation: varchar(2) # used in billets barcode
     symbol: char(2)
@@ -138,7 +139,7 @@ tables:
     id: pk_auto
     assignment: int -> assignments.id
     counter: int
-    cnab: char(3)
+    cnab: cnab
     status: tinyint(1) NULLABLE
     stamp: timestamp DEFAULT CURRENT_TIMESTAMP
     update: datetime NULLABLE
