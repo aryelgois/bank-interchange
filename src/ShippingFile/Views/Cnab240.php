@@ -19,6 +19,8 @@ use aryelgois\BankInterchange;
  */
 class Cnab240 extends BankInterchange\ShippingFile\View
 {
+    const TITLE_LIMIT = 999977;
+
     /**
      * FEBRABAN's version of file layout
      *

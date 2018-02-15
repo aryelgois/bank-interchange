@@ -34,6 +34,13 @@ abstract class View
     const EOF = "";
 
     /**
+     * How many titles can fit in this shipping file
+     *
+     * @const int
+     */
+    const TITLE_LIMIT = 0;
+
+    /**
      * File registries
      *
      * @var string[]
@@ -59,13 +66,26 @@ abstract class View
      *
      * @param Models\ShippingFile $shipping_file A Shipping File whose Titles
      *                                           will be used
+     *
+     * @throws \OverflowException If $shipping_file has too many titles
      */
     public function __construct(Models\ShippingFile $shipping_file)
     {
         $this->shipping_file = $shipping_file;
+        $shipped_titles = $shipping_file->getShippedTitles();
+        $count = count($shipped_titles);
+        if ($count > static::TITLE_LIMIT) {
+            throw new \OverflowException(sprintf(
+                '%s(%s) has %s titles, but only %s are allowed',
+                get_class($shipping_file),
+                $shipping_file->id,
+                $count,
+                static::TITLE_LIMIT
+            ));
+        }
 
         $this->open();
-        foreach ($shipping_file->getShippedTitles() as $sft) {
+        foreach ($shipped_titles as $sft) {
             $this->add($sft);
         }
         $this->close();
