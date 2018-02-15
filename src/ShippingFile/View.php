@@ -129,7 +129,7 @@ abstract class View
         $format = 'COB.%03.3s.%06.6s.%08.8s.%05.5s.%05.5s';
 
         $data = [
-            $cnab,
+            $this->shipping_file->cnab,
             $assignment->edi,
             date('Ymd', strtotime($this->shipping_file->stamp)),
             $this->shipping_file->counter,
