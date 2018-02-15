@@ -138,6 +138,7 @@ tables:
     id: pk_auto
     assignment: int -> assignments.id
     counter: int
+    cnab: char(3)
     status: tinyint(1) NULLABLE
     stamp: timestamp DEFAULT CURRENT_TIMESTAMP
     update: datetime NULLABLE
