@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Columns for `interest`
 - Column `agency_account_cd`
 - ShippingFile View `TITLE_LIMIT`
+- Bank specific ShippingFile views
 
 ### Changed
 - Bump [aryelgois/medools] version
@@ -64,6 +65,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Use document_kinds in titles table
 - Replace `SPECIE_DOC` with title's `kind`
 - Split discount columns into multiple discounts
+- Rewrite ShippingFile Cnab* views
 
 ### Deprecated
 
