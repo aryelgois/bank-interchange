@@ -102,9 +102,8 @@ abstract class View
      */
     final public function output(string $name = null)
     {
-        $result = strtoupper(NoDiacritic::filter(
-            implode(static::EOL, $this->registries) . static::EOL . static::EOF
-        ));
+        $result = implode(static::EOL, $this->registries) . static::EOL
+            . static::EOF;
 
         if ($name === null) {
             return $result;
@@ -175,6 +174,7 @@ abstract class View
     protected function filter($data)
     {
         foreach ($data as $id => $value) {
+            $data[$id] = strtoupper(NoDiacritic::filter($value));
             $data[$id] = preg_replace('/:;,\.\/\\\?\$\*!#_-/', '', $data[$id]);
         }
         return $data;
