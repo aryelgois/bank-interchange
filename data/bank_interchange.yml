@@ -154,6 +154,7 @@ tables:
   shipping_file_titles:
     shipping_file: int -> shipping_files.id
     title: int -> titles.id
+    movement: tinyint -> shipping_file_movements.id
 
 composite:
   - PRIMARY currency_codes currency bank

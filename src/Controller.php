@@ -57,6 +57,7 @@ abstract class Controller
             $sft = (new Models\ShippingFileTitle)->fill([
                 'shipping_file' => $id,
                 'title' => $title_id,
+                'movement' => ($cnab == 240 ? 1 : 40),
             ]);
             $sft->save();
         }

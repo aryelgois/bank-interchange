@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Title `getCurrencyCode()`
 - Column `cnab` in `assignment` and `shipping_files` tables
 - Table `shipping_file_movements`
+- Column `movement` in shipping_file_titles
 
 ### Changed
 - Bump [aryelgois/medools] version
