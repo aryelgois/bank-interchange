@@ -20,18 +20,18 @@ use VRia\Utils\NoDiacritic;
 abstract class View
 {
     /**
-     * Added at the end of every line
-     *
-     * @const string
-     */
-    const EOL = "\r\n";
-
-    /**
      * Added at the file end
      *
      * @const string
      */
     const EOF = "";
+
+    /**
+     * Added at the end of every line
+     *
+     * @const string
+     */
+    const EOL = "\r\n";
 
     /**
      * How many titles can fit in this shipping file
