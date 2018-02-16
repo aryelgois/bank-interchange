@@ -1,10 +1,10 @@
 -- Banks
 -- TODO verify `billet_tax`
 
-INSERT INTO `banks` (`id`, `code`, `name`, `logo`, `billet_tax`) VALUES
-(1, '104', 'Caixa Econômica Federal', 'caixa.jpg', '2.0000'),
-(2, '047', 'Banese', 'banese.jpg', '2.0000'),
-(3, '004', 'Banco do Nordeste', 'banco_do_nordeste.jpg', '2.0000');
+INSERT INTO `banks` (`id`, `code`, `name`, `billet_tax`) VALUES
+(1, '104', 'Caixa Econômica Federal', '2.0000'),
+(2, '047', 'Banese', '2.0000'),
+(3, '004', 'Banco do Nordeste', '2.0000');
 
 -- Currencies
 -- TODO verify `currency_codes`
