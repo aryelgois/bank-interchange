@@ -68,7 +68,7 @@ tables:
     bank: int -> banks.id
     cnab: cnab
     code: varchar(2)      # used in cnab
-    operation: varchar(2) # used in billets barcode
+    operation: varchar(2) # used in billet barcode
     symbol: char(2)
     name: name
 
