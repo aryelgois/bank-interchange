@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Table `shipping_file_movements`
 - Column `movement` in shipping_file_titles
 - Column `doc_number` in titles
+- Mode `nomask` in Currency `format()`
 
 ### Changed
 - Bump [aryelgois/medools] version

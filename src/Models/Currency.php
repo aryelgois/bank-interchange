@@ -39,17 +39,18 @@ class Currency extends Medools\Model
      *
      * @param number $value  Some monetary value to be formated
      * @param string $format If should prepend 'symbol' or append 'name', or if
-     *                       should return without any ('raw')
+     *                       should return without any ('raw'), or even ignore
+     *                       masks ('nomask')
      *
      * @return string
      */
-    public function format($value, $format = 'symbol')
+    public function format($value, string $format = null)
     {
         $formatted = number_format(
             $value,
             $this->decimals,
-            $this->decimal,
-            $this->thousand
+            $format === 'nomask' ? '' : $this->decimal,
+            $format === 'nomask' ? '' : $this->thousand
         );
 
         switch ($format) {
@@ -62,6 +63,7 @@ class Currency extends Medools\Model
                 break;
 
             case 'raw':
+            case 'nomask':
                 return $formatted;
                 break;
 
