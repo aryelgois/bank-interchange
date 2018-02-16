@@ -34,6 +34,7 @@ class Title extends Medools\Model
         'guarantor',      // Someone that would be charged if the Client could not pay
         'currency',
         'kind',
+        'doc_number',
         'our_number',
         'accept',
         'status',

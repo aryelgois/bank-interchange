@@ -767,7 +767,7 @@ abstract class View extends FPDF
     {
         $data = $this->data;
         $models = $this->models;
-        $doc_number = BankInterchange\Utils::padNumber($models['title']->id, 10);
+        $doc_number = BankInterchange\Utils::padNumber($models['title']->doc_number, 10);
         $value = $this->formatMoney($data['value']);
 
         $fields = [

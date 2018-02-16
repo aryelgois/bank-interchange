@@ -158,7 +158,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '1', // Document type
             '2', // Emission identifier
             '2', // Distribuition identifier
-            $title->id,
+            $title->doc_number,
             date('dmY', strtotime($title->due)),
             number_format($title->value, 2, '', ''),
             '0', // Charging agency

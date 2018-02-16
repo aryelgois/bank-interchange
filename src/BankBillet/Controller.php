@@ -68,12 +68,16 @@ class Controller
             ? $where
             : Medools\ModelManager::getInstance($model_class, $where);
 
+        $assignment = $title->assignment;
+
         $view_class = __NAMESPACE__ . '\\Views\\'
-            . Utils::toPascalCase($title->assignment->bank->name);
+            . Utils::toPascalCase($assignment->bank->name);
+
+        $default = $assignment->id . '-' . $title->doc_number;
 
         $this->views[] = [
             'file' => new $view_class($title, $this->data, $this->logos),
-            'name' => Utils::addExtension($name ?? $title->id, '.pdf'),
+            'name' => Utils::addExtension($name ?? $default, '.pdf'),
         ];
     }
 

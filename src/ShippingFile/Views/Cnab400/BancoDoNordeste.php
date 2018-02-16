@@ -98,7 +98,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             '',
             $assignment->wallet->code,
             $sft->movement->code,
-            $title->id,
+            $title->doc_number,
             date('dmy', strtotime($title->due)),
             number_format($title->value, 2, '', ''),
             '0', // Charging bank
