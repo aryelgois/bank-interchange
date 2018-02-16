@@ -43,7 +43,7 @@ abstract class Controller
         if (count($assignment) != 1) {
             throw new \InvalidArgumentException('Title list is invalid');
         }
-        $assignment = $assignment[0];
+        $assignment = Models\Assignment::getInstance($assignment[0]);
 
         $shipping_file = (new Models\ShippingFile)->fill([
             'assignment' => $assignment,
