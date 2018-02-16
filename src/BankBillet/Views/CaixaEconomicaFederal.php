@@ -34,14 +34,10 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
 
         $this->drawBillhead();
 
-        $this->drawBankHeader();
-
         $this->drawTable1();
 
         $this->billetSetFont('cell_title');
         $this->drawDash($fields['cut_here']['text'], true);
-
-        $this->drawBankHeader();
 
         $this->drawTable2();
 
@@ -58,7 +54,7 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
      */
     protected function drawTable1()
     {
-        $fields = $this->fields;
+        $this->drawBankHeader();
 
         $this->drawGenericTable1(
             'LB',
@@ -69,6 +65,8 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
                 177
             ]
         );
+
+        $fields = $this->fields;
 
         // Demonstrative
         $this->billetSetFont('cell_title');
@@ -92,8 +90,7 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
      */
     protected function drawTable2()
     {
-        $fields = $this->fields;
-        $models = $this->models;
+        $this->drawBankHeader();
 
         $this->drawGenericTable2(
             'instructions',
@@ -106,6 +103,9 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
                 127.2, 49.8
             ]
         );
+
+        $fields = $this->fields;
+        $models = $this->models;
 
         // Client
         $this->billetSetFont('cell_title');

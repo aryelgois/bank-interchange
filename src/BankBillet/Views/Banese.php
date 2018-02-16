@@ -92,8 +92,6 @@ class Banese extends BankInterchange\BankBillet\View
 
         $this->drawBillhead();
 
-        $this->drawBankHeader('L', 1);
-
         $this->drawTable('demonstrative');
 
         $this->Ln(4);
@@ -102,8 +100,6 @@ class Banese extends BankInterchange\BankBillet\View
         $this->drawDash($fields['compensation']['text']);
 
         $this->SetY($this->GetY() - 3);
-
-        $this->drawBankHeader('L', 1);
 
         $this->drawTable('instructions');
 
@@ -118,8 +114,7 @@ class Banese extends BankInterchange\BankBillet\View
      */
     protected function drawTable($big_cell)
     {
-        $fields = $this->fields;
-        $models = $this->models;
+        $this->drawBankHeader('L', 1);
 
         $this->drawGenericTable2(
             $big_cell,
@@ -132,6 +127,9 @@ class Banese extends BankInterchange\BankBillet\View
                 127.2, 49.8
             ]
         );
+
+        $fields = $this->fields;
+        $models = $this->models;
 
         // Client
         $y = $this->GetY();
