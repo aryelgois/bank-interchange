@@ -72,6 +72,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
         $client = $title->client;
         $client_address = $client->address;
         $client_person = $client->person;
+        $currency = $title->currency;
         $currency_code = $title->getCurrencyCode();
 
         $format = '%01.1s%-16.16s%04.4s%02.2s%07.7s%01.1s%02.2s%-4.4s%-25.25s'
@@ -94,13 +95,13 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $title->checkDigitOurNumber(),
             '0', // contract
             ($title->discount2_date != '' ? date('dmy', strtotime($title->discount2_date)) : '0'),
-            number_format($title->discount2_value, 2, '', ''),
+            $currency->format($title->discount2_value, 'nomask'),
             '',
             $assignment->wallet->code,
             $sft->movement->code,
             $title->doc_number,
             date('dmy', strtotime($title->due)),
-            number_format($title->value, 2, '', ''),
+            $currency->format($title->value, 'nomask'),
             '0', // Charging bank
             '0', // Charging agency
             '',
@@ -110,9 +111,9 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             '5', // instruction code
             '0', // interest value
             ($title->discount1_date != '' ? date('dmy', strtotime($title->discount1_date)) : '0'),
-            number_format($title->discount1_value, 2, '', ''),
-            number_format($title->ioc_iof, 2, '', ''),
-            number_format($title->rebate, 2, '', ''),
+            $currency->format($title->discount1_value, 'nomask'),
+            $currency->format($title->ioc_iof, 'nomask'),
+            $currency->format($title->rebate, 'nomask'),
             $client_person->documentValidate()['type'] ?? '',
             $client_person->document,
             $client_person->name,

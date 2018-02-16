@@ -126,6 +126,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
         $client = $title->client;
         $client_address = $client->address;
         $client_person = $client->person;
+        $currency = $title->currency;
         $currency_code = $title->getCurrencyCode();
         $guarantor_person = $title->guarantor->person ?? null;
 
@@ -160,7 +161,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '2', // Distribuition identifier
             $title->doc_number,
             date('dmY', strtotime($title->due)),
-            number_format($title->value, 2, '', ''),
+            $currency->format($title->value, 'nomask'),
             '0', // Charging agency
             '',  // Charging agency Check Digit
             $title->kind->code,
@@ -168,12 +169,12 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             date('dmY', strtotime($title->stamp)),
             $title->interest_type,
             ($title->interest_date != '' ? date('dmY', strtotime($title->interest_date)) : '0'),
-            number_format($title->interest_value, 2, '', ''),
+            $currency->format($title->interest_value, 'nomask'),
             $title->discount1_type,
             ($title->discount1_date != '' ? date('dmY', strtotime($title->discount1_date)) : '0'),
-            number_format($title->discount1_value, 2, '', ''),
-            '0', // number_format($title->ioc_iof, 2, '', ''),
-            number_format($title->rebate, 2, '', ''),
+            $currency->format($title->discount1_value, 'nomask'),
+            '0', // $currency->format($title->ioc_iof, 'nomask'),
+            $currency->format($title->rebate, 'nomask'),
             $title->description,
             '3', // Protest code
             '0', // Protest due

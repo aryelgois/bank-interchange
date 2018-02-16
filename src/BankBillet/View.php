@@ -742,12 +742,13 @@ abstract class View extends FPDF
      */
     protected function generateBarcode($value)
     {
+        $value = $this->models['currency']->format($value, 'nomask');
         $barcode = [
             $this->models['bank']->code,
             $this->models['currency_code']->billet,
             '', // Check digit
             $this->dueFactor(),
-            BankInterchange\Utils::padNumber(number_format($value, 2, '', ''), 10),
+            BankInterchange\Utils::padNumber($value, 10),
             $this->generateFreeSpace()
         ];
         $barcode[2] = self::checkDigitBarcode(implode('', $barcode));
