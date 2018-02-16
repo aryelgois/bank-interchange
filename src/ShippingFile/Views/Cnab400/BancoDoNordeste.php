@@ -72,10 +72,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
         $client = $title->client;
         $client_address = $client->address;
         $client_person = $client->person;
-        $currency_code = Models\CurrencyCode::getInstance([
-            'currency' => $title->currency->id,
-            'bank' => $bank->id
-        ]);
+        $currency_code = $title->getCurrencyCode();
 
         $format = '%01.1s%-16.16s%04.4s%02.2s%07.7s%01.1s%02.2s%-4.4s%-25.25s'
             . '%07.7s%01.1s%010.10s%06.6s%013.13s%-8.8s%01.1s%02.2s%-10.10s'

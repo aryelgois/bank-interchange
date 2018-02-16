@@ -126,13 +126,7 @@ abstract class View extends FPDF
         $models['client.address']    = $models['client']->address;
         $models['client.person']     = $models['client']->person;
         $models['currency']          = $title->currency;
-        $models['currency_code']     = Medools\ModelManager::getInstance(
-            BankInterchange\Models\CurrencyCode::class,
-            [
-                'currency' => $models['currency']->id,
-                'bank' => $models['bank']->id
-            ]
-        );
+        $models['currency_code']     = $title->getCurrencyCode();
         $models['document_kind']     = $title->kind;
         $models['guarantor']         = $title->guarantor;
         $models['guarantor.person']  = $models['guarantor']->person ?? null;

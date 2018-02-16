@@ -126,10 +126,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
         $client = $title->client;
         $client_address = $client->address;
         $client_person = $client->person;
-        $currency_code = Models\CurrencyCode::getInstance([
-            'currency' => $title->currency->id,
-            'bank' => $bank->id
-        ]);
+        $currency_code = $title->getCurrencyCode();
         $guarantor_person = $title->guarantor->person ?? null;
 
         /*
