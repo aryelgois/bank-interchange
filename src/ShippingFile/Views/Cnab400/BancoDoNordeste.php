@@ -40,7 +40,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             '1',
             'COBRANCA',
             $assignment->agency,
-            '',
+            '0',
             $assignment->account,
             $assignment->account_cd,
             '',
@@ -96,8 +96,8 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $title->our_number,
             $title->checkDigitOurNumber(),
             '0', // contract
-            '0', // second discount date
-            '0', // second discount value
+            ($title->discount2_date != '' ? date('dmy', strtotime($title->discount2_date)) : '0'),
+            number_format($title->discount2_value, 2, '', ''),
             '',
             $assignment->wallet->code,
             $sft->movement->code,
@@ -110,7 +110,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $title->kind->code,
             $title->accept,
             date('dmy', strtotime($title->stamp)),
-            $config['instruction_code'] ?? '0',
+            '5', // instruction code
             '0', // interest value
             ($title->discount1_date != '' ? date('dmy', strtotime($title->discount1_date)) : '0'),
             number_format($title->discount1_value, 2, '', ''),
@@ -125,7 +125,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $client_address->county->name,
             $client_address->county->state->code,
             '', // message or guarantor name
-            '99', // protest deadline
+            '99', // protest due
             $currency_code->cnab400,
             $this->registry_count,
         ];
