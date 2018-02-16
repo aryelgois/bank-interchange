@@ -24,6 +24,7 @@ class ShippingFile extends Medools\Model
         'id',
         'assignment',
         'counter',
+        'cnab',
         'status',
         'stamp',
         'update',
@@ -43,20 +44,26 @@ class ShippingFile extends Medools\Model
     ];
 
     /**
-     * Sets the `counter` column based on current `assignor`
+     * Returns a Iterator of ShippingFileTitle models for this object
      *
-     * Intended to be used only when creating a new entry
-     *
-     * NOTE:
-     * - Be sure to save() soon
-     *
-     * @throws \LogicException If assignor is not set
+     * @return Medools\ModelIterator
      */
-    public function setCounter()
+    public function getShippedTitles()
     {
-        $assignor = $this->assignor;
-        if ($assignor === null) {
-            throw new \LogicException('You MUST set `assignor` column first');
+        return new Medools\ModelIterator(
+            __NAMESPACE__ . '\\ShippingFileTitle',
+            ['shipping_file' => $this->__get('id')]
+        );
+    }
+
+    /**
+     * Sets the `counter` column based on `assignment`
+     */
+    protected function onFirstSaveHook()
+    {
+        $assignment = $this->__get('assignment');
+        if ($assignment === null) {
+            return false;
         }
 
         $database = self::getDatabase();
@@ -64,10 +71,11 @@ class ShippingFile extends Medools\Model
             static::TABLE,
             'counter',
             [
-                'assignor' => $assignor->id
+                'assignment' => $assignment->__get('id')
             ]
         );
 
         $this->counter = ++$counter;
+        return true;
     }
 }

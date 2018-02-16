@@ -23,11 +23,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Can generate a `.zip` with multiple bank billets
 - Platform requirements (zlib and zip extensions)
 - Setup section
+- General Controller
+- ShippingFile `getShippedTitles()`
 - Table `document_kinds`
 - Default assignment's document kind
 - Column `accept` in `titles` table
 - Columns for `interest`
 - Column `agency_account_cd`
+- ShippingFile View `TITLE_LIMIT`
+- Bank specific ShippingFile views
+- Title `getCurrencyCode()`
+- Column `cnab` in `assignment` and `shipping_files` tables
+- Table `shipping_file_movements`
+- Column `movement` in shipping_file_titles
 
 ### Changed
 - Bump [aryelgois/medools] version
@@ -51,12 +59,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Rename `$billet` to `$data`
 - Replace `drawTableRow()` and `drawTableColumn()` with `drawRow()`
 - Rewrite BankBillet Controller
+- Move ShippingFile classes to its own namespace
+- Replace `setCounter()` in ShippingFile model with `onFirstSaveHook()`
+- Rewrite ShippingFile Controller
+- Rewrite ShippingFile View
 - Move resource files to assets directory
 - Rename `tax` column to `billet_tax`
 - Rename `iof` column to `ioc_iof`
 - Use document_kinds in titles table
 - Replace `SPECIE_DOC` with title's `kind`
 - Split discount columns into multiple discounts
+- Rewrite ShippingFile Cnab* views
 
 ### Deprecated
 

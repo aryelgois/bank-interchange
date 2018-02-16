@@ -23,6 +23,7 @@ class ShippingFileTitle extends Medools\Model
     const COLUMNS = [
         'shipping_file',
         'title',
+        'movement',
     ];
 
     const PRIMARY_KEY = [
@@ -39,6 +40,10 @@ class ShippingFileTitle extends Medools\Model
         ],
         'title' => [
             __NAMESPACE__ . '\\Title',
+            'id'
+        ],
+        'movement' => [
+            __NAMESPACE__ . '\\ShippingFileMovements',
             'id'
         ],
     ];

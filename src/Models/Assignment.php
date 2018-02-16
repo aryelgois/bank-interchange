@@ -29,6 +29,7 @@ class Assignment extends Medools\Model
         'bank',
         'document_kind',
         'wallet',
+        'cnab',
         'covenant',          // Covenant provided by the Bank. Max 20 digits, but should have up to 6
         'agency',            // Bank Agency. max 5 digits
         'agency_cd',         // check digit

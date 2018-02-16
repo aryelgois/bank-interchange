@@ -12,6 +12,7 @@ definitions:
   money: decimal(17,4)
   money_small: decimal(6,4)
   1_or_2: enum('1','2')
+  cnab: enum('240','400')
 
 tables:
 
@@ -51,15 +52,21 @@ tables:
   document_kinds:
     id: tiny_pk_auto
     bank: int -> banks.id
-    cnab: char(3)
+    cnab: cnab
     code: varchar(2)
     symbol: varchar(3)
+    name: name
+
+  shipping_file_movements:
+    id: tiny_pk_auto
+    cnab: cnab
+    code: char(2)
     name: name
 
   wallets:
     id: tiny_pk_auto
     bank: int -> banks.id
-    cnab: char(3)
+    cnab: cnab
     code: varchar(2)      # used in cnab
     operation: varchar(2) # used in billets barcode
     symbol: char(2)
@@ -79,6 +86,7 @@ tables:
     bank: int -> banks.id
     document_kind: tinyint -> document_kinds.id
     wallet: tinyint -> wallets.id
+    cnab: cnab
     covenant: char(20)
     agency: char(5)
     agency_cd: char(1)
@@ -138,6 +146,7 @@ tables:
     id: pk_auto
     assignment: int -> assignments.id
     counter: int
+    cnab: cnab
     status: tinyint(1) NULLABLE
     stamp: timestamp DEFAULT CURRENT_TIMESTAMP
     update: datetime NULLABLE
@@ -145,9 +154,11 @@ tables:
   shipping_file_titles:
     shipping_file: int -> shipping_files.id
     title: int -> titles.id
+    movement: tinyint -> shipping_file_movements.id
 
 composite:
   - PRIMARY currency_codes currency bank
+  - UNIQUE shipping_file_movements cnab code
   - UNIQUE clients person assignor
   - UNIQUE titles assignment our_number
   - UNIQUE shipping_files assignment counter
