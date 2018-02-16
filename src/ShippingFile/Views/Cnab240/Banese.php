@@ -143,7 +143,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $bank->code,
             $this->lot_count,
             '3',
-            $this->current_lot['registry_count'],
+            $this->current_lot,
             'P',
             '',
             $sft->movement->code,
@@ -198,7 +198,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $bank->code,
             $this->lot_count,
             '3',
-            $this->current_lot['registry_count'],
+            $this->current_lot,
             'Q',
             '',
             $sft->movement->code,
@@ -238,7 +238,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $this->lot_count,
             '5',
             '',
-            $this->current_lot['registry_count'],
+            $this->current_lot,
             '0', // CS
             '0', // CS
             '0', // CV

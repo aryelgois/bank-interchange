@@ -43,9 +43,9 @@ abstract class Cnab240 extends BankInterchange\ShippingFile\View
     protected $lot_count = 0;
 
     /**
-     * Contais current lot's data
+     * Count registries in the current lot
      *
-     * @var array[]
+     * @var int
      */
     protected $current_lot;
 
@@ -65,9 +65,9 @@ abstract class Cnab240 extends BankInterchange\ShippingFile\View
      */
     protected function add(Models\ShippingFileTitle $sft)
     {
-        if ($this->current_lot['registry_count'] === 99999) {
+        if ($this->current_lot === 99999) {
             $this->registry_count++;
-            $this->current_lot['registry_count'] += 2;
+            $this->current_lot += 2;
             $this->registries[] = $this->generateLotTrailer();
             $this->current_lot = null;
         }
@@ -75,18 +75,12 @@ abstract class Cnab240 extends BankInterchange\ShippingFile\View
         if ($this->current_lot === null) {
             $this->registry_count++;
             $this->lot_count++;
-            $this->current_lot = [
-                'registry_count' => 0,
-                'title_count' => 0,
-                'title_total' => 0.0,
-            ];
+            $this->current_lot = 0;
             $this->registries[] = $this->generateLotHeader();
         }
 
         $this->registry_count++;
-        $this->current_lot['registry_count']++;
-        $this->current_lot['title_count']++;
-        $this->current_lot['title_total'] += $sft->title->value;
+        $this->current_lot++;
 
         $this->registries = array_merge(
             $this->registries,
@@ -101,7 +95,7 @@ abstract class Cnab240 extends BankInterchange\ShippingFile\View
     {
         if ($this->current_lot !== null) {
             $this->registry_count++;
-            $this->current_lot['registry_count'] += 2;
+            $this->current_lot += 2;
             $this->registries[] = $this->generateLotTrailer();
             $this->current_lot = null;
         }
