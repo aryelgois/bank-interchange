@@ -78,7 +78,11 @@ The script kinda works.. It's under development.
   - [ ] A nice interface to integrate with one's website.
 
 
+# [Changelog]
+
+
 [databases]: config/databases.yml
+[Changelog]: CHANGELOG.md
 
 [yasql]: https://github.com/aryelgois/yasql
 [yasql-php]: https://github.com/aryelgois/yasql-php
