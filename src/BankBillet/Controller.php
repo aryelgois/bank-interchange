@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\BankBillet;
 
 use aryelgois\Medools;
-use aryelgois\BankInterchange;
+use aryelgois\BankInterchange\Models;
 use aryelgois\BankInterchange\Utils;
 
 /**
@@ -63,15 +63,13 @@ class Controller
      */
     public function generate($where, string $name = null)
     {
-        $title_class = BankInterchange\Models\Title::class;
-        $title = ($where instanceof $title_class)
+        $model_class = Models\Title::class;
+        $title = ($where instanceof $model_class)
             ? $where
-            : Medools\ModelManager::getInstance($title_class, $where);
-
-        $bank = $title->assignment->bank;
+            : Medools\ModelManager::getInstance($model_class, $where);
 
         $view_class = __NAMESPACE__ . '\\Views\\'
-            . Utils::toPascalCase($bank->name);
+            . Utils::toPascalCase($title->assignment->bank->name);
 
         $this->views[] = [
             'file' => new $view_class($title, $this->data, $this->logos),
