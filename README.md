@@ -49,8 +49,7 @@ Files, and the reading of Return Files in a webserver:
 
  ```bash
 composer yasql-build -- vendor=aryelgois/bank-interchange
-cd build
-ls
+ls build
  ```
 
 
