@@ -44,7 +44,7 @@ tables:
 
   currency_codes:
     currency: tinyint -> currencies.id
-    bank: int -> banks.id UNIQUE
+    bank: int -> banks.id
     billet: char(1)
     cnab240: char(2)
     cnab400: char(1)
