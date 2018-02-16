@@ -39,16 +39,12 @@ class Controller
     /**
      * Generates the CNAB shipping file from data in a ShippingFile
      *
-     * @param mixed  $where \Medoo\Medoo $where clause or for ShippingFile or
-     *                      its instance
+     * @param mixed  $where \Medoo\Medoo $where clause or for ShippingFile
      * @param string $name  Name for the generated shipping file
      */
     public function generate($where, string $name = null)
     {
-        $model_class = Models\ShippingFile::class;
-        $shipping_file = ($where instanceof $model_class)
-            ? $where
-            : Medools\ModelManager::getInstance($model_class, $where);
+        $shipping_file = Models\ShippingFile::getInstance($where);
 
         $view_class = __NAMESPACE__ . "\\Views\\Cnab$shipping_file->cnab\\"
             . Utils::toPascalCase($shipping_file->assignment->bank->name);

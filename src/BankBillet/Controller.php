@@ -58,15 +58,12 @@ class Controller
     /**
      * Generates the Bank Billet from data in a Title
      *
-     * @param mixed  $where \Medoo\Medoo $where clause for Title or its instance
+     * @param mixed  $where \Medoo\Medoo $where clause for Title
      * @param string $name  Name for the generated PDF
      */
     public function generate($where, string $name = null)
     {
-        $model_class = Models\Title::class;
-        $title = ($where instanceof $model_class)
-            ? $where
-            : Medools\ModelManager::getInstance($model_class, $where);
+        $title = Models\Title::getInstance($where);
 
         $assignment = $title->assignment;
 
