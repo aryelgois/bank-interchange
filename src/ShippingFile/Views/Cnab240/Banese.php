@@ -239,8 +239,8 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '5',
             '',
             $this->current_lot['registry_count'],
-            $this->current_lot['title_count'],
-            number_format($this->current_lot['title_total'], 2, '', ''),
+            '0', // CS
+            '0', // CS
             '0', // CV
             '0', // CV
             '0', // CC
