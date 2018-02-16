@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Column `movement` in shipping_file_titles
 - Column `doc_number` in titles
 - Mode `nomask` in Currency `format()`
+- `Person` model (extending Medools `Person`)
 
 ### Changed
 - Bump [aryelgois/medools] version

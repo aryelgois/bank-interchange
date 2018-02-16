@@ -29,7 +29,7 @@ class Client extends Medools\Model
 
     const FOREIGN_KEYS = [
         'person' => [
-            'aryelgois\\Medools\\Models\\Person',
+            __NAMESPACE__ . '\\Person',
             'id'
         ],
         'address' => [
