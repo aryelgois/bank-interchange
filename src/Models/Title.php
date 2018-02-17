@@ -30,8 +30,8 @@ class Title extends Medools\Model
     const COLUMNS = [
         'id',
         'assignment',
-        'client',         // Who the Title is destined
-        'guarantor',      // Someone that would be charged if the Client could not pay
+        'client',
+        'guarantor',
         'currency',
         'kind',
         'doc_number',
