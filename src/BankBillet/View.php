@@ -195,7 +195,7 @@ abstract class View extends FPDF
         }
 
         $text = $this->models['assignor.person']->name . "\n"
-            . $this->models['assignor.person']->documentFormat() . "\n"
+            . $this->models['assignor.person']->getformatedDocument() . "\n"
             . $this->models['assignor.address']->outputLong();
 
         $this->billetSetFont('billhead');
@@ -815,7 +815,7 @@ abstract class View extends FPDF
             ],
             'cpf_cnpj' => [
                 'text' => 'CPF/CNPJ',
-                'value' => $models['assignor.person']->documentFormat(),
+                'value' => $models['assignor.person']->getformatedDocument(),
             ],
             'currency' => [
                 'text' => 'Espécie',

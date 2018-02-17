@@ -78,7 +78,7 @@ class Banese extends BankInterchange\BankBillet\View
 
         // Add document to assignor
         $this->fields['assignor']['value'] .= '     '
-            . $this->models['assignor.person']->documentFormat(true);
+            . $this->models['assignor.person']->getformatedDocument(true);
 
         // Draw billet
         $fields = $this->fields;
@@ -140,7 +140,7 @@ class Banese extends BankInterchange\BankBillet\View
         $this->MultiCell(112.2, 3.5, $fields['client']['value'] . "\n" . utf8_decode($models['client.address']->outputLong()));
         $y1 = $this->GetY();
         $this->SetXY(119.2, $y);
-        $this->Cell(36, 3.5, $models['client.person']->documentFormat(true), 0, 0, 'C');
+        $this->Cell(36, 3.5, $models['client.person']->getformatedDocument(true), 0, 0, 'C');
         $this->setY($y1);
 
         // Guarantor

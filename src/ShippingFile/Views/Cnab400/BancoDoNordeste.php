@@ -114,7 +114,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $currency->format($title->discount1_value, 'nomask'),
             $currency->format($title->ioc_iof, 'nomask'),
             $currency->format($title->rebate, 'nomask'),
-            $client_person->documentValidate()['type'] ?? '',
+            $client_person->getDocumentType(),
             $client_person->document,
             $client_person->name,
             implode(' ', [static::filter($client_address->place), $client_address->number, $client_address->neighborhood]),
