@@ -50,10 +50,7 @@ class ShippingFile extends Medools\Model
      */
     public function getShippedTitles()
     {
-        return new Medools\ModelIterator(
-            __NAMESPACE__ . '\\ShippingFileTitle',
-            ['shipping_file' => $this->__get('id')]
-        );
+        return ShippingFileTitle::getIterator(['shipping_file' => $this->id]);
     }
 
     /**
