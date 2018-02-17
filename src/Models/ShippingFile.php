@@ -59,7 +59,7 @@ class ShippingFile extends Medools\Model
     /**
      * Sets the `counter` column based on `assignment`
      */
-    protected function onFirstSaveHook()
+    protected function onFirstSave()
     {
         $assignment = $this->__get('assignment');
         if ($assignment === null) {
