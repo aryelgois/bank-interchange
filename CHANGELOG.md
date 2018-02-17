@@ -41,7 +41,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Person` model (extending Medools `Person`)
 
 ### Changed
-- Bump [aryelgois/medools] version
+- Update dependencies
 - Example generate_cnab: now it forces the file download
 - Example index: rename sections and add text
 - Assignor and Payer names in BankBillet fields
