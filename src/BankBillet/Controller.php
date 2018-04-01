@@ -7,134 +7,64 @@
 
 namespace aryelgois\BankInterchange\BankBillet;
 
-use aryelgois\Utils\Utils;
 use aryelgois\Medools;
 use aryelgois\BankInterchange;
-use aryelgois\BankInterchange\Models;
 
 /**
- * Controller class for Bank Billets
+ * Controller class for bank billets
  *
- * A Bank Billet is a printable representation of a Title
+ * A bank billet is a printable representation of a Title
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Controller
+class Controller extends BankInterchange\FilePack\Controller
 {
+    const EXTENSION = '.pdf';
+
+    const MODEL_CLASS = BankInterchange\Models\Title::class;
+
     /**
      * Additional data for the bank billets
      *
      * @var mixed[]
      */
-    protected $data;
+    protected static $data = [];
 
     /**
      * Paths to directories with logos
      *
      * @var string[]
      */
-    protected $logos;
+    protected static $logos = [];
 
     /**
-     * Holds BankBillet View objects
-     *
-     * @var array[]
-     */
-    protected $views;
-
-    /**
-     * Creates a new BankBillet Controller object
+     * Loads data for the bank billets
      *
      * @param string[]        $data  Additional data for the bank billets
      * @param string|string[] $logos Paths to directories with logos
      */
-    public function __construct(array $data, $logos)
+    public static function loadData(array $data, $logos)
     {
-        $this->data = $data;
-        $this->logos = (array) $logos;
+        static::$data = $data;
+        static::$logos = (array) $logos;
     }
 
     /**
-     * Generates the Bank Billet from data in a Title
+     * Returns a BankBillet View
      *
-     * @param mixed  $where \Medoo\Medoo $where clause for Title
-     * @param string $name  Name for the generated PDF
+     * @param Medools\Model $model A Title Model
+     *
+     * @return BankInterchange\FilePack\ViewInterface
      */
-    public function generate($where, string $name = null)
+    protected function getView(Medools\Model $model)
     {
-        $title = Models\Title::getInstance($where);
-
-        $assignment = $title->assignment;
+        $assignment = $model->assignment;
 
         $view_class = __NAMESPACE__ . '\\Views\\'
             . BankInterchange\Utils::toPascalCase($assignment->bank->name);
 
-        $view = new $view_class($title, $this->data, $this->logos);
-
-        $this->views[] = [
-            'file' => $view,
-            'name' => BankInterchange\Utils::addExtension(
-                $name ?? ($assignment->id . '-' . $title->doc_number),
-                '.pdf'
-            ),
-        ];
-    }
-
-    /**
-     * Echos the Bank Billet with headers
-     *
-     * If there are more than one billet, it outputs a zip
-     *
-     * @throws \LogicException If there is no view to output
-     */
-    public function output()
-    {
-        $count = count($this->views);
-        if ($count == 0) {
-            throw new \LogicException('You need to generate() first');
-        } elseif ($count > 1) {
-            return $this->zip();
-        }
-
-        $view = $this->views[0];
-        $view['file']->Output('I', $view['name']);
-    }
-
-    /**
-     * Echos a zip file containing all bank billets
-     *
-     * @param string $name Filename
-     *
-     * @throws \LogicException If there is no view to pack
-     */
-    public function zip(string $name = null)
-    {
-        if (count($this->views) == 0) {
-            throw new \LogicException('You need to generate() first');
-        }
-        Utils::checkOutput('ZIP');
-
-        $file = tmpfile();
-        $filepath = stream_get_meta_data($file)['uri'];
-
-        $zip = new \ZipArchive();
-        $zip->open($filepath, \ZipArchive::OVERWRITE);
-        foreach ($this->views as $view) {
-            $zip->addFromString($view['name'], $view['file']->Output('S'));
-        }
-        $zip->close();
-
-        $name = BankInterchange\Utils::addExtension(
-            $name ?? 'download',
-            '.zip'
-        );
-
-        header('Content-Type: application/zip');
-        header('Content-Length: ' . filesize($filepath));
-        header('Content-Disposition: attachment; filename="' . $name . '"');
-        readfile($filepath);
-        unlink($filepath);
+        return new $view_class($model, static::$data, static::$logos);
     }
 }

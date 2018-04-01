@@ -10,6 +10,7 @@ namespace aryelgois\BankInterchange\BankBillet;
 use aryelgois\Utils;
 use aryelgois\Medools;
 use aryelgois\BankInterchange;
+use aryelgois\BankInterchange\FilePack;
 use FPDF;
 
 /**
@@ -24,7 +25,7 @@ use FPDF;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-abstract class View extends FPDF
+abstract class View extends FPDF implements FilePack\ViewInterface
 {
     /**
      * Length used to zero-pad "Our Number"
@@ -150,6 +151,44 @@ abstract class View extends FPDF
         $this->AliasNbPages('{{ total_pages }}');
         $this->SetLineWidth(static::DEFAULT_LINE_WIDTH);
         $this->drawBillet();
+    }
+
+    /*
+     * FilePack\ViewInterface
+     * =========================================================================
+     */
+
+    /**
+     * Generates a filename (without extension)
+     *
+     * @return string
+     */
+    public function filename()
+    {
+        $name = $this->models['assignment']->id . '-'
+            . $this->models['title']->doc_number;
+
+        return $name;
+    }
+
+    /**
+     * Returns the View contents
+     *
+     * @return string
+     */
+    public function getContents()
+    {
+        return $this->Output('S');
+    }
+
+    /**
+     * Outputs the View with appropriated headers
+     *
+     * @param string $filename File name to be outputed
+     */
+    public function outputFile(string $filename)
+    {
+        $this->Output('I', $filename);
     }
 
     /*

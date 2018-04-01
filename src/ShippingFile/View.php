@@ -8,6 +8,7 @@
 namespace aryelgois\BankInterchange\ShippingFile;
 
 use aryelgois\Utils\Utils;
+use aryelgois\BankInterchange\FilePack;
 use aryelgois\BankInterchange\Models;
 use VRia\Utils\NoDiacritic;
 
@@ -18,7 +19,7 @@ use VRia\Utils\NoDiacritic;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-abstract class View
+abstract class View implements FilePack\ViewInterface
 {
     /**
      * Added at the file end
@@ -117,6 +118,11 @@ abstract class View
         echo $result;
     }
 
+    /*
+     * FilePack\ViewInterface
+     * =========================================================================
+     */
+
     /**
      * Generates a filename (without extension)
      *
@@ -137,6 +143,26 @@ abstract class View
         ];
 
         return vsprintf($format, $data);
+    }
+
+    /**
+     * Returns the View contents
+     *
+     * @return string
+     */
+    public function getContents()
+    {
+        return $this->output();
+    }
+
+    /**
+     * Outputs the View with appropriated headers
+     *
+     * @param string $filename File name to be outputed
+     */
+    public function outputFile(string $filename)
+    {
+        $this->output($filename);
     }
 
     /*
