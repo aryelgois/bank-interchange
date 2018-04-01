@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Title `getCurrencyCode()`
 - Mode `nomask` in Currency `format()`
 - `Person` model (extending Medools `Person`)
+- Namespace `aryelgois\BankInterchange\FilePack`
 
 ### Changed
 - Update dependencies
