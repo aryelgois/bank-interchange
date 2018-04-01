@@ -71,12 +71,13 @@ class Title extends Medools\Model
 
     const OPTIONAL_COLUMNS = [
         'guarantor',
+        'accept',
         'status',
         'value_paid',
-        'interest_date',
-        'interest_value',
         'fine_date',
         'fine_value',
+        'interest_date',
+        'interest_value',
         'discount1_date',
         'discount1_value',
         'discount2_date',

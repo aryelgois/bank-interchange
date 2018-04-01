@@ -32,6 +32,7 @@ class Currency extends Medools\Model
 
     const OPTIONAL_COLUMNS = [
         'name_plural',
+        'decimals',
     ];
 
     /**
