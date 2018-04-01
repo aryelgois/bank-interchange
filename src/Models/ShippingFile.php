@@ -26,14 +26,17 @@ class ShippingFile extends Medools\Model
         'counter',
         'cnab',
         'status',
-        'stamp',
         'update',
+        'stamp',
+    ];
+
+    const STAMP_COLUMNS = [
+        'update' => 'auto',
+        'stamp' => 'auto',
     ];
 
     const OPTIONAL_COLUMNS = [
         'status',
-        'stamp',
-        'update',
     ];
 
     const FOREIGN_KEYS = [

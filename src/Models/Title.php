@@ -60,8 +60,13 @@ class Title extends Medools\Model
         'discount3_value', // (float)
         'description',
         'due',             // Must be between 1997-10-07 and 2025-02-21, inclusives; or should be empty/with a message
-        'stamp',           // When Title was generated
         'update',
+        'stamp',           // When Title was generated
+    ];
+
+    const STAMP_COLUMNS = [
+        'update' => 'auto',
+        'stamp' => 'auto',
     ];
 
     const OPTIONAL_COLUMNS = [
@@ -78,8 +83,6 @@ class Title extends Medools\Model
         'discount2_value',
         'discount3_date',
         'discount3_value',
-        'stamp',
-        'update',
     ];
 
     const FOREIGN_KEYS = [
