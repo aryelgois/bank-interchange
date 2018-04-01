@@ -71,12 +71,12 @@ class Controller
         $view_class = __NAMESPACE__ . '\\Views\\'
             . BankInterchange\Utils::toPascalCase($assignment->bank->name);
 
-        $default = $assignment->id . '-' . $title->doc_number;
+        $view = new $view_class($title, $this->data, $this->logos);
 
         $this->views[] = [
-            'file' => new $view_class($title, $this->data, $this->logos),
+            'file' => $view,
             'name' => BankInterchange\Utils::addExtension(
-                $name ?? $default,
+                $name ?? ($assignment->id . '-' . $title->doc_number),
                 '.pdf'
             ),
         ];
