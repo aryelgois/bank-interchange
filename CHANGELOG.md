@@ -73,6 +73,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replace `SPECIE_DOC` with title's `kind`
 - Split discount columns into multiple discounts
 - Rewrite ShippingFile Cnab* views
+- Update [aryelgois/Medools] config file
 
 ### Deprecated
 

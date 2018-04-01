@@ -1,23 +1,25 @@
 <?php
 /**
- * Example of Configurations for aryelgois\Medools
+ * Example of Configuration for MedooConnection
  *
- * You only need to repeat the 'databases' keys in your application
+ * @see https://github.com/aryelgois/Medools#setup for details
  */
 
 return [
-    'databases' => [
-        'default'       => 'bank_interchange',
-        'address'       => 'address',
-    ],
-    'options' => [
-        // required
-        'database_type' => 'mysql',
-        'server'        => 'localhost',
-        'username'      => 'root',
-        'password'      => 'password',
+    'servers' => [
+        'default' => [
+            // required
+            'server' => 'localhost',
+            'username' => 'root',
+            'password' => 'password',
+            'database_type' => 'mysql',
 
-        // [optional]
-        'charset' => 'utf8',
-    ]
+            // [optional]
+            'charset' => 'utf8',
+        ],
+    ],
+    'databases' => [
+        'default' => 'bank_interchange',
+        'address' => 'address',
+    ],
 ];
