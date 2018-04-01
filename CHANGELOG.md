@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Columns for `interest` in `titles`
   - Column `agency_account_cd` in `assignments`
 - Namespace `aryelgois\BankInterchange\ReturnFile`
-- Utils `addExtension()`, `checkOutput()`, `toPascalCase()`
+- Utils `addExtension()`, `toPascalCase()`
 - Generic tables for BankBillet views
 - Can generate a `.zip` with multiple bank billets
 - General Controller

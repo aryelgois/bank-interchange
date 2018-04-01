@@ -7,9 +7,10 @@
 
 namespace aryelgois\BankInterchange\BankBillet;
 
+use aryelgois\Utils\Utils;
 use aryelgois\Medools;
+use aryelgois\BankInterchange;
 use aryelgois\BankInterchange\Models;
-use aryelgois\BankInterchange\Utils;
 
 /**
  * Controller class for Bank Billets
@@ -68,13 +69,16 @@ class Controller
         $assignment = $title->assignment;
 
         $view_class = __NAMESPACE__ . '\\Views\\'
-            . Utils::toPascalCase($assignment->bank->name);
+            . BankInterchange\Utils::toPascalCase($assignment->bank->name);
 
         $default = $assignment->id . '-' . $title->doc_number;
 
         $this->views[] = [
             'file' => new $view_class($title, $this->data, $this->logos),
-            'name' => Utils::addExtension($name ?? $default, '.pdf'),
+            'name' => BankInterchange\Utils::addExtension(
+                $name ?? $default,
+                '.pdf'
+            ),
         ];
     }
 
@@ -122,7 +126,10 @@ class Controller
         }
         $zip->close();
 
-        $name = Utils::addExtension($name ?? 'download', '.zip');
+        $name = BankInterchange\Utils::addExtension(
+            $name ?? 'download',
+            '.zip'
+        );
 
         header('Content-Type: application/zip');
         header('Content-Length: ' . filesize($filepath));

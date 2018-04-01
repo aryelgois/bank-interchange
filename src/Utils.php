@@ -36,41 +36,6 @@ abstract class Utils
     }
 
     /**
-     * Checks if data has already been output
-     *
-     * Use case: when wanting to output a file, check if something was already
-     * sent
-     *
-     * NOTE:
-     * - Copied from FPDF, modified to suit my needs
-     *
-     * @author Olivier PLATHEY
-     * @license FPDF
-     * @link http://www.fpdf.org
-     *
-     * @param string $type File type desired to send, just composes the error
-     *                     message
-     *
-     * @throws \Exception If some data has already been output
-     */
-    public static function checkOutput(string $type)
-    {
-        $message = "Some data has already been output, can't send $type file";
-        if (PHP_SAPI != 'cli' && headers_sent($file, $line)) {
-            throw new \Exception($message . " (output started at $file:$line)");
-        }
-        if (ob_get_length()) {
-            // The output buffer is not empty
-            if (preg_match('/^(\xEF\xBB\xBF)?\s*$/', ob_get_contents())) {
-                // It contains only a UTF-8 BOM and/or whitespace
-                ob_clean();
-            } else {
-                throw new \Exception($message);
-            }
-        }
-    }
-
-    /**
      * Adds trailing spaces to a value and trims overflow
      *
      * @param string  $val Value to be formatted
