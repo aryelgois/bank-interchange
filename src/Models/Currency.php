@@ -35,9 +35,9 @@ class Currency extends Medools\Model
     ];
 
     /**
-     * Outputs a value formated to this model
+     * Outputs a value formatted to this model
      *
-     * @param number $value  Some monetary value to be formated
+     * @param number $value  Some monetary value to be formatted
      * @param string $format If should prepend 'symbol' or append 'name', or if
      *                       should return without any ('raw'), or even ignore
      *                       masks ('nomask')
