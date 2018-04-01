@@ -734,7 +734,7 @@ abstract class View extends FPDF
     }
 
     /**
-     * Generates the barcode data and it's digitable line
+     * Generates the barcode data and its digitable line
      *
      * @param numeric $value Billet value
      *
