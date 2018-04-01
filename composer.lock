@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a466df7fa92a6f8e442a4d9cc2caeb4f",
+    "content-hash": "fa6f72ed4cdb05c779ceef26baf6ad43",
     "packages": [
         {
             "name": "aryelgois/databases",
-            "version": "v0.5.0",
+            "version": "v0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/databases.git",
-                "reference": "9b5998d88a572b005efb510a8fe28afef7730746"
+                "reference": "ba173591defa4c8d1251c3e5d6f42c919ffd1c38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/databases/zipball/9b5998d88a572b005efb510a8fe28afef7730746",
-                "reference": "9b5998d88a572b005efb510a8fe28afef7730746",
+                "url": "https://api.github.com/repos/aryelgois/databases/zipball/ba173591defa4c8d1251c3e5d6f42c919ffd1c38",
+                "reference": "ba173591defa4c8d1251c3e5d6f42c919ffd1c38",
                 "shasum": ""
             },
             "require": {
-                "aryelgois/medools": "^4.0",
-                "aryelgois/yasql-php": "^0.4.1",
+                "aryelgois/medools": "^5.0",
+                "aryelgois/yasql-php": "^0.5.0",
                 "php": "^7.0",
                 "symfony/yaml": "^3.4"
             },
@@ -49,24 +49,24 @@
                 "schema",
                 "yasql"
             ],
-            "time": "2018-02-17T17:16:32+00:00"
+            "time": "2018-04-01T13:34:53+00:00"
         },
         {
             "name": "aryelgois/medools",
-            "version": "v4.1.0",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/Medools.git",
-                "reference": "f22bc784aecf75819c451bb61be7b878503a5bc3"
+                "reference": "82d68bbe2c8f618d353b8221dda7cc7f0eaf2dcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/Medools/zipball/f22bc784aecf75819c451bb61be7b878503a5bc3",
-                "reference": "f22bc784aecf75819c451bb61be7b878503a5bc3",
+                "url": "https://api.github.com/repos/aryelgois/Medools/zipball/82d68bbe2c8f618d353b8221dda7cc7f0eaf2dcd",
+                "reference": "82d68bbe2c8f618d353b8221dda7cc7f0eaf2dcd",
                 "shasum": ""
             },
             "require": {
-                "aryelgois/utils": "^0.3.0",
+                "aryelgois/utils": "^0.5",
                 "catfan/medoo": "^1.5",
                 "php": "^7.0"
             },
@@ -96,20 +96,20 @@
                 "medoo",
                 "medools"
             ],
-            "time": "2018-02-17T18:12:08+00:00"
+            "time": "2018-03-29T14:42:04+00:00"
         },
         {
             "name": "aryelgois/utils",
-            "version": "v0.3.0",
+            "version": "v0.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/utils.git",
-                "reference": "449383ce0393eaf975deb64e91b8a8e50bc629eb"
+                "reference": "683a4685de166592aadd0fe7ebec828b99f0cbdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/utils/zipball/449383ce0393eaf975deb64e91b8a8e50bc629eb",
-                "reference": "449383ce0393eaf975deb64e91b8a8e50bc629eb",
+                "url": "https://api.github.com/repos/aryelgois/utils/zipball/683a4685de166592aadd0fe7ebec828b99f0cbdc",
+                "reference": "683a4685de166592aadd0fe7ebec828b99f0cbdc",
                 "shasum": ""
             },
             "require": {
@@ -135,20 +135,20 @@
             "keywords": [
                 "utils"
             ],
-            "time": "2018-02-17T03:29:37+00:00"
+            "time": "2018-03-10T13:03:12+00:00"
         },
         {
             "name": "aryelgois/yasql-php",
-            "version": "v0.4.2",
+            "version": "v0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/yasql-php.git",
-                "reference": "ebd3b7d335d4a6c95ad3cf5224c8e4eadce0a5ce"
+                "reference": "683c8e021b44bc17c022a62adf29bb679469342d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/yasql-php/zipball/ebd3b7d335d4a6c95ad3cf5224c8e4eadce0a5ce",
-                "reference": "ebd3b7d335d4a6c95ad3cf5224c8e4eadce0a5ce",
+                "url": "https://api.github.com/repos/aryelgois/yasql-php/zipball/683c8e021b44bc17c022a62adf29bb679469342d",
+                "reference": "683c8e021b44bc17c022a62adf29bb679469342d",
                 "shasum": ""
             },
             "require": {
@@ -180,20 +180,20 @@
                 "yaml",
                 "yasql"
             ],
-            "time": "2018-02-08T01:26:23+00:00"
+            "time": "2018-03-26T16:32:29+00:00"
         },
         {
             "name": "catfan/medoo",
-            "version": "v1.5.4",
+            "version": "v1.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/catfan/Medoo.git",
-                "reference": "a6b7b05b18fa7c8f955e259d491344b1db9a51bf"
+                "reference": "f77a93f72864e892c99d1033b8733e5da8fb0b3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/catfan/Medoo/zipball/a6b7b05b18fa7c8f955e259d491344b1db9a51bf",
-                "reference": "a6b7b05b18fa7c8f955e259d491344b1db9a51bf",
+                "url": "https://api.github.com/repos/catfan/Medoo/zipball/f77a93f72864e892c99d1033b8733e5da8fb0b3b",
+                "reference": "f77a93f72864e892c99d1033b8733e5da8fb0b3b",
                 "shasum": ""
             },
             "require": {
@@ -239,7 +239,7 @@
                 "sql",
                 "sqlite"
             ],
-            "time": "2018-01-08T20:01:12+00:00"
+            "time": "2018-03-26T17:54:24+00:00"
         },
         {
             "name": "setasign/fpdf",
@@ -282,16 +282,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.4",
+            "version": "v3.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "eab73b6c21d27ae4cd037c417618dfd4befb0bfe"
+                "reference": "6af42631dcf89e9c616242c900d6c52bd53bd1bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/eab73b6c21d27ae4cd037c417618dfd4befb0bfe",
-                "reference": "eab73b6c21d27ae4cd037c417618dfd4befb0bfe",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/6af42631dcf89e9c616242c900d6c52bd53bd1bb",
+                "reference": "6af42631dcf89e9c616242c900d6c52bd53bd1bb",
                 "shasum": ""
             },
             "require": {
@@ -336,7 +336,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2018-01-21T19:05:02+00:00"
+            "time": "2018-02-16T09:50:28+00:00"
         },
         {
             "name": "vria/nodiacritic",
