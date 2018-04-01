@@ -10,47 +10,64 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Year 2018 in LICENSE
-- Dependencies [aryelgois/databases], [aryelgois/yasql-php] and [symfony/yaml]
-- Composer scripts and Builder config for [aryelgois/yasql-php]
-- Wallets for Banco do Nordeste
-- Namespace `aryelgois\BankInterchange\ReturnFile`
-- Rewrite ReturnFile config files in [YAML]
-- Configurations for matching return files in Banco do Nordeste CNAB400 schema
-- Billet column in currency_codes table
-- Add Utils `addExtension()`, `checkOutput()` and `toPascalCase()`
 - Changelog file
+- README sections:
+  - Setup
+- Dependencies:
+  - [aryelgois/databases]
+  - [aryelgois/yasql-php]
+  - [symfony/yaml]
+  - Platform requirements:
+    - zlib and zip extensions
+- Composer scripts:
+  - [aryelgois/yasql-php]
+- Config files:
+  - Builder config for [aryelgois/yasql-php]
+  - Return file parser options for Banco do Nordeste's CNAB400 schema
+- Database:
+  - Populate `wallets` for Banco do Nordeste
+  - Column `billet` in `currency_codes`
+  - Table `document_kinds`
+  - Column `document_kind` in `assignments`
+  - Column `accept` in `titles`
+  - Column `cnab` in `shipping_files`
+  - Column `cnab` in `assignments`
+  - Table `shipping_file_movements`
+  - Column `movement` in `shipping_file_titles`
+  - Column `doc_number` in `titles`
+  - Columns for `interest` in `titles`
+  - Column `agency_account_cd` in `assignments`
+- Namespace `aryelgois\BankInterchange\ReturnFile`
+- Utils `addExtension()`, `checkOutput()`, `toPascalCase()`
 - Generic tables for BankBillet views
 - Can generate a `.zip` with multiple bank billets
-- Platform requirements (zlib and zip extensions)
-- Setup section
 - General Controller
 - ShippingFile `getShippedTitles()`
-- Table `document_kinds`
-- Default assignment's document kind
-- Column `accept` in `titles` table
-- Columns for `interest`
-- Column `agency_account_cd`
 - ShippingFile View `TITLE_LIMIT`
 - Bank specific ShippingFile views
 - Title `getCurrencyCode()`
-- Column `cnab` in `assignment` and `shipping_files` tables
-- Table `shipping_file_movements`
-- Column `movement` in shipping_file_titles
-- Column `doc_number` in titles
 - Mode `nomask` in Currency `format()`
 - `Person` model (extending Medools `Person`)
 
 ### Changed
 - Update dependencies
-- Example generate_cnab: now it forces the file download
-- Example index: rename sections and add text
+- Example
+  - `generate_cnab`: force the file download
+  - `index`: rename sections and add text
+- Database:
+  - Convert to [YASQL][aryelgois/yasql]
+  - Split `assignors` into `assignors` and `assignments`
+  - Rename `payers` to `clients` and bound them to `assignors`
+  - Replace `assignor` column with `assignment` in `titles`
+  - Split `currencies` into `currencies` and `currency_codes`
+  - Rename `tax` column to `billet_tax`
+  - Rename `iof` column to `ioc_iof` in `titles`
+  - Use `document_kinds` in `titles`
+  - Split `discount` columns into multiple discounts
+- Config files:
+  - Rewrite ReturnFile config files in [YAML], improve patterns, rename some
+    fields
 - Assignor and Payer names in BankBillet fields
-- Convert database.sql to [YASQL][aryelgois/yasql]
-- Update ReturnFile config file: improved patterns, renamed some fields
-- Split assignors table into `assignors` and `assignments`
-- Rename payers to clients and bound them to assignors
-- Replace assignor column with assignment in titles table
-- Split currencies table into `currencies` and `currency_codes`
 - Update wallets
 - Move BankBillet classes to its own namespace
 - BankBillet view keeps a plain array with most models extracted from a Title
@@ -67,11 +84,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Rewrite ShippingFile Controller
 - Rewrite ShippingFile View
 - Move resource files to assets directory
-- Rename `tax` column to `billet_tax`
-- Rename `iof` column to `ioc_iof`
-- Use document_kinds in titles table
 - Replace `SPECIE_DOC` with title's `kind`
-- Split discount columns into multiple discounts
 - Rewrite ShippingFile Cnab* views
 - Update [aryelgois/Medools] config file
 
@@ -80,10 +93,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 - Accidentally committed lines
 - Alias 'BankI' for `aryelgois\BankInterchange`
-- Remove `beforeDraw()`
-- Example assignor logos
-- Column `doc_type`
-- Defaults for `fine_type` and `discount_type`
+- BankBillet View `beforeDraw()`
+- Example of assignor logos
+- Column `doc_type` in `titles`
+- Defaults for `fine_type` and `discount_type` in `titles`
 
 ### Fixed
 - Fix model Title `setOurNumber()` and `discount_type`
@@ -93,7 +106,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Model ReturnFile `analyze()`: monetary values weren't turned into float
 - Model ReturnFile `analyze()`: CNAB240 occurrence is empty on success
 - Our Number check digit for Banco do Nordeste has a different length and base
-- Currency code for different banks or the cnabs
+- Currency code for different banks and CNABs
 - Remove EOF character `0x1A` in shipping files
 - Rename `B. do Nordeste` to `Banco do Nordeste`
 - BankBillet views
@@ -104,13 +117,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.1] - 2017-11-27
 
 ### Added
-- Dependencies [aryelgois/Medools], [vria/nodiacritic] and [setasign/fpdf]
+- Dependencies:
+  - [aryelgois/Medools]
+  - [vria/nodiacritic]
+  - [setasign/fpdf]
 - Config file for [aryelgois/Medools]
 - Database schema and defaults in SQL
 - Some bank logos (and assignor example logos)
 
 ### Changed
-- Project name changed from `cnab240` to `bank-interchange`
+- Rename project from `cnab240` to `bank-interchange`
 - Bump [aryelgois/utils] version
 - Example from a moderate complex twig to a simpler HTML + JavaScript
 - Code and logic mostly rewritten
