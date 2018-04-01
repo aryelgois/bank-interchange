@@ -89,6 +89,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Rewrite ShippingFile Cnab* views
 - Update [aryelgois/Medools] config file
 - BankBillet and ShippingFile Controllers and Views use FilePack
+- Convert billet data to [YAML]
 
 ### Deprecated
 

@@ -1,0 +1,21 @@
+header_title: Instruções de Impressão
+
+header_body: |-
+  - Imprima em impressora jato de tinta (ink jet) ou laser em qualidade normal ou alta (Não use modo econômico).
+  - Utilize folha A4 (210 x 297 mm) ou Carta (216 x 279 mm) e margens mínimas à esquerda e à direita do formulário.
+  - Corte na linha indicada. Não rasure, risque, fure ou dobre a região onde se encontra o código de barras.
+  - Caso não apareça o código de barras no final, clique em F5 para atualizar esta tela.
+  - Caso tenha problemas ao imprimir, copie a sequência numérica abaixo e pague no caixa eletrônico ou no internet banking:
+
+payment_place: Pagável em qualquer Banco até o vencimento
+
+demonstrative: |-
+  Pagamento de boleto - Teste de boleto
+  Taxa bancária - {{ tax }}
+  BankInterchange - https://www.github.com/aryelgois/bank-interchange
+
+instructions: |-
+  - Sr. Caixa, cobrar multa de 2% após o vencimento
+  - Receber até 10 dias após o vencimento
+  - Em caso de dúvidas entre em contato conosco: suporte@exemplo.com.br
+    Emitido pelo sistema BankInterchange - https://www.github.com/aryelgois/bank-interchange
