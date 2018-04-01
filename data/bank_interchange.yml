@@ -13,6 +13,7 @@ definitions:
   money_small: decimal(6,4)
   1_or_2: enum('1','2')
   cnab: enum('240','400')
+  insertstamp: timestamp DEFAULT CURRENT_TIMESTAMP
 
 tables:
 
@@ -140,8 +141,8 @@ tables:
     discount3_value: money NULLABLE
     description: varchar(25)
     due: date
-    stamp: timestamp DEFAULT CURRENT_TIMESTAMP
-    update: datetime NULLABLE
+    update: timestamp
+    stamp: insertstamp
 
   shipping_files:
     id: pk_auto
@@ -149,8 +150,8 @@ tables:
     counter: int
     cnab: cnab
     status: tinyint(1) NULLABLE
-    stamp: timestamp DEFAULT CURRENT_TIMESTAMP
-    update: datetime NULLABLE
+    update: timestamp
+    stamp: insertstamp
 
   shipping_file_titles:
     shipping_file: int -> shipping_files.id
