@@ -28,7 +28,7 @@ class FullAddress extends \aryelgois\Databases\Models\Address\FullAddress
     {
         $result = $this->place . ', '
             . $this->number . ', '
-            . ($this->detail != '' ? ', ' . $this->detail : '')
+            . ($this->detail != '' ? $this->detail . ', ' : '')
             . $this->neighborhood . "\n"
             . $this->county->name . '/'
             . $this->county->state->code . ' - '
