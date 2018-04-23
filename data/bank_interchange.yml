@@ -109,8 +109,8 @@ tables:
 
   titles:
     id: pk_auto
-    assignment: int -> assignments.id
-    client: int -> clients.id
+    assignment: int -> assignments.id KEY
+    client: int -> clients.id KEY
     guarantor: int -> clients.id NULLABLE
     currency: tinyint -> currencies.id
     kind: tinyint -> document_kinds.id
