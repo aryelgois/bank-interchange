@@ -90,7 +90,7 @@ tables:
     covenant: char(20)
     agency: char(5)
     agency_cd: char(1)
-    account: char(11)
+    account: char(12)
     account_cd: char(1)
     agency_account_cd: char(1)
     edi: char(6)
