@@ -29,6 +29,8 @@ class Title extends Medools\Model
 
     const COLUMNS = [
         'id',
+        'shipping_file',
+        'movement',
         'assignment',
         'client',
         'guarantor',
@@ -71,6 +73,8 @@ class Title extends Medools\Model
     ];
 
     const OPTIONAL_COLUMNS = [
+        'shipping_file',
+        'movement',
         'guarantor',
         'accept',
         'status',
@@ -88,6 +92,14 @@ class Title extends Medools\Model
     ];
 
     const FOREIGN_KEYS = [
+        'shipping_file' => [
+            __NAMESPACE__ . '\\ShippingFile',
+            'id'
+        ],
+        'movement' => [
+            __NAMESPACE__ . '\\ShippingFileMovements',
+            'id'
+        ],
         'assignment' => [
             __NAMESPACE__ . '\\Assignment',
             'id'

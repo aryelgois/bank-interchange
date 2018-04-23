@@ -33,12 +33,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Column `cnab` in `shipping_files`
   - Column `cnab` in `assignments`
   - Table `shipping_file_movements`
-  - Column `movement` in `shipping_file_titles`
   - Column `doc_number` in `titles`
   - Columns for `interest` in `titles`
   - Column `agency_account_cd` in `assignments`
   - Column `tax_included` in `titles`
   - Index keys for `assignment` and `client` in `titles`
+  - Column `shipping_file` in `titles`
+  - Column `movement` in `titles`
 - Namespace `aryelgois\BankInterchange\ReturnFile`
 - Utils `addExtension()`, `toPascalCase()`
 - Generic tables for BankBillet views
@@ -105,6 +106,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Example of assignor logos
 - Column `doc_type` in `titles`
 - Defaults for `fine_type` and `discount_type` in `titles`
+- Table `shipping_file_titles`
 
 ### Fixed
 - Fix model Title `setOurNumber()` and `discount_type`

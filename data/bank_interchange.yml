@@ -109,6 +109,8 @@ tables:
 
   titles:
     id: pk_auto
+    shipping_file: int -> shipping_files.id KEY NULLABLE
+    movement: tinyint -> shipping_file_movements.id NULLABLE
     assignment: int -> assignments.id KEY
     client: int -> clients.id KEY
     guarantor: int -> clients.id NULLABLE
@@ -153,16 +155,10 @@ tables:
     update: timestamp
     stamp: insertstamp
 
-  shipping_file_titles:
-    shipping_file: int -> shipping_files.id
-    title: int -> titles.id
-    movement: tinyint -> shipping_file_movements.id
-
 composite:
   - PRIMARY currency_codes currency bank
   - UNIQUE shipping_file_movements cnab code
   - UNIQUE clients assignor person
-  - UNIQUE titles assignment doc_number
-  - UNIQUE titles assignment our_number
+  - UNIQUE titles shipping_file assignment doc_number
+  - UNIQUE titles shipping_file assignment our_number
   - UNIQUE shipping_files assignment counter
-  - PRIMARY shipping_file_titles shipping_file title
