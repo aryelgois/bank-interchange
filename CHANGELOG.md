@@ -66,6 +66,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Use `document_kinds` in `titles`
   - Split `discount` columns into multiple discounts
   - Change `assignors` PRIMARY KEY to `person`
+  - Move `address` column from `assignors` to `assignments`
 - Config files:
   - Rewrite ReturnFile config files in [YAML], improve patterns, rename some
     fields

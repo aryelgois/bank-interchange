@@ -26,6 +26,7 @@ class Assignment extends Medools\Model
     const COLUMNS = [
         'id',
         'assignor',
+        'address',
         'bank',
         'document_kind',
         'wallet',
@@ -43,6 +44,10 @@ class Assignment extends Medools\Model
         'assignor' => [
             __NAMESPACE__ . '\\Assignor',
             'person'
+        ],
+        'address' => [
+            __NAMESPACE__ . '\\FullAddress',
+            'id'
         ],
         'bank' => [
             __NAMESPACE__ . '\\Bank',

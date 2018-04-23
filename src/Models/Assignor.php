@@ -22,7 +22,6 @@ class Assignor extends Medools\Model
 
     const COLUMNS = [
         'person',
-        'address',
         'url',     // URL to be embeded into Assignor's logo, in the Bank Billet
     ];
 
@@ -37,10 +36,6 @@ class Assignor extends Medools\Model
     const FOREIGN_KEYS = [
         'person' => [
             __NAMESPACE__ . '\\Person',
-            'id'
-        ],
-        'address' => [
-            __NAMESPACE__ . '\\FullAddress',
             'id'
         ],
     ];
