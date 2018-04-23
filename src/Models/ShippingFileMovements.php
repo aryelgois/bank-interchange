@@ -22,8 +22,16 @@ class ShippingFileMovements extends Medools\Model
 
     const COLUMNS = [
         'id',
+        'bank',
         'cnab',
         'code',
         'name',
+    ];
+
+    const FOREIGN_KEYS = [
+        'bank' => [
+            __NAMESPACE__ . '\\Bank',
+            'id'
+        ],
     ];
 }

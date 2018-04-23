@@ -60,6 +60,7 @@ tables:
 
   shipping_file_movements:
     id: tiny_pk_auto
+    bank: int -> banks.id
     cnab: cnab
     code: char(2)
     name: name
