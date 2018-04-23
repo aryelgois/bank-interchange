@@ -68,6 +68,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Split `discount` columns into multiple discounts
   - Change `assignors` PRIMARY KEY to `person`
   - Move `address` column from `assignors` to `assignments`
+  - Rename `billet_tax` column in `titles` to `tax_value`
 - Config files:
   - Rewrite ReturnFile config files in [YAML], improve patterns, rename some
     fields
