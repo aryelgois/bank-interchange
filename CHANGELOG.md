@@ -30,7 +30,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Table `document_kinds`
   - Column `document_kind` in `assignments`
   - Column `accept` in `titles`
-  - Column `cnab` in `shipping_files`
   - Column `cnab` in `assignments`
   - Table `shipping_file_movements`
   - Column `doc_number` in `titles`

@@ -24,7 +24,6 @@ class ShippingFile extends Medools\Model
         'id',
         'assignment',
         'counter',
-        'cnab',
         'status',
         'update',
         'stamp',

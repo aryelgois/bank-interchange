@@ -150,7 +150,6 @@ tables:
     id: pk_auto
     assignment: int -> assignments.id
     counter: int
-    cnab: cnab
     status: tinyint(1) NULLABLE
     update: timestamp
     stamp: insertstamp
