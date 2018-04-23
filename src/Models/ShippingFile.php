@@ -25,6 +25,7 @@ class ShippingFile extends Medools\Model
         'assignment',
         'counter',
         'status',
+        'notes',
         'update',
         'stamp',
     ];
@@ -36,6 +37,7 @@ class ShippingFile extends Medools\Model
 
     const OPTIONAL_COLUMNS = [
         'status',
+        'notes',
     ];
 
     const FOREIGN_KEYS = [

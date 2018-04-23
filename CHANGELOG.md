@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Index keys for `assignment` and `client` in `titles`
   - Column `shipping_file` in `titles`
   - Column `movement` in `titles`
+  - Column `notes` in `shipping_files`
 - Namespace `aryelgois\BankInterchange\ReturnFile`
 - Utils `addExtension()`, `toPascalCase()`
 - Generic tables for BankBillet views

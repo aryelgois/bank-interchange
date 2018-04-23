@@ -151,6 +151,7 @@ tables:
     assignment: int -> assignments.id
     counter: int
     status: tinyint(1) NULLABLE
+    notes: varchar(20) NULLABLE
     update: timestamp
     stamp: insertstamp
 
