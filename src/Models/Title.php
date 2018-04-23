@@ -43,6 +43,7 @@ class Title extends Medools\Model
         'ioc_iof',         // (float) A Brazilian tax
         'rebate',          // (float)
         'billet_tax',
+        'tax_included',
         'fine_type',
         'fine_date',
         'fine_value',      // (float)

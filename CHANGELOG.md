@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Column `doc_number` in `titles`
   - Columns for `interest` in `titles`
   - Column `agency_account_cd` in `assignments`
+  - Column `tax_included` in `titles`
 - Namespace `aryelgois\BankInterchange\ReturnFile`
 - Utils `addExtension()`, `toPascalCase()`
 - Generic tables for BankBillet views

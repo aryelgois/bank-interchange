@@ -123,6 +123,7 @@ tables:
     ioc_iof: money
     rebate: money
     billet_tax: money_small
+    tax_included: tinyint(1)
     fine_type: 1_or_2
     fine_date: date NULLABLE
     fine_value: money NULLABLE
