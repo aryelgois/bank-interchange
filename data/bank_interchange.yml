@@ -76,14 +76,13 @@ tables:
   # Main Tables
 
   assignors:
-    id: pk_auto
-    person: int -> people.id UNIQUE
+    person: pk -> people.id
     address: int -> full_addresses.id
     url: varchar(30) NULLABLE
 
   assignments:
     id: pk_auto
-    assignor: int -> assignors.id
+    assignor: int -> assignors.person
     bank: int -> banks.id
     document_kind: tinyint -> document_kinds.id
     wallet: tinyint -> wallets.id
@@ -104,9 +103,9 @@ tables:
 
   clients:
     id: pk_auto
+    assignor: int -> assignors.person
     person: int -> people.id
     address: int -> full_addresses.id
-    assignor: int -> assignors.id
 
   titles:
     id: pk_auto

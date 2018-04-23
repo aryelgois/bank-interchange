@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Rename `iof` column to `ioc_iof` in `titles`
   - Use `document_kinds` in `titles`
   - Split `discount` columns into multiple discounts
+  - Change `assignors` PRIMARY KEY to `person`
 - Config files:
   - Rewrite ReturnFile config files in [YAML], improve patterns, rename some
     fields

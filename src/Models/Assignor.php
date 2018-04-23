@@ -21,11 +21,14 @@ class Assignor extends Medools\Model
     const TABLE = 'assignors';
 
     const COLUMNS = [
-        'id',
         'person',
         'address',
         'url',     // URL to be embeded into Assignor's logo, in the Bank Billet
     ];
+
+    const PRIMARY_KEY = ['person'];
+
+    const AUTO_INCREMENT = null;
 
     const OPTIONAL_COLUMNS = [
         'url',
