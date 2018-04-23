@@ -87,13 +87,13 @@ tables:
     document_kind: tinyint -> document_kinds.id
     wallet: tinyint -> wallets.id
     cnab: cnab
-    covenant: char(20)
-    agency: char(5)
-    agency_cd: char(1)
-    account: char(12)
+    covenant: varchar(20)
+    agency: varchar(5)
+    agency_cd: varchar(2)
+    account: varchar(12)
     account_cd: char(1)
     agency_account_cd: char(1)
-    edi: char(6)
+    edi: varchar(6)
 
   banks:
     id: pk_auto
