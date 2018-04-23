@@ -31,13 +31,13 @@ class Assignment extends Medools\Model
         'document_kind',
         'wallet',
         'cnab',
-        'covenant',          // Covenant provided by the Bank. Max 20 digits, but should have up to 6
-        'agency',            // Bank Agency. max 5 digits
-        'agency_cd',         // check digit
-        'account',           // Bank Account. max 12 digits
-        'account_cd',        // check digit
-        'agency_account_cd', // check digit for both agency and account
-        'edi',               // EDI code informed by the Bank
+        'covenant',
+        'agency',
+        'agency_cd',
+        'account',
+        'account_cd',
+        'agency_account_cd',
+        'edi',
     ];
 
     const FOREIGN_KEYS = [

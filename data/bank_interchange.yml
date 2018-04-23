@@ -77,7 +77,7 @@ tables:
 
   assignors:
     person: pk -> people.id
-    url: varchar(30) NULLABLE
+    url: varchar(30) NULLABLE # Embeded into assignor's logo, in the Bank Billet
 
   assignments:
     id: pk_auto
@@ -97,7 +97,7 @@ tables:
 
   banks:
     id: pk_auto
-    code: char(3)
+    code: char(3) # Defined by FEBRABAN
     name: name
     billet_tax: money_small
 
@@ -140,7 +140,7 @@ tables:
     discount3_date: date NULLABLE
     discount3_value: money NULLABLE
     description: varchar(25)
-    due: date
+    due: date # Between 1997-10-07 and 2025-02-21, inclusive
     update: timestamp
     stamp: insertstamp
 

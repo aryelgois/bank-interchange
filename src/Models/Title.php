@@ -38,31 +38,31 @@ class Title extends Medools\Model
         'our_number',
         'accept',
         'status',
-        'value',           // (float)
-        'value_paid',      // (float)
-        'ioc_iof',         // (float) A Brazilian tax
-        'rebate',          // (float)
+        'value',
+        'value_paid',
+        'ioc_iof',
+        'rebate',
         'tax_value',
         'tax_included',
         'fine_type',
         'fine_date',
-        'fine_value',      // (float)
+        'fine_value',
         'interest_type',
         'interest_date',
-        'interest_value',  // (float)
+        'interest_value',
         'discount1_type',
         'discount1_date',
-        'discount1_value', // (float)
+        'discount1_value',
         'discount2_type',
         'discount2_date',
-        'discount2_value', // (float)
+        'discount2_value',
         'discount3_type',
         'discount3_date',
-        'discount3_value', // (float)
+        'discount3_value',
         'description',
-        'due',             // Must be between 1997-10-07 and 2025-02-21, inclusives; or should be empty/with a message
+        'due',
         'update',
-        'stamp',           // When Title was generated
+        'stamp',
     ];
 
     const STAMP_COLUMNS = [
