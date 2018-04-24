@@ -47,7 +47,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Utils `addExtension()`, `toPascalCase()`
 - Generic tables for BankBillet views
 - Can generate a `.zip` with multiple bank billets
-- General Controller
 - ShippingFile `getShippedTitles()`
 - ShippingFile View `TITLE_LIMIT`
 - Bank specific ShippingFile views
