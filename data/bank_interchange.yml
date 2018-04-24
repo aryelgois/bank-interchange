@@ -11,8 +11,8 @@ definitions:
   name: varchar(60)
   money: decimal(17,4)
   money_small: decimal(6,4)
-  1_or_2: enum('1','2')
-  cnab: enum('240','400')
+  1_or_2: enum('1', '2')
+  cnab: enum('240', '400')
   insertstamp: timestamp DEFAULT CURRENT_TIMESTAMP
 
 tables:
@@ -119,7 +119,7 @@ tables:
     kind: tinyint -> document_kinds.id
     doc_number: int
     our_number: int
-    accept: enum('A','N') DEFAULT 'N'
+    accept: enum('A', 'N') DEFAULT 'N'
     status: tinyint(1) NULLABLE
     value: money
     value_paid: money DEFAULT 0
@@ -130,7 +130,7 @@ tables:
     fine_type: 1_or_2
     fine_date: date NULLABLE
     fine_value: money NULLABLE
-    interest_type: enum('1','2','3')
+    interest_type: enum('1', '2', '3')
     interest_date: date NULLABLE
     interest_value: money NULLABLE
     discount1_type: 1_or_2
