@@ -61,6 +61,8 @@ class Title extends Medools\Model
         'discount3_type',
         'discount3_date',
         'discount3_value',
+        'protest_code',
+        'protest_days',
         'description',
         'emission',
         'due',
@@ -90,6 +92,8 @@ class Title extends Medools\Model
         'discount2_value',
         'discount3_date',
         'discount3_value',
+        'protest_code',
+        'protest_days',
     ];
 
     const FOREIGN_KEYS = [

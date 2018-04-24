@@ -142,6 +142,8 @@ tables:
     discount3_type: 1_or_2
     discount3_date: date NULLABLE
     discount3_value: money NULLABLE
+    protest_code: tinyint NULLABLE
+    protest_days: tinyint NULLABLE
     description: varchar(25)
     emission: date
     due: date # Between 1997-10-07 and 2025-02-21, inclusive
