@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\Models;
 
 use aryelgois\Medools;
-use aryelgois\BankInterchange;
+use aryelgois\BankInterchange\Utils;
 
 /**
  * The relation between an assignor and a Bank
@@ -68,26 +68,21 @@ class Assignment extends Medools\Model
      *
      * @param integer $agency_length
      * @param integer $account_length
-     * @param boolean $symbols        If should include symbols
+     * @param boolean $mask           If should include mask
      *
      * @return string
      *
      * @throws \LengthException @see Utils::padNumber()
      */
     public function formatAgencyAccount(
-        $agency_length,
-        $account_length,
-        $symbols = true
+        int $agency_length,
+        int $account_length,
+        bool $mask = true
     ) {
-        $tmp = [
-            BankInterchange\Utils::padNumber($this->agency, $agency_length),
-            BankInterchange\Utils::padNumber($this->account, $account_length)
-        ];
-        $check_digit = $this->account_cd;
-
-        if ($symbols) {
-            return implode(' / ', $tmp) . '-' . $check_digit;
-        }
-        return implode('', $tmp) . $check_digit;
+        return Utils::padNumber($this->agency, $agency_length)
+            . ($mask ? '/' : '')
+            . Utils::padNumber($this->account, $account_length)
+            . ($mask ? '-' : '')
+            . $this->account_cd;
     }
 }
