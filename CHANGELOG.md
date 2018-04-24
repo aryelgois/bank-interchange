@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Column `notes` in `shipping_files`
   - Column `emission` in `titles`
   - Columns for `protest` in `titles`
+  - SQL Programs
 - Namespace `aryelgois\BankInterchange\ReturnFile`
 - Utils `addExtension()`, `toPascalCase()`
 - Generic tables for BankBillet views

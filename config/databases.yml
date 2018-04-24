@@ -1,6 +1,8 @@
 databases:
   - path: ../data/bank_interchange.yml
-    post: ../data/bank_interchange_populate.sql
+    post:
+      - ../data/bank_interchange_programs.sql
+      - ../data/bank_interchange_populate.sql
 
 vendors:
   aryelgois/databases: ~
