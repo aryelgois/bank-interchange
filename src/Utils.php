@@ -53,15 +53,15 @@ abstract class Utils
      *
      * @param string  $val  Value to be formatted
      * @param integer $len  Maximum digits length allowed
-     * @param boolean $trim If left digits should be trimmed (disable throw)
+     * @param boolean $trim If left digits should be trimmed (disables throw)
      *
      * @return string
      *
      * @throws \LengthException If $val overflows
      */
-    public static function padNumber($val, $len, $trim = false)
+    public static function padNumber(int $val, int $len, bool $trim = false)
     {
-        $result = str_pad($val, $len, '0', STR_PAD_LEFT);
+        $result = sprintf("%0${len}d", $val);
         if (strlen($result) > $len) {
             if ($trim) {
                 return substr($result, - $len);
