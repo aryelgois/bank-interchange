@@ -144,7 +144,7 @@ tables:
     discount3_value: money NULLABLE
     protest_code: tinyint NULLABLE
     protest_days: tinyint NULLABLE
-    description: varchar(25)
+    description: varchar(25) DEFAULT ''
     emission: date
     due: date # Between 1997-10-07 and 2025-02-21, inclusive
     update: timestamp
@@ -155,7 +155,7 @@ tables:
     assignment: int -> assignments.id
     counter: int
     status: tinyint(1) NULLABLE
-    notes: varchar(20) NULLABLE
+    notes: varchar(20) DEFAULT ''
     update: timestamp
     stamp: insertstamp
 

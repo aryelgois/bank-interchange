@@ -94,6 +94,7 @@ class Title extends Medools\Model
         'discount3_value',
         'protest_code',
         'protest_days',
+        'description',
     ];
 
     const FOREIGN_KEYS = [
