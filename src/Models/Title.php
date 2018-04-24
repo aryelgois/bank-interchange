@@ -62,6 +62,7 @@ class Title extends Medools\Model
         'discount3_date',
         'discount3_value',
         'description',
+        'emission',
         'due',
         'update',
         'stamp',

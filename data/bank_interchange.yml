@@ -143,6 +143,7 @@ tables:
     discount3_date: date NULLABLE
     discount3_value: money NULLABLE
     description: varchar(25)
+    emission: date
     due: date # Between 1997-10-07 and 2025-02-21, inclusive
     update: timestamp
     stamp: insertstamp
