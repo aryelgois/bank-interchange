@@ -176,33 +176,4 @@ class Title extends Medools\Model
             'bank' => $this->assignment->bank->id
         ]);
     }
-
-    /**
-     * Sets the `our_number` column based on current `assignor`
-     *
-     * Intended to be used only when creating a new entry
-     *
-     * NOTE:
-     * - Be sure to save() soon
-     *
-     * @throws \LogicException If assignor is not set
-     */
-    public function setOurNumber()
-    {
-        $assignor = $this->assignor;
-        if ($assignor === null) {
-            throw new \LogicException('You MUST set `assignor` column first');
-        }
-
-        $database = self::getDatabase();
-        $our_number = $database->max(
-            static::TABLE,
-            'our_number',
-            [
-                'assignor' => $assignor->id
-            ]
-        );
-
-        $this->our_number = ++$our_number;
-    }
 }

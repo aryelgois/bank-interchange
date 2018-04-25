@@ -108,9 +108,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Column `doc_type` in `titles`
 - Defaults for `fine_type` and `discount_type` in `titles`
 - Table `shipping_file_titles`
+- Title `setOurNumber()`
 
 ### Fixed
-- Fix model Title `setOurNumber()` and `discount_type`
 - Shipping File counter: using `id` is inconsistent when generating shipping
   files for more than one assignor
 - Cnab240 View: wrong registry type in 'Q' segment and wrong registry count
