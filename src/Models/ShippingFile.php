@@ -56,27 +56,4 @@ class ShippingFile extends Medools\Model
     {
         return ShippingFileTitle::getIterator(['shipping_file' => $this->id]);
     }
-
-    /**
-     * Sets the `counter` column based on `assignment`
-     */
-    protected function onFirstSave()
-    {
-        $assignment = $this->__get('assignment');
-        if ($assignment === null) {
-            return false;
-        }
-
-        $database = self::getDatabase();
-        $counter = $database->max(
-            static::TABLE,
-            'counter',
-            [
-                'assignment' => $assignment->__get('id')
-            ]
-        );
-
-        $this->counter = ++$counter;
-        return true;
-    }
 }

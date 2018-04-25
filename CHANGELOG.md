@@ -89,7 +89,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replace `drawTableRow()` and `drawTableColumn()` with `drawRow()`
 - Rewrite BankBillet Controller
 - Move ShippingFile classes to its own namespace
-- Replace `setCounter()` in ShippingFile model with `onFirstSave()`
 - Rewrite ShippingFile Controller
 - Rewrite ShippingFile View
 - Move resource files to assets directory
