@@ -30,18 +30,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Table `document_kinds`
   - Column `document_kind` in `assignments`
   - Column `accept` in `titles`
-  - Column `cnab` in `shipping_files`
   - Column `cnab` in `assignments`
   - Table `shipping_file_movements`
-  - Column `movement` in `shipping_file_titles`
   - Column `doc_number` in `titles`
   - Columns for `interest` in `titles`
   - Column `agency_account_cd` in `assignments`
+  - Column `tax_included` in `titles`
+  - Index keys for `assignment` and `client` in `titles`
+  - Column `shipping_file` in `titles`
+  - Column `movement` in `titles`
+  - Column `notes` in `shipping_files`
+  - Column `emission` in `titles`
+  - Columns for `protest` in `titles`
+  - SQL Programs
 - Namespace `aryelgois\BankInterchange\ReturnFile`
 - Utils `addExtension()`, `toPascalCase()`
 - Generic tables for BankBillet views
 - Can generate a `.zip` with multiple bank billets
-- General Controller
 - ShippingFile `getShippedTitles()`
 - ShippingFile View `TITLE_LIMIT`
 - Bank specific ShippingFile views
@@ -65,6 +70,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Rename `iof` column to `ioc_iof` in `titles`
   - Use `document_kinds` in `titles`
   - Split `discount` columns into multiple discounts
+  - Change `assignors` PRIMARY KEY to `person`
+  - Move `address` column from `assignors` to `assignments`
+  - Rename `billet_tax` column in `titles` to `tax_value`
 - Config files:
   - Rewrite ReturnFile config files in [YAML], improve patterns, rename some
     fields
@@ -81,7 +89,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replace `drawTableRow()` and `drawTableColumn()` with `drawRow()`
 - Rewrite BankBillet Controller
 - Move ShippingFile classes to its own namespace
-- Replace `setCounter()` in ShippingFile model with `onFirstSave()`
 - Rewrite ShippingFile Controller
 - Rewrite ShippingFile View
 - Move resource files to assets directory
@@ -100,9 +107,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Example of assignor logos
 - Column `doc_type` in `titles`
 - Defaults for `fine_type` and `discount_type` in `titles`
+- Table `shipping_file_titles`
+- Title `setOurNumber()`
 
 ### Fixed
-- Fix model Title `setOurNumber()` and `discount_type`
 - Shipping File counter: using `id` is inconsistent when generating shipping
   files for more than one assignor
 - Cnab240 View: wrong registry type in 'Q' segment and wrong registry count

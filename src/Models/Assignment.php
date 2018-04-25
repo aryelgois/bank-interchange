@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\Models;
 
 use aryelgois\Medools;
-use aryelgois\BankInterchange;
+use aryelgois\BankInterchange\Utils;
 
 /**
  * The relation between an assignor and a Bank
@@ -26,22 +26,27 @@ class Assignment extends Medools\Model
     const COLUMNS = [
         'id',
         'assignor',
+        'address',
         'bank',
         'document_kind',
         'wallet',
         'cnab',
-        'covenant',          // Covenant provided by the Bank. Max 20 digits, but should have up to 6
-        'agency',            // Bank Agency. max 5 digits
-        'agency_cd',         // check digit
-        'account',           // Bank Account. max 12 digits
-        'account_cd',        // check digit
-        'agency_account_cd', // check digit for both agency and account
-        'edi',               // EDI code informed by the Bank
+        'covenant',
+        'agency',
+        'agency_cd',
+        'account',
+        'account_cd',
+        'agency_account_cd',
+        'edi',
     ];
 
     const FOREIGN_KEYS = [
         'assignor' => [
             __NAMESPACE__ . '\\Assignor',
+            'person'
+        ],
+        'address' => [
+            __NAMESPACE__ . '\\FullAddress',
             'id'
         ],
         'bank' => [
@@ -63,26 +68,21 @@ class Assignment extends Medools\Model
      *
      * @param integer $agency_length
      * @param integer $account_length
-     * @param boolean $symbols        If should include symbols
+     * @param boolean $mask           If should include mask
      *
      * @return string
      *
      * @throws \LengthException @see Utils::padNumber()
      */
     public function formatAgencyAccount(
-        $agency_length,
-        $account_length,
-        $symbols = true
+        int $agency_length,
+        int $account_length,
+        bool $mask = true
     ) {
-        $tmp = [
-            BankInterchange\Utils::padNumber($this->agency, $agency_length),
-            BankInterchange\Utils::padNumber($this->account, $account_length)
-        ];
-        $check_digit = $this->account_cd;
-
-        if ($symbols) {
-            return implode(' / ', $tmp) . '-' . $check_digit;
-        }
-        return implode('', $tmp) . $check_digit;
+        return Utils::padNumber($this->agency, $agency_length)
+            . ($mask ? '/' : '')
+            . Utils::padNumber($this->account, $account_length)
+            . ($mask ? '-' : '')
+            . $this->account_cd;
     }
 }

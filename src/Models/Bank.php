@@ -22,8 +22,8 @@ class Bank extends Medools\Model
 
     const COLUMNS = [
         'id',
-        'code', // Defined by a government entity, 3 digits
-        'name', // Bank's name, 30 characters, left-padded with spaces
+        'code',
+        'name',
         'billet_tax',
     ];
 }

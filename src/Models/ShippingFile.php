@@ -24,8 +24,8 @@ class ShippingFile extends Medools\Model
         'id',
         'assignment',
         'counter',
-        'cnab',
         'status',
+        'notes',
         'update',
         'stamp',
     ];
@@ -37,6 +37,7 @@ class ShippingFile extends Medools\Model
 
     const OPTIONAL_COLUMNS = [
         'status',
+        'notes',
     ];
 
     const FOREIGN_KEYS = [
@@ -54,28 +55,5 @@ class ShippingFile extends Medools\Model
     public function getShippedTitles()
     {
         return ShippingFileTitle::getIterator(['shipping_file' => $this->id]);
-    }
-
-    /**
-     * Sets the `counter` column based on `assignment`
-     */
-    protected function onFirstSave()
-    {
-        $assignment = $this->__get('assignment');
-        if ($assignment === null) {
-            return false;
-        }
-
-        $database = self::getDatabase();
-        $counter = $database->max(
-            static::TABLE,
-            'counter',
-            [
-                'assignment' => $assignment->__get('id')
-            ]
-        );
-
-        $this->counter = ++$counter;
-        return true;
     }
 }

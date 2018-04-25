@@ -29,6 +29,8 @@ class Title extends Medools\Model
 
     const COLUMNS = [
         'id',
+        'shipping_file',
+        'movement',
         'assignment',
         'client',
         'guarantor',
@@ -38,30 +40,34 @@ class Title extends Medools\Model
         'our_number',
         'accept',
         'status',
-        'value',           // (float)
-        'value_paid',      // (float)
-        'ioc_iof',         // (float) A Brazilian tax
-        'rebate',          // (float)
-        'billet_tax',
+        'value',
+        'value_paid',
+        'ioc_iof',
+        'rebate',
+        'tax_value',
+        'tax_included',
         'fine_type',
         'fine_date',
-        'fine_value',      // (float)
+        'fine_value',
         'interest_type',
         'interest_date',
-        'interest_value',  // (float)
+        'interest_value',
         'discount1_type',
         'discount1_date',
-        'discount1_value', // (float)
+        'discount1_value',
         'discount2_type',
         'discount2_date',
-        'discount2_value', // (float)
+        'discount2_value',
         'discount3_type',
         'discount3_date',
-        'discount3_value', // (float)
+        'discount3_value',
+        'protest_code',
+        'protest_days',
         'description',
-        'due',             // Must be between 1997-10-07 and 2025-02-21, inclusives; or should be empty/with a message
+        'emission',
+        'due',
         'update',
-        'stamp',           // When Title was generated
+        'stamp',
     ];
 
     const STAMP_COLUMNS = [
@@ -70,6 +76,8 @@ class Title extends Medools\Model
     ];
 
     const OPTIONAL_COLUMNS = [
+        'shipping_file',
+        'movement',
         'guarantor',
         'accept',
         'status',
@@ -84,9 +92,20 @@ class Title extends Medools\Model
         'discount2_value',
         'discount3_date',
         'discount3_value',
+        'protest_code',
+        'protest_days',
+        'description',
     ];
 
     const FOREIGN_KEYS = [
+        'shipping_file' => [
+            __NAMESPACE__ . '\\ShippingFile',
+            'id'
+        ],
+        'movement' => [
+            __NAMESPACE__ . '\\ShippingFileMovements',
+            'id'
+        ],
         'assignment' => [
             __NAMESPACE__ . '\\Assignment',
             'id'
@@ -156,34 +175,5 @@ class Title extends Medools\Model
             'currency' => $this->currency->id,
             'bank' => $this->assignment->bank->id
         ]);
-    }
-
-    /**
-     * Sets the `our_number` column based on current `assignor`
-     *
-     * Intended to be used only when creating a new entry
-     *
-     * NOTE:
-     * - Be sure to save() soon
-     *
-     * @throws \LogicException If assignor is not set
-     */
-    public function setOurNumber()
-    {
-        $assignor = $this->assignor;
-        if ($assignor === null) {
-            throw new \LogicException('You MUST set `assignor` column first');
-        }
-
-        $database = self::getDatabase();
-        $our_number = $database->max(
-            static::TABLE,
-            'our_number',
-            [
-                'assignor' => $assignor->id
-            ]
-        );
-
-        $this->our_number = ++$our_number;
     }
 }

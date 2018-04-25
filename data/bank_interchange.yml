@@ -11,8 +11,8 @@ definitions:
   name: varchar(60)
   money: decimal(17,4)
   money_small: decimal(6,4)
-  1_or_2: enum('1','2')
-  cnab: enum('240','400')
+  1_or_2: enum('1', '2')
+  cnab: enum('240', '400')
   insertstamp: timestamp DEFAULT CURRENT_TIMESTAMP
 
 tables:
@@ -60,6 +60,7 @@ tables:
 
   shipping_file_movements:
     id: tiny_pk_auto
+    bank: int -> banks.id
     cnab: cnab
     code: char(2)
     name: name
@@ -76,58 +77,60 @@ tables:
   # Main Tables
 
   assignors:
-    id: pk_auto
-    person: int -> people.id UNIQUE
-    address: int -> full_addresses.id
-    url: varchar(30) NULLABLE
+    person: pk -> people.id
+    url: varchar(30) NULLABLE # Embeded into assignor's logo, in the Bank Billet
 
   assignments:
     id: pk_auto
-    assignor: int -> assignors.id
+    assignor: int -> assignors.person
+    address: int -> full_addresses.id
     bank: int -> banks.id
     document_kind: tinyint -> document_kinds.id
     wallet: tinyint -> wallets.id
     cnab: cnab
-    covenant: char(20)
-    agency: char(5)
-    agency_cd: char(1)
-    account: char(11)
+    covenant: varchar(20)
+    agency: varchar(5)
+    agency_cd: varchar(2)
+    account: varchar(12)
     account_cd: char(1)
     agency_account_cd: char(1)
-    edi: char(6)
+    edi: varchar(6)
 
   banks:
     id: pk_auto
-    code: char(3)
+    code: char(3) # Defined by FEBRABAN
     name: name
     billet_tax: money_small
 
   clients:
     id: pk_auto
+    assignor: int -> assignors.person
     person: int -> people.id
     address: int -> full_addresses.id
-    assignor: int -> assignors.id
 
   titles:
     id: pk_auto
-    assignment: int -> assignments.id
-    client: int -> clients.id
+    shipping_file: int -> shipping_files.id KEY NULLABLE
+    movement: tinyint -> shipping_file_movements.id NULLABLE
+    assignment: int -> assignments.id KEY
+    client: int -> clients.id KEY
     guarantor: int -> clients.id NULLABLE
     currency: tinyint -> currencies.id
     kind: tinyint -> document_kinds.id
     doc_number: int
     our_number: int
-    accept: enum('A','N') DEFAULT 'N'
+    accept: enum('A', 'N') DEFAULT 'N'
     status: tinyint(1) NULLABLE
     value: money
     value_paid: money DEFAULT 0
     ioc_iof: money
     rebate: money
-    billet_tax: money_small
+    tax_value: money_small
+    tax_included: tinyint(1)
     fine_type: 1_or_2
     fine_date: date NULLABLE
     fine_value: money NULLABLE
-    interest_type: enum('1','2','3')
+    interest_type: enum('1', '2', '3')
     interest_date: date NULLABLE
     interest_value: money NULLABLE
     discount1_type: 1_or_2
@@ -139,8 +142,11 @@ tables:
     discount3_type: 1_or_2
     discount3_date: date NULLABLE
     discount3_value: money NULLABLE
-    description: varchar(25)
-    due: date
+    protest_code: tinyint NULLABLE
+    protest_days: tinyint NULLABLE
+    description: varchar(25) DEFAULT ''
+    emission: date
+    due: date # Between 1997-10-07 and 2025-02-21, inclusive
     update: timestamp
     stamp: insertstamp
 
@@ -148,21 +154,15 @@ tables:
     id: pk_auto
     assignment: int -> assignments.id
     counter: int
-    cnab: cnab
     status: tinyint(1) NULLABLE
+    notes: varchar(20) DEFAULT ''
     update: timestamp
     stamp: insertstamp
-
-  shipping_file_titles:
-    shipping_file: int -> shipping_files.id
-    title: int -> titles.id
-    movement: tinyint -> shipping_file_movements.id
 
 composite:
   - PRIMARY currency_codes currency bank
   - UNIQUE shipping_file_movements cnab code
-  - UNIQUE clients person assignor
-  - UNIQUE titles assignment doc_number
-  - UNIQUE titles assignment our_number
+  - UNIQUE clients assignor person
+  - UNIQUE titles shipping_file assignment doc_number
+  - UNIQUE titles shipping_file assignment our_number
   - UNIQUE shipping_files assignment counter
-  - PRIMARY shipping_file_titles shipping_file title

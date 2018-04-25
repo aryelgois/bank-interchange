@@ -22,22 +22,22 @@ class Client extends Medools\Model
 
     const COLUMNS = [
         'id',
+        'assignor',
         'person',
         'address',
-        'assignor',
     ];
 
     const FOREIGN_KEYS = [
+        'assignor' => [
+            __NAMESPACE__ . '\\Assignor',
+            'person'
+        ],
         'person' => [
             __NAMESPACE__ . '\\Person',
             'id'
         ],
         'address' => [
             __NAMESPACE__ . '\\FullAddress',
-            'id'
-        ],
-        'assignor' => [
-            __NAMESPACE__ . '\\Assignor',
             'id'
         ],
     ];
