@@ -23,28 +23,28 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
      */
     protected function drawBillet()
     {
-        $fields = $this->fields;
+        $dict = $this->dictionary;
 
         $this->AddPage();
 
         $this->drawPageHeader();
 
         $this->billetSetFont('cell_data');
-        $this->drawDash($fields['client_receipt']['text']);
+        $this->drawDash($dict['client_receipt']);
 
         $this->drawBillhead();
 
         $this->drawTable1();
 
         $this->billetSetFont('cell_title');
-        $this->drawDash($fields['cut_here']['text'], true);
+        $this->drawDash($dict['cut_here'], true);
 
         $this->drawTable2();
 
         $this->drawBarCode();
 
         $this->billetSetFont('cell_title');
-        $this->drawDash($fields['cut_here']['text'], true);
+        $this->drawDash($dict['cut_here'], true);
     }
 
     /**
@@ -66,12 +66,13 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
             ]
         );
 
+        $dict = $this->dictionary;
         $fields = $this->fields;
 
         // Demonstrative
         $this->billetSetFont('cell_title');
         $this->Cell(151, 3.5, $fields['demonstrative']['text'], 0, 0);
-        $this->Cell(26, 3.5, $fields['mech_auth']['text'], 0, 1);
+        $this->Cell(26, 3.5, $dict['mech_auth'], 0, 1);
         $this->billetSetFont('cell_data');
         $y = $this->GetY();
         $this->MultiCell(151, 3.5, $fields['demonstrative']['value']);
@@ -104,6 +105,7 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
             ]
         );
 
+        $dict = $this->dictionary;
         $fields = $this->fields;
         $models = $this->models;
 
@@ -114,7 +116,7 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
         $this->MultiCell(127.2, 3.5, $fields['client']['value'] . "\n" . utf8_decode($models['client.address']->outputLong()), 'LB');
         $this->SetXY(137.2, $this->GetY() - 3.5);
         $this->billetSetFont('cell_title');
-        $this->Cell(49.8, 3.5, $fields['cod_down']['text'], 'LB', 1);
+        $this->Cell(49.8, 3.5, $dict['cod_down'], 'LB', 1);
 
         // Guarantor
         $this->Cell(17, 3.5, $fields['guarantor']['text']);
@@ -123,8 +125,8 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
 
         // Mechanical authentication
         $this->billetSetFont('cell_title');
-        $this->Cell(39.5, 3.5, $fields['mech_auth']['text'] . ' - ', 0, 0, 'R');
+        $this->Cell(39.5, 3.5, $dict['mech_auth'] . ' - ', 0, 0, 'R');
         $this->billetSetFont('cell_data');
-        $this->Cell(27.5, 3.5, $fields['compensation']['text'], 0, 1, 'R');
+        $this->Cell(27.5, 3.5, $dict['compensation'], 0, 1, 'R');
     }
 }
