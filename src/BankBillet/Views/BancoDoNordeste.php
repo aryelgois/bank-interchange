@@ -29,9 +29,9 @@ class BancoDoNordeste extends CaixaEconomicaFederal
      */
     protected function checkDigitOurNumber()
     {
-        $our_number = BankInterchange\Utils::padNumber($this->models['title']->our_number, 7);
-
-        return $this->models['title']->checkDigitOurNumberAlgorithm($our_number, 8);
+        $title = $this->models['title'];
+        $our_number = BankInterchange\Utils::padNumber($title->our_number, 7);
+        return $title->checkDigitOurNumberAlgorithm($our_number, 8);
     }
 
     /**
@@ -43,7 +43,7 @@ class BancoDoNordeste extends CaixaEconomicaFederal
     {
         $result = $this->formatAgencyAccount()
             . $this->formatOurNumber()
-            . '21'
+            . $this->models['wallet']->operation
             . '000';
         return $result;
     }
