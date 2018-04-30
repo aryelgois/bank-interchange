@@ -260,7 +260,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         $info = sprintf(
             $dict['header_info'],
             $data['digitable'],
-            $data['value']
+            $this->formatMoney($data['value'])
         );
 
         $this->billetSetFont('cell_data');
