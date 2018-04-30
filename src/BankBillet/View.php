@@ -252,14 +252,31 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function drawPageHeader()
     {
-        $fields = $this->fields;
+        $data = $this->data;
+        $dict = $this->dictionary;
+
+        $title = utf8_decode($data['header_title']);
+        $body = utf8_decode($data['header_body']);
+        $info = sprintf(
+            $dict['header_info'],
+            $data['digitable'],
+            $data['value']
+        );
+
         $this->billetSetFont('cell_data');
-        $this->Cell(177, 3, $fields['header_title']['text'], 0, 1, 'C');
-        $this->Ln(2);
-        $this->MultiCell(177, 3, $fields['header_body']['text']);
-        $this->Ln(2);
+
+        if (strlen($title)) {
+            $this->Cell(177, 3, $title, 0, 1, 'C');
+            $this->Ln(2);
+        }
+
+        if (strlen($body)) {
+            $this->MultiCell(177, 3, $body);
+            $this->Ln(2);
+        }
+
         $this->billetSetFont('digitable');
-        $this->MultiCell(177, 3.5, $fields['header_info']['text']);
+        $this->MultiCell(177, 3.5, $info);
         $this->Ln(4);
     }
 
