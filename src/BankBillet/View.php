@@ -159,6 +159,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         array $data,
         array $logos
     ) {
+        $this->updateDictionary();
         $this->dictionary = array_map('utf8_decode', $this->dictionary);
 
         $models = [];
@@ -940,6 +941,19 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected function generateFreeSpace()
     {
         return $this->formatOurNumber() . $this->formatAgencyAccount();
+    }
+
+    /*
+     * Hooks
+     * =========================================================================
+     */
+
+    /**
+     * Modifies $dictionary before its UTF8 decoding
+     */
+    protected function updateDictionary()
+    {
+        return;
     }
 
     /*

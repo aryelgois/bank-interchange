@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Mode `nomask` in Currency `format()`
 - `Person` model (extending Medools `Person`)
 - Namespace `aryelgois\BankInterchange\FilePack`
+- BankBillet View `updateDictionary()` hook
 
 ### Changed
 - Update dependencies
