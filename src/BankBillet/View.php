@@ -911,7 +911,6 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             ],
             'doc_value' => [
                 'text' => 'Valor documento',
-                'value' => $data['doc_value'] ?? '',
                 'value' => $value,
             ],
             'doc_value=' => [
