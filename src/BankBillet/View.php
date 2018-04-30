@@ -119,8 +119,8 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     ) {
         $models = [];
         $models['assignment']        = $title->assignment;
+        $models['assignment.address'] = $models['assignment']->address;
         $models['assignor']          = $models['assignment']->assignor;
-        $models['assignor.address']  = $models['assignor']->address;
         $models['assignor.person']   = $models['assignor']->person;
         $models['bank']              = $models['assignment']->bank;
         $models['client']            = $title->client;
@@ -136,7 +136,9 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         $models['wallet']            = $models['assignment']->wallet;
         $this->models = $models;
 
-        $value = $title->value + $title->billet_tax;
+        $value = $title->value
+            + ($title->tax_included ? 0 : $title->tax_value);
+
         $data = array_merge(
             $data,
             ['value' => (float) $value],
