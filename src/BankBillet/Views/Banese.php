@@ -38,57 +38,19 @@ class Banese extends BankInterchange\BankBillet\View
      */
     protected function drawBillet()
     {
-        // Change some fields
-        $rename_fields = [
-            'agency_code'   => ['text' => 'Agência/Cod. Beneficiário'],
-            'date_process'  => ['text' => 'Data do processameto'],
-            'doc_number_sh' => ['text' => 'Nº do documento'],
-            'discount'      => ['text' => '(-) Desconto/ Abatimento'],
-            'doc_value'     => ['text' => 'Valor'],
-            'doc_valueU'    => ['text' => 'Valor'],
-            'doc_value='    => ['text' => '(=) Valor do documento'],
-            'fine'          => ['text' => '(+) Mora/Multa'],
-            'guarantor'     => ['text' => 'Sacador/Avalista: '],
-            'instructions'  => ['text' => 'Instruções'],
-            'kind'          => ['text' => 'Espécie doc'],
-            'currency'      => ['text' => 'Moeda'],
-        ];
-        foreach ($rename_fields as &$field) {
-            $field['text'] = utf8_decode($field['text']);
-        }
-        unset($field);
-        $this->fields = array_replace_recursive(
-            $this->fields,
-            $rename_fields
-        );
-
-        // Make most fields upper case
-        $keys = [
-            'accept', 'addition', 'agency_code', 'amount', 'assignor',
-            'bank_use', 'charged', 'client', 'currency', 'date_document',
-            'date_due', 'date_process', 'deduction', 'demonstrative',
-            'discount', 'doc_number_sh', 'doc_value', 'doc_value=',
-            'doc_valueU', 'fine', 'guarantor', 'instructions', 'kind',
-            'mech_auth', 'our_number', 'payment_place', 'wallet',
-        ];
-        foreach ($keys as $key) {
-            $text = mb_strtoupper(utf8_encode($this->fields[$key]['text']));
-            $this->fields[$key]['text'] = utf8_decode($text);
-        }
-
         // Add document to assignor
         $this->fields['assignor']['value'] .= '     '
             . $this->models['assignor.person']->getFormattedDocument(true);
 
         // Draw billet
-        $fields = $this->fields;
+        $dict = $this->dictionary;
 
         $this->AddPage();
 
         $this->drawPageHeader();
 
         $this->billetSetFont('cell_data');
-        $this->drawDash($fields['client_receipt']['text']);
+        $this->drawDash($dict['client_receipt']);
 
         $this->drawBillhead();
 
@@ -97,7 +59,7 @@ class Banese extends BankInterchange\BankBillet\View
         $this->Ln(4);
 
         $this->billetSetFont('cell_title');
-        $this->drawDash($fields['compensation']['text']);
+        $this->drawDash($dict['compensation']);
 
         $this->SetY($this->GetY() - 3);
 
@@ -128,19 +90,23 @@ class Banese extends BankInterchange\BankBillet\View
             ]
         );
 
+        $dict = $this->dictionary;
         $fields = $this->fields;
         $models = $this->models;
 
         // Client
+        $client_data = $fields['client']['value'] . "\n"
+            . utf8_decode($models['client.address']->outputLong());
+        $client_doc = $models['client.person']->getFormattedDocument(true);
         $y = $this->GetY();
         $this->billetSetFont('cell_title');
         $this->Cell(10, 3.5, $fields['client']['text']);
         $this->SetXY($this->GetX() + 5, $y);
         $this->billetSetFont('cell_data');
-        $this->MultiCell(112.2, 3.5, $fields['client']['value'] . "\n" . utf8_decode($models['client.address']->outputLong()));
+        $this->MultiCell(112.2, 3.5, $client_data);
         $y1 = $this->GetY();
         $this->SetXY(119.2, $y);
-        $this->Cell(36, 3.5, $models['client.person']->getFormattedDocument(true), 0, 0, 'C');
+        $this->Cell(36, 3.5, $client_doc, 0, 0, 'C');
         $this->setY($y1);
 
         // Guarantor
@@ -157,9 +123,10 @@ class Banese extends BankInterchange\BankBillet\View
         $this->Line(187, $y, 187, $y1);
 
         // Mechanical authentication
+        $text = $dict['mech_auth'] . '/' . utf8_decode($models['wallet']->name);
         $this->SetX(119.2);
         $this->billetSetFont('cell_title');
-        $this->Cell(67.8, 3.5, $fields['mech_auth']['text'] . '/' . utf8_decode($models['wallet']->name));
+        $this->Cell(67.8, 3.5, $text);
         $this->Ln(3.5);
     }
 
@@ -170,10 +137,13 @@ class Banese extends BankInterchange\BankBillet\View
      */
     protected function generateFreeSpace()
     {
-        $key = BankInterchange\Utils::padNumber($this->models['assignment']->agency, 2, true)
-            . BankInterchange\Utils::padNumber($this->models['assignment']->account, 9, true)
+        $assignment = $this->models['assignment'];
+        $bank = $this->models['bank'];
+
+        $key = BankInterchange\Utils::padNumber($assignment->agency, 2, true)
+            . BankInterchange\Utils::padNumber($assignment->account, 9, true)
             . $this->formatOurNumber()
-            . BankInterchange\Utils::padNumber($this->models['bank']->code, 3, true);
+            . BankInterchange\Utils::padNumber($bank->code, 3, true);
         $cd1 = Validation::mod10($key);
         $cd2 = Validation::mod11($key . $cd1, 7);
 
@@ -190,5 +160,43 @@ class Banese extends BankInterchange\BankBillet\View
         }
 
         return $key . $cd1 . $cd2;
+    }
+
+    /**
+     * Modifies $dictionary before its UTF8 decoding
+     */
+    protected function updateDictionary()
+    {
+        // Change some terms
+        $this->dictionary = array_replace(
+            $this->dictionary,
+            [
+                'agency_code'   => 'Agência/Cod. Beneficiário',
+                'date_process'  => 'Data do processameto',
+                'doc_number_sh' => 'Nº do documento',
+                'discount'      => '(-) Desconto/ Abatimento',
+                'doc_value'     => 'Valor',
+                'doc_valueU'    => 'Valor',
+                'doc_value='    => '(=) Valor do documento',
+                'fine'          => '(+) Mora/Multa',
+                'guarantor'     => 'Sacador/Avalista: ',
+                'instructions'  => 'Instruções',
+                'kind'          => 'Espécie doc',
+                'currency'      => 'Moeda',
+            ]
+        );
+
+        // Make most terms upper case
+        $keys = [
+            'accept', 'addition', 'agency_code', 'amount', 'assignor',
+            'bank_use', 'charged', 'client', 'currency', 'date_document',
+            'date_due', 'date_process', 'deduction', 'demonstrative',
+            'discount', 'doc_number_sh', 'doc_value', 'doc_value=',
+            'doc_valueU', 'fine', 'guarantor', 'instructions', 'kind',
+            'mech_auth', 'our_number', 'payment_place', 'wallet',
+        ];
+        foreach ($keys as $key) {
+            $this->dictionary[$key] = mb_strtoupper($this->dictionary[$key]);
+        }
     }
 }
