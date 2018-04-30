@@ -85,6 +85,48 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected $data = [];
 
     /**
+     * Dictionary of terms used in the billet
+     *
+     * @var string[]
+     */
+    protected $dictionary = [
+        'accept'         => 'Aceite',
+        'addition'       => '(+) Outros acréscimos',
+        'agency_code'    => 'Agência/Código do Beneficiário',
+        'amount'         => 'Quantidade',
+        'assignor'       => 'Beneficiário',
+        'bank_use'       => 'Uso do banco',
+        'charged'        => '(=) Valor cobrado',
+        'client'         => 'Pagador',
+        'client_receipt' => 'Recibo do Pagador',
+        'cod_down'       => 'Cód. baixa',
+        'compensation'   => 'Ficha de Compensação',
+        'cpf_cnpj'       => 'CPF/CNPJ',
+        'currency'       => 'Espécie',
+        'cut_here'       => 'Corte na linha pontilhada',
+        'date_document'  => 'Data do documento',
+        'date_due'       => 'Vencimento',
+        'date_process'   => 'Data processameto',
+        'deduction'      => '(-) Outras deduções',
+        'demonstrative'  => 'Demonstrativo',
+        'discount'       => '(-) Desconto / Abatimentos',
+        'doc_number'     => 'Número do documento',
+        'doc_number_sh'  => 'Nº documento',
+        'doc_value'      => 'Valor documento',
+        'doc_value='     => '(=) Valor documento',
+        'doc_valueU'     => 'Valor documento',
+        'fine'           => '(+) Mora / Multa',
+        'guarantor'      => 'Sacador/Avalista',
+        'header_info'    => "    Linha Digitável:  %s\n    Valor:   %s",
+        'instructions'   => 'Instruções (Texto de responsabilidade do beneficiário)',
+        'kind'           => 'Espécie doc.',
+        'mech_auth'      => 'Autenticação mecânica',
+        'our_number'     => 'Nosso número',
+        'payment_place'  => 'Local de pagamento',
+        'wallet'         => 'Carteira',
+    ];
+
+    /**
      * Contains fields to be drawn in the billet
      *
      * @var array[]
