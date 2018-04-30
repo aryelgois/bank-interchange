@@ -159,6 +159,8 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         array $data,
         array $logos
     ) {
+        $this->dictionary = array_map('utf8_decode', $this->dictionary);
+
         $models = [];
         $models['assignment']        = $title->assignment;
         $models['assignment.address'] = $models['assignment']->address;
