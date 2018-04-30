@@ -875,7 +875,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             ],
             'date_document' => [
                 'text' => 'Data do documento',
-                'value' => self::formatDate($models['title']->stamp),
+                'value' => self::formatDate($models['title']->emission),
             ],
             'date_due' => [
                 'text' => 'Vencimento',
