@@ -148,6 +148,13 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected $models = [];
 
     /**
+     * Holds data from database and manipulates some tables
+     *
+     * @var BankInterchange\Models\Title
+     */
+    protected $title;
+
+    /**
      * Creates a new Billet View object
      *
      * @param Models\Title $title Holds data for the bank billet
@@ -161,6 +168,8 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     ) {
         $this->updateDictionary();
         $this->dictionary = array_map('utf8_decode', $this->dictionary);
+
+        $this->title = $title;
 
         $models = [];
         $models['assignment']        = $title->assignment;
