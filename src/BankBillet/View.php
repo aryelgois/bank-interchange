@@ -812,6 +812,11 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         $doc_number = BankInterchange\Utils::padNumber($models['title']->doc_number, 10);
         $value = $this->formatMoney($data['value']);
 
+        $placeholders = [
+            '{{ tax }}' => $this->formatMoney($models['title']->tax_value),
+            '{{ description }}' => $models['title']->description,
+        ];
+
         $fields = [
             'accept' => [
                 'text' => 'Aceite',
@@ -884,8 +889,8 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             'demonstrative' => [
                 'text' => 'Demonstrativo',
                 'value' => str_replace(
-                    '{{ tax }}',
-                    $this->formatMoney($models['title']->billet_tax),
+                    array_keys($placeholders),
+                    $placeholders,
                     $data['demonstrative'] ?? ''
                 ),
             ],
