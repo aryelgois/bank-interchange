@@ -864,165 +864,56 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             '{{ description }}' => $models['title']->description,
         ];
 
+        $demonstrative = str_replace(
+            array_keys($placeholders),
+            $placeholders,
+            $data['demonstrative'] ?? ''
+        );
+
+        $guarantor = ($models['guarantor'] !== null)
+            ? $models['guarantor.person']->name . '     '
+            . $models['guarantor.address']->outputShort()
+            : '';
+
         $fields = [
-            'accept' => [
-                'text' => 'Aceite',
-                'value' => $models['title']->accept,
-            ],
-            'addition' => [
-                'text' => '(+) Outros acréscimos',
-                'value' => $data['addition'] ?? '',
-            ],
-            'agency_code' => [
-                'text' => 'Agência/Código do Beneficiário',
-                'value' => $this->formatAgencyAccount(true),
-            ],
-            'amount' => [
-                'text' => 'Quantidade',
-                'value' => $data['amount'] ?? '',
-            ],
-            'assignor' => [
-                'text' => 'Beneficiário',
-                'value' => $models['assignor.person']->name,
-            ],
-            'bank_use' => [
-                'text' => 'Uso do banco',
-                'value' => $data['bank_use'] ?? '',
-            ],
-            'charged' => [
-                'text' => '(=) Valor cobrado',
-                'value' => $data['charged'] ?? '',
-            ],
-            'client' => [
-                'text' => 'Pagador',
-                'value' => $models['client.person']->name,
-            ],
-            'client_receipt' => [
-                'text' => 'Recibo do Pagador',
-            ],
-            'cod_down' => [
-                'text' => 'Cód. baixa',
-            ],
-            'compensation' => [
-                'text' => 'Ficha de Compensação',
-            ],
-            'cpf_cnpj' => [
-                'text' => 'CPF/CNPJ',
-                'value' => $models['assignor.person']->getFormattedDocument(),
-            ],
-            'currency' => [
-                'text' => 'Espécie',
-                'value' => $models['currency']->symbol,
-            ],
-            'cut_here' => [
-                'text' => 'Corte na linha pontilhada',
-            ],
-            'date_document' => [
-                'text' => 'Data do documento',
-                'value' => self::formatDate($models['title']->emission),
-            ],
-            'date_due' => [
-                'text' => 'Vencimento',
-                'value' => self::formatDate($models['title']->due),
-            ],
-            'date_process' => [
-                'text' => 'Data processameto',
-                'value' => date('d/m/Y'),
-            ],
-            'deduction' => [
-                'text' => '(-) Outras deduções',
-                'value' => $data['deduction'] ?? '',
-            ],
-            'demonstrative' => [
-                'text' => 'Demonstrativo',
-                'value' => str_replace(
-                    array_keys($placeholders),
-                    $placeholders,
-                    $data['demonstrative'] ?? ''
-                ),
-            ],
-            'discount' => [
-                'text' => '(-) Desconto / Abatimentos',
-                'value' => $data['discount'] ?? '',
-            ],
-            'doc_number' => [
-                'text' => 'Número do documento',
-                'value' => $doc_number,
-            ],
-            'doc_number_sh' => [
-                'text' => 'Nº documento',
-                'value' => $doc_number,
-            ],
-            'doc_value' => [
-                'text' => 'Valor documento',
-                'value' => $value,
-            ],
-            'doc_value=' => [
-                'text' => '(=) Valor documento',
-                'value' => $value,
-            ],
-            'doc_valueU' => [
-                'text' => 'Valor documento',
-                'value' => $data['doc_valueU'] ?? '',
-            ],
-            'fine' => [
-                'text' => '(+) Mora / Multa',
-                'value' => $data['fine'] ?? '',
-            ],
-            'guarantor' => [
-                'text' => 'Sacador/Avalista',
-                'value' => ($models['guarantor'] !== null)
-                    ? $models['guarantor.person']->name . '     '
-                    . $models['guarantor.address']->outputShort()
-                    : '',
-            ],
-            'header_body' => [
-                'text' => $data['header_body'] ?? '',
-            ],
-            'header_info' => [
-                'text' => sprintf(
-                    "    Linha Digitável:  %s\n    Valor:   %s",
-                    $data['digitable'],
-                    $value
-                ),
-            ],
-            'header_title' => [
-                'text' => $data['header_title'] ?? '',
-            ],
-            'instructions' => [
-                'text' => 'Instruções (Texto de responsabilidade do beneficiário)',
-                'value' => $data['instructions'] ?? '',
-            ],
-            'kind' => [
-                'text' => 'Espécie doc.',
-                'value' => $models['document_kind']->symbol,
-            ],
-            'mech_auth' => [
-                'text' => 'Autenticação mecânica',
-            ],
-            'our_number' => [
-                'text' => 'Nosso número',
-                'value' => $this->formatOurNumber(true),
-            ],
-            'payment_place' => [
-                'text' => 'Local de pagamento',
-                'value' => $data['payment_place'] ?? '',
-            ],
-            'wallet' => [
-                'text' => 'Carteira',
-                'value' => $models['wallet']->symbol,
-            ],
+            'accept'        => $models['title']->accept,
+            'addition'      => $data['addition'] ?? '',
+            'agency_code'   => $this->formatAgencyAccount(true),
+            'amount'        => $data['amount'] ?? '',
+            'assignor'      => $models['assignor.person']->name,
+            'bank_use'      => $data['bank_use'] ?? '',
+            'charged'       => $data['charged'] ?? '',
+            'client'        => $models['client.person']->name,
+            'cpf_cnpj'      => $models['assignor.person']->getFormattedDocument(),
+            'currency'      => $models['currency']->symbol,
+            'date_document' => self::formatDate($models['title']->emission),
+            'date_due'      => self::formatDate($models['title']->due),
+            'date_process'  => date('d/m/Y'),
+            'deduction'     => $data['deduction'] ?? '',
+            'demonstrative' => $demonstrative,
+            'discount'      => $data['discount'] ?? '',
+            'doc_number'    => $doc_number,
+            'doc_number_sh' => $doc_number,
+            'doc_value'     => $value,
+            'doc_value='    => $value,
+            'doc_valueU'    => $data['doc_valueU'] ?? '',
+            'fine'          => $data['fine'] ?? '',
+            'guarantor'     => $guarantor,
+            'instructions'  => $data['instructions'] ?? '',
+            'kind'          => $models['document_kind']->symbol,
+            'our_number'    => $this->formatOurNumber(true),
+            'payment_place' => $data['payment_place'] ?? '',
+            'wallet'        => $models['wallet']->symbol,
         ];
 
-        foreach ($fields as &$field) {
-            $field['text'] = utf8_decode($field['text']);
-            if (array_key_exists('value', $field)) {
-                $field['value'] = utf8_decode($field['value']);
-            }
+        $result = [];
+        foreach ($fields as $field_key => $field_value) {
+            $result[$field_key] = [
+                'text' => $this->dictionary[$field_key],
+                'value' => utf8_decode($field_value),
+            ];
         }
-        unset($field);
-
-        return $fields;
+        return $result;
     }
 
     /**
