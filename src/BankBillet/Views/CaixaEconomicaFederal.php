@@ -107,13 +107,14 @@ class CaixaEconomicaFederal extends BankInterchange\BankBillet\View
 
         $dict = $this->dictionary;
         $fields = $this->fields;
-        $models = $this->models;
 
         // Client
+        $client_data = $fields['client']['value'] . "\n"
+            . utf8_decode($this->title->client->address->outputLong());
         $this->billetSetFont('cell_title');
         $this->Cell(127.2, 7, $fields['client']['text'], 'L', 1);
         $this->billetSetFont('cell_data');
-        $this->MultiCell(127.2, 3.5, $fields['client']['value'] . "\n" . utf8_decode($models['client.address']->outputLong()), 'LB');
+        $this->MultiCell(127.2, 3.5, $client_data, 'LB');
         $this->SetXY(137.2, $this->GetY() - 3.5);
         $this->billetSetFont('cell_title');
         $this->Cell(49.8, 3.5, $dict['cod_down'], 'LB', 1);

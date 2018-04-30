@@ -141,13 +141,6 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected $logos = [];
 
     /**
-     * Holds model instances from different tables
-     *
-     * @var Medools\Model[]
-     */
-    protected $models = [];
-
-    /**
      * Holds data from database and manipulates some tables
      *
      * @var BankInterchange\Models\Title
@@ -170,25 +163,6 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         $this->dictionary = array_map('utf8_decode', $this->dictionary);
 
         $this->title = $title;
-
-        $models = [];
-        $models['assignment']        = $title->assignment;
-        $models['assignment.address'] = $models['assignment']->address;
-        $models['assignor']          = $models['assignment']->assignor;
-        $models['assignor.person']   = $models['assignor']->person;
-        $models['bank']              = $models['assignment']->bank;
-        $models['client']            = $title->client;
-        $models['client.address']    = $models['client']->address;
-        $models['client.person']     = $models['client']->person;
-        $models['currency']          = $title->currency;
-        $models['currency_code']     = $title->getCurrencyCode();
-        $models['document_kind']     = $title->kind;
-        $models['guarantor']         = $title->guarantor;
-        $models['guarantor.person']  = $models['guarantor']->person ?? null;
-        $models['guarantor.address'] = $models['guarantor']->address ?? null;
-        $models['title']             = $title;
-        $models['wallet']            = $models['assignment']->wallet;
-        $this->models = $models;
 
         $value = $title->value
             + ($title->tax_included ? 0 : $title->tax_value);
@@ -220,10 +194,8 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     public function filename()
     {
-        $name = $this->models['assignment']->id . '-'
-            . $this->models['title']->doc_number;
-
-        return $name;
+        $title = $this->title;
+        return $title->assignment->id . '-' . $title->doc_number;
     }
 
     /**
@@ -294,9 +266,9 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function drawBillhead()
     {
-        $assignor = $this->models['assignor'];
-        $person = $this->models['assignor.person'];
-        $address = $this->models['assignment.address'];
+        $assignment = $this->title->assignment;
+        $assignor = $assignment->assignor;
+        $person = $assignor->person;
 
         $this->Ln(2);
 
@@ -310,7 +282,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
 
         $text = $person->name . "\n"
             . $person->getFormattedDocument() . "\n"
-            . $address->outputLong();
+            . $assignment->address->outputLong();
 
         $this->billetSetFont('billhead');
         $this->MultiCell(103.2, 2.5, utf8_decode($text));
@@ -358,7 +330,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         $digitable_align = 'R',
         $line_width_factor = 2
     ) {
-        $bank = $this->models['bank'];
+        $bank = $this->title->assignment->bank;
         $this->Ln(3);
 
         $logo = self::findFile("banks/$bank->id.*", $this->logos);
@@ -618,7 +590,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function formatAgencyAccount($symbol = false)
     {
-        return $this->models['assignment']->formatAgencyAccount(
+        return $this->title->assignment->formatAgencyAccount(
             static::AGENCY_LENGTH,
             static::ACCOUNT_LENGTH,
             $symbol
@@ -632,7 +604,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function formatBankCode()
     {
-        $code = $this->models['bank']->code;
+        $code = $this->title->assignment->bank->code;
 
         $checksum = Utils\Validation::mod11Pre($code);
         $digit = $checksum * 10 % 11;
@@ -740,7 +712,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function formatMoney($value, $format = 'symbol')
     {
-        return $this->models['currency']->format($value, $format);
+        return $this->title->currency->format($value, $format);
     }
 
     /**
@@ -753,7 +725,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected function formatOurNumber($mask = false)
     {
         $our_number = BankInterchange\Utils::padNumber(
-            $this->models['title']->our_number,
+            $this->title->our_number,
             static::OUR_NUMBER_LENGTH
         );
 
@@ -803,10 +775,13 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function checkDigitOurNumber()
     {
-        $our_number = BankInterchange\Utils::padNumber($this->models['assignment']->agency, 3)
-            . BankInterchange\Utils::padNumber($this->models['title']->our_number, 8);
+        $title = $this->title;
+        $assignment = $title->assignment;
 
-        return $this->models['title']->checkDigitOurNumberAlgorithm($our_number);
+        $our_number = BankInterchange\Utils::padNumber($assignment->agency, 3)
+            . BankInterchange\Utils::padNumber($title->our_number, 8);
+
+        return $title->checkDigitOurNumberAlgorithm($our_number);
     }
 
     /**
@@ -816,7 +791,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function dueFactor()
     {
-        $date = \DateTime::createFromFormat('Y-m-d', $this->models['title']->due);
+        $date = \DateTime::createFromFormat('Y-m-d', $this->title->due);
         $epoch = new \DateTime('1997-10-07');
         if ($date && $date > $epoch) {
             $diff = substr($date->diff($epoch)->format('%a'), -4);
@@ -856,10 +831,12 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function generateBarcode($value)
     {
-        $value = $this->models['currency']->format($value, 'nomask');
+        $title = $this->title;
+
+        $value = $title->currency->format($value, 'nomask');
         $barcode = [
-            $this->models['bank']->code,
-            $this->models['currency_code']->billet,
+            $title->assignment->bank->code,
+            $title->getCurrencyCode()->billet,
             '', // Check digit
             $this->dueFactor(),
             BankInterchange\Utils::padNumber($value, 10),
@@ -881,13 +858,16 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected function generateFields()
     {
         $data = $this->data;
-        $models = $this->models;
-        $doc_number = BankInterchange\Utils::padNumber($models['title']->doc_number, 10);
+        $title = $this->title;
+        $assignment = $title->assignment;
+        $assignor_person = $title->assignment->assignor->person;
+
+        $doc_number = BankInterchange\Utils::padNumber($title->doc_number, 10);
         $value = $this->formatMoney($data['value']);
 
         $placeholders = [
-            '{{ tax }}' => $this->formatMoney($models['title']->tax_value),
-            '{{ description }}' => $models['title']->description,
+            '{{ tax }}' => $this->formatMoney($title->tax_value),
+            '{{ description }}' => $title->description,
         ];
 
         $demonstrative = str_replace(
@@ -896,24 +876,24 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             $data['demonstrative'] ?? ''
         );
 
-        $guarantor = ($models['guarantor'] !== null)
-            ? $models['guarantor.person']->name . '     '
-            . $models['guarantor.address']->outputShort()
+        $guarantor = ($title->guarantor !== null)
+            ? $title->guarantor->person->name . '     '
+            . $title->guarantor->address->outputShort()
             : '';
 
         $fields = [
-            'accept'        => $models['title']->accept,
+            'accept'        => $title->accept,
             'addition'      => $data['addition'] ?? '',
             'agency_code'   => $this->formatAgencyAccount(true),
             'amount'        => $data['amount'] ?? '',
-            'assignor'      => $models['assignor.person']->name,
+            'assignor'      => $assignor_person->name,
             'bank_use'      => $data['bank_use'] ?? '',
             'charged'       => $data['charged'] ?? '',
-            'client'        => $models['client.person']->name,
-            'cpf_cnpj'      => $models['assignor.person']->getFormattedDocument(),
-            'currency'      => $models['currency']->symbol,
-            'date_document' => self::formatDate($models['title']->emission),
-            'date_due'      => self::formatDate($models['title']->due),
+            'client'        => $title->client->person->name,
+            'cpf_cnpj'      => $assignor_person->getFormattedDocument(),
+            'currency'      => $title->currency->symbol,
+            'date_document' => self::formatDate($title->emission),
+            'date_due'      => self::formatDate($title->due),
             'date_process'  => date('d/m/Y'),
             'deduction'     => $data['deduction'] ?? '',
             'demonstrative' => $demonstrative,
@@ -926,10 +906,10 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             'fine'          => $data['fine'] ?? '',
             'guarantor'     => $guarantor,
             'instructions'  => $data['instructions'] ?? '',
-            'kind'          => $models['document_kind']->symbol,
+            'kind'          => $title->kind->symbol,
             'our_number'    => $this->formatOurNumber(true),
             'payment_place' => $data['payment_place'] ?? '',
-            'wallet'        => $models['wallet']->symbol,
+            'wallet'        => $assignment->wallet->symbol,
         ];
 
         $result = [];

@@ -39,8 +39,9 @@ class Banese extends BankInterchange\BankBillet\View
     protected function drawBillet()
     {
         // Add document to assignor
+        $assignor = $this->title->assignment->assignor;
         $this->fields['assignor']['value'] .= '     '
-            . $this->models['assignor.person']->getFormattedDocument(true);
+            . $assignor->person->getFormattedDocument(true);
 
         // Draw billet
         $dict = $this->dictionary;
@@ -92,12 +93,14 @@ class Banese extends BankInterchange\BankBillet\View
 
         $dict = $this->dictionary;
         $fields = $this->fields;
-        $models = $this->models;
+        $title = $this->title;
+        $client = $title->client;
+        $wallet = $title->assignment->wallet;
 
         // Client
         $client_data = $fields['client']['value'] . "\n"
-            . utf8_decode($models['client.address']->outputLong());
-        $client_doc = $models['client.person']->getFormattedDocument(true);
+            . utf8_decode($client->address->outputLong());
+        $client_doc = $client->person->getFormattedDocument(true);
         $y = $this->GetY();
         $this->billetSetFont('cell_title');
         $this->Cell(10, 3.5, $fields['client']['text']);
@@ -123,7 +126,7 @@ class Banese extends BankInterchange\BankBillet\View
         $this->Line(187, $y, 187, $y1);
 
         // Mechanical authentication
-        $text = $dict['mech_auth'] . '/' . utf8_decode($models['wallet']->name);
+        $text = $dict['mech_auth'] . '/' . utf8_decode($wallet->name);
         $this->SetX(119.2);
         $this->billetSetFont('cell_title');
         $this->Cell(67.8, 3.5, $text);
@@ -137,8 +140,8 @@ class Banese extends BankInterchange\BankBillet\View
      */
     protected function generateFreeSpace()
     {
-        $assignment = $this->models['assignment'];
-        $bank = $this->models['bank'];
+        $assignment = $this->title->assignment;
+        $bank = $assignment->bank;
 
         $key = BankInterchange\Utils::padNumber($assignment->agency, 2, true)
             . BankInterchange\Utils::padNumber($assignment->account, 9, true)

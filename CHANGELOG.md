@@ -80,7 +80,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Assignor and Payer names in BankBillet fields
 - Update wallets
 - Move BankBillet classes to its own namespace
-- BankBillet view keeps a plain array with most models extracted from a Title
 - Invert default parameter value for some methods in BankBillet view
 - Use bank name in PascalCase to select the BankBillet view
 - Allow multiple paths to be searched for logos
