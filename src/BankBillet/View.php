@@ -225,9 +225,12 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected function drawBillhead()
     {
         $assignor = $this->models['assignor'];
+        $person = $this->models['assignor.person'];
+        $address = $this->models['assignment.address'];
+
         $this->Ln(2);
 
-        $logo = self::findFile("assignors/$assignor->id.*", $this->logos);
+        $logo = self::findFile("assignors/$person->id.*", $this->logos);
         if ($logo !== null) {
             $y = $this->GetY();
             $this->Image($logo, null, null, 40, 0, '', $assignor->url);
@@ -235,9 +238,9 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             $this->SetXY(50, $y);
         }
 
-        $text = $this->models['assignor.person']->name . "\n"
-            . $this->models['assignor.person']->getFormattedDocument() . "\n"
-            . $this->models['assignor.address']->outputLong();
+        $text = $person->name . "\n"
+            . $person->getFormattedDocument() . "\n"
+            . $address->outputLong();
 
         $this->billetSetFont('billhead');
         $this->MultiCell(103.2, 2.5, utf8_decode($text));
