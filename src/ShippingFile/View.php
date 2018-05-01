@@ -74,8 +74,9 @@ abstract class View implements FilePack\ViewInterface
     public function __construct(Models\ShippingFile $shipping_file)
     {
         $this->shipping_file = $shipping_file;
-        $shipped_titles = $shipping_file->getShippedTitles();
-        $count = count($shipped_titles);
+
+        $titles = $shipping_file->getTitles();
+        $count = count($titles);
         if ($count > static::TITLE_LIMIT) {
             throw new \OverflowException(sprintf(
                 '%s(%s) has %s titles, but only %s are allowed',
@@ -87,7 +88,7 @@ abstract class View implements FilePack\ViewInterface
         }
 
         $this->open();
-        foreach ($shipped_titles as $title) {
+        foreach ($titles as $title) {
             $this->add($title);
         }
         $this->close();
