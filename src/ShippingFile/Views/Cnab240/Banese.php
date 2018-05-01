@@ -58,7 +58,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             static::VERSION_FILE_LAYOUT,
             '0',
             '',
-            '',
+            $shipping_file->notes,
             '',
         ];
 
