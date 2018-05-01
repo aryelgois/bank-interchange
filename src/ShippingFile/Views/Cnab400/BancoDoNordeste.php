@@ -90,7 +90,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $assignment->account_cd,
             '0', // fine percent
             '',
-            $title->id,
+            $title->doc_number,
             $title->our_number,
             $title->checkDigitOurNumber(),
             '0', // contract
