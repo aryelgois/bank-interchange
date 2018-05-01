@@ -87,8 +87,8 @@ abstract class View implements FilePack\ViewInterface
         }
 
         $this->open();
-        foreach ($shipped_titles as $sft) {
-            $this->add($sft);
+        foreach ($shipped_titles as $title) {
+            $this->add($title);
         }
         $this->close();
     }
@@ -178,9 +178,9 @@ abstract class View implements FilePack\ViewInterface
     /**
      * Adds a Title registry
      *
-     * @param Models\ShippingFileTitle $sft Contains data for the registry
+     * @param Models\Title $title Contains data for the registry
      */
-    abstract protected function add(Models\ShippingFileTitle $sft);
+    abstract protected function add(Models\Title $title);
 
     /**
      * Does final steps for creating a shipping file

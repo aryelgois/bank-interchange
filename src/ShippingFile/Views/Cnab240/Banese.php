@@ -111,15 +111,14 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
     /**
      * Generates LotDetail registry
      *
-     * @param Models\ShippingFileTitle $sft Contains data for the registry
+     * @param Models\Title $title Contains data for the registry
      *
      * @return string[]
      */
-    protected function generateLotDetail(Models\ShippingFileTitle $sft)
+    protected function generateLotDetail(Models\Title $title)
     {
         $result = [];
 
-        $title = $sft->title;
         $assignment = $title->assignment;
         $assignor_person = $assignment->assignor->person;
         $bank = $assignment->bank;
@@ -147,7 +146,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $this->current_lot,
             'P',
             '',
-            $sft->movement->code,
+            $title->movement->code,
             '0', // $assignment->agency,
             '',
             '0', // $assignment->account,
@@ -202,7 +201,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $this->current_lot,
             'Q',
             '',
-            $sft->movement->code,
+            $title->movement->code,
             $client_person->getDocumentType(),
             $client_person->document,
             $client_person->name,

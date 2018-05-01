@@ -59,13 +59,12 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
     /**
      * Generates Transaction registry
      *
-     * @param Models\ShippingFileTitle $sft Contains data for the registry
+     * @param Models\Title $title Contains data for the registry
      *
      * @return string
      */
-    protected function generateTransaction(Models\ShippingFileTitle $sft)
+    protected function generateTransaction(Models\Title $title)
     {
-        $title = $sft->title;
         $assignment = $title->assignment;
         $assignor_person = $assignment->assignor->person;
         $bank = $assignment->bank;
@@ -98,7 +97,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $currency->format($title->discount2_value, 'nomask'),
             '',
             $assignment->wallet->code,
-            $sft->movement->code,
+            $title->movement->code,
             $title->doc_number,
             date('dmy', strtotime($title->due)),
             $currency->format($title->value, 'nomask'),

@@ -33,12 +33,12 @@ abstract class Cnab400 extends BankInterchange\ShippingFile\View
     /**
      * Adds a Title registry
      *
-     * @param Models\ShippingFileTitle $sft Contains data for the registry
+     * @param Models\Title $title Contains data for the registry
      */
-    protected function add(Models\ShippingFileTitle $sft)
+    protected function add(Models\Title $title)
     {
         $this->registry_count++;
-        $this->registries[] = $this->generateTransaction($sft);
+        $this->registries[] = $this->generateTransaction($title);
     }
 
     /**
@@ -65,13 +65,11 @@ abstract class Cnab400 extends BankInterchange\ShippingFile\View
     /**
      * Generates Transaction registry
      *
-     * @param Models\ShippingFileTitle $sft Contains data for the registry
+     * @param Models\Title $title Contains data for the registry
      *
      * @return string
      */
-    abstract protected function generateTransaction(
-        Models\ShippingFileTitle $sft
-    );
+    abstract protected function generateTransaction(Models\Title $title);
 
     /**
      * Generates Trailer registry
