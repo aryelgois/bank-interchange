@@ -100,7 +100,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $title->movement->code,
             $title->doc_number,
             date('dmy', strtotime($title->due)),
-            $currency->format($title->value, 'nomask'),
+            $currency->format($title->getActualValue(), 'nomask'),
             '0', // Charging bank
             '0', // Charging agency
             '',

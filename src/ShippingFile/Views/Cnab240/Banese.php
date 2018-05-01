@@ -160,7 +160,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '2', // Distribuition identifier
             $title->doc_number,
             date('dmY', strtotime($title->due)),
-            $currency->format($title->value, 'nomask'),
+            $currency->format($title->getActualValue(), 'nomask'),
             '0', // Charging agency
             '',  // Charging agency Check Digit
             $title->kind->code,

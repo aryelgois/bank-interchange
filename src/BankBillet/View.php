@@ -163,12 +163,11 @@ abstract class View extends FPDF implements FilePack\ViewInterface
 
         $this->title = $title;
 
-        $value = $title->value
-            + ($title->tax_included ? 0 : $title->tax_value);
+        $value = $title->getActualValue();
 
         $this->data = array_merge(
             $data,
-            ['value' => (float) $value],
+            ['value' => $value],
             $this->generateBarcode($value)
         );
 
