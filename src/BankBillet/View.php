@@ -233,11 +233,10 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected function drawPageHeader()
     {
         $data = $this->data;
-        $dict = $this->dictionary;
 
-        $title = utf8_decode($data['header_title']);
-        $body = utf8_decode($data['header_body']);
-        $info = utf8_decode($this->simpleTemplate($data['header_info']));
+        $title = utf8_decode($data['header_title'] ?? '');
+        $body = utf8_decode($data['header_body'] ?? '');
+        $info = utf8_decode($this->simpleTemplate($data['header_info'] ?? ''));
 
         $this->billetSetFont('cell_data');
 
