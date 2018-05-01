@@ -925,10 +925,10 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     }
 
     /**
-     * Expands a template tag to a $title column
+     * Expands a template tag
      *
      * NOTE:
-     * - Some columns have specific formatting that is applied automatically
+     * - Some tags have specific formatting that is applied automatically
      * - If the tag points to a Medools\Model, its primary key is returned
      *
      * @param string[] $match Match from preg_replace_callback()
@@ -939,12 +939,23 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     {
         $keys = explode('->', $match[1]);
 
+        $context = 'title';
+        if ($keys[0][0] === '$') {
+            $context = substr(array_shift($keys), 1);
+        }
+
         $previous = null;
-        $model = $this->title;
+        $model = $this->{$context};
 
         foreach ($keys as $key) {
             $previous = $model;
-            $model = $model->{$key};
+            $model = (is_object($model))
+                ? $model->{$key}
+                : $model[$key];
+        }
+
+        if ($context === 'dictionary') {
+            $model = utf8_encode($model);
         }
 
         if ($model instanceof Medools\Model) {
@@ -996,8 +1007,9 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     /**
      * Searches and replaces {{ key }} tags
      *
-     * The key must be a valid $title column. Nested Models can be accessed with
-     * {{ key->key }}
+     * - By default tags access $title columns
+     * - Nested Models can be accessed with {{ key->key }}
+     * - A starting '$' allows a different context: {{ $data->key }}
      *
      * @param string $subject The string to search and replace
      *
@@ -1010,7 +1022,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         }
 
         $result = preg_replace_callback(
-            '/{{ ?(\w+(?:->\w+)*) ?}}/',
+            '/{{ ?(\$?\w+(?:->\w+)*) ?}}/',
             [$this, 'parseTemplateTag'],
             $subject
         );
