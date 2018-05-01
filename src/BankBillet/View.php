@@ -117,7 +117,6 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         'doc_valueU'     => 'Valor documento',
         'fine'           => '(+) Mora / Multa',
         'guarantor'      => 'Sacador/Avalista',
-        'header_info'    => "    Linha Digitável:  %s\n    Valor:   %s",
         'instructions'   => 'Instruções (Texto de responsabilidade do beneficiário)',
         'kind'           => 'Espécie doc.',
         'mech_auth'      => 'Autenticação mecânica',
@@ -238,11 +237,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
 
         $title = utf8_decode($data['header_title']);
         $body = utf8_decode($data['header_body']);
-        $info = sprintf(
-            $dict['header_info'],
-            $data['digitable'],
-            $this->formatMoney($data['value'])
-        );
+        $info = utf8_decode($this->simpleTemplate($data['header_info']));
 
         $this->billetSetFont('cell_data');
 

@@ -7,6 +7,10 @@ header_body: |-
   - Caso não apareça o código de barras no final, clique em F5 para atualizar esta tela.
   - Caso tenha problemas ao imprimir, copie a sequência numérica abaixo e pague no caixa eletrônico ou no internet banking:
 
+header_info: |1
+   Linha Digitável:  {{ $data->digitable }}
+   Valor:  {{ $data->value }}
+
 payment_place: Pagável em qualquer Banco até o vencimento
 
 demonstrative: |-
