@@ -58,6 +58,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Simple template syntax for BankBillet
   - Allows dynamic access to any data in the BankBillet view
   - Supported by: `demonstrative`, `instructions`, `header_info`
+- Title `getActualValue()`
 
 ### Changed
 - Update dependencies

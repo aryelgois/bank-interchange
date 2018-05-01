@@ -160,6 +160,17 @@ class Title extends Medools\Model
     }
 
     /**
+     * Returns the Title value, considering its tax
+     *
+     * @return float
+     */
+    public function getActualValue()
+    {
+        $val = $this->value + ($this->tax_included ? 0 : $this->tax_value);
+        return (float) $val;
+    }
+
+    /**
      * Returns the correct CurrencyCode
      *
      * @return CurrencyCode
