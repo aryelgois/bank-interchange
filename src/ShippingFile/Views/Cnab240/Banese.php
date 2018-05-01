@@ -165,7 +165,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '',  // Charging agency Check Digit
             $title->kind->code,
             $title->accept,
-            date('dmY', strtotime($title->stamp)),
+            date('dmY', strtotime($title->emission)),
             $title->interest_type,
             ($title->interest_date != '' ? date('dmY', strtotime($title->interest_date)) : '0'),
             $currency->format($title->interest_value, 'nomask'),

@@ -106,7 +106,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             '',
             $title->kind->code,
             $title->accept,
-            date('dmy', strtotime($title->stamp)),
+            date('dmy', strtotime($title->emission)),
             '5', // instruction code
             '0', // interest value
             ($title->discount1_date != '' ? date('dmy', strtotime($title->discount1_date)) : '0'),
