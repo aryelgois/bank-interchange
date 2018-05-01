@@ -26,7 +26,8 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
      */
     protected function generateHeader()
     {
-        $assignment = $this->shipping_file->assignment;
+        $shipping_file = $this->shipping_file;
+        $assignment = $shipping_file->assignment;
         $assignor_person = $assignment->assignor->person;
         $bank = $assignment->bank;
 
@@ -47,7 +48,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $assignor_person->name,
             $bank->code,
             $bank->name,
-            date('dmy', strtotime($this->shipping_file->stamp)),
+            date('dmy', strtotime($shipping_file->stamp)),
             $assignment->edi,
             '',
             $this->registry_count,

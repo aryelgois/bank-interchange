@@ -130,15 +130,16 @@ abstract class View implements FilePack\ViewInterface
      */
     public function filename()
     {
-        $assignment = $this->shipping_file->assignment;
+        $shipping_file = $this->shipping_file;
+        $assignment = $shipping_file->assignment;
 
         $format = 'COB.%03.3s.%06.6s.%08.8s.%05.5s.%05.5s';
 
         $data = [
-            $this->shipping_file->cnab,
+            $assignment->cnab,
             $assignment->edi,
-            date('Ymd', strtotime($this->shipping_file->stamp)),
-            $this->shipping_file->counter,
+            date('Ymd', strtotime($shipping_file->stamp)),
+            $shipping_file->counter,
             $assignment->covenant,
         ];
 

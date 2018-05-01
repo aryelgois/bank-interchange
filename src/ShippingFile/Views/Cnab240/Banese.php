@@ -26,7 +26,8 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
      */
     protected function generateFileHeader()
     {
-        $assignment = $this->shipping_file->assignment;
+        $shipping_file = $this->shipping_file;
+        $assignment = $shipping_file->assignment;
         $assignor_person = $assignment->assignor->person;
         $bank = $assignment->bank;
 
@@ -51,9 +52,9 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $bank->name,
             '',
             '1',
-            date('dmY', strtotime($this->shipping_file->stamp)),
-            date('His', strtotime($this->shipping_file->stamp)),
-            $this->shipping_file->counter,
+            date('dmY', strtotime($shipping_file->stamp)),
+            date('His', strtotime($shipping_file->stamp)),
+            $shipping_file->counter,
             static::VERSION_FILE_LAYOUT,
             '0',
             '',
