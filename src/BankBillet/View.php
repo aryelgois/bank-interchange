@@ -883,7 +883,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             'date_due'      => self::formatDate($title->due),
             'date_process'  => date('d/m/Y'),
             'deduction'     => $data['deduction'] ?? '',
-            'demonstrative' => $demonstrative,
+            'demonstrative' => trim($demonstrative),
             'discount'      => $data['discount'] ?? '',
             'doc_number'    => $doc_number,
             'doc_number_sh' => $doc_number,
@@ -892,7 +892,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             'doc_valueU'    => $data['doc_valueU'] ?? '',
             'fine'          => $data['fine'] ?? '',
             'guarantor'     => $guarantor,
-            'instructions'  => $instructions,
+            'instructions'  => trim($instructions),
             'kind'          => $title->kind->symbol,
             'our_number'    => $this->formatOurNumber(true),
             'payment_place' => $data['payment_place'] ?? '',
@@ -1022,7 +1022,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             $subject
         );
 
-        return trim($result);
+        return $result;
     }
 
     /*
