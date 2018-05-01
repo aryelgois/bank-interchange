@@ -865,16 +865,8 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         $doc_number = BankInterchange\Utils::padNumber($title->doc_number, 10);
         $value = $this->formatMoney($data['value']);
 
-        $placeholders = [
-            '{{ tax }}' => $this->formatMoney($title->tax_value),
-            '{{ description }}' => $title->description,
-        ];
-
-        $demonstrative = str_replace(
-            array_keys($placeholders),
-            $placeholders,
-            $data['demonstrative'] ?? ''
-        );
+        $demonstrative = $this->simpleTemplate($data['demonstrative'] ?? '');
+        $instructions = $this->simpleTemplate($data['instructions'] ?? '');
 
         $guarantor = ($title->guarantor !== null)
             ? $title->guarantor->person->name . '     '
@@ -905,7 +897,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             'doc_valueU'    => $data['doc_valueU'] ?? '',
             'fine'          => $data['fine'] ?? '',
             'guarantor'     => $guarantor,
-            'instructions'  => $data['instructions'] ?? '',
+            'instructions'  => $instructions,
             'kind'          => $title->kind->symbol,
             'our_number'    => $this->formatOurNumber(true),
             'payment_place' => $data['payment_place'] ?? '',
@@ -930,6 +922,100 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected function generateFreeSpace()
     {
         return $this->formatOurNumber() . $this->formatAgencyAccount();
+    }
+
+    /**
+     * Expands a template tag to a $title column
+     *
+     * NOTE:
+     * - Some columns have specific formatting that is applied automatically
+     * - If the tag points to a Medools\Model, its primary key is returned
+     *
+     * @param string[] $match Match from preg_replace_callback()
+     *
+     * @return string
+     */
+    protected function parseTemplateTag(array $match)
+    {
+        $keys = explode('->', $match[1]);
+
+        $previous = null;
+        $model = $this->title;
+
+        foreach ($keys as $key) {
+            $previous = $model;
+            $model = $model->{$key};
+        }
+
+        if ($model instanceof Medools\Model) {
+            return implode('-', $model->getPrimaryKey());
+        }
+
+        switch ($key) {
+            case 'billet_tax':
+            case 'discount1_value':
+            case 'discount2_value':
+            case 'discount3_value':
+            case 'fine_value':
+            case 'interest_value':
+            case 'ioc_iof':
+            case 'rebate':
+            case 'tax_value':
+            case 'value_paid':
+            case 'value':
+                $model = $this->formatMoney($model);
+                break;
+
+            case 'discount1_date':
+            case 'discount2_date':
+            case 'discount3_type_date':
+            case 'due':
+            case 'emission':
+            case 'fine_date':
+            case 'interest_date':
+                $model = $this->formatDate($model);
+                break;
+
+            case 'document':
+                $model = $previous->getFormattedDocument();
+                break;
+
+            case 'stamp':
+            case 'update':
+                $model = date('H:i:s d/m/Y', strtotime($model));
+                break;
+
+            case 'zipcode':
+                $model = Utils\Validation::cep($model);
+                break;
+        }
+
+        return $model;
+    }
+
+    /**
+     * Searches and replaces {{ key }} tags
+     *
+     * The key must be a valid $title column. Nested Models can be accessed with
+     * {{ key->key }}
+     *
+     * @param string $subject The string to search and replace
+     *
+     * @return string
+     */
+    protected function simpleTemplate(string $subject)
+    {
+        if ($subject === '') {
+            return '';
+        }
+
+        $result = preg_replace_callback(
+            '/{{ ?(\w+(?:->\w+)*) ?}}/',
+            [$this, 'parseTemplateTag'],
+            $subject
+        );
+
+        return trim($result);
     }
 
     /*

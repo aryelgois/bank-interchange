@@ -55,6 +55,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Person` model (extending Medools `Person`)
 - Namespace `aryelgois\BankInterchange\FilePack`
 - BankBillet View `updateDictionary()` hook
+- BankBillet `demonstrative` and `instructions` support a simple template syntax
+  to insert any data from a Title (foreigns included)
 
 ### Changed
 - Update dependencies
