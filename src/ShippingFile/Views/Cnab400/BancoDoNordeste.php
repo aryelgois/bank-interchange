@@ -8,6 +8,7 @@
 namespace aryelgois\BankInterchange\ShippingFile\Views\Cnab400;
 
 use aryelgois\BankInterchange;
+use aryelgois\BankInterchange\Utils;
 use aryelgois\BankInterchange\Models;
 
 /**
@@ -45,7 +46,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $assignment->account,
             $assignment->account_cd,
             '',
-            $assignor_person->name,
+            Utils::cleanSpaces($assignor_person->name),
             $bank->code,
             $bank->name,
             date('dmy', strtotime($shipping_file->stamp)),
@@ -130,9 +131,9 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $currency->format($title->rebate, 'nomask'),
             $client_person->getDocumentType(),
             $client_person->document,
-            $client_person->name,
-            $client_address_piece,
-            $client_address->detail,
+            Utils::cleanSpaces($client_person->name),
+            Utils::cleanSpaces($client_address_piece),
+            Utils::cleanSpaces($client_address->detail),
             $client_address->zipcode,
             $client_address->county->name,
             $client_address->county->state->code,

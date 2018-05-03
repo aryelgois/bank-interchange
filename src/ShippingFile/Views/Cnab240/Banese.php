@@ -8,6 +8,7 @@
 namespace aryelgois\BankInterchange\ShippingFile\Views\Cnab240;
 
 use aryelgois\BankInterchange;
+use aryelgois\BankInterchange\Utils;
 use aryelgois\BankInterchange\Models;
 
 /**
@@ -48,7 +49,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '0', // $assignment->account,
             '',
             '',
-            $assignor_person->name,
+            Utils::cleanSpaces($assignor_person->name),
             $bank->name,
             '',
             '1',
@@ -97,7 +98,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '0', // $assignment->account,
             '',
             '',
-            $assignor_person->name,
+            Utils::cleanSpaces($assignor_person->name),
             '',  // message 1
             '',  // message 2
             '0', // number shipping/return
@@ -222,7 +223,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $client_person->document,
             $client_person->name,
             static::filter($client_address->place),
-            $client_address->neighborhood,
+            Utils::cleanSpaces($client_address->neighborhood),
             $client_address->zipcode,
             $client_address->county->name,
             $client_address->county->state->code,
