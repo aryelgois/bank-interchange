@@ -36,6 +36,18 @@ abstract class Utils
     }
 
     /**
+     * Replaces tabs with spaces, removes repeated spaces and trims spaces
+     *
+     * @param string $val Value to be cleaned
+     *
+     * @return string
+     */
+    public static function cleanSpaces(string $val)
+    {
+        return preg_replace('/[\t ]+/', ' ', trim($val));
+    }
+
+    /**
      * Adds trailing spaces to a value and trims overflow
      *
      * @param string  $val Value to be formatted
