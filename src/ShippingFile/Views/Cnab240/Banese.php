@@ -140,6 +140,14 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             . '%08.8s%015.15s%01.1s%08.8s%015.15s%015.15s%015.15s%-25.25s'
             . '%01.1s%02.2s%01.1s%03.3s%02.2s%010.10s%-1.1s';
 
+        $discount1_date = ($title->discount1_date != '')
+            ? date('dmY', strtotime($title->discount1_date))
+            : '0';
+
+        $interest_date = ($title->interest_date != '')
+            ? date('dmY', strtotime($title->interest_date))
+            : '0';
+
         $protest_code = $title->protest_code ?? 3;
         $protest_days = ($protest_code != 3 ? $title->protest_days ?? 0 : 0);
 
@@ -171,10 +179,10 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $title->accept,
             date('dmY', strtotime($title->emission)),
             $title->interest_type,
-            ($title->interest_date != '' ? date('dmY', strtotime($title->interest_date)) : '0'),
+            $interest_date,
             $currency->format($title->interest_value, 'nomask'),
             $title->discount1_type,
-            ($title->discount1_date != '' ? date('dmY', strtotime($title->discount1_date)) : '0'),
+            $discount1_date,
             $currency->format($title->discount1_value, 'nomask'),
             '0', // $currency->format($title->ioc_iof, 'nomask'),
             $currency->format($title->rebate, 'nomask'),
@@ -198,6 +206,10 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             . '%-40.40s%-40.40s%-15.15s%08.8s%-15.15s%-2.2s%01.1s%015.15s'
             . '%-40.40s%03.3s%020.20s%-8.8s';
 
+        $guarantor_document_type = ($guarantor_person !== null)
+            ? $guarantor_person->getDocumentType()
+            : '';
+
         $data = [
             $bank->code,
             $this->lot_count,
@@ -214,7 +226,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $client_address->zipcode,
             $client_address->county->name,
             $client_address->county->state->code,
-            ($guarantor_person !== null ? $guarantor_person->getDocumentType() : ''),
+            $guarantor_document_type,
             $guarantor_person->document ?? '',
             $guarantor_person->name ?? '',
             '0', // Corresponding bank

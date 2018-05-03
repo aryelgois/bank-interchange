@@ -81,6 +81,20 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             . '%06.6s%013.13s%013.13s%013.13s%02.2s%014.14s%-40.40s%-40.40s'
             . '%-12.12s%08.8s%-15.15s%-2.2s%-40.40s%02.2s%-1.1s%06.6s';
 
+        $client_address_piece = implode(' ', [
+            static::filter($client_address->place),
+            $client_address->number,
+            $client_address->neighborhood
+        ]);
+
+        $discount1_date = ($title->discount1_date != '')
+            ? date('dmy', strtotime($title->discount1_date))
+            : '0';
+
+        $discount2_date = ($title->discount2_date != '')
+            ? date('dmy', strtotime($title->discount2_date))
+            : '0';
+
         $data = [
             '1',
             '',
@@ -94,7 +108,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $title->our_number,
             $title->checkDigitOurNumber(),
             '0', // contract
-            ($title->discount2_date != '' ? date('dmy', strtotime($title->discount2_date)) : '0'),
+            $discount2_date,
             $currency->format($title->discount2_value, 'nomask'),
             '',
             $assignment->wallet->code,
@@ -110,14 +124,14 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             date('dmy', strtotime($title->emission)),
             '5', // instruction code
             '0', // interest value
-            ($title->discount1_date != '' ? date('dmy', strtotime($title->discount1_date)) : '0'),
+            $discount1_date,
             $currency->format($title->discount1_value, 'nomask'),
             $currency->format($title->ioc_iof, 'nomask'),
             $currency->format($title->rebate, 'nomask'),
             $client_person->getDocumentType(),
             $client_person->document,
             $client_person->name,
-            implode(' ', [static::filter($client_address->place), $client_address->number, $client_address->neighborhood]),
+            $client_address_piece,
             $client_address->detail,
             $client_address->zipcode,
             $client_address->county->name,
