@@ -227,7 +227,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $title->movement->code,
             $client_person->getDocumentType(),
             $client_person->document,
-            $client_person->name,
+            Utils::cleanSpaces($client_person->name),
             Utils::cleanSpaces($client_address_piece),
             static::filter($client_address->neighborhood),
             $client_address->zipcode,
