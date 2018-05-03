@@ -215,7 +215,7 @@ abstract class View implements FilePack\ViewInterface
     protected static function filter($field)
     {
         $field = preg_replace('/[\.\/\\:;,?$*!#_-]/', '', $field);
-        $field = preg_replace('/  +/', ' ', $field);
+        $field = preg_replace('/\s+/', ' ', trim($field));
         return $field;
     }
 }
