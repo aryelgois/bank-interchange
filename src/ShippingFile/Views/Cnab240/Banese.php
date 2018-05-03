@@ -140,6 +140,9 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             . '%08.8s%015.15s%01.1s%08.8s%015.15s%015.15s%015.15s%-25.25s'
             . '%01.1s%02.2s%01.1s%03.3s%02.2s%010.10s%-1.1s';
 
+        $protest_code = $title->protest_code ?? 3;
+        $protest_days = ($protest_code != 3 ? $title->protest_days ?? 0 : 0);
+
         $data = [
             $bank->code,
             $this->lot_count,
@@ -176,8 +179,8 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '0', // $currency->format($title->ioc_iof, 'nomask'),
             $currency->format($title->rebate, 'nomask'),
             $title->description,
-            '3', // Protest code
-            '0', // Protest due
+            $protest_code,
+            min($protest_days, 99),
             '1', // down/return code
             '0', // down/return due
             $currency_code->cnab240,

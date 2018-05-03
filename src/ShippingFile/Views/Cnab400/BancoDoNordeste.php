@@ -123,7 +123,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $client_address->county->name,
             $client_address->county->state->code,
             '', // message or guarantor name
-            '99', // protest due
+            min($title->protest_days ?? 99, 99),
             $currency_code->cnab400,
             $this->registry_count,
         ];
