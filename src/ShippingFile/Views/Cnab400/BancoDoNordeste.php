@@ -85,7 +85,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
         $client_address_piece = implode(' ', [
             static::filter($client_address->place),
             $client_address->number,
-            $client_address->neighborhood
+            static::filter($client_address->neighborhood)
         ]);
 
         $discount1_date = ($title->discount1_date != '')

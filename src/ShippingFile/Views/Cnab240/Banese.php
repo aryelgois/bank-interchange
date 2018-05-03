@@ -207,6 +207,12 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             . '%-40.40s%-40.40s%-15.15s%08.8s%-15.15s%-2.2s%01.1s%015.15s'
             . '%-40.40s%03.3s%020.20s%-8.8s';
 
+        $client_address_piece = implode(' ', [
+            static::filter($client_address->place),
+            $client_address->number,
+            static::filter($client_address->detail)
+        ]);
+
         $guarantor_document_type = ($guarantor_person !== null)
             ? $guarantor_person->getDocumentType()
             : '';
@@ -222,8 +228,8 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $client_person->getDocumentType(),
             $client_person->document,
             $client_person->name,
-            static::filter($client_address->place),
-            Utils::cleanSpaces($client_address->neighborhood),
+            Utils::cleanSpaces($client_address_piece),
+            static::filter($client_address->neighborhood),
             $client_address->zipcode,
             $client_address->county->name,
             $client_address->county->state->code,
