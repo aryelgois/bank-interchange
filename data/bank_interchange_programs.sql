@@ -46,7 +46,22 @@ CREATE PROCEDURE titles_validate(
   IN new_guarantor int,
   IN new_kind int,
   IN new_emission date,
-  IN new_due date
+  IN new_due date,
+  IN fine_type int,
+  INOUT fine_date date,
+  INOUT fine_value decimal,
+  IN interest_type int,
+  INOUT interest_date date,
+  INOUT interest_value decimal,
+  IN discount1_type int,
+  INOUT discount1_date date,
+  INOUT discount1_value decimal,
+  IN discount2_type int,
+  INOUT discount2_date date,
+  INOUT discount2_value decimal,
+  IN discount3_type int,
+  INOUT discount3_date date,
+  INOUT discount3_value decimal
 ) READS SQL DATA
 BEGIN
   DECLARE movement_bank, assignment_assignor, assignment_bank int;
@@ -106,6 +121,36 @@ BEGIN
     SIGNAL SQLSTATE '45000'
       SET MESSAGE_TEXT = 'Cannot add or update row: due date is earlier than emission';
   END IF;
+
+  IF fine_type = 0
+  THEN
+    SET fine_date = NULL;
+    SET fine_value = NULL;
+  END IF;
+
+  IF interest_type = 3
+  THEN
+    SET interest_date = NULL;
+    SET interest_value = NULL;
+  END IF;
+
+  IF discount1_type = 0
+  THEN
+    SET discount1_date = NULL;
+    SET discount1_value = NULL;
+  END IF;
+
+  IF discount2_type = 0
+  THEN
+    SET discount2_date = NULL;
+    SET discount2_value = NULL;
+  END IF;
+
+  IF discount3_type = 0
+  THEN
+    SET discount3_date = NULL;
+    SET discount3_value = NULL;
+  END IF;
 END//
 
 
@@ -156,7 +201,22 @@ BEGIN
     NEW.guarantor,
     NEW.kind,
     NEW.emission,
-    NEW.due
+    NEW.due,
+    NEW.fine_type,
+    NEW.fine_date,
+    NEW.fine_value,
+    NEW.interest_type,
+    NEW.interest_date,
+    NEW.interest_value,
+    NEW.discount1_type,
+    NEW.discount1_date,
+    NEW.discount1_value,
+    NEW.discount2_type,
+    NEW.discount2_date,
+    NEW.discount2_value,
+    NEW.discount3_type,
+    NEW.discount3_date,
+    NEW.discount3_value
   );
 END//
 
@@ -171,7 +231,22 @@ CALL titles_validate(
   NEW.guarantor,
   NEW.kind,
   NEW.emission,
-  NEW.due
+  NEW.due,
+  NEW.fine_type,
+  NEW.fine_date,
+  NEW.fine_value,
+  NEW.interest_type,
+  NEW.interest_date,
+  NEW.interest_value,
+  NEW.discount1_type,
+  NEW.discount1_date,
+  NEW.discount1_value,
+  NEW.discount2_type,
+  NEW.discount2_date,
+  NEW.discount2_value,
+  NEW.discount3_type,
+  NEW.discount3_date,
+  NEW.discount3_value
 )//
 
 

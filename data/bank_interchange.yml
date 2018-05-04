@@ -11,7 +11,6 @@ definitions:
   name: varchar(60)
   money: decimal(17,4)
   money_small: decimal(6,4)
-  1_or_2: enum('1', '2')
   cnab: enum('240', '400')
   insertstamp: timestamp DEFAULT CURRENT_TIMESTAMP
 
@@ -127,19 +126,19 @@ tables:
     rebate: money
     tax_value: money_small
     tax_included: tinyint(1)
-    fine_type: 1_or_2
+    fine_type: tinyint DEFAULT 0
     fine_date: date NULLABLE
     fine_value: money NULLABLE
-    interest_type: enum('1', '2', '3')
+    interest_type: tinyint DEFAULT 3
     interest_date: date NULLABLE
     interest_value: money NULLABLE
-    discount1_type: 1_or_2
+    discount1_type: tinyint DEFAULT 0
     discount1_date: date NULLABLE
     discount1_value: money NULLABLE
-    discount2_type: 1_or_2
+    discount2_type: tinyint DEFAULT 0
     discount2_date: date NULLABLE
     discount2_value: money NULLABLE
-    discount3_type: 1_or_2
+    discount3_type: tinyint DEFAULT 0
     discount3_date: date NULLABLE
     discount3_value: money NULLABLE
     protest_code: tinyint NULLABLE

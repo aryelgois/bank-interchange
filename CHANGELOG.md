@@ -81,6 +81,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Change `assignors` PRIMARY KEY to `person`
   - Move `address` column from `assignors` to `assignments`
   - Rename `billet_tax` column in `titles` to `tax_value`
+  - Title `fine_type`, `interest_type` and `discount*_type` are `tinyint` have
+    default value
 - Config files:
   - Rewrite ReturnFile config files in [YAML], improve patterns, rename some
     fields
@@ -113,7 +115,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - BankBillet View `beforeDraw()`
 - Example of assignor logos
 - Column `doc_type` in `titles`
-- Defaults for `fine_type` and `discount_type` in `titles`
 - Table `shipping_file_titles`
 - Title `setOurNumber()`
 
