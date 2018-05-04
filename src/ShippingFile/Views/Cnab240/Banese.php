@@ -235,6 +235,53 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
 
         $result[] = vsprintf($format, static::normalize($data));
 
+        /*
+         * 'R' Segment
+         */
+
+        if ($title->discount2_type || $title->discount3_type
+            || $title->fine_type
+        ) {
+            $format = '%03.3s%04.4s%01.1s%05.5s%-1.1s%-1.1s%02.2s%01.1s%08.8s'
+                . '%015.15s%01.1s%08.8s%015.15s%01.1s%08.8s%015.15s%-10.10s'
+                . '%-40.40s%-40.40s%-20.20s%08.8s%03.3s%05.5s%-1.1s%012.12s'
+                . '%-1.1s%-1.1s%01.1s%-9.9s';
+
+            $data = [
+                $bank->code,
+                $this->lot_count,
+                '3',
+                $this->current_lot,
+                'R',
+                '',
+                $title->movement->code,
+                $title->discount2_type,
+                static::date('dmY', $title->discount2_date),
+                $currency->format($title->discount2_value, 'nomask'),
+                $title->discount3_type,
+                static::date('dmY', $title->discount3_date),
+                $currency->format($title->discount3_value, 'nomask'),
+                $title->fine_type,
+                static::date('dmY', $title->fine_date),
+                $currency->format($title->fine_value, 'nomask'),
+                '', // information to client
+                '', // message 3
+                '', // message 4
+                '',
+                '0', // client occurence_code
+                '0', // debit bank_code
+                '0', // debit agency
+                '0', // debit agency_cd
+                '0', // debit account
+                '',  // debit account_cd
+                '',  // debit agency_account_cd
+                '0', // debit emission_identification
+                '',
+            ];
+
+            $result[] = vsprintf($format, static::normalize($data));
+        }
+
         return $result;
     }
 
