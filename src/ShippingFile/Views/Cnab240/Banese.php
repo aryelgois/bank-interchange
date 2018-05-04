@@ -53,8 +53,8 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $bank->name,
             '',
             '1',
-            date('dmY', strtotime($shipping_file->stamp)),
-            date('His', strtotime($shipping_file->stamp)),
+            static::date('dmY', $shipping_file->stamp),
+            static::date('His', $shipping_file->stamp),
             $shipping_file->counter,
             static::VERSION_FILE_LAYOUT,
             '0',
@@ -141,14 +141,6 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             . '%08.8s%015.15s%01.1s%08.8s%015.15s%015.15s%015.15s%-25.25s'
             . '%01.1s%02.2s%01.1s%03.3s%02.2s%010.10s%-1.1s';
 
-        $discount1_date = ($title->discount1_date != '')
-            ? date('dmY', strtotime($title->discount1_date))
-            : '0';
-
-        $interest_date = ($title->interest_date != '')
-            ? date('dmY', strtotime($title->interest_date))
-            : '0';
-
         $protest_code = $title->protest_code ?? 3;
         $protest_days = ($protest_code != 3 ? $title->protest_days ?? 0 : 0);
 
@@ -172,18 +164,18 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '2', // Emission identifier
             '2', // Distribuition identifier
             $title->doc_number,
-            date('dmY', strtotime($title->due)),
+            static::date('dmY', $title->due),
             $currency->format($title->getActualValue(), 'nomask'),
             '0', // Charging agency
             '',  // Charging agency Check Digit
             $title->kind->code,
             $title->accept,
-            date('dmY', strtotime($title->emission)),
+            static::date('dmY', $title->emission),
             $title->interest_type,
-            $interest_date,
+            static::date('dmY', $title->interest_date),
             $currency->format($title->interest_value, 'nomask'),
             $title->discount1_type,
-            $discount1_date,
+            static::date('dmY', $title->discount1_date),
             $currency->format($title->discount1_value, 'nomask'),
             '0', // $currency->format($title->ioc_iof, 'nomask'),
             $currency->format($title->rebate, 'nomask'),

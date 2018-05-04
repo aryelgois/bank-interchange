@@ -139,7 +139,7 @@ abstract class View implements FilePack\ViewInterface
         $data = [
             $assignment->cnab,
             $assignment->edi,
-            date('Ymd', strtotime($shipping_file->stamp)),
+            static::date('Ymd', $shipping_file->stamp),
             $shipping_file->counter,
             $assignment->covenant,
         ];
@@ -193,6 +193,25 @@ abstract class View implements FilePack\ViewInterface
      * Helper
      * =========================================================================
      */
+
+    /**
+     * Formats a local time/date from an English textual datetime
+     *
+     * NOTE:
+     * - If $time is empty, the result is '0'
+     *
+     * @param string $format @see \date()
+     * @param mixed  $time   @see \strtotime()
+     *
+     * @return string
+     */
+    protected static function date($format, $time)
+    {
+        if (empty($time)) {
+            return '0';
+        }
+        return date($format, strtotime($time));
+    }
 
     /**
      * Removes diacritics and convert to upper case

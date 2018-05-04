@@ -49,7 +49,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             Utils::cleanSpaces($assignor_person->name),
             $bank->code,
             $bank->name,
-            date('dmy', strtotime($shipping_file->stamp)),
+            static::date('dmy', $shipping_file->stamp),
             $assignment->edi,
             '',
             $this->registry_count,
@@ -88,14 +88,6 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             static::filter($client_address->neighborhood)
         ]);
 
-        $discount1_date = ($title->discount1_date != '')
-            ? date('dmy', strtotime($title->discount1_date))
-            : '0';
-
-        $discount2_date = ($title->discount2_date != '')
-            ? date('dmy', strtotime($title->discount2_date))
-            : '0';
-
         $data = [
             '1',
             '',
@@ -109,23 +101,23 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $title->our_number,
             $title->checkDigitOurNumber(),
             '0', // contract
-            $discount2_date,
+            static::date('dmy', $title->discount2_date),
             $currency->format($title->discount2_value, 'nomask'),
             '',
             $assignment->wallet->code,
             $title->movement->code,
             $title->doc_number,
-            date('dmy', strtotime($title->due)),
+            static::date('dmy', $title->due),
             $currency->format($title->getActualValue(), 'nomask'),
             '0', // Charging bank
             '0', // Charging agency
             '',
             $title->kind->code,
             $title->accept,
-            date('dmy', strtotime($title->emission)),
+            static::date('dmy', $title->emission),
             '5', // instruction code
             '0', // interest value
-            $discount1_date,
+            static::date('dmy', $title->discount1_date),
             $currency->format($title->discount1_value, 'nomask'),
             $currency->format($title->ioc_iof, 'nomask'),
             $currency->format($title->rebate, 'nomask'),
