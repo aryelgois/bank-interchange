@@ -177,7 +177,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $title->discount1_type,
             static::date('dmY', $title->discount1_date),
             $currency->format($title->discount1_value, 'nomask'),
-            '0', // $currency->format($title->ioc_iof, 'nomask'),
+            $currency->format($title->ioc_iof, 'nomask'),
             $currency->format($title->rebate, 'nomask'),
             $title->description,
             $protest_code,
