@@ -44,16 +44,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Columns for `protest` in `titles`
   - SQL Programs
 - Namespace `aryelgois\BankInterchange\ReturnFile`
-- Utils `addExtension()`, `toPascalCase()`
+- Utils:
+  - `addExtension()`
+  - `cleanSpaces()`
+  - `toPascalCase()`
 - Generic tables for BankBillet views
 - Can generate a `.zip` with multiple bank billets
-- ShippingFile `getShippedTitles()`
+- ShippingFile `getTitles()`
 - ShippingFile View `TITLE_LIMIT`
 - Bank specific ShippingFile views
 - Title `getCurrencyCode()`
 - Mode `nomask` in Currency `format()`
 - `Person` model (extending Medools `Person`)
 - Namespace `aryelgois\BankInterchange\FilePack`
+- BankBillet View `updateDictionary()` hook
+- Simple template syntax for BankBillet
+  - Allows dynamic access to any data in the BankBillet view
+  - Supported by: `demonstrative`, `instructions`, `header_info`
+- Title `getActualValue()`
+- ShippingFile `date()`
+- Optional 'R' segment in CNAB240 ShippingFile
+- ShippingFile movement masks
 
 ### Changed
 - Update dependencies
@@ -73,13 +84,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Change `assignors` PRIMARY KEY to `person`
   - Move `address` column from `assignors` to `assignments`
   - Rename `billet_tax` column in `titles` to `tax_value`
+  - Title `fine_type`, `interest_type` and `discount*_type` are `tinyint` have
+    default value
 - Config files:
   - Rewrite ReturnFile config files in [YAML], improve patterns, rename some
     fields
 - Assignor and Payer names in BankBillet fields
 - Update wallets
 - Move BankBillet classes to its own namespace
-- BankBillet view keeps a plain array with most models extracted from a Title
 - Invert default parameter value for some methods in BankBillet view
 - Use bank name in PascalCase to select the BankBillet view
 - Allow multiple paths to be searched for logos
@@ -106,7 +118,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - BankBillet View `beforeDraw()`
 - Example of assignor logos
 - Column `doc_type` in `titles`
-- Defaults for `fine_type` and `discount_type` in `titles`
 - Table `shipping_file_titles`
 - Title `setOurNumber()`
 

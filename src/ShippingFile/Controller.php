@@ -36,7 +36,7 @@ class Controller extends BankInterchange\FilePack\Controller
     {
         $assignment = $model->assignment;
 
-        $view_class = __NAMESPACE__ . "\\Views\\Cnab$model->cnab\\"
+        $view_class = __NAMESPACE__ . "\\Views\\Cnab$assignment->cnab\\"
             . BankInterchange\Utils::toPascalCase($assignment->bank->name);
 
         return new $view_class($model);

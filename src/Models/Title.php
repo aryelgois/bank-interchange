@@ -82,14 +82,19 @@ class Title extends Medools\Model
         'accept',
         'status',
         'value_paid',
+        'fine_type',
         'fine_date',
         'fine_value',
+        'interest_type',
         'interest_date',
         'interest_value',
+        'discount1_type',
         'discount1_date',
         'discount1_value',
+        'discount2_type',
         'discount2_date',
         'discount2_value',
+        'discount3_type',
         'discount3_date',
         'discount3_value',
         'protest_code',
@@ -157,6 +162,17 @@ class Title extends Medools\Model
             : 0;
 
         return abs($digit);
+    }
+
+    /**
+     * Returns the Title value, considering its tax
+     *
+     * @return float
+     */
+    public function getActualValue()
+    {
+        $val = $this->value + ($this->tax_included ? 0 : $this->tax_value);
+        return (float) $val;
     }
 
     /**

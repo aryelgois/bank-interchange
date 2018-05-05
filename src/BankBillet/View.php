@@ -85,6 +85,47 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected $data = [];
 
     /**
+     * Dictionary of terms used in the billet
+     *
+     * @var string[]
+     */
+    protected $dictionary = [
+        'accept'         => 'Aceite',
+        'addition'       => '(+) Outros acréscimos',
+        'agency_code'    => 'Agência/Código do Beneficiário',
+        'amount'         => 'Quantidade',
+        'assignor'       => 'Beneficiário',
+        'bank_use'       => 'Uso do banco',
+        'charged'        => '(=) Valor cobrado',
+        'client'         => 'Pagador',
+        'client_receipt' => 'Recibo do Pagador',
+        'cod_down'       => 'Cód. baixa',
+        'compensation'   => 'Ficha de Compensação',
+        'cpf_cnpj'       => 'CPF/CNPJ',
+        'currency'       => 'Espécie',
+        'cut_here'       => 'Corte na linha pontilhada',
+        'date_document'  => 'Data do documento',
+        'date_due'       => 'Vencimento',
+        'date_process'   => 'Data processameto',
+        'deduction'      => '(-) Outras deduções',
+        'demonstrative'  => 'Demonstrativo',
+        'discount'       => '(-) Desconto / Abatimentos',
+        'doc_number'     => 'Número do documento',
+        'doc_number_sh'  => 'Nº documento',
+        'doc_value'      => 'Valor documento',
+        'doc_value='     => '(=) Valor documento',
+        'doc_valueU'     => 'Valor documento',
+        'fine'           => '(+) Mora / Multa',
+        'guarantor'      => 'Sacador/Avalista',
+        'instructions'   => 'Instruções (Texto de responsabilidade do beneficiário)',
+        'kind'           => 'Espécie doc.',
+        'mech_auth'      => 'Autenticação mecânica',
+        'our_number'     => 'Nosso número',
+        'payment_place'  => 'Local de pagamento',
+        'wallet'         => 'Carteira',
+    ];
+
+    /**
      * Contains fields to be drawn in the billet
      *
      * @var array[]
@@ -99,11 +140,11 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected $logos = [];
 
     /**
-     * Holds model instances from different tables
+     * Holds data from database and manipulates some tables
      *
-     * @var Medools\Model[]
+     * @var BankInterchange\Models\Title
      */
-    protected $models = [];
+    protected $title;
 
     /**
      * Creates a new Billet View object
@@ -117,33 +158,19 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         array $data,
         array $logos
     ) {
-        $models = [];
-        $models['assignment']        = $title->assignment;
-        $models['assignor']          = $models['assignment']->assignor;
-        $models['assignor.address']  = $models['assignor']->address;
-        $models['assignor.person']   = $models['assignor']->person;
-        $models['bank']              = $models['assignment']->bank;
-        $models['client']            = $title->client;
-        $models['client.address']    = $models['client']->address;
-        $models['client.person']     = $models['client']->person;
-        $models['currency']          = $title->currency;
-        $models['currency_code']     = $title->getCurrencyCode();
-        $models['document_kind']     = $title->kind;
-        $models['guarantor']         = $title->guarantor;
-        $models['guarantor.person']  = $models['guarantor']->person ?? null;
-        $models['guarantor.address'] = $models['guarantor']->address ?? null;
-        $models['title']             = $title;
-        $models['wallet']            = $models['assignment']->wallet;
-        $this->models = $models;
+        $this->updateDictionary();
+        $this->dictionary = array_map('utf8_decode', $this->dictionary);
 
-        $value = $title->value + $title->billet_tax;
-        $data = array_merge(
+        $this->title = $title;
+
+        $value = $title->getActualValue();
+
+        $this->data = array_merge(
             $data,
-            ['value' => (float) $value],
+            ['value' => $value],
             $this->generateBarcode($value)
         );
 
-        $this->data = $data;
         $this->fields = $this->generateFields();
         $this->logos = $logos;
 
@@ -165,10 +192,8 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     public function filename()
     {
-        $name = $this->models['assignment']->id . '-'
-            . $this->models['title']->doc_number;
-
-        return $name;
+        $title = $this->title;
+        return $title->assignment->id . '-' . $title->doc_number;
     }
 
     /**
@@ -206,14 +231,26 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function drawPageHeader()
     {
-        $fields = $this->fields;
+        $data = $this->data;
+
+        $title = utf8_decode($data['header_title'] ?? '');
+        $body = utf8_decode($data['header_body'] ?? '');
+        $info = utf8_decode($this->simpleTemplate($data['header_info'] ?? ''));
+
         $this->billetSetFont('cell_data');
-        $this->Cell(177, 3, $fields['header_title']['text'], 0, 1, 'C');
-        $this->Ln(2);
-        $this->MultiCell(177, 3, $fields['header_body']['text']);
-        $this->Ln(2);
+
+        if (strlen($title)) {
+            $this->Cell(177, 3, $title, 0, 1, 'C');
+            $this->Ln(2);
+        }
+
+        if (strlen($body)) {
+            $this->MultiCell(177, 3, $body);
+            $this->Ln(2);
+        }
+
         $this->billetSetFont('digitable');
-        $this->MultiCell(177, 3.5, $fields['header_info']['text']);
+        $this->MultiCell(177, 3.5, $info);
         $this->Ln(4);
     }
 
@@ -222,10 +259,13 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function drawBillhead()
     {
-        $assignor = $this->models['assignor'];
+        $assignment = $this->title->assignment;
+        $assignor = $assignment->assignor;
+        $person = $assignor->person;
+
         $this->Ln(2);
 
-        $logo = self::findFile("assignors/$assignor->id.*", $this->logos);
+        $logo = self::findFile("assignors/$person->id.*", $this->logos);
         if ($logo !== null) {
             $y = $this->GetY();
             $this->Image($logo, null, null, 40, 0, '', $assignor->url);
@@ -233,9 +273,9 @@ abstract class View extends FPDF implements FilePack\ViewInterface
             $this->SetXY(50, $y);
         }
 
-        $text = $this->models['assignor.person']->name . "\n"
-            . $this->models['assignor.person']->getFormattedDocument() . "\n"
-            . $this->models['assignor.address']->outputLong();
+        $text = $person->name . "\n"
+            . $person->getFormattedDocument() . "\n"
+            . $assignment->address->outputLong();
 
         $this->billetSetFont('billhead');
         $this->MultiCell(103.2, 2.5, utf8_decode($text));
@@ -283,7 +323,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
         $digitable_align = 'R',
         $line_width_factor = 2
     ) {
-        $bank = $this->models['bank'];
+        $bank = $this->title->assignment->bank;
         $this->Ln(3);
 
         $logo = self::findFile("banks/$bank->id.*", $this->logos);
@@ -543,7 +583,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function formatAgencyAccount($symbol = false)
     {
-        return $this->models['assignment']->formatAgencyAccount(
+        return $this->title->assignment->formatAgencyAccount(
             static::AGENCY_LENGTH,
             static::ACCOUNT_LENGTH,
             $symbol
@@ -557,7 +597,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function formatBankCode()
     {
-        $code = $this->models['bank']->code;
+        $code = $this->title->assignment->bank->code;
 
         $checksum = Utils\Validation::mod11Pre($code);
         $digit = $checksum * 10 % 11;
@@ -665,7 +705,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function formatMoney($value, $format = 'symbol')
     {
-        return $this->models['currency']->format($value, $format);
+        return $this->title->currency->format($value, $format);
     }
 
     /**
@@ -678,7 +718,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected function formatOurNumber($mask = false)
     {
         $our_number = BankInterchange\Utils::padNumber(
-            $this->models['title']->our_number,
+            $this->title->our_number,
             static::OUR_NUMBER_LENGTH
         );
 
@@ -728,10 +768,13 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function checkDigitOurNumber()
     {
-        $our_number = BankInterchange\Utils::padNumber($this->models['assignment']->agency, 3)
-            . BankInterchange\Utils::padNumber($this->models['title']->our_number, 8);
+        $title = $this->title;
+        $assignment = $title->assignment;
 
-        return $this->models['title']->checkDigitOurNumberAlgorithm($our_number);
+        $our_number = BankInterchange\Utils::padNumber($assignment->agency, 3)
+            . BankInterchange\Utils::padNumber($title->our_number, 8);
+
+        return $title->checkDigitOurNumberAlgorithm($our_number);
     }
 
     /**
@@ -741,7 +784,7 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function dueFactor()
     {
-        $date = \DateTime::createFromFormat('Y-m-d', $this->models['title']->due);
+        $date = \DateTime::createFromFormat('Y-m-d', $this->title->due);
         $epoch = new \DateTime('1997-10-07');
         if ($date && $date > $epoch) {
             $diff = substr($date->diff($epoch)->format('%a'), -4);
@@ -781,10 +824,12 @@ abstract class View extends FPDF implements FilePack\ViewInterface
      */
     protected function generateBarcode($value)
     {
-        $value = $this->models['currency']->format($value, 'nomask');
+        $title = $this->title;
+
+        $value = $title->currency->format($value, 'nomask');
         $barcode = [
-            $this->models['bank']->code,
-            $this->models['currency_code']->billet,
+            $title->assignment->bank->code,
+            $title->getCurrencyCode()->billet,
             '', // Check digit
             $this->dueFactor(),
             BankInterchange\Utils::padNumber($value, 10),
@@ -806,170 +851,60 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected function generateFields()
     {
         $data = $this->data;
-        $models = $this->models;
-        $doc_number = BankInterchange\Utils::padNumber($models['title']->doc_number, 10);
+        $title = $this->title;
+        $assignment = $title->assignment;
+        $assignor_person = $title->assignment->assignor->person;
+
+        $doc_number = BankInterchange\Utils::padNumber($title->doc_number, 10);
         $value = $this->formatMoney($data['value']);
 
+        $demonstrative = $this->simpleTemplate($data['demonstrative'] ?? '');
+        $instructions = $this->simpleTemplate($data['instructions'] ?? '');
+
+        $guarantor = ($title->guarantor !== null)
+            ? $title->guarantor->person->name . '     '
+            . $title->guarantor->address->outputShort()
+            : '';
+
         $fields = [
-            'accept' => [
-                'text' => 'Aceite',
-                'value' => $models['title']->accept,
-            ],
-            'addition' => [
-                'text' => '(+) Outros acréscimos',
-                'value' => $data['addition'] ?? '',
-            ],
-            'agency_code' => [
-                'text' => 'Agência/Código do Beneficiário',
-                'value' => $this->formatAgencyAccount(true),
-            ],
-            'amount' => [
-                'text' => 'Quantidade',
-                'value' => $data['amount'] ?? '',
-            ],
-            'assignor' => [
-                'text' => 'Beneficiário',
-                'value' => $models['assignor.person']->name,
-            ],
-            'bank_use' => [
-                'text' => 'Uso do banco',
-                'value' => $data['bank_use'] ?? '',
-            ],
-            'charged' => [
-                'text' => '(=) Valor cobrado',
-                'value' => $data['charged'] ?? '',
-            ],
-            'client' => [
-                'text' => 'Pagador',
-                'value' => $models['client.person']->name,
-            ],
-            'client_receipt' => [
-                'text' => 'Recibo do Pagador',
-            ],
-            'cod_down' => [
-                'text' => 'Cód. baixa',
-            ],
-            'compensation' => [
-                'text' => 'Ficha de Compensação',
-            ],
-            'cpf_cnpj' => [
-                'text' => 'CPF/CNPJ',
-                'value' => $models['assignor.person']->getFormattedDocument(),
-            ],
-            'currency' => [
-                'text' => 'Espécie',
-                'value' => $models['currency']->symbol,
-            ],
-            'cut_here' => [
-                'text' => 'Corte na linha pontilhada',
-            ],
-            'date_document' => [
-                'text' => 'Data do documento',
-                'value' => self::formatDate($models['title']->stamp),
-            ],
-            'date_due' => [
-                'text' => 'Vencimento',
-                'value' => self::formatDate($models['title']->due),
-            ],
-            'date_process' => [
-                'text' => 'Data processameto',
-                'value' => date('d/m/Y'),
-            ],
-            'deduction' => [
-                'text' => '(-) Outras deduções',
-                'value' => $data['deduction'] ?? '',
-            ],
-            'demonstrative' => [
-                'text' => 'Demonstrativo',
-                'value' => str_replace(
-                    '{{ tax }}',
-                    $this->formatMoney($models['title']->billet_tax),
-                    $data['demonstrative'] ?? ''
-                ),
-            ],
-            'discount' => [
-                'text' => '(-) Desconto / Abatimentos',
-                'value' => $data['discount'] ?? '',
-            ],
-            'doc_number' => [
-                'text' => 'Número do documento',
-                'value' => $doc_number,
-            ],
-            'doc_number_sh' => [
-                'text' => 'Nº documento',
-                'value' => $doc_number,
-            ],
-            'doc_value' => [
-                'text' => 'Valor documento',
-                'value' => $data['doc_value'] ?? '',
-                'value' => $value,
-            ],
-            'doc_value=' => [
-                'text' => '(=) Valor documento',
-                'value' => $value,
-            ],
-            'doc_valueU' => [
-                'text' => 'Valor documento',
-                'value' => $data['doc_valueU'] ?? '',
-            ],
-            'fine' => [
-                'text' => '(+) Mora / Multa',
-                'value' => $data['fine'] ?? '',
-            ],
-            'guarantor' => [
-                'text' => 'Sacador/Avalista',
-                'value' => ($models['guarantor'] !== null)
-                    ? $models['guarantor.person']->name . '     '
-                    . $models['guarantor.address']->outputShort()
-                    : '',
-            ],
-            'header_body' => [
-                'text' => $data['header_body'] ?? '',
-            ],
-            'header_info' => [
-                'text' => sprintf(
-                    "    Linha Digitável:  %s\n    Valor:   %s",
-                    $data['digitable'],
-                    $value
-                ),
-            ],
-            'header_title' => [
-                'text' => $data['header_title'] ?? '',
-            ],
-            'instructions' => [
-                'text' => 'Instruções (Texto de responsabilidade do beneficiário)',
-                'value' => $data['instructions'] ?? '',
-            ],
-            'kind' => [
-                'text' => 'Espécie doc.',
-                'value' => $models['document_kind']->symbol,
-            ],
-            'mech_auth' => [
-                'text' => 'Autenticação mecânica',
-            ],
-            'our_number' => [
-                'text' => 'Nosso número',
-                'value' => $this->formatOurNumber(true),
-            ],
-            'payment_place' => [
-                'text' => 'Local de pagamento',
-                'value' => $data['payment_place'] ?? '',
-            ],
-            'wallet' => [
-                'text' => 'Carteira',
-                'value' => $models['wallet']->symbol,
-            ],
+            'accept'        => $title->accept,
+            'addition'      => $data['addition'] ?? '',
+            'agency_code'   => $this->formatAgencyAccount(true),
+            'amount'        => $data['amount'] ?? '',
+            'assignor'      => $assignor_person->name,
+            'bank_use'      => $data['bank_use'] ?? '',
+            'charged'       => $data['charged'] ?? '',
+            'client'        => $title->client->person->name,
+            'cpf_cnpj'      => $assignor_person->getFormattedDocument(),
+            'currency'      => $title->currency->symbol,
+            'date_document' => self::formatDate($title->emission),
+            'date_due'      => self::formatDate($title->due),
+            'date_process'  => date('d/m/Y'),
+            'deduction'     => $data['deduction'] ?? '',
+            'demonstrative' => trim($demonstrative),
+            'discount'      => $data['discount'] ?? '',
+            'doc_number'    => $doc_number,
+            'doc_number_sh' => $doc_number,
+            'doc_value'     => $value,
+            'doc_value='    => $value,
+            'doc_valueU'    => $data['doc_valueU'] ?? '',
+            'fine'          => $data['fine'] ?? '',
+            'guarantor'     => $guarantor,
+            'instructions'  => trim($instructions),
+            'kind'          => $title->kind->symbol,
+            'our_number'    => $this->formatOurNumber(true),
+            'payment_place' => $data['payment_place'] ?? '',
+            'wallet'        => $assignment->wallet->symbol,
         ];
 
-        foreach ($fields as &$field) {
-            $field['text'] = utf8_decode($field['text']);
-            if (array_key_exists('value', $field)) {
-                $field['value'] = utf8_decode($field['value']);
-            }
+        $result = [];
+        foreach ($fields as $field_key => $field_value) {
+            $result[$field_key] = [
+                'text' => $this->dictionary[$field_key],
+                'value' => utf8_decode($field_value),
+            ];
         }
-        unset($field);
-
-        return $fields;
+        return $result;
     }
 
     /**
@@ -980,6 +915,125 @@ abstract class View extends FPDF implements FilePack\ViewInterface
     protected function generateFreeSpace()
     {
         return $this->formatOurNumber() . $this->formatAgencyAccount();
+    }
+
+    /**
+     * Expands a template tag
+     *
+     * NOTE:
+     * - Some tags have specific formatting that is applied automatically
+     * - If the tag points to a Medools\Model, its primary key is returned
+     *
+     * @param string[] $match Match from preg_replace_callback()
+     *
+     * @return string
+     */
+    protected function parseTemplateTag(array $match)
+    {
+        $keys = explode('->', $match[1]);
+
+        $context = 'title';
+        if ($keys[0][0] === '$') {
+            $context = substr(array_shift($keys), 1);
+        }
+
+        $previous = null;
+        $model = $this->{$context};
+
+        foreach ($keys as $key) {
+            $previous = $model;
+            $model = (is_object($model))
+                ? $model->{$key}
+                : $model[$key];
+        }
+
+        if ($context === 'dictionary') {
+            $model = utf8_encode($model);
+        }
+
+        if ($model instanceof Medools\Model) {
+            return implode('-', $model->getPrimaryKey());
+        }
+
+        switch ($key) {
+            case 'billet_tax':
+            case 'discount1_value':
+            case 'discount2_value':
+            case 'discount3_value':
+            case 'fine_value':
+            case 'interest_value':
+            case 'ioc_iof':
+            case 'rebate':
+            case 'tax_value':
+            case 'value_paid':
+            case 'value':
+                $model = $this->formatMoney($model);
+                break;
+
+            case 'discount1_date':
+            case 'discount2_date':
+            case 'discount3_type_date':
+            case 'due':
+            case 'emission':
+            case 'fine_date':
+            case 'interest_date':
+                $model = $this->formatDate($model);
+                break;
+
+            case 'document':
+                $model = $previous->getFormattedDocument();
+                break;
+
+            case 'stamp':
+            case 'update':
+                $model = date('H:i:s d/m/Y', strtotime($model));
+                break;
+
+            case 'zipcode':
+                $model = Utils\Validation::cep($model);
+                break;
+        }
+
+        return $model;
+    }
+
+    /**
+     * Searches and replaces {{ key }} tags
+     *
+     * - By default tags access $title columns
+     * - Nested Models can be accessed with {{ key->key }}
+     * - A starting '$' allows a different context: {{ $data->key }}
+     *
+     * @param string $subject The string to search and replace
+     *
+     * @return string
+     */
+    protected function simpleTemplate(string $subject)
+    {
+        if ($subject === '') {
+            return '';
+        }
+
+        $result = preg_replace_callback(
+            '/{{ ?(\$?\w+(?:->\w+)*) ?}}/',
+            [$this, 'parseTemplateTag'],
+            $subject
+        );
+
+        return $result;
+    }
+
+    /*
+     * Hooks
+     * =========================================================================
+     */
+
+    /**
+     * Modifies $dictionary before its UTF8 decoding
+     */
+    protected function updateDictionary()
+    {
+        return;
     }
 
     /*

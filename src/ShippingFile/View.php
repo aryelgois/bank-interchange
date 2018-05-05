@@ -36,6 +36,20 @@ abstract class View implements FilePack\ViewInterface
     const EOL = "\r\n";
 
     /**
+     * List of masks to apply in a Title registry based on its movement
+     *
+     * @var string[]
+     */
+    const MOVEMENT_MASK = [];
+
+    /**
+     * Character that do not modify the registry in the MOVEMENT_MASK
+     *
+     * @var string
+     */
+    const MOVEMENT_MASK_CHAR = '*';
+
+    /**
      * How many titles can fit in this shipping file
      *
      * @const int
@@ -74,8 +88,9 @@ abstract class View implements FilePack\ViewInterface
     public function __construct(Models\ShippingFile $shipping_file)
     {
         $this->shipping_file = $shipping_file;
-        $shipped_titles = $shipping_file->getShippedTitles();
-        $count = count($shipped_titles);
+
+        $titles = $shipping_file->getTitles();
+        $count = count($titles);
         if ($count > static::TITLE_LIMIT) {
             throw new \OverflowException(sprintf(
                 '%s(%s) has %s titles, but only %s are allowed',
@@ -87,8 +102,8 @@ abstract class View implements FilePack\ViewInterface
         }
 
         $this->open();
-        foreach ($shipped_titles as $sft) {
-            $this->add($sft);
+        foreach ($titles as $title) {
+            $this->add($title);
         }
         $this->close();
     }
@@ -130,15 +145,16 @@ abstract class View implements FilePack\ViewInterface
      */
     public function filename()
     {
-        $assignment = $this->shipping_file->assignment;
+        $shipping_file = $this->shipping_file;
+        $assignment = $shipping_file->assignment;
 
         $format = 'COB.%03.3s.%06.6s.%08.8s.%05.5s.%05.5s';
 
         $data = [
-            $this->shipping_file->cnab,
+            $assignment->cnab,
             $assignment->edi,
-            date('Ymd', strtotime($this->shipping_file->stamp)),
-            $this->shipping_file->counter,
+            static::date('Ymd', $shipping_file->stamp),
+            $shipping_file->counter,
             $assignment->covenant,
         ];
 
@@ -178,9 +194,9 @@ abstract class View implements FilePack\ViewInterface
     /**
      * Adds a Title registry
      *
-     * @param Models\ShippingFileTitle $sft Contains data for the registry
+     * @param Models\Title $title Contains data for the registry
      */
-    abstract protected function add(Models\ShippingFileTitle $sft);
+    abstract protected function add(Models\Title $title);
 
     /**
      * Does final steps for creating a shipping file
@@ -193,16 +209,22 @@ abstract class View implements FilePack\ViewInterface
      */
 
     /**
-     * Removes diacritics and convert to upper case
+     * Formats a local time/date from an English textual datetime
      *
-     * @param string[] $data Data to be normalized
+     * NOTE:
+     * - If $time is empty, the result is '0'
+     *
+     * @param string $format @see \date()
+     * @param mixed  $time   @see \strtotime()
+     *
+     * @return string
      */
-    protected static function normalize($data)
+    protected static function date($format, $time)
     {
-        foreach ($data as $id => $value) {
-            $data[$id] = strtoupper(NoDiacritic::filter($value));
+        if (empty($time)) {
+            return '0';
         }
-        return $data;
+        return date($format, strtotime($time));
     }
 
     /**
@@ -213,7 +235,54 @@ abstract class View implements FilePack\ViewInterface
     protected static function filter($field)
     {
         $field = preg_replace('/[\.\/\\:;,?$*!#_-]/', '', $field);
-        $field = preg_replace('/  +/', ' ', $field);
+        $field = preg_replace('/\s+/', ' ', trim($field));
         return $field;
+    }
+
+    /**
+     * Applies a mask in a string
+     *
+     * Characters in $subject which position in $mask is MOVEMENT_MASK_CHAR are
+     * kept, otherwise they are replaced with the corresponding $mask character
+     *
+     * NOTE:
+     * - If $mask is null, it returns $subject unchanged
+     * - If $mask is an empty string, it returns ''
+     *
+     * @param string $subject  String to be masked
+     * @param string $mask     Mask to be applied
+     *
+     * @return string
+     */
+    protected static function mask($subject, $mask)
+    {
+        if ($mask === null) {
+            return $subject;
+        } elseif ($mask === '') {
+            return '';
+        }
+
+        $result = str_split($subject);
+        foreach ($result as $id => $value) {
+            $char = $mask[$id];
+            if ($char !== static::MOVEMENT_MASK_CHAR) {
+                $result[$id] = $char;
+            }
+        }
+
+        return implode('', $result);
+    }
+
+    /**
+     * Removes diacritics and convert to upper case
+     *
+     * @param string[] $data Data to be normalized
+     */
+    protected static function normalize($data)
+    {
+        foreach ($data as $id => $value) {
+            $data[$id] = strtoupper(NoDiacritic::filter($value));
+        }
+        return $data;
     }
 }

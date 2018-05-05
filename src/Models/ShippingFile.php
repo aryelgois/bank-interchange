@@ -48,12 +48,12 @@ class ShippingFile extends Medools\Model
     ];
 
     /**
-     * Returns a Iterator of ShippingFileTitle models for this object
+     * Returns a Iterator of Title models related to this object
      *
      * @return Medools\ModelIterator
      */
-    public function getShippedTitles()
+    public function getTitles()
     {
-        return ShippingFileTitle::getIterator(['shipping_file' => $this->id]);
+        return Title::getIterator(['shipping_file' => $this->id]);
     }
 }
