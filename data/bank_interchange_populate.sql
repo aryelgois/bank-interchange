@@ -49,6 +49,7 @@ INSERT INTO `document_kinds` (`id`, `bank`, `cnab`, `code`, `symbol`, `name`) VA
 
 -- Shipping File Movements
 -- TODO check if missing for cnab 400
+-- NOTE commented entries are not implemented
 
 INSERT INTO `shipping_file_movements` (`bank`, `cnab`, `code`, `name`) VALUES
 (2, '240', '01', 'Entrada de Títulos'),
@@ -64,7 +65,7 @@ INSERT INTO `shipping_file_movements` (`bank`, `cnab`, `code`, `name`) VALUES
 (2, '240', '15', 'Dispensar Cobrança de Multa'),
 (2, '240', '16', 'Alteração de Valor/Data de Desconto'),
 (2, '240', '18', 'Alteração do Valor de Abatimento'),
-(2, '240', '19', 'Prazo Limite de Recebimento - Alterar'),
+-- (2, '240', '19', 'Prazo Limite de Recebimento - Alterar'),
 (2, '240', '21', 'Alterar número do título dado pelo cedente'),
 (2, '240', '31', 'Alteração de Outros Dados'),
 (2, '240', '42', 'Alteração de Espécie de Título'),
@@ -76,12 +77,12 @@ INSERT INTO `shipping_file_movements` (`bank`, `cnab`, `code`, `name`) VALUES
 (3, '400', '08', 'Alteração de Seu número'),
 (3, '400', '09', 'Protestar'),
 (3, '400', '10', 'Não Protestar'),
-(3, '400', '12', 'Inclusão de Ocorrência'),
-(3, '400', '13', 'Exclusão de Ocorrência'),
-(3, '400', '31', 'Alteração de Outros Dados'),
-(3, '400', '32', 'Pedido de Devolução'),
-(3, '400', '33', 'Pedido de Devolução (entregue ao Sacado)'),
-(3, '400', '99', 'Pedido dos Títulos em Aberto');
+-- (3, '400', '12', 'Inclusão de Ocorrência'),
+-- (3, '400', '13', 'Exclusão de Ocorrência'),
+(3, '400', '31', 'Alteração de Outros Dados');
+-- (3, '400', '32', 'Pedido de Devolução'),
+-- (3, '400', '33', 'Pedido de Devolução (entregue ao Sacado)'),
+-- (3, '400', '99', 'Pedido dos Títulos em Aberto');
 
 -- Wallets
 -- TODO verify data
