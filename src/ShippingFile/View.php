@@ -36,6 +36,20 @@ abstract class View implements FilePack\ViewInterface
     const EOL = "\r\n";
 
     /**
+     * List of masks to apply in a Title registry based on its movement
+     *
+     * @var string[]
+     */
+    const MOVEMENT_MASK = [];
+
+    /**
+     * Character that do not modify the registry in the MOVEMENT_MASK
+     *
+     * @var string
+     */
+    const MOVEMENT_MASK_CHAR = '*';
+
+    /**
      * How many titles can fit in this shipping file
      *
      * @const int
@@ -211,6 +225,40 @@ abstract class View implements FilePack\ViewInterface
             return '0';
         }
         return date($format, strtotime($time));
+    }
+
+    /**
+     * Applies a mask in a string
+     *
+     * Characters in $subject which position in $mask is MOVEMENT_MASK_CHAR are
+     * kept, otherwise they are replaced with the corresponding $mask character
+     *
+     * NOTE:
+     * - If $mask is null, it returns $subject unchanged
+     * - If $mask is an empty string, it returns ''
+     *
+     * @param string $subject  String to be masked
+     * @param string $mask     Mask to be applied
+     *
+     * @return string
+     */
+    protected static function mask($subject, $mask)
+    {
+        if ($mask === null) {
+            return $subject;
+        } elseif ($mask === '') {
+            return '';
+        }
+
+        $result = str_split($subject);
+        foreach ($result as $id => $value) {
+            $char = $mask[$id];
+            if ($char !== static::MOVEMENT_MASK_CHAR) {
+                $result[$id] = $char;
+            }
+        }
+
+        return implode('', $result);
     }
 
     /**

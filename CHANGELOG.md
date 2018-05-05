@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Title `getActualValue()`
 - ShippingFile `date()`
 - Optional 'R' segment in CNAB240 ShippingFile
+- ShippingFile movement masks
 
 ### Changed
 - Update dependencies

@@ -21,6 +21,96 @@ use aryelgois\BankInterchange\Models;
 class Banese extends BankInterchange\ShippingFile\Views\Cnab240
 {
     /**
+     * List of masks to apply in a Title registry based on its movement
+     *
+     * NOTE:
+     * - I am not sure about all these segments being omitted. Maybe Q should
+     *   have something
+     * - Some movements are not implemented
+     * - '13' should have the interest_type value set to 3
+     * - '15' should have the fine_type value set to 0
+     *
+     * @var string[]
+     */
+    const MOVEMENT_MASK = [
+        '02' => [
+            'P' => '************** *******************************************                           ***************                                                                                                                                            ',
+            'Q' => '',
+            'R' => '',
+        ],
+        '04' => [
+            'P' => '************** *******************************************                           ***************                                                                                ***************                                             ',
+            'Q' => '',
+            'R' => '',
+        ],
+        '05' => [
+            'P' => '************** *******************************************                           ***************                                                                                000000000000000                                             ',
+            'Q' => '',
+            'R' => '',
+        ],
+        '06' => [
+            'P' => '************** *******************************************                   ***********************                                                                                                                                            ',
+            'Q' => '',
+            'R' => '',
+        ],
+        '07' => [
+            'P' => '************** *******************************************                           ***************                                         ************************                                                                           ',
+            'Q' => '',
+            'R' => '************** **************************************************                                                                                                                                                                               ',
+        ],
+        '08' => [
+            'P' => '************** *******************************************                           ***************                                         ************************                                                                           ',
+            'Q' => '',
+            'R' => '************** **************************************************                                                                                                                                                                               ',
+        ],
+        '12' => [
+            'P' => '************** *******************************************                           ***************                 ************************                                                                                                   ',
+            'Q' => '',
+            'R' => '',
+        ],
+        '13' => [
+            'P' => '************** *******************************************                           ***************                 300000000000000000000000                                                                                                   ',
+            'Q' => '',
+            'R' => '',
+        ],
+        '14' => [
+            'P' => '',
+            'Q' => '',
+            'R' => '************** **                                                ************************                                                                                                                                                       ',
+        ],
+        '15' => [
+            'P' => '',
+            'Q' => '',
+            'R' => '************** **                                                000000000000000000000000                                                                                                                                                       ',
+        ],
+        '16' => [
+            'P' => '************** *******************************************                           ***************                                          ***********************                                                                           ',
+            'Q' => '',
+            'R' => '************** ** *********************** ***********************                                                                                                                                                                               ',
+        ],
+        '18' => [
+            'P' => '************** *******************************************                           ***************                                                                                ***************                                             ',
+            'Q' => '',
+            'R' => '',
+        ],
+        '21' => [
+            'P' => '************** *******************************************    ***************        ***************                                                                                                                                            ',
+            'Q' => '',
+            'R' => '',
+        ],
+        '31' => [
+            'P' => '************** *******************************************                   ***********************                                                                                                                                            ',
+            'Q' => '',
+            'R' => '',
+        ],
+        '42' => [
+            'P' => '************** *******************************************                           ***************      **                                                                                                                                    ',
+            'Q' => '',
+            'R' => '',
+        ],
+    ];
+
+    /**
      * Generates FileHeader registry
      *
      * @return string
@@ -130,6 +220,9 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
         $currency = $title->currency;
         $currency_code = $title->getCurrencyCode();
         $guarantor_person = $title->guarantor->person ?? null;
+        $movement = $title->movement->code;
+
+        $movement_mask = static::MOVEMENT_MASK[$movement] ?? null;
 
         /*
          * 'P' Segment
@@ -151,7 +244,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $this->current_lot,
             'P',
             '',
-            $title->movement->code,
+            $movement,
             '0', // $assignment->agency,
             '',
             '0', // $assignment->account,
@@ -189,7 +282,10 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '1', // Free use: it's defining partial payment isn't allowed
         ];
 
-        $result[] = vsprintf($format, static::normalize($data));
+        $result[] = static::mask(
+            vsprintf($format, static::normalize($data)),
+            $movement_mask['P']
+        );
 
         /*
          * 'Q' Segment
@@ -216,7 +312,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             $this->current_lot,
             'Q',
             '',
-            $title->movement->code,
+            $movement,
             $client_person->getDocumentType(),
             $client_person->document,
             Utils::cleanSpaces($client_person->name),
@@ -233,7 +329,10 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
             '',
         ];
 
-        $result[] = vsprintf($format, static::normalize($data));
+        $result[] = static::mask(
+            vsprintf($format, static::normalize($data)),
+            $movement_mask['Q']
+        );
 
         /*
          * 'R' Segment
@@ -241,6 +340,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
 
         if ($title->discount2_type || $title->discount3_type
             || $title->fine_type
+            || in_array($movement, ['07', '08', '14', '15', '16'])
         ) {
             $format = '%03.3s%04.4s%01.1s%05.5s%-1.1s%-1.1s%02.2s%01.1s%08.8s'
                 . '%015.15s%01.1s%08.8s%015.15s%01.1s%08.8s%015.15s%-10.10s'
@@ -254,7 +354,7 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
                 $this->current_lot,
                 'R',
                 '',
-                $title->movement->code,
+                $movement,
                 $title->discount2_type,
                 static::date('dmY', $title->discount2_date),
                 $currency->format($title->discount2_value, 'nomask'),
@@ -279,10 +379,13 @@ class Banese extends BankInterchange\ShippingFile\Views\Cnab240
                 '',
             ];
 
-            $result[] = vsprintf($format, static::normalize($data));
+            $result[] = static::mask(
+                vsprintf($format, static::normalize($data)),
+                $movement_mask['R']
+            );
         }
 
-        return $result;
+        return array_filter($result, 'strlen');
     }
 
     /**

@@ -21,6 +21,28 @@ use aryelgois\BankInterchange\Models;
 class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
 {
     /**
+     * List of masks to apply in a Title registry based on its movement
+     *
+     * NOTE:
+     * - Some movements are not implemented
+     * - '10' should have the protest_days value set accordingly
+     * - '31' should mask '02' + changed fields only, but currently it masks all
+     *   allowed fields
+     *
+     * @var string[]
+     */
+    const MOVEMENT_MASK = [
+        '02' => '*                **************                               ********                                     ***                *************                                                                                                                                                                                                                                                               ******',
+        '04' => '*                **************                               ********                                     ***                *************                                                                  *************                                                                                                                                                                                ******',
+        '06' => '*                **************                               ********                                     ***          *******************                                                                                                                                                                                                                                                               ******',
+        '07' => '*                **************      *********************************                                     ***                *************                                                                                                                                                                                                                                                               ******',
+        '08' => '*                **************                               ********                                     *************      *************                                                                                                                                                                                                                                                               ******',
+        '09' => '*                **************                               ********                                     ***                *************                                                                                                                                                                                                                                                            ** ******',
+        '10' => '*                **************                               ********                                     ***                *************                                                                                                                                                                                                                                                            99 ******',
+        '31' => '*                **************                               ********          *******************        ***                *************        *************             *******************                          *************************************************************************************************************************************                                           ******',
+    ];
+
+    /**
      * Generates Header registry
      *
      * @return string
@@ -75,6 +97,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
         $client_person = $client->person;
         $currency = $title->currency;
         $currency_code = $title->getCurrencyCode();
+        $movement = $title->movement->code;
 
         $format = '%01.1s%-16.16s%04.4s%02.2s%07.7s%01.1s%02.2s%-4.4s%-25.25s'
             . '%07.7s%01.1s%010.10s%06.6s%013.13s%-8.8s%01.1s%02.2s%-10.10s'
@@ -105,7 +128,7 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $currency->format($title->discount2_value, 'nomask'),
             '',
             $assignment->wallet->code,
-            $title->movement->code,
+            $movement,
             $title->doc_number,
             static::date('dmy', $title->due),
             $currency->format($title->getActualValue(), 'nomask'),
@@ -135,7 +158,10 @@ class BancoDoNordeste extends BankInterchange\ShippingFile\Views\Cnab400
             $this->registry_count,
         ];
 
-        return vsprintf($format, static::normalize($data));
+        return static::mask(
+            vsprintf($format, static::normalize($data)),
+            static::MOVEMENT_MASK[$movement] ?? null
+        );
     }
 
     /**
