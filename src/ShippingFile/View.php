@@ -228,6 +228,18 @@ abstract class View implements FilePack\ViewInterface
     }
 
     /**
+     * Remove unwanted characters
+     *
+     * @param string $field Field to be filtered
+     */
+    protected static function filter($field)
+    {
+        $field = preg_replace('/[\.\/\\:;,?$*!#_-]/', '', $field);
+        $field = preg_replace('/\s+/', ' ', trim($field));
+        return $field;
+    }
+
+    /**
      * Applies a mask in a string
      *
      * Characters in $subject which position in $mask is MOVEMENT_MASK_CHAR are
@@ -272,17 +284,5 @@ abstract class View implements FilePack\ViewInterface
             $data[$id] = strtoupper(NoDiacritic::filter($value));
         }
         return $data;
-    }
-
-    /**
-     * Remove unwanted characters
-     *
-     * @param string $field Field to be filtered
-     */
-    protected static function filter($field)
-    {
-        $field = preg_replace('/[\.\/\\:;,?$*!#_-]/', '', $field);
-        $field = preg_replace('/\s+/', ' ', trim($field));
-        return $field;
     }
 }
