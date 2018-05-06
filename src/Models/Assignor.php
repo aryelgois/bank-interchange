@@ -35,7 +35,7 @@ class Assignor extends Medools\Model
 
     const FOREIGN_KEYS = [
         'person' => [
-            __NAMESPACE__ . '\\Person',
+            Person::class,
             'id'
         ],
     ];

@@ -42,7 +42,7 @@ class ShippingFile extends Medools\Model
 
     const FOREIGN_KEYS = [
         'assignment' => [
-            __NAMESPACE__ . '\\Assignment',
+            Assignment::class,
             'id'
         ],
     ];

@@ -104,31 +104,31 @@ class Title extends Medools\Model
 
     const FOREIGN_KEYS = [
         'shipping_file' => [
-            __NAMESPACE__ . '\\ShippingFile',
+            ShippingFile::class,
             'id'
         ],
         'movement' => [
-            __NAMESPACE__ . '\\ShippingFileMovements',
+            ShippingFileMovements::class,
             'id'
         ],
         'assignment' => [
-            __NAMESPACE__ . '\\Assignment',
+            Assignment::class,
             'id'
         ],
         'client' => [
-            __NAMESPACE__ . '\\Client',
+            Client::class,
             'id'
         ],
         'guarantor' => [
-            __NAMESPACE__ . '\\Client',
+            Client::class,
             'id'
         ],
         'currency' => [
-            __NAMESPACE__ . '\\Currency',
+            Currency::class,
             'id'
         ],
         'kind' => [
-            __NAMESPACE__ . '\\DocumentKind',
+            DocumentKind::class,
             'id'
         ],
     ];

@@ -29,15 +29,15 @@ class Client extends Medools\Model
 
     const FOREIGN_KEYS = [
         'assignor' => [
-            __NAMESPACE__ . '\\Assignor',
+            Assignor::class,
             'person'
         ],
         'person' => [
-            __NAMESPACE__ . '\\Person',
+            Person::class,
             'id'
         ],
         'address' => [
-            __NAMESPACE__ . '\\FullAddress',
+            FullAddress::class,
             'id'
         ],
     ];

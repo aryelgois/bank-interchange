@@ -42,23 +42,23 @@ class Assignment extends Medools\Model
 
     const FOREIGN_KEYS = [
         'assignor' => [
-            __NAMESPACE__ . '\\Assignor',
+            Assignor::class,
             'person'
         ],
         'address' => [
-            __NAMESPACE__ . '\\FullAddress',
+            FullAddress::class,
             'id'
         ],
         'bank' => [
-            __NAMESPACE__ . '\\Bank',
+            Bank::class,
             'id'
         ],
         'document_kind' => [
-            __NAMESPACE__ . '\\DocumentKind',
+            DocumentKind::class,
             'id'
         ],
         'wallet' => [
-            __NAMESPACE__ . '\\Wallet',
+            Wallet::class,
             'id'
         ],
     ];

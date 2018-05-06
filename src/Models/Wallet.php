@@ -32,7 +32,7 @@ class Wallet extends Medools\Model
 
     const FOREIGN_KEYS = [
         'bank' => [
-            __NAMESPACE__ . '\\Bank',
+            Bank::class,
             'id'
         ],
     ];
