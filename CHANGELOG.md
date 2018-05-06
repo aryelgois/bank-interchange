@@ -133,6 +133,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Rename `B. do Nordeste` to `Banco do Nordeste`
 - BankBillet views
 - Rename `formated` to `formatted`
+- Comparison operators
 
 ### Security
 

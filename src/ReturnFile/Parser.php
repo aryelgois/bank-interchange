@@ -130,7 +130,7 @@ class Parser
                         $result = array_merge($result, [$rec['registries']]);
                         $offset = $rec['offset'];
                     } catch (ParseException $e) {
-                        if ($amount != 'multiple') {
+                        if ($amount !== 'multiple') {
                             throw $e;
                         }
                     }
@@ -147,7 +147,7 @@ class Parser
                     if ($registry !== null) {
                         $result[] = $registry;
                         $offset++;
-                    } elseif ($amount == 'unique') {
+                    } elseif ($amount === 'unique') {
                         throw ParseException::pregMismatch(
                             $cnab,
                             $registries,
@@ -155,7 +155,7 @@ class Parser
                         );
                     }
                 }
-            } while ($amount == 'multiple' && $offset > $previous_offset);
+            } while ($amount === 'multiple' && $offset > $previous_offset);
         }
 
         return [

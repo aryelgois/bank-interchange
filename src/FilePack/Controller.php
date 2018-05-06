@@ -97,7 +97,7 @@ abstract class Controller
     {
         $count = count($this->views);
 
-        if ($count == 0) {
+        if ($count === 0) {
             throw new \LogicException('You need to generate() first');
         } elseif ($count > 1) {
             return $this->zip();
@@ -116,7 +116,7 @@ abstract class Controller
      */
     public function zip(string $name = null)
     {
-        if (count($this->views) == 0) {
+        if (count($this->views) === 0) {
             throw new \LogicException('You need to generate() first');
         }
 

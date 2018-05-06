@@ -150,11 +150,11 @@ class Banese extends BankInterchange\BankBillet\View
         $cd1 = Validation::mod10($key);
         $cd2 = Validation::mod11($key . $cd1, 7);
 
-        if ($cd2 == 1) {
+        if ($cd2 === 1) {
             if ($cd1 < 9) {
                 $cd1++;
                 $cd2 = Validation::mod11($key . $cd1, 7);
-            } elseif ($cd1 == 9) {
+            } elseif ($cd1 === 9) {
                 $cd1 = 0;
                 $cd2 = Validation::mod11($key . $cd1, 7);
             }

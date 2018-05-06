@@ -69,7 +69,7 @@ abstract class ReturnFile
          */
         if (strlen($header) <= 240) {
             $bank_code = substr($header, 0, 3);
-        } elseif (strlen($header) == 400) {
+        } elseif (strlen($header) === 400) {
             $bank_code = substr($header, 76, 3);
         } else {
             throw new \InvalidArgumentException('Could not define Bank code');
@@ -91,14 +91,14 @@ abstract class ReturnFile
             if ($config === null) {
                 throw new \RuntimeException('Failed to load Bank config');
             }
-        } elseif ($strategy == 'replace') {
+        } elseif ($strategy === 'replace') {
             throw new \RuntimeException('Could not find Bank config');
         }
 
         /*
          * Load defaults
          */
-        if ($strategy == 'combine') {
+        if ($strategy === 'combine') {
             $path = static::CONFIG_PATH . '/config.json';
             $defaults = json_decode(file_get_contents($path), true);
             if ($defaults === null) {
