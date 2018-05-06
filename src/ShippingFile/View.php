@@ -134,6 +134,28 @@ abstract class View implements FilePack\ViewInterface
     }
 
     /*
+     * Abstracts
+     * =========================================================================
+     */
+
+    /**
+     * Does initial steps for creating a shipping file
+     */
+    abstract protected function open();
+
+    /**
+     * Adds a Title registry
+     *
+     * @param Models\Title $title Contains data for the registry
+     */
+    abstract protected function add(Models\Title $title);
+
+    /**
+     * Does final steps for creating a shipping file
+     */
+    abstract protected function close();
+
+    /*
      * FilePack\ViewInterface
      * =========================================================================
      */
@@ -180,28 +202,6 @@ abstract class View implements FilePack\ViewInterface
     {
         $this->output($filename);
     }
-
-    /*
-     * Abstracts
-     * =========================================================================
-     */
-
-    /**
-     * Does initial steps for creating a shipping file
-     */
-    abstract protected function open();
-
-    /**
-     * Adds a Title registry
-     *
-     * @param Models\Title $title Contains data for the registry
-     */
-    abstract protected function add(Models\Title $title);
-
-    /**
-     * Does final steps for creating a shipping file
-     */
-    abstract protected function close();
 
     /*
      * Helper
