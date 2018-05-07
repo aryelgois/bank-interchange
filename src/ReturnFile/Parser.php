@@ -48,6 +48,13 @@ class Parser
     protected $return_file;
 
     /**
+     * Contains parsed registries
+     *
+     * @var array[]
+     */
+    protected $result;
+
+    /**
      * Creates a new return file Parser Object
      *
      * @param string $raw Return File to be parsed
@@ -88,6 +95,8 @@ class Parser
         $this->cnab = $cnab;
         $this->config = $config;
         $this->return_file = $return_file;
+
+        $this->result = self::doParse($config['structure'])['registries'];
     }
 
     /**
