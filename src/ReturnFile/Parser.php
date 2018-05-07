@@ -27,6 +27,13 @@ class Parser
     protected static $cache = [];
 
     /**
+     * Path to directory with config files
+     *
+     * @var string
+     */
+    protected static $config_path;
+
+    /**
      * Which CNAB the Return File might be
      *
      * @var int
@@ -39,13 +46,6 @@ class Parser
      * @var array[]
      */
     protected $config;
-
-    /**
-     * Path to directory with config files
-     *
-     * @var string
-     */
-    protected static $config_path;
 
     /**
      * Contains Return File registries
