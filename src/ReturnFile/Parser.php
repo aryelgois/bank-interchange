@@ -20,6 +20,13 @@ use Symfony\Component\Yaml\Yaml;
 class Parser
 {
     /**
+     * Holds loaded configs
+     *
+     * @var array[]
+     */
+    protected static $cache = [];
+
+    /**
      * Which CNAB the Return File might be
      *
      * @var int
@@ -59,17 +66,13 @@ class Parser
      *
      * @param string $raw Return File to be parsed
      *
-     * @throws \BadMethodCallException       If called before setConfigPath()
      * @throws \InvalidArgumentException     If Return File is empty
-     * @throws \RuntimeException             If config file does not exist
+     * @throws \BadMethodCallException       @see loadConfig()
+     * @throws \RuntimeException             @see loadConfig()
      * @throws Yaml\Exception\ParseException If could not load config file
      */
     public function __construct(string $raw)
     {
-        if (self::$config_path === null) {
-            throw new \BadMethodCallException('Config path is null');
-        }
-
         $return_file = explode("\n", rtrim(str_replace("\r", '', $raw), "\n"));
         if (empty($return_file)) {
             throw new \InvalidArgumentException('Return File is empty');
@@ -84,19 +87,46 @@ class Parser
         $cnab = ($length <= 240 ? 240 : 400);
         $bank_code = substr($return_file[0], ($cnab === 240 ? 0 : 76), 3);
 
-        $config_file = self::$config_path . "/cnab$cnab/$bank_code.yml";
-        if (file_exists($config_file)) {
-            $config = Yaml::parseFile($config_file);
-        } else {
-            $message = "Config file for Bank $bank_code in CNAB$cnab not found";
-            throw new \RuntimeException($message);
-        }
-
         $this->cnab = $cnab;
-        $this->config = $config;
+        $this->config = self::loadConfig($cnab, $bank_code);
         $this->return_file = $return_file;
 
-        $this->result = self::parse($config['structure'])['registries'];
+        $this->result = self::parse(self::$cache[$this->config]['structure']);
+    }
+
+    /**
+     * Loads YAML config file into cache
+     *
+     * @param int    $cnab      CNAB layout
+     * @param string $bank_code Bank code
+     *
+     * @return string $cache key
+     *
+     * @throws \BadMethodCallException If called before setConfigPath()
+     * @throws \RuntimeException       If config file does not exist
+     */
+    protected static function loadConfig($cnab, $bank_code)
+    {
+        if (self::$config_path === null) {
+            throw new \BadMethodCallException('Config path is null');
+        }
+
+        $key = "$cnab/$bank_code";
+
+        if (!array_key_exists($key, self::$cache)) {
+            $config_file = self::$config_path . "/cnab$key.yml";
+            if (file_exists($config_file)) {
+                self::$cache[$key] = Yaml::parseFile($config_file);
+            } else {
+                throw new \RuntimeException(sprintf(
+                    'Config file for Bank %s in CNAB%s not found',
+                    $bank_code,
+                    $cnab
+                ));
+            }
+        }
+
+        return $key;
     }
 
     /**
@@ -106,7 +136,7 @@ class Parser
      */
     public function output()
     {
-        return $this->result;
+        return $this->result['registries'];
     }
 
     /**
@@ -136,7 +166,7 @@ class Parser
 
             if (!is_array($type)) {
                 $registries = Utils\Utils::arrayWhitelist(
-                    $this->config['registries'],
+                    self::$cache[$this->config]['registries'],
                     explode(' ', $type)
                 );
             }
@@ -214,5 +244,6 @@ class Parser
     public static function setConfigPath(string $path)
     {
         self::$config_path = $path;
+        self::$cache = [];
     }
 }
