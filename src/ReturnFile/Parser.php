@@ -19,6 +19,18 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Parser
 {
+    /**
+     * Which CNAB the Return File might be
+     *
+     * @var int
+     */
+    protected $cnab;
+
+    /**
+     * Loaded parser config
+     *
+     * @var array[]
+     */
     protected $config;
 
     /**
@@ -29,14 +41,53 @@ class Parser
     protected static $config_path;
 
     /**
-     * Creates a new Parser Object
+     * Contains Return File registries
      *
-     * @param string $config YAML with Return File layouts
-     *                       (length, structure, patterns, maps)
+     * @var string[]
      */
-    public function __construct(string $config)
+    protected $return_file;
+
+    /**
+     * Creates a new return file Parser Object
+     *
+     * @param string $raw Return File to be parsed
+     *
+     * @throws \BadMethodCallException       If called before setConfigPath()
+     * @throws \InvalidArgumentException     If Return File is empty
+     * @throws \RuntimeException             If config file does not exist
+     * @throws Yaml\Exception\ParseException If could not load config file
+     */
+    public function __construct(string $raw)
     {
-        $this->config = Yaml::parse($config);
+        if (self::$config_path === null) {
+            throw new \BadMethodCallException('Config path is null');
+        }
+
+        $return_file = explode("\n", rtrim(str_replace("\r", '', $raw), "\n"));
+        if (empty($return_file)) {
+            throw new \InvalidArgumentException('Return File is empty');
+        }
+
+        $length = max(array_map('strlen', $return_file));
+        foreach ($return_file as &$line) {
+            $line = str_pad($line, $length);
+        }
+        unset($line);
+
+        $cnab = ($length <= 240 ? 240 : 400);
+        $bank_code = substr($return_file[0], ($cnab === 240 ? 0 : 76), 3);
+
+        $config_file = self::$config_path . "/cnab$cnab/$bank_code.yml";
+        if (file_exists($config_file)) {
+            $config = Yaml::parseFile($config_file);
+        } else {
+            $message = "Config file for Bank $bank_code in CNAB$cnab not found";
+            throw new \RuntimeException($message);
+        }
+
+        $this->cnab = $cnab;
+        $this->config = $config;
+        $this->return_file = $return_file;
     }
 
     /**
