@@ -79,12 +79,13 @@ class Parser
         }
 
         $length = max(array_map('strlen', $return_file));
+        $cnab = ($length <= 240 ? 240 : 400);
+
         foreach ($return_file as &$line) {
-            $line = str_pad($line, $length);
+            $line = str_pad($line, $cnab);
         }
         unset($line);
 
-        $cnab = ($length <= 240 ? 240 : 400);
         $bank_code = substr($return_file[0], ($cnab === 240 ? 0 : 76), 3);
 
         $this->cnab = $cnab;
