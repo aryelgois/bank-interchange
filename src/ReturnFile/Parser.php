@@ -143,24 +143,18 @@ class Parser
     }
 
     /**
-     * Recursively follows the structure of a Return File to extract fields
+     * Recursively follows the Return File structure to extract its fields
      *
-     * @param string $cnab      Return File layout from config
      * @param array  $structure Structure tree to be used
-     * @param array  $lines     Lines of Return File to be parsed
-     * @param int    $offset    Current item in $lines
+     * @param int    $offset    Current item in $return_file
      *
      * @return array With keys 'offset' and 'registries'
      *
      * @throws \DomainException For invalid structure amount
      * @throws ParseException   For invalid registry
      */
-    protected function doParse(
-        string $cnab,
-        array $structure,
-        array $lines,
-        int $offset = null
-    ) {
+    protected function doParse(array $structure, int $offset = null)
+    {
         $result = [];
         $offset = $offset ?? 0;
 
@@ -169,13 +163,13 @@ class Parser
             $amount = key($registry_group);
 
             if (!in_array($amount, ['unique', 'multiple'])) {
-                $message = "Invalid structure amount '$amount' in $cnab";
+                $message = "Invalid structure amount '$amount'";
                 throw new \DomainException($message);
             }
 
             if (!is_array($type)) {
                 $registries = Utils\Utils::arrayWhitelist(
-                    $this->config[$cnab]['registries'],
+                    $this->config['registries'],
                     explode(' ', $type)
                 );
             }
@@ -184,7 +178,7 @@ class Parser
                 $previous_offset = $offset;
                 if (is_array($type)) {
                     try {
-                        $rec = self::doParse($cnab, $type, $lines, $offset);
+                        $rec = self::doParse($type, $offset);
                         $result = array_merge($result, [$rec['registries']]);
                         $offset = $rec['offset'];
                     } catch (ParseException $e) {
@@ -194,12 +188,8 @@ class Parser
                     }
                 } else {
                     $registry = self::pregRegistry(
-                        str_pad(
-                            rtrim($lines[$offset]),
-                            $this->config[$cnab]['registry_length']
-                        ),
-                        $registries,
-                        $cnab
+                        $this->return_file[$offset],
+                        $registries
                     );
 
                     if ($registry !== null) {
@@ -207,7 +197,7 @@ class Parser
                         $offset++;
                     } elseif ($amount === 'unique') {
                         throw ParseException::pregMismatch(
-                            $cnab,
+                            $this->cnab,
                             $registries,
                             $offset + 1
                         );
@@ -227,15 +217,13 @@ class Parser
      *
      * @param string $registry   Line with fields to be extracted
      * @param array  $registries Sequence of pattern and map
-     * @param string $cnab       Metadata for new Registry
      *
      * @return Registry On success
      * @return null     On failure
      */
     protected function pregRegistry(
         string $registry,
-        array $registries,
-        string $cnab
+        array $registries
     ) {
         $result = null;
         foreach ($registries as $type => $matcher) {
@@ -244,7 +232,7 @@ class Parser
                     $matcher['map'],
                     array_map('trim', array_slice($matches, 1))
                 );
-                $result = new Registry($cnab, $type, $match);
+                $result = new Registry($this->cnab, $type, $match);
                 break;
             }
         }
