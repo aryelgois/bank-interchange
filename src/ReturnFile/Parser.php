@@ -96,7 +96,7 @@ class Parser
         $this->config = $config;
         $this->return_file = $return_file;
 
-        $this->result = self::doParse($config['structure'])['registries'];
+        $this->result = self::parse($config['structure'])['registries'];
     }
 
     /**
@@ -120,7 +120,7 @@ class Parser
      * @throws \DomainException For invalid structure amount
      * @throws ParseException   For invalid registry
      */
-    protected function doParse(array $structure, int $offset = null)
+    protected function parse(array $structure, int $offset = null)
     {
         $result = [];
         $offset = $offset ?? 0;
@@ -145,7 +145,7 @@ class Parser
                 $previous_offset = $offset;
                 if (is_array($type)) {
                     try {
-                        $rec = self::doParse($type, $offset);
+                        $rec = self::parse($type, $offset);
                         $result = array_merge($result, [$rec['registries']]);
                         $offset = $rec['offset'];
                     } catch (ParseException $e) {
