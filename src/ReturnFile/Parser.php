@@ -160,8 +160,11 @@ class Parser
             $amount = key($registry_group);
 
             if (!in_array($amount, ['unique', 'multiple'])) {
-                $message = "Invalid structure amount '$amount'";
-                throw new \DomainException($message);
+                throw new \DomainException(sprintf(
+                    "Invalid structure amount '%s' in CNAB%s",
+                    $amount,
+                    $this->config
+                ));
             }
 
             if (!is_array($type)) {
