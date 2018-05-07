@@ -110,6 +110,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - BankBillet and ShippingFile Controllers and Views use FilePack
 - Convert billet data to [YAML]
 - Use `class` keyword in foreign classes
+- Move ReturnFile Controller
 
 ### Deprecated
 

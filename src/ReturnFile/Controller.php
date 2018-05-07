@@ -5,18 +5,18 @@
  * @see LICENSE
  */
 
-namespace aryelgois\BankInterchange\Controllers;
+namespace aryelgois\BankInterchange\ReturnFile;
 
 /**
- * Controller class for Return Files
+ * Controller class for return files
  *
- * A ReturnFile is response sent by a Bank to a previous ShippingFile.
+ * A return file is the response sent by a Bank to a previous shipping file
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-abstract class ReturnFile
+abstract class Controller
 {
     /**
      * Path to directory with config files
