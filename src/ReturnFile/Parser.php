@@ -100,6 +100,16 @@ class Parser
     }
 
     /**
+     * Outputs parsed registries
+     *
+     * @return array[]
+     */
+    public function output()
+    {
+        return $this->result;
+    }
+
+    /**
      * Parses a Return File into an array
      *
      * @param string $return_file The contents of a Return File
