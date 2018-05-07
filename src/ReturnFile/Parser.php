@@ -110,58 +110,6 @@ class Parser
     }
 
     /**
-     * Parses a Return File into an array
-     *
-     * @param string $return_file The contents of a Return File
-     *
-     * @return array With (array nested) Registry instances
-     *
-     * @throws ParseException If can not identify $return_file layout
-     */
-    public function parse(string $return_file)
-    {
-        $return_file = explode("\n", trim($return_file));
-        $registries = [];
-        $offset = 0;
-
-        foreach ($this->config as $cnab => $config) {
-            try {
-                $result = self::doParse(
-                    $cnab,
-                    array_slice($config['structure'], 0, 1),
-                    $return_file
-                );
-
-                if (!empty($result['registries'])) {
-                    $registries = $result['registries'];
-                    $offset = $result['offset'];
-                    break;
-                }
-            } catch (ParseException $e) {
-                /*
-                 * Ignore the Exception. We are trying to figure out which
-                 * layout $return_file has
-                 */
-            }
-        }
-
-        if (empty($registries)) {
-            throw ParseException::undefinedLayout(array_keys($this->config));
-        }
-
-        $result = self::doParse(
-            $cnab,
-            array_slice($config['structure'], 1),
-            $return_file,
-            $offset
-        );
-
-        $registries = array_merge($registries, $result['registries']);
-
-        return $registries;
-    }
-
-    /**
      * Recursively follows the Return File structure to extract its fields
      *
      * @param array  $structure Structure tree to be used
