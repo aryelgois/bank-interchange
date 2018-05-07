@@ -154,7 +154,7 @@ class Parser
     protected function parse(array $structure, int $offset = null)
     {
         $result = [];
-        $offset = $offset ?? 0;
+        $current = $offset ?? 0;
 
         foreach ($structure as $registry_group) {
             $type = reset($registry_group);
@@ -176,12 +176,12 @@ class Parser
             }
 
             do {
-                $previous_offset = $offset;
+                $previous = $current;
                 if (is_array($type)) {
                     try {
-                        $rec = self::parse($type, $offset);
+                        $rec = self::parse($type, $current);
                         $result = array_merge($result, [$rec['registries']]);
-                        $offset = $rec['offset'];
+                        $current = $rec['offset'];
                     } catch (ParseException $e) {
                         if ($amount !== 'multiple') {
                             throw $e;
@@ -189,26 +189,26 @@ class Parser
                     }
                 } else {
                     $registry = self::pregRegistry(
-                        $this->return_file[$offset],
+                        $this->return_file[$current],
                         $registries
                     );
 
                     if ($registry !== null) {
                         $result[] = $registry;
-                        $offset++;
+                        $current++;
                     } elseif ($amount === 'unique') {
                         throw new ParseException(
                             $this->config,
                             array_keys($registries),
-                            $offset + 1
+                            $current + 1
                         );
                     }
                 }
-            } while ($amount === 'multiple' && $offset > $previous_offset);
+            } while ($amount === 'multiple' && $current > $previous);
         }
 
         return [
-            'offset' => $offset,
+            'offset' => $current,
             'registries' => $result,
         ];
     }
