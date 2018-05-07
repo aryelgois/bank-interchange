@@ -197,7 +197,7 @@ class Parser
                         $offset++;
                     } elseif ($amount === 'unique') {
                         throw ParseException::pregMismatch(
-                            $this->cnab,
+                            $this->config,
                             $registries,
                             $offset + 1
                         );

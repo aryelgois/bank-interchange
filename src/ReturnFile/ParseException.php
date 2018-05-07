@@ -18,14 +18,23 @@ use aryelgois\Utils\Format;
  */
 class ParseException extends \RuntimeException
 {
+    /**
+     * The Parser could not match a registry
+     *
+     * @param string $config     Contains CNAB and Bank code
+     * @param array  $registries Tried registry types
+     * @param int    $line       Return file line
+     *
+     * @return self
+     */
     public static function pregMismatch(
-        string $cnab,
+        string $config,
         array $registries,
         int $line
     ) {
-        $message = "Invalid registry at line $line. Expecting "
+        $message = "Invalid registry at line $line: expecting "
             . Format::naturalLanguageJoin(array_keys($registries), 'or')
-            . " ($cnab)";
+            . " (CNAB$config)";
 
         return new self($message);
     }
