@@ -19,6 +19,13 @@ use aryelgois\Utils\Format;
 class ParseException extends \RuntimeException
 {
     /**
+     * Which Registry types did not match
+     *
+     * @var string[]
+     */
+    protected $registries;
+
+    /**
      * Creates a new ParseException object
      *
      * @param string   $config     Contains CNAB and Bank code
@@ -31,6 +38,8 @@ class ParseException extends \RuntimeException
         int $line,
         Throwable $previous = null
     ) {
+        $this->registries = $registries;
+
         $message = "Invalid registry at line $line: expecting "
             . Format::naturalLanguageJoin($registries, 'or')
             . " (CNAB$config)";
