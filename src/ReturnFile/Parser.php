@@ -197,9 +197,9 @@ class Parser
                         $result[] = $registry;
                         $offset++;
                     } elseif ($amount === 'unique') {
-                        throw ParseException::pregMismatch(
+                        throw new ParseException(
                             $this->config,
-                            $registries,
+                            array_keys($registries),
                             $offset + 1
                         );
                     }

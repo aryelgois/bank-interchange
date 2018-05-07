@@ -19,23 +19,22 @@ use aryelgois\Utils\Format;
 class ParseException extends \RuntimeException
 {
     /**
-     * The Parser could not match a registry
+     * Creates a new ParseException object
      *
-     * @param string $config     Contains CNAB and Bank code
-     * @param array  $registries Tried registry types
-     * @param int    $line       Return file line
-     *
-     * @return self
+     * @param string   $config     Contains CNAB and Bank code
+     * @param string[] $registries Tried registry types
+     * @param int      $line       Return file line
      */
-    public static function pregMismatch(
+    public function __construct(
         string $config,
         array $registries,
-        int $line
+        int $line,
+        Throwable $previous = null
     ) {
         $message = "Invalid registry at line $line: expecting "
-            . Format::naturalLanguageJoin(array_keys($registries), 'or')
+            . Format::naturalLanguageJoin($registries, 'or')
             . " (CNAB$config)";
 
-        return new self($message);
+        parent::__construct($message, 0, $previous);
     }
 }
