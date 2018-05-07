@@ -22,6 +22,13 @@ class Parser
     protected $config;
 
     /**
+     * Path to directory with config files
+     *
+     * @var string
+     */
+    protected static $config_path;
+
+    /**
      * Creates a new Parser Object
      *
      * @param string $config YAML with Return File layouts
@@ -191,5 +198,15 @@ class Parser
             }
         }
         return $result;
+    }
+
+    /**
+     * Sets path to directory with config files
+     *
+     * @param string $path Path to directory with config files
+     */
+    public static function setConfigPath(string $path)
+    {
+        self::$config_path = $path;
     }
 }
