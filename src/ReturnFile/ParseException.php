@@ -29,12 +29,4 @@ class ParseException extends \RuntimeException
 
         return new self($message);
     }
-
-    public static function undefinedLayout($layouts)
-    {
-        $message = 'Could not identify Return File layout, tried '
-            . Format::naturalLanguageJoin($layouts);
-
-        return new self($message);
-    }
 }
