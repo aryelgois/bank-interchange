@@ -87,8 +87,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Title `fine_type`, `interest_type` and `discount*_type` are `tinyint` have
     default value
 - Config files:
-  - Rewrite ReturnFile config files in [YAML], improve patterns, rename some
-    fields
+  - ReturnFile:
+    - Rewrite in [YAML]
+    - Split parser config into individual files
+    - Improve patterns
+    - Rename some fields
 - Assignor and Payer names in BankBillet fields
 - Update wallets
 - Move BankBillet classes to its own namespace
