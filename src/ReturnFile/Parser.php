@@ -57,7 +57,7 @@ class Parser
     /**
      * Contains parsed registries
      *
-     * @var array[]
+     * @var mixed[]
      */
     protected $result;
 
@@ -142,7 +142,7 @@ class Parser
     /**
      * Outputs parsed registries
      *
-     * @return array[]
+     * @return mixed[]
      */
     public function output()
     {
@@ -155,7 +155,7 @@ class Parser
      * @param array  $structure Structure tree to be used
      * @param int    $offset    Current item in $return_file
      *
-     * @return array With keys 'offset' and 'registries'
+     * @return mixed[]
      *
      * @throws ParseException For invalid registry
      */
