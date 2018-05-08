@@ -68,11 +68,13 @@ class Registry implements \JsonSerializable
     {
         if (array_key_exists($field, $this->data)) {
             return $this->data[$field];
-        } else {
-            $message = "Invalid Registry field '$field' for a "
-                . "$this->type ($this->cnab)";
-            throw new \DomainException($message);
         }
+        throw new \DomainException(sprintf(
+            "Invalid field '%s' for a %s registry (CNAB%s)",
+            $field,
+            $this->type,
+            $this->cnab
+        ));
     }
 
     /**
