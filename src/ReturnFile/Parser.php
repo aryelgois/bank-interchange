@@ -70,29 +70,38 @@ class Parser
      * @throws \BadMethodCallException       @see loadConfig()
      * @throws \RuntimeException             @see loadConfig()
      * @throws Yaml\Exception\ParseException If could not load config file
+     * @throws ParseException                @see parse()
+     * @throws \UnexpectedValueException     If there are non-empty lines after
+     *                                       the Return File
      */
     public function __construct(string $raw)
     {
-        $return_file = explode("\n", rtrim(str_replace("\r", '', $raw), "\n"));
+        $return_file = rtrim(str_replace("\r", '', $raw), "\n");
         if (empty($return_file)) {
             throw new \InvalidArgumentException('Return File is empty');
         }
+        $return_file = explode("\n", $return_file);
 
         $length = max(array_map('strlen', $return_file));
         $cnab = ($length <= 240 ? 240 : 400);
+        $bank_code = substr($return_file[0], ($cnab === 240 ? 0 : 76), 3);
 
         foreach ($return_file as &$line) {
             $line = str_pad($line, $cnab);
         }
         unset($line);
 
-        $bank_code = substr($return_file[0], ($cnab === 240 ? 0 : 76), 3);
-
         $this->cnab = $cnab;
         $this->config = self::loadConfig($cnab, $bank_code);
         $this->return_file = $return_file;
 
         $this->result = self::parse(self::$cache[$this->config]['structure']);
+        $last = $this->result['offset'];
+        if ($last < count($return_file)) {
+            $message = 'Unexpected content at line ' . ($last + 1)
+                . ': expecting EOF';
+            throw new \UnexpectedValueException($message);
+        }
     }
 
     /**
