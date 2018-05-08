@@ -16,7 +16,7 @@ namespace aryelgois\BankInterchange\ReturnFile;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Registry
+class Registry implements \JsonSerializable
 {
     /**
      * Holds the Registry CNAB
@@ -103,5 +103,22 @@ class Registry
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Outputs useful data from the Registry
+     *
+     * NOTE:
+     * - It does not output $cnab because this method is intended for use with
+     *   Parser output, which already has a 'cnab' key
+     *
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'type' => $this->type,
+            'data' => $this->data,
+        ];
     }
 }
