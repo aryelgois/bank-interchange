@@ -11,7 +11,7 @@ structure:
 
 registries:
   FILE_HEADER:
-    pattern: /^(.{3})(\d{4})0 {9}(\d{1})(\d{14})(\d{20})(\d{5})(.)(\d{12})(.)(.)(.{30})(.{30}) {10}2(\d{8})(\d{6})(\d{6})(\d{3})(\d{5}) {20}( {20}) {29}$/
+    pattern: /^(047)(\d{4})0 {9}(\d)(\d{14})(\d{20})(\d{5})(.)(\d{12})(.)(.)(.{30})(.{30}) {10}2(\d{8})(\d{6})(\d{6})\d{3}\d{5}(.{20})(.{20}) {29}$/
     map:
       - bank_code
       - lot
@@ -28,18 +28,15 @@ registries:
       - record_date
       - record_time
       - file_sequence
-      - file_layout
-      - density
+      - bank_use
       - assignor_use
 
   LOT_HEADER:
-    pattern: /^(.{3})(\d{4})1([RT])(\d{2}) {2}(\d{3}) (\d{1})(\d{15})(\d{20})(\d{5})(.)(\d{12})(.)(.)(.{30})(.{40})(.{40})(\d{8})(\d{8})(\d{8}) {33}$/
+    pattern: /^(047)(\d{4})1T(\d{2}) {2}\d{3} (\d)(\d{15})(\d{20})(\d{5})(.)(\d{12})(.)(.)(.{30})(.{40})(.{40})(\d{8})(\d{8})(\d{8}) {33}$/
     map:
       - bank_code
       - lot
       - service_code
-      - service_type
-      - lot_layout
       - assignor_document_type
       - assignor_document
       - assignor_covenant
@@ -56,7 +53,7 @@ registries:
       - credit_date
 
   TITLE_T:
-    pattern: /^(.{3})(\d{4})3(\d{5})T (\d{2})(\d{5})(.)(\d{12})(.)(.)(\d{20})(\d)(.{15})(\d{8})(\d{15})(.{3})(\d{5})(\d)(.{25})(\d{2})(\d)(\d{15})(.{40})(\d{10})(\d{15})(.{10}) {17}$/
+    pattern: /^(047)(\d{4})3(\d{5})T (\d{2})(\d{5})(.)(\d{12})(.)(.)(\d{20})(\d)(.{15})(\d{8})(\d{15})(\d{3})(\d{5})(\d)(.{25})(\d{2})(\d)(\d{15})(.{40})(\d{10})(\d{15})(.{10}) {17}$/
     map:
       - bank_code
       - lot
@@ -66,7 +63,7 @@ registries:
       - assignor_agency_cd
       - assignor_account
       - assignor_account_cd
-      - assignor_account_cd
+      - assignor_agency_account_cd
       - our_number
       - wallet
       - doc_number
@@ -85,7 +82,7 @@ registries:
       - occurrence
 
   TITLE_U:
-    pattern: /^(.{3})(\d{4})3(\d{5})U (\d{2})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{8})(\d{8})(.{4})(.{8})(\d{15})(.{30})(\d{3})(\d{20}) {7}$/
+    pattern: /^(047)(\d{4})3(\d{5})U (\d{2})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{15})(\d{8})(\d{8})(.{4})(.{8})(\d{15})(.{30})(\d{3})(\d{20}) {7}$/
     map:
       - bank_code
       - lot
@@ -94,7 +91,7 @@ registries:
       - fine_value
       - discount_value
       - rebate
-      - iof
+      - ioc_iof
       - value_received
       - value_net
       - expenses
@@ -109,7 +106,7 @@ registries:
       - corresponding_bank_our_number
 
   LOT_TRAILER:
-    pattern: /^(.{3})(\d{4})5 {9}(\d{6})(\d{6})(\d{17})(\d{6})(\d{17})(\d{6})(\d{17})(\d{6})(\d{17})(.{8}) {117}$/
+    pattern: /^(047)(\d{4})5 {9}(\d{6})(\d{6})(\d{17})(\d{6})(\d{17})(\d{6})(\d{17})(\d{6})(\d{17})(.{8}) {117}$/
     map:
       - bank_code
       - lot
@@ -125,7 +122,7 @@ registries:
       - warning
 
   FILE_TRAILER:
-    pattern: /^(.{3})(\d{4})9 {9}(\d{6})(\d{6})(\d{6}) {205}$/
+    pattern: /^(047)(\d{4})9 {9}(\d{6})(\d{6})(\d{6}) {205}$/
     map:
       - bank_code
       - lot
