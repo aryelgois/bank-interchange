@@ -146,7 +146,10 @@ class Parser
      */
     public function output()
     {
-        return $this->result['registries'];
+        return [
+            'cnab' => $this->cnab,
+            'registries' => $this->result['registries'],
+        ];
     }
 
     /**
