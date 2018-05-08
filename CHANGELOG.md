@@ -88,7 +88,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     default value
 - Config files:
   - ReturnFile:
-    - Rewrite in [YAML]
+    - Rewrite configs in [YAML]
     - Split parser config into individual files
     - Improve patterns
     - Rename some fields
