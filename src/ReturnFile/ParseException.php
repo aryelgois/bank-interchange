@@ -46,4 +46,14 @@ class ParseException extends \RuntimeException
 
         parent::__construct($message, 0, $previous);
     }
+
+    /**
+     * Returns registry types that did not match
+     *
+     * @return string[]
+     */
+    public function getRegistries()
+    {
+        return $this->registries;
+    }
 }

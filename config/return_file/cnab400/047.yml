@@ -1,9 +1,10 @@
 # Banese
 
 structure:
-  - unique: HEADER
-  - multiple: TRANSACTION
-  - unique: TRAILER
+  - HEADER
+  -
+    - TRANSACTION
+  - TRAILER
 
 registries:
   HEADER:

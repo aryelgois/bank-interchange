@@ -41,9 +41,9 @@ class Parser
     protected $cnab;
 
     /**
-     * Loaded parser config
+     * Config from $cache being used
      *
-     * @var array[]
+     * @var string
      */
     protected $config;
 
@@ -148,63 +148,64 @@ class Parser
      *
      * @return array With keys 'offset' and 'registries'
      *
-     * @throws \DomainException For invalid structure amount
-     * @throws ParseException   For invalid registry
+     * @throws ParseException For invalid registry
      */
     protected function parse(array $structure, int $offset = null)
     {
         $result = [];
         $current = $offset ?? 0;
 
+        $count_structure = 0;
         foreach ($structure as $registry_group) {
-            $type = reset($registry_group);
-            $amount = key($registry_group);
-
-            if (!in_array($amount, ['unique', 'multiple'])) {
-                throw new \DomainException(sprintf(
-                    "Invalid structure amount '%s' in CNAB%s",
-                    $amount,
-                    $this->config
-                ));
-            }
-
-            if (!is_array($type)) {
-                $registries = Utils\Utils::arrayWhitelist(
-                    self::$cache[$this->config]['registries'],
-                    explode(' ', $type)
-                );
-            }
-
-            do {
-                $previous = $current;
-                if (is_array($type)) {
+            if (is_array($registry_group)) {
+                $buffer = [];
+                do {
                     try {
-                        $rec = self::parse($type, $current);
-                        $result = array_merge($result, [$rec['registries']]);
+                        $rec = self::parse($registry_group, $current);
+                        $nested = (count($registry_group) > 1)
+                            ? [$rec['registries']]
+                            : $rec['registries'];
+                        $buffer = array_merge($buffer, $nested);
                         $current = $rec['offset'];
                     } catch (ParseException $e) {
-                        if ($amount !== 'multiple') {
+                        if (count($buffer) === 0) {
                             throw $e;
+                        } else {
+                            $first = $registry_group[0];
+                            if (is_string($first)) {
+                                $first = explode(' ', $first);
+                            }
+                            $in_first = array_intersect(
+                                $first,
+                                $e->getRegistries()
+                            );
+                            if (count($in_first) === 0) {
+                                throw $e;
+                            }
+                            break;
                         }
                     }
-                } else {
-                    $registry = self::pregRegistry(
-                        $this->return_file[$current],
-                        $registries
-                    );
+                } while ($current < count($this->return_file));
+                $nested = (count($registry_group) > 1)
+                    ? $buffer
+                    : [$buffer];
+                $result = array_merge($result, $nested);
+            } else {
+                $types = explode(' ', $registry_group);
+                $registry = self::pregRegistry($current, $types);
 
-                    if ($registry !== null) {
-                        $result[] = $registry;
-                        $current++;
-                    } elseif ($amount === 'unique') {
-                        throw new ParseException(
-                            $this->config,
-                            array_keys($registries),
-                            $current + 1
-                        );
-                    }
+                if ($registry !== null) {
+                    $result[] = $registry;
+                    $current++;
+                } elseif (count($result) === 0 || $count_structure > 0) {
+                    throw new ParseException(
+                        $this->config,
+                        $types,
+                        $current + 1
+                    );
                 }
-            } while ($amount === 'multiple' && $current > $previous);
+            }
+            $count_structure++;
         }
 
         return [
@@ -216,19 +217,26 @@ class Parser
     /**
      * Extracts fields from a Return File registry to fill a Registry instance
      *
-     * @param string $registry   Line with fields to be extracted
-     * @param array  $registries Sequence of pattern and map
+     * @param int      $registry Id from $return_file to be parsed
+     * @param string[] $types    Registry types to test
      *
      * @return Registry On success
      * @return null     On failure
      */
-    protected function pregRegistry(
-        string $registry,
-        array $registries
-    ) {
+    protected function pregRegistry(int $registry, array $types)
+    {
+        $registries = Utils\Utils::arrayWhitelist(
+            self::$cache[$this->config]['registries'],
+            $types
+        );
+
         $result = null;
         foreach ($registries as $type => $matcher) {
-            if (preg_match($matcher['pattern'], $registry, $matches)) {
+            if (preg_match(
+                $matcher['pattern'],
+                $this->return_file[$registry] ?? '',
+                $matches
+            )) {
                 $match = array_combine(
                     $matcher['map'],
                     array_map('trim', array_slice($matches, 1))

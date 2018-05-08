@@ -92,6 +92,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - Split parser config into individual files
     - Improve patterns
     - Rename some fields
+    - Improve Parser
 - Assignor and Payer names in BankBillet fields
 - Update wallets
 - Move BankBillet classes to its own namespace

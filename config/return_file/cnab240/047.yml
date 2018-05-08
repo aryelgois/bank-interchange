@@ -1,12 +1,13 @@
 # Banese
 
 structure:
-  - unique: FILE_HEADER
-  - multiple:
-    - unique: LOT_HEADER
-    - multiple: TITLE_T TITLE_U
-    - unique: LOT_TRAILER
-  - unique: FILE_TRAILER
+  - FILE_HEADER
+  -
+    - LOT_HEADER
+    -
+      - TITLE_T TITLE_U
+    - LOT_TRAILER
+  - FILE_TRAILER
 
 registries:
   FILE_HEADER:
