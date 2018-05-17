@@ -167,7 +167,7 @@ class Parser
                 self::$cache[$key] = Yaml::parseFile($config_file);
             } else {
                 throw new \RuntimeException(sprintf(
-                    'Config file for Bank %s in CNAB%s not found',
+                    "Config file for Bank '%s' in CNAB%s not found",
                     $bank_code,
                     $cnab
                 ));
