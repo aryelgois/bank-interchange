@@ -59,7 +59,7 @@ class Parser
      *
      * @var string[]
      */
-    protected $return_file;
+    protected $registries;
 
     /**
      * Contains parsed registries
@@ -87,25 +87,25 @@ class Parser
         if (empty($return_file)) {
             throw new \InvalidArgumentException('Return File is empty');
         }
-        $return_file = explode("\n", $return_file);
+        $registries = explode("\n", $return_file);
 
-        $length = max(array_map('strlen', $return_file));
+        $length = max(array_map('strlen', $registries));
         $cnab = ($length <= 240 ? 240 : 400);
-        $bank_code = substr($return_file[0], ($cnab === 240 ? 0 : 76), 3);
+        $bank_code = substr($registries[0], ($cnab === 240 ? 0 : 76), 3);
 
-        foreach ($return_file as &$line) {
-            $line = str_pad($line, $cnab);
+        foreach ($registries as &$registry) {
+            $registry = str_pad($registry, $cnab);
         }
-        unset($line);
+        unset($registry);
 
         $this->bank_code = $bank_code;
         $this->cnab = $cnab;
         $this->config = self::loadConfig($cnab, $bank_code);
-        $this->return_file = $return_file;
+        $this->registries = $registries;
 
         $this->result = self::parse(self::$cache[$this->config]['structure']);
         $last = $this->result['offset'];
-        if ($last < count($return_file)) {
+        if ($last < count($registries)) {
             $message = 'Unexpected content at line ' . ($last + 1)
                 . ': expecting EOF';
             throw new \UnexpectedValueException($message);
@@ -165,7 +165,7 @@ class Parser
      * Recursively follows the Return File structure to extract its fields
      *
      * @param array  $structure Structure tree to be used
-     * @param int    $offset    Current item in $return_file
+     * @param int    $offset    Current item in $registries
      *
      * @return mixed[]
      *
@@ -206,7 +206,7 @@ class Parser
                             break;
                         }
                     }
-                } while ($current < count($this->return_file));
+                } while ($current < count($this->registries));
                 $nested = (count($registry_group) > 1)
                     ? $buffer
                     : [$buffer];
@@ -238,24 +238,24 @@ class Parser
     /**
      * Extracts fields from a Return File registry to fill a Registry instance
      *
-     * @param int      $registry Id from $return_file to be parsed
-     * @param string[] $types    Registry types to test
+     * @param int      $id    $registries id to be parsed
+     * @param string[] $types Registry types to test
      *
      * @return Registry On success
      * @return null     On failure
      */
-    protected function pregRegistry(int $registry, array $types)
+    protected function pregRegistry(int $id, array $types)
     {
-        $registries = Utils\Utils::arrayWhitelist(
+        $registry_types = Utils\Utils::arrayWhitelist(
             self::$cache[$this->config]['registries'],
             $types
         );
 
         $result = null;
-        foreach ($registries as $type => $matcher) {
+        foreach ($registry_types as $type => $matcher) {
             if (preg_match(
                 $matcher['pattern'],
-                $this->return_file[$registry] ?? '',
+                $this->registries[$id] ?? '',
                 $matches
             )) {
                 $match = array_combine(
