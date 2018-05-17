@@ -83,13 +83,9 @@ class Parser
      *
      * @param string $raw Return File to be parsed
      *
-     * @throws \InvalidArgumentException     If Return File is empty
-     * @throws \BadMethodCallException       @see loadConfig()
-     * @throws \RuntimeException             @see loadConfig()
-     * @throws Yaml\Exception\ParseException If could not load config file
-     * @throws ParseException                @see parse()
-     * @throws \UnexpectedValueException     If there are non-empty lines after
-     *                                       the Return File
+     * @throws \InvalidArgumentException If Return File is empty
+     * @throws \UnexpectedValueException If there are non-empty lines after the
+     *                                   Return File
      */
     public function __construct(string $raw)
     {
@@ -153,8 +149,9 @@ class Parser
      *
      * @return string $cache key
      *
-     * @throws \BadMethodCallException If called before setConfigPath()
-     * @throws \RuntimeException       If config file does not exist
+     * @throws \BadMethodCallException       If called before setConfigPath()
+     * @throws \RuntimeException             If config file does not exist
+     * @throws Yaml\Exception\ParseException If could not load config file
      */
     protected static function loadConfig($cnab, $bank_code)
     {
