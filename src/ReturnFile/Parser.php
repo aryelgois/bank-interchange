@@ -96,8 +96,7 @@ class Parser
         $registries = explode("\n", $return_file);
 
         $this->detect($registries);
-
-        $this->config = self::loadConfig($this->cnab, $this->bank_code);
+        $this->loadConfig();
 
         foreach ($registries as &$registry) {
             $registry = str_pad($registry, $this->cnab);
@@ -145,22 +144,17 @@ class Parser
     /**
      * Loads YAML config file into cache
      *
-     * @param int    $cnab      CNAB layout
-     * @param string $bank_code Bank code
-     *
-     * @return string $cache key
-     *
      * @throws \BadMethodCallException       If called before setConfigPath()
      * @throws \RuntimeException             If config file does not exist
      * @throws Yaml\Exception\ParseException If could not load config file
      */
-    protected static function loadConfig($cnab, $bank_code)
+    protected function loadConfig()
     {
         if (self::$config_path === null) {
             throw new \BadMethodCallException('Config path is null');
         }
 
-        $key = "$cnab/$bank_code";
+        $key = "$this->cnab/$this->bank_code";
 
         if (!array_key_exists($key, self::$cache)) {
             $config_file = self::$config_path . "/cnab$key.yml";
@@ -169,13 +163,13 @@ class Parser
             } else {
                 throw new \RuntimeException(sprintf(
                     "Config file for Bank '%s' in CNAB%s not found",
-                    $bank_code,
-                    $cnab
+                    $this->bank_code,
+                    $this->cnab
                 ));
             }
         }
 
-        return $key;
+        $this->config = $key;
     }
 
     /**
