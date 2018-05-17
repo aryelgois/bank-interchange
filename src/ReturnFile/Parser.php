@@ -34,6 +34,13 @@ class Parser
     protected static $config_path;
 
     /**
+     * Bank that generated the Return File
+     *
+     * @var string
+     */
+    protected $bank_code;
+
+    /**
      * Which CNAB the Return File might be
      *
      * @var int
@@ -91,6 +98,7 @@ class Parser
         }
         unset($line);
 
+        $this->bank_code = $bank_code;
         $this->cnab = $cnab;
         $this->config = self::loadConfig($cnab, $bank_code);
         $this->return_file = $return_file;
@@ -147,6 +155,7 @@ class Parser
     public function output()
     {
         return [
+            'bank_code' => $this->bank_code,
             'cnab' => $this->cnab,
             'registries' => $this->result['registries'],
         ];
