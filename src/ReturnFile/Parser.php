@@ -213,7 +213,7 @@ class Parser
                 $buffer = [];
                 do {
                     try {
-                        $rec = self::parse($registry_group, $current);
+                        $rec = $this->parse($registry_group, $current);
                         $nested = (count($registry_group) > 1)
                             ? [$rec['registries']]
                             : $rec['registries'];
@@ -244,7 +244,7 @@ class Parser
                 $result = array_merge($result, $nested);
             } else {
                 $types = explode(' ', $registry_group);
-                $registry = self::pregRegistry($current, $types);
+                $registry = $this->pregRegistry($current, $types);
 
                 if ($registry !== null) {
                     $result[] = $registry;
