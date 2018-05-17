@@ -20,6 +20,16 @@ use Symfony\Component\Yaml\Yaml;
 class Parser
 {
     /**
+     * Map of CNAB layout to Bank code location in first registry
+     *
+     * const int[]
+     */
+    const DETECT_LAYOUT = [
+        240 => 0,
+        400 => 76,
+    ];
+
+    /**
      * Holds loaded configs
      *
      * @var array[]
@@ -89,18 +99,14 @@ class Parser
         }
         $registries = explode("\n", $return_file);
 
-        $length = max(array_map('strlen', $registries));
-        $cnab = ($length <= 240 ? 240 : 400);
-        $bank_code = substr($registries[0], ($cnab === 240 ? 0 : 76), 3);
+        $this->detect($registries);
 
         foreach ($registries as &$registry) {
-            $registry = str_pad($registry, $cnab);
+            $registry = str_pad($registry, $this->cnab);
         }
         unset($registry);
 
-        $this->bank_code = $bank_code;
-        $this->cnab = $cnab;
-        $this->config = self::loadConfig($cnab, $bank_code);
+        $this->config = self::loadConfig($this->cnab, $this->bank_code);
         $this->registries = $registries;
 
         $this->result = self::parse(self::$cache[$this->config]['structure']);
@@ -110,6 +116,33 @@ class Parser
                 . ': expecting EOF';
             throw new \UnexpectedValueException($message);
         }
+    }
+
+    /**
+     * Detects the CNAB layout and the Bank Code
+     *
+     * @param string[] $registries Return File registries
+     *
+     * @throws \DomainException If could not detect Return File layout
+     */
+    protected function detect(array $registries)
+    {
+        $length = max(array_map('strlen', $registries));
+
+        $found = false;
+        foreach (self::DETECT_LAYOUT as $cnab => $start) {
+            if ($length <= $cnab) {
+                $found = true;
+                break;
+            }
+        }
+
+        if (!$found) {
+            throw new \DomainException('Could not detect Return File layout');
+        }
+
+        $this->bank_code = substr($registries[0], $start, 3);
+        $this->cnab = $cnab;
     }
 
     /**
