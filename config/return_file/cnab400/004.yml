@@ -24,7 +24,7 @@ registries:
       - registry
 
   TRANSACTION:
-    pattern: /^1(\d{2})(\d{14})(\d{4})(\d{2})(\d{7})(\d) {6}(.{25})(\d{8})(\d{10}) {27}(\d)(\d{2})(\d{6})(.{10})(\d{8}) {12}(\d{6})(\d{13})(\d{3})(\d{4}) (\d{2})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(.{115})(\d{6})$/
+    pattern: /^1(\d{2})(\d{14})(\d{4})(\d{2})(\d{7})(\d) {6}(.{25})(\d{7})(\d)(\d{10}) {27}(\d)(\d{2})(\d{6})(.{10})(\d{7})(\d) {12}(\d{6})(\d{13})(\d{3})(\d{4}) (\d{2})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(\d{13})(.{115})(\d{6})$/
     map:
       - assignor_document_type
       - assignor_document
@@ -34,12 +34,14 @@ registries:
       - assignor_account_cd
       - doc_number
       - our_number
+      - our_number_cd
       - contract
       - wallet
       - occurrence
       - occurrence_date
       - your_number
       - confirm_our_number
+      - confirm_our_number_cd
       - due
       - value
       - receiver_bank
