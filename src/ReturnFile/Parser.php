@@ -97,15 +97,16 @@ class Parser
 
         $this->detect($registries);
 
+        $this->config = self::loadConfig($this->cnab, $this->bank_code);
+
         foreach ($registries as &$registry) {
             $registry = str_pad($registry, $this->cnab);
         }
         unset($registry);
-
-        $this->config = self::loadConfig($this->cnab, $this->bank_code);
         $this->registries = $registries;
 
-        $this->result = self::parse(self::$cache[$this->config]['structure']);
+        $this->result = $this->parse(self::$cache[$this->config]['structure']);
+
         $last = $this->result['offset'];
         if ($last < count($registries)) {
             $message = 'Unexpected content at line ' . ($last + 1)
