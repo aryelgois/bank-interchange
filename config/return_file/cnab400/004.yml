@@ -11,10 +11,10 @@ registries:
     pattern: /^02RETORNO(\d{2}).{15}(\d{4})(\d{2})(\d{7})(\d) {6}(.{30})(004)(.{15})(\d{6}).{8}(\d{5}) {6}(\d{6}) {269}(\d{6})$/
     map:
       - service_code
-      - assignor_agency
-      - assignor_agency_cd
-      - assignor_account
-      - assignor_account_cd
+      - assignment_agency
+      - assignment_agency_cd
+      - assignment_account
+      - assignment_account_cd
       - assignor_name
       - bank_code
       - bank_name
@@ -28,10 +28,10 @@ registries:
     map:
       - assignor_document_type
       - assignor_document
-      - assignor_agency
-      - assignor_agency_cd
-      - assignor_account
-      - assignor_account_cd
+      - assignment_agency
+      - assignment_agency_cd
+      - assignment_account
+      - assignment_account_cd
       - doc_number
       - our_number
       - our_number_cd

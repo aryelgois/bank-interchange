@@ -17,12 +17,12 @@ registries:
       - lot
       - assignor_document_type
       - assignor_document
-      - assignor_covenant
-      - assignor_agency
-      - assignor_agency_cd
-      - assignor_account
-      - assignor_account_cd
-      - assignor_agency_account_cd
+      - assignment_covenant
+      - assignment_agency
+      - assignment_agency_cd
+      - assignment_account
+      - assignment_account_cd
+      - assignment_agency_account_cd
       - assignor_name
       - bank_name
       - record_date
@@ -39,12 +39,12 @@ registries:
       - service_code
       - assignor_document_type
       - assignor_document
-      - assignor_covenant
-      - assignor_agency
-      - assignor_agency_cd
-      - assignor_account
-      - assignor_account_cd
-      - assignor_agency_account_cd
+      - assignment_covenant
+      - assignment_agency
+      - assignment_agency_cd
+      - assignment_account
+      - assignment_account_cd
+      - assignment_agency_account_cd
       - assignor_name
       - message1
       - message2
@@ -59,11 +59,11 @@ registries:
       - lot
       - lot_registry
       - movement
-      - assignor_agency
-      - assignor_agency_cd
-      - assignor_account
-      - assignor_account_cd
-      - assignor_agency_account_cd
+      - assignment_agency
+      - assignment_agency_cd
+      - assignment_account
+      - assignment_account_cd
+      - assignment_agency_account_cd
       - our_number
       - our_number_cd
       - wallet
