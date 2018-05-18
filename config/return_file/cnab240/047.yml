@@ -113,14 +113,14 @@ registries:
       - bank_code
       - lot
       - lot_registry_count
-      - title_cs_count
-      - title_cs_total
-      - title_cv_count
-      - title_cv_total
-      - title_cc_count
-      - title_cc_total
-      - title_cd_count
-      - title_cd_total
+      - cs_count
+      - cs_total
+      - cv_count
+      - cv_total
+      - cc_count
+      - cc_total
+      - cd_count
+      - cd_total
       - warning
 
   FILE_TRAILER:

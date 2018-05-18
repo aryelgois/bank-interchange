@@ -63,7 +63,7 @@ registries:
     map:
       - service_code
       - bank_code
-      - title_cs_count
-      - title_cs_total
-      - warning_cs
+      - cs_count
+      - cs_total
+      - cs_warning
       - registry

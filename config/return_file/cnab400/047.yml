@@ -67,18 +67,18 @@ registries:
     map:
       - service_code
       - bank_code
-      - title_cs_count
-      - title_cs_total
-      - warning_cs
-      - title_cv_count
-      - title_cv_total
-      - warning_cv
-      - title_cc_count
-      - title_cc_total
-      - warning_cc
-      - title_cd_count
-      - title_cd_total
-      - warning_cd
+      - cs_count
+      - cs_total
+      - cs_warning
+      - cv_count
+      - cv_total
+      - cv_warning
+      - cc_count
+      - cc_total
+      - cc_warning
+      - cd_count
+      - cd_total
+      - cd_warning
       - discount_margin
       - down_rate
       - regular_titles
