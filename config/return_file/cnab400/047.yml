@@ -31,13 +31,13 @@ registries:
       - assignment_agency
       - assignment_account
       - assignment_account_cd
-      - assignor_use
+      - doc_number
       - our_number
       - our_number_cd
       - wallet
       - occurrence
       - occurrence_date
-      - doc_number
+      - your_number
       - due
       - value
       - receiver_bank
@@ -45,7 +45,7 @@ registries:
       - kind
       - tax
       - expenses
-      - interest_discount
+      - interest
       - ioc_iof
       - rebate
       - discount_value
