@@ -47,6 +47,13 @@ abstract class Extractor
     protected $cnab;
 
     /**
+     * Config used by the parser
+     *
+     * @var mixed[]
+     */
+    protected $config;
+
+    /**
      * Parsed registries
      *
      * @var mixed[]
@@ -74,6 +81,8 @@ abstract class Extractor
         ]);
 
         $this->cnab = $parsed['cnab'];
+
+        $this->config = $return_file->getConfig();
 
         $this->registries = $parsed['registries'];
 

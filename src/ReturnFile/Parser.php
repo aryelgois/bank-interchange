@@ -167,6 +167,16 @@ class Parser
     }
 
     /**
+     * Returns config being used
+     *
+     * @return array[]
+     */
+    public function getConfig()
+    {
+        return self::$cache[$this->config];
+    }
+
+    /**
      * Loads YAML config file into cache
      *
      * @throws \BadMethodCallException       If called before setConfigPath()
