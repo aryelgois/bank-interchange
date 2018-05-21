@@ -126,6 +126,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Column `doc_type` in `titles`
 - Table `shipping_file_titles`
 - Title `setOurNumber()`
+- Old Return file config files
 
 ### Fixed
 - Shipping File counter: using `id` is inconsistent when generating shipping
