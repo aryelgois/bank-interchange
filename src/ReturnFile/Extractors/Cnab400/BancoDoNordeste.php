@@ -21,4 +21,25 @@ class BancoDoNordeste extends ReturnFile\Extractors\Cnab400
     const CHARGING_TYPES = [
         'cs',
     ];
+
+    /**
+     * Computes a human readable occurrence from a title
+     *
+     * @param ReturnFile\Registry $registry Registry with title's data
+     *
+     * @return string|null
+     */
+    protected function occurrence(ReturnFile\Registry $registry)
+    {
+        $occurrence = parent::occurrence($registry);
+
+        $errors = array_intersect_key(
+            $this->config['error_table'],
+            array_filter(str_split($registry->error_table))
+        );
+
+        return (empty($errors))
+            ? $occurrence
+            : implode("\n", array_merge([$occurrence ?? 'Erros:'], $errors));
+    }
 }

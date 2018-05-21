@@ -64,11 +64,28 @@ abstract class Cnab400 extends ReturnFile\Extractor
                 'value' => (float) ($title->value / 100.0),
                 'tax' => (float) ($title->tax / 100.0),
                 'value_received' => (float) ($title->value_received / 100.0),
-                'occurrence' => $title->occurrence,
+                'occurrence' => $this->occurrence($title) ?? $title->occurrence,
                 'occurrence_date' => static::parseDate($title->occurrence_date),
             ];
         }
 
         return $result;
+    }
+
+    /*
+     * Helper
+     * =========================================================================
+     */
+
+    /**
+     * Computes a human readable occurrence from a title
+     *
+     * @param ReturnFile\Registry $registry Registry with title's data
+     *
+     * @return string|null
+     */
+    protected function occurrence(ReturnFile\Registry $registry)
+    {
+        return $this->config['occurrence'][$registry->occurrence] ?? null;
     }
 }

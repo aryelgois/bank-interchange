@@ -67,3 +67,140 @@ registries:
       - cs_total
       - cs_warning
       - registry
+
+occurrence:
+  '02': Entrada Confirmada
+  '04': Alteração
+  '06': Liquidação Normal
+  '07': Pagamento por Conta
+  '08': Pagamento por Cartório
+  '09': Baixa Simples
+  '10': Devolvido / Protestado
+  '11': Em ser
+  '12': Abatimento Concedido
+  '13': Abatimento Cancelado
+  '14': Vencimento Alterado
+  '15': Baixa Automática
+  '18': Alteração Depositária
+  '19': Confirmação de Protesto
+  '20': Confirmação de Sustar Protesto
+  '21': Alteração Informações de Controle Empresa
+  '22': Alteração "Seu Número"
+  '51': Entrada Rejeitada
+
+error_table:
+  - Falta valor do IOC.
+  - Não permite desconto/ abatimento.
+  - Código do serviço inválido.
+  - Novo vencimento igual/ menor que o da entrada.
+  - Novo vencimento igual ao do Título.
+  - Espécie Documento Inválida.
+  - Espécie Documento Inexistente.
+  - Tipo Operação Inválida.
+  - Tipo Operação Inexistente.
+  - Contrato Proibido para esta Carteira.
+  - Falta Número do Contrato.
+  - Proibido Informar Tipo de Conta.
+  - Tipo de Conta do Contrato Inexistente.
+  - Dígito de Contrato não confere.
+  - Contrato Inexistente.
+  - Data de Emissão Inválida.
+  - Falta Valor do Título.
+  - Vencimento Inválido.
+  - Data Vencimento Anterior a Emissão.
+  - Falta Vencimento Desconto.
+  - Data Desconto Inválida.
+  - Data Desconto Posterior ao Vencimento.
+  - Falta Valor Desconto.
+  - Falta Mora-1-Dia.
+  - Banco/Agência Cobrador Inexistente.
+  - BCO/AGE Cobrador não Cadastrado.
+  - Código Pessoa Inválido.
+  - Falta CEP, Banco e Agência Cobrador.
+  - Falta Nome Sacado.
+  - Falta Endereço.
+  - Falta Cidade.
+  - Falta Estado.
+  - Estado Inválido.
+  - Falta CPF/ CGC do Sacado.
+  - Falta numeração - Bloquete emitido.
+  - Título Pré-Numerado já Existente.
+  - Dígito do Título Não Confere.
+  - Proibido Protestar.
+  - Proibido título pré-numerado p/ Correspondente.
+  - Dígito Cliente/ Contrato com Erro.
+  - Dígito Nosso Número com Erro.
+  - Título Inexistente.
+  - Título Liquidado.
+  - Título Não Pode Ser Baixado.
+  - Valor Nominal Incorreto.
+  - Proibido Taxa – Multa p/ Correspondente.
+  - Falta Tipo de Conta do Contrato.
+  - Tipo de Conta Inexistente.
+  - Dígito Contrato Não Confere.
+  - Dígito do Título Não Confere.
+  - Título Inexistente ou Liquidado.
+  - Valor Abatimento Inválido.
+  - Data Vencimento Inválida.
+  - Estado Inválido.
+  - Falta Tipo de Pessoa P/ Alteração de CGC/ CPF.
+  - CPF/ CGC com Erro.
+  - Data Emissão Inválida.
+  - Data Vencimento Desconto Inválida.
+  - Aceite Inválido para Espécie Documento.
+  - Não Aceite Inválido para Espécie Documento.
+  - Banco/ Agência Cobrador Inválido.
+  - Limite Operacional Não Cadastrado.
+  - Título já em situação de protesto.
+  - Proibido alterar vencimento título descontado.
+  - Proibido informar nosso número p/ cod. carteira.
+  - Falta vencimento desconto-2.
+  - Data desconto-2 inválida.
+  - Data desconto-2 posterior ao vencimento.
+  - Falta valor desconto-2.
+  - Data vencimento desconto-2 inválida.
+  - IOC maior que valor do título.
+  - CEP não pertence ao Estado.
+  - Seu número já existente.
+  - Moeda Inválida para o tipo de Operação.
+  - Moeda inexistente.
+  - Nosso número/ dígito com erro.
+  - Dias vencidos superior ao prazo de devolução.
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO
+  - VAGO

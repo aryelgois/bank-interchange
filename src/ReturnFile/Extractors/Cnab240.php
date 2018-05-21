@@ -79,8 +79,7 @@ abstract class Cnab240 extends ReturnFile\Extractor
                             'our_number' => (int) $registry->our_number,
                             'value' => (float) ($registry->value / 100.0),
                             'tax' => (float) ($registry->tax / 100.0),
-                            'movement' => $registry->movement,
-                            'occurrence' => $registry->occurrence,
+                            'occurrence' => $this->occurrence($registry) ?? $registry->occurrence,
                         ];
                         break;
 
@@ -100,5 +99,47 @@ abstract class Cnab240 extends ReturnFile\Extractor
         }
 
         return $result;
+    }
+
+    /*
+     * Helper
+     * =========================================================================
+     */
+
+    /**
+     * Computes a human readable occurrence from a title
+     *
+     * @param ReturnFile\Registry $registry Registry with title's data
+     *
+     * @return string
+     */
+    protected function occurrence(ReturnFile\Registry $registry)
+    {
+        $config = $this->config;
+
+        $movement = $registry->movement;
+        $occurrence = $registry->occurrence;
+
+        $result = [
+            "Movimento $movement",
+            "Ocorrência $occurrence",
+        ];
+        $glue = ', ';
+
+        $tmp = $config['movement'][$movement] ?? null;
+        if ($tmp !== null) {
+            $result[0] = $tmp;
+            $glue = ': ';
+        }
+
+        $group = $config['movement_to_occurrence'][$movement] ?? null;
+        if (array_key_exists($group, $config['occurrence'])) {
+            $tmp = $config['occurrence'][$group][$occurrence] ?? null;
+            if ($tmp !== null) {
+                $result[1] = $tmp;
+            }
+        }
+
+        return implode($glue, $result);
     }
 }

@@ -161,6 +161,23 @@ abstract class Extractor
     }
 
     /**
+     * Computes a human readable occurrence from a title
+     *
+     * NOTE:
+     * - The default behavior is to do nothing. It is not abstract because some
+     *   children classes may not use it.
+     *
+     * @param Registry $title Registry with title's data
+     *
+     * @return string When defined by a child class
+     * @return null   When disabled. You should fallback to the occurrence code
+     */
+    protected function occurrence(Registry $title)
+    {
+        return;
+    }
+
+    /**
      * Parses a date to Y-m-d
      *
      * @param string $date   Date string
