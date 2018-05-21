@@ -7,6 +7,7 @@
 
 namespace aryelgois\BankInterchange\ReturnFile;
 
+use aryelgois\BankInterchange;
 use aryelgois\Utils;
 use Symfony\Component\Yaml\Yaml;
 
@@ -19,177 +20,327 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Parser
 {
+    /**
+     * Map of CNAB layout to Bank code location in first registry
+     *
+     * const int[]
+     */
+    const DETECT_LAYOUT = [
+        240 => 0,
+        400 => 76,
+    ];
+
+    /**
+     * Holds loaded configs
+     *
+     * @var array[]
+     */
+    protected static $cache = [];
+
+    /**
+     * Path to directory with config files
+     *
+     * @var string
+     */
+    protected static $config_path;
+
+    /**
+     * Bank that generated the Return File
+     *
+     * @var string
+     */
+    protected $bank_code;
+
+    /**
+     * Which CNAB the Return File might be
+     *
+     * @var int
+     */
+    protected $cnab;
+
+    /**
+     * Config from $cache being used
+     *
+     * @var string
+     */
     protected $config;
 
     /**
-     * Creates a new Parser Object
+     * Contains Return File registries
      *
-     * @param string $config YAML with Return File layouts
-     *                       (length, structure, patterns, maps)
+     * @var string[]
      */
-    public function __construct(string $config)
+    protected $registries;
+
+    /**
+     * Contains parsed registries
+     *
+     * @var mixed[]
+     */
+    protected $result;
+
+    /**
+     * Creates a new return file Parser Object
+     *
+     * @param string $raw Return File to be parsed
+     *
+     * @throws \InvalidArgumentException If Return File is empty
+     * @throws \UnexpectedValueException If there are non-empty lines after the
+     *                                   Return File
+     */
+    public function __construct(string $raw)
     {
-        $this->config = Yaml::parse($config);
+        $return_file = rtrim(str_replace("\r", '', $raw), "\n");
+        if (empty($return_file)) {
+            throw new \InvalidArgumentException('Return File is empty');
+        }
+        $registries = explode("\n", $return_file);
+
+        $this->detect($registries);
+        $this->loadConfig();
+
+        foreach ($registries as &$registry) {
+            $registry = str_pad($registry, $this->cnab);
+        }
+        unset($registry);
+        $this->registries = $registries;
+
+        $this->result = $this->parse();
+
+        $last = $this->result['offset'];
+        if ($last < count($registries)) {
+            $message = 'Unexpected content at line ' . ($last + 1)
+                . ': expecting EOF';
+            throw new \UnexpectedValueException($message);
+        }
     }
 
     /**
-     * Parses a Return File into an array
+     * Detects the CNAB layout and the Bank Code
      *
-     * @param string $return_file The contents of a Return File
+     * @param string[] $registries Return File registries
      *
-     * @return array With (array nested) Registry instances
-     *
-     * @throws ParseException If can not identify $return_file layout
+     * @throws \DomainException If could not detect Return File layout
      */
-    public function parse(string $return_file)
+    protected function detect(array $registries)
     {
-        $return_file = explode("\n", trim($return_file));
-        $registries = [];
-        $offset = 0;
+        $length = max(array_map('strlen', $registries));
 
-        foreach ($this->config as $cnab => $config) {
-            try {
-                $result = self::doParse(
-                    $cnab,
-                    array_slice($config['structure'], 0, 1),
-                    $return_file
-                );
-
-                if (!empty($result['registries'])) {
-                    $registries = $result['registries'];
-                    $offset = $result['offset'];
-                    break;
-                }
-            } catch (ParseException $e) {
-                /*
-                 * Ignore the Exception. We are trying to figure out which
-                 * layout $return_file has
-                 */
+        $found = false;
+        foreach (self::DETECT_LAYOUT as $cnab => $start) {
+            if ($length <= $cnab) {
+                $found = true;
+                break;
             }
         }
 
-        if (empty($registries)) {
-            throw ParseException::undefinedLayout(array_keys($this->config));
+        if (!$found) {
+            throw new \DomainException('Could not detect Return File layout');
         }
 
-        $result = self::doParse(
-            $cnab,
-            array_slice($config['structure'], 1),
-            $return_file,
-            $offset
-        );
-
-        $registries = array_merge($registries, $result['registries']);
-
-        return $registries;
+        $this->bank_code = substr($registries[0], $start, 3);
+        $this->cnab = $cnab;
     }
 
     /**
-     * Recursively follows the structure of a Return File to extract fields
+     * Extracts useful data from the parsed registries in a fixed layout
      *
-     * @param string $cnab      Return File layout from config
+     * @return Extractor
+     *
+     * @throws \LogicException If could not find Bank in the Database
+     */
+    public function extract()
+    {
+        $bank = BankInterchange\Models\Bank::getInstance([
+            'code' => $this->bank_code,
+        ]);
+
+        if ($bank === null) {
+            $message = "Extractor class for CNAB$this->config not found";
+            throw new \LogicException($message);
+        }
+
+        $extractor_class = __NAMESPACE__ . "\\Extractors\\Cnab$this->cnab\\"
+            . BankInterchange\Utils::toPascalCase($bank->name);
+
+        return new $extractor_class($this);
+    }
+
+    /**
+     * Returns config being used
+     *
+     * @return array[]
+     */
+    public function getConfig()
+    {
+        return self::$cache[$this->config];
+    }
+
+    /**
+     * Loads YAML config file into cache
+     *
+     * @throws \BadMethodCallException       If called before setConfigPath()
+     * @throws \RuntimeException             If config file does not exist
+     * @throws Yaml\Exception\ParseException If could not load config file
+     */
+    protected function loadConfig()
+    {
+        if (self::$config_path === null) {
+            throw new \BadMethodCallException('Config path is null');
+        }
+
+        $key = "$this->cnab/$this->bank_code";
+
+        if (!array_key_exists($key, self::$cache)) {
+            $config_file = self::$config_path . "/cnab$key.yml";
+            if (file_exists($config_file)) {
+                self::$cache[$key] = Yaml::parseFile($config_file);
+            } else {
+                throw new \RuntimeException(sprintf(
+                    "Config file for Bank '%s' in CNAB%s not found",
+                    $this->bank_code,
+                    $this->cnab
+                ));
+            }
+        }
+
+        $this->config = $key;
+    }
+
+    /**
+     * Outputs parsed registries
+     *
+     * @return mixed[]
+     */
+    public function output()
+    {
+        return [
+            'bank_code' => $this->bank_code,
+            'cnab' => $this->cnab,
+            'registries' => $this->result['registries'],
+        ];
+    }
+
+    /**
+     * Recursively follows the Return File structure to preg-match its fields
+     *
      * @param array  $structure Structure tree to be used
-     * @param array  $lines     Lines of Return File to be parsed
-     * @param int    $offset    Current item in $lines
+     * @param int    $offset    Current item in $registries
      *
-     * @return array With keys 'offset' and 'registries'
+     * @return mixed[]
      *
-     * @throws \DomainException For invalid structure amount
-     * @throws ParseException   For invalid registry
+     * @throws ParseException For invalid registry
      */
-    protected function doParse(
-        string $cnab,
-        array $structure,
-        array $lines,
-        int $offset = null
-    ) {
+    protected function parse(array $structure = null, int $offset = null)
+    {
+        if ($structure === null) {
+            $structure = self::$cache[$this->config]['structure'];
+        }
+
         $result = [];
-        $offset = $offset ?? 0;
+        $current = $offset ?? 0;
 
+        $count_structure = 0;
         foreach ($structure as $registry_group) {
-            $type = reset($registry_group);
-            $amount = key($registry_group);
-
-            if (!in_array($amount, ['unique', 'multiple'])) {
-                $message = "Invalid structure amount '$amount' in $cnab";
-                throw new \DomainException($message);
-            }
-
-            if (!is_array($type)) {
-                $registries = Utils\Utils::arrayWhitelist(
-                    $this->config[$cnab]['registries'],
-                    explode(' ', $type)
-                );
-            }
-
-            do {
-                $previous_offset = $offset;
-                if (is_array($type)) {
+            if (is_array($registry_group)) {
+                $buffer = [];
+                do {
                     try {
-                        $rec = self::doParse($cnab, $type, $lines, $offset);
-                        $result = array_merge($result, [$rec['registries']]);
-                        $offset = $rec['offset'];
+                        $rec = $this->parse($registry_group, $current);
+                        $nested = (count($registry_group) > 1)
+                            ? [$rec['registries']]
+                            : $rec['registries'];
+                        $buffer = array_merge($buffer, $nested);
+                        $current = $rec['offset'];
                     } catch (ParseException $e) {
-                        if ($amount !== 'multiple') {
+                        if (count($buffer) === 0) {
                             throw $e;
+                        } else {
+                            $first = $registry_group[0];
+                            if (is_string($first)) {
+                                $first = explode(' ', $first);
+                            }
+                            $in_first = array_intersect(
+                                $first,
+                                $e->getRegistries()
+                            );
+                            if (count($in_first) === 0) {
+                                throw $e;
+                            }
+                            break;
                         }
                     }
-                } else {
-                    $registry = self::pregRegistry(
-                        str_pad(
-                            rtrim($lines[$offset]),
-                            $this->config[$cnab]['registry_length']
-                        ),
-                        $registries,
-                        $cnab
-                    );
+                } while ($current < count($this->registries));
+                $nested = (count($registry_group) > 1)
+                    ? $buffer
+                    : [$buffer];
+                $result = array_merge($result, $nested);
+            } else {
+                $types = explode(' ', $registry_group);
+                $registry = $this->pregRegistry($current, $types);
 
-                    if ($registry !== null) {
-                        $result[] = $registry;
-                        $offset++;
-                    } elseif ($amount === 'unique') {
-                        throw ParseException::pregMismatch(
-                            $cnab,
-                            $registries,
-                            $offset + 1
-                        );
-                    }
+                if ($registry !== null) {
+                    $result[] = $registry;
+                    $current++;
+                } elseif (count($result) === 0 || $count_structure > 0) {
+                    throw new ParseException(
+                        $this->config,
+                        $types,
+                        $current + 1
+                    );
                 }
-            } while ($amount === 'multiple' && $offset > $previous_offset);
+            }
+            $count_structure++;
         }
 
         return [
-            'offset' => $offset,
+            'offset' => $current,
             'registries' => $result,
         ];
     }
 
     /**
-     * Extracts fields from a Return File registry to fill a Registry instance
+     * Preg-match fields from a Return File registry to fill a Registry instance
      *
-     * @param string $registry   Line with fields to be extracted
-     * @param array  $registries Sequence of pattern and map
-     * @param string $cnab       Metadata for new Registry
+     * @param int      $id    $registries id to be parsed
+     * @param string[] $types Registry types to test
      *
      * @return Registry On success
      * @return null     On failure
      */
-    protected function pregRegistry(
-        string $registry,
-        array $registries,
-        string $cnab
-    ) {
+    protected function pregRegistry(int $id, array $types)
+    {
+        $registry_types = Utils\Utils::arrayWhitelist(
+            self::$cache[$this->config]['registries'],
+            $types
+        );
+
         $result = null;
-        foreach ($registries as $type => $matcher) {
-            if (preg_match($matcher['pattern'], $registry, $matches)) {
+        foreach ($registry_types as $type => $matcher) {
+            if (preg_match(
+                $matcher['pattern'],
+                $this->registries[$id] ?? '',
+                $matches
+            )) {
                 $match = array_combine(
                     $matcher['map'],
                     array_map('trim', array_slice($matches, 1))
                 );
-                $result = new Registry($cnab, $type, $match);
+                $result = new Registry($this->config, $type, $match);
                 break;
             }
         }
         return $result;
+    }
+
+    /**
+     * Sets path to directory with config files
+     *
+     * @param string $path Path to directory with config files
+     */
+    public static function setConfigPath(string $path)
+    {
+        self::$config_path = $path;
+        self::$cache = [];
     }
 }

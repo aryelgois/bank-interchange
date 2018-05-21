@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\ReturnFile;
 
 /**
- * Registry Model with fields extracted
+ * Registry Model with matched fields
  *
  * Once instantiated, the object is immutable
  *
@@ -16,19 +16,19 @@ namespace aryelgois\BankInterchange\ReturnFile;
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Registry
+class Registry implements \JsonSerializable
 {
     /**
-     * Holds the Registry CNAB
+     * Holds the Return File config key
      *
      * @var string
      */
-    protected $cnab;
+    protected $config;
 
     /**
      * Holds the Registry data
      *
-     * The available keys depend on $cnab and $type
+     * The available keys depend on $config and $type
      *
      * @var array
      */
@@ -44,13 +44,13 @@ class Registry
     /**
      * Creates a new Registry
      *
-     * @param string $cnab CNAB to be stored
-     * @param string $type Type to be stored
-     * @param array  $data Data to be stored
+     * @param string $config Return File config to be stored
+     * @param string $type   Type to be stored
+     * @param array  $data   Data to be stored
      */
-    public function __construct(string $cnab, string $type, array $data)
+    public function __construct(string $config, string $type, array $data)
     {
-        $this->cnab = $cnab;
+        $this->config = $config;
         $this->data = $data;
         $this->type = $type;
     }
@@ -68,21 +68,23 @@ class Registry
     {
         if (array_key_exists($field, $this->data)) {
             return $this->data[$field];
-        } else {
-            $message = "Invalid Registry field '$field' for a "
-                . "$this->type ($this->cnab)";
-            throw new \DomainException($message);
         }
+        throw new \DomainException(sprintf(
+            "Invalid field '%s' for a %s registry (CNAB%s)",
+            $field,
+            $this->type,
+            $this->config
+        ));
     }
 
     /**
-     * Returns the stored CNAB
+     * Returns the stored Return File config key
      *
      * @return string
      */
-    public function getCnab()
+    public function getConfig()
     {
-        return $this->cnab;
+        return $this->config;
     }
 
     /**
@@ -103,5 +105,18 @@ class Registry
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Outputs useful data from the Registry
+     *
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'type' => $this->type,
+            'data' => $this->data,
+        ];
     }
 }

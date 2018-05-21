@@ -18,23 +18,42 @@ use aryelgois\Utils\Format;
  */
 class ParseException extends \RuntimeException
 {
-    public static function pregMismatch(
-        string $cnab,
-        array $registries,
-        int $line
-    ) {
-        $message = "Invalid registry at line $line. Expecting "
-            . Format::naturalLanguageJoin(array_keys($registries), 'or')
-            . " ($cnab)";
+    /**
+     * Which Registry types did not match
+     *
+     * @var string[]
+     */
+    protected $registries;
 
-        return new self($message);
+    /**
+     * Creates a new ParseException object
+     *
+     * @param string   $config     Contains CNAB and Bank code
+     * @param string[] $registries Tried registry types
+     * @param int      $line       Return file line
+     */
+    public function __construct(
+        string $config,
+        array $registries,
+        int $line,
+        Throwable $previous = null
+    ) {
+        $this->registries = $registries;
+
+        $message = "Invalid registry at line $line: expecting "
+            . Format::naturalLanguageJoin($registries, 'or')
+            . " (CNAB$config)";
+
+        parent::__construct($message, 0, $previous);
     }
 
-    public static function undefinedLayout($layouts)
+    /**
+     * Returns registry types that did not match
+     *
+     * @return string[]
+     */
+    public function getRegistries()
     {
-        $message = 'Could not identify Return File layout, tried '
-            . Format::naturalLanguageJoin($layouts);
-
-        return new self($message);
+        return $this->registries;
     }
 }

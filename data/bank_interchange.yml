@@ -97,7 +97,7 @@ tables:
 
   banks:
     id: pk_auto
-    code: char(3) # Defined by FEBRABAN
+    code: char(3) UNIQUE # Defined by FEBRABAN
     name: name
     billet_tax: money_small
 

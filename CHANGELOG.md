@@ -87,8 +87,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Title `fine_type`, `interest_type` and `discount*_type` are `tinyint` have
     default value
 - Config files:
-  - Rewrite ReturnFile config files in [YAML], improve patterns, rename some
-    fields
+  - ReturnFile:
+    - Rewrite configs in [YAML]
+    - Split parser config into individual files
+    - Improve patterns
+    - Rename some fields
+    - Improve Parser
 - Assignor and Payer names in BankBillet fields
 - Update wallets
 - Move BankBillet classes to its own namespace
@@ -110,6 +114,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - BankBillet and ShippingFile Controllers and Views use FilePack
 - Convert billet data to [YAML]
 - Use `class` keyword in foreign classes
+- Move ReturnFile Controller
 
 ### Deprecated
 
@@ -121,6 +126,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Column `doc_type` in `titles`
 - Table `shipping_file_titles`
 - Title `setOurNumber()`
+- Old Return file config files
+- Old ReturnFile model
 
 ### Fixed
 - Shipping File counter: using `id` is inconsistent when generating shipping
