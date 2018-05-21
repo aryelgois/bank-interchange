@@ -7,6 +7,7 @@
 
 namespace aryelgois\BankInterchange\ReturnFile;
 
+use aryelgois\BankInterchange;
 use aryelgois\Utils;
 use Symfony\Component\Yaml\Yaml;
 
@@ -139,6 +140,30 @@ class Parser
 
         $this->bank_code = substr($registries[0], $start, 3);
         $this->cnab = $cnab;
+    }
+
+    /**
+     * Extracts useful data from the parsed registries in a fixed layout
+     *
+     * @return Extractor
+     *
+     * @throws \LogicException If could not find Bank in the Database
+     */
+    public function extract()
+    {
+        $bank = BankInterchange\Models\Bank::getInstance([
+            'code' => $this->bank_code,
+        ]);
+
+        if ($bank === null) {
+            $message = "Extractor class for CNAB$this->config not found";
+            throw new \LogicException($message);
+        }
+
+        $extractor_class = __NAMESPACE__ . "\\Extractors\\Cnab$this->cnab\\"
+            . BankInterchange\Utils::toPascalCase($bank->name);
+
+        return new $extractor_class($this);
     }
 
     /**
