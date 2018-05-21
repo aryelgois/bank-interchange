@@ -212,7 +212,7 @@ class Parser
     }
 
     /**
-     * Recursively follows the Return File structure to extract its fields
+     * Recursively follows the Return File structure to preg-match its fields
      *
      * @param array  $structure Structure tree to be used
      * @param int    $offset    Current item in $registries
@@ -290,7 +290,7 @@ class Parser
     }
 
     /**
-     * Extracts fields from a Return File registry to fill a Registry instance
+     * Preg-match fields from a Return File registry to fill a Registry instance
      *
      * @param int      $id    $registries id to be parsed
      * @param string[] $types Registry types to test

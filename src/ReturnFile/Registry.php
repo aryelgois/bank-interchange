@@ -8,7 +8,7 @@
 namespace aryelgois\BankInterchange\ReturnFile;
 
 /**
- * Registry Model with fields extracted
+ * Registry Model with matched fields
  *
  * Once instantiated, the object is immutable
  *
