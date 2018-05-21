@@ -6,6 +6,7 @@ INSERT INTO `banks` (`id`, `code`, `name`, `billet_tax`) VALUES
 (2, '047', 'Banese', '2.0000'),
 (3, '004', 'Banco do Nordeste', '2.0000');
 
+
 -- Currencies
 -- TODO verify `currency_codes`
 
@@ -16,6 +17,7 @@ INSERT INTO `currency_codes` (`currency`, `bank`, `billet`, `cnab240`, `cnab400`
 (1, 1, '9', '09', '?'),
 (1, 2, '9', '09', '1'),
 (1, 3, '9', '??', '0');
+
 
 -- Document kinds
 
@@ -33,6 +35,7 @@ INSERT INTO `document_kinds` (`bank`, `cnab`, `code`, `symbol`, `name`) VALUES
 (2, '240', '22', 'PC', 'Parcela de Consórcio'),
 (2, '240', '23', 'NF', 'Nota Fiscal'),
 (2, '240', '99', 'OU', 'Outros'),
+
 (2, '400', '01', 'DIB', 'Duplicata impressa pelo Banese'),  -- --
 (2, '400', '02', 'NPB', 'NP impressa pelo Banese'),         -- Dummy symbol,
 (2, '400', '05', 'RCB', 'Recibo impresso pelo Banese'),     -- not actually
@@ -46,6 +49,7 @@ INSERT INTO `document_kinds` (`bank`, `cnab`, `code`, `symbol`, `name`) VALUES
 (3, '400', '05', 'RC', 'Recibo'),
 (3, '400', '06', 'DS', 'Duplicata Prest. Serviços'),
 (3, '400', '19', 'OU', 'Outros');
+
 
 -- Shipping File Movements
 -- TODO check if missing for cnab 400
@@ -69,7 +73,9 @@ INSERT INTO `shipping_file_movements` (`bank`, `cnab`, `code`, `name`) VALUES
 (2, '240', '21', 'Alterar número do título dado pelo cedente'),
 (2, '240', '31', 'Alteração de Outros Dados'),
 (2, '240', '42', 'Alteração de Espécie de Título'),
+
 (2, '400', '01', 'Entrada de Títulos'),
+
 (3, '400', '01', 'Entrada Normal'),
 (3, '400', '02', 'Pedido de Baixa'),
 (3, '400', '04', 'Concessão de Abatimento'),
@@ -85,14 +91,18 @@ INSERT INTO `shipping_file_movements` (`bank`, `cnab`, `code`, `name`) VALUES
 -- (3, '400', '33', 'Pedido de Devolução (entregue ao Sacado)'),
 -- (3, '400', '99', 'Pedido dos Títulos em Aberto');
 
+
 -- Wallets
 -- TODO verify data
 
 INSERT INTO `wallets` (`bank`, `cnab`, `code`, `operation`, `symbol`, `name`) VALUES
 (1, '240', '1', '?', 'CR', 'Cobrança Registrada'),
+
 (2, '240', '1', '?', 'CS', 'Cobrança Simples'),
+
 (2, '400', '2', '?', 'CS', 'Cobrança Simples'),
 (2, '400', '7', '?', 'CE', 'Cobrança Expressa'),
+
 (3, '400', '1', '21', 'CS', 'Cobrança Simples Escritural - Boleto Emitido Pelo Banco'),
 (3, '400', '2', '41', 'CV', 'Cobrança Vinculada – Boleto Emitido Pelo Banco'),
 (3, '400', '4', '21', 'CS', 'Cobrança Simples - Boleto Emitido Pelo Cliente'),
