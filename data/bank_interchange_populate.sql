@@ -69,6 +69,7 @@ INSERT INTO `shipping_file_movements` (`bank`, `cnab`, `code`, `name`) VALUES
 (2, '240', '21', 'Alterar número do título dado pelo cedente'),
 (2, '240', '31', 'Alteração de Outros Dados'),
 (2, '240', '42', 'Alteração de Espécie de Título'),
+(2, '400', '01', 'Entrada de Títulos'),
 (3, '400', '01', 'Entrada Normal'),
 (3, '400', '02', 'Pedido de Baixa'),
 (3, '400', '04', 'Concessão de Abatimento'),
