@@ -79,6 +79,7 @@ abstract class Cnab240 extends ReturnFile\Extractor
                             'our_number' => (int) $registry->our_number,
                             'value' => (float) ($registry->value / 100.0),
                             'tax' => (float) ($registry->tax / 100.0),
+                            'due' => static::parseDate($registry->due),
                             'occurrence' => $this->occurrence($registry) ?? $registry->occurrence,
                         ];
                         break;
