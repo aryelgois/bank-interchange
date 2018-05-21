@@ -19,16 +19,16 @@ namespace aryelgois\BankInterchange\ReturnFile;
 class Registry implements \JsonSerializable
 {
     /**
-     * Holds the Registry CNAB
+     * Holds the Return File config key
      *
      * @var string
      */
-    protected $cnab;
+    protected $config;
 
     /**
      * Holds the Registry data
      *
-     * The available keys depend on $cnab and $type
+     * The available keys depend on $config and $type
      *
      * @var array
      */
@@ -44,13 +44,13 @@ class Registry implements \JsonSerializable
     /**
      * Creates a new Registry
      *
-     * @param string $cnab CNAB to be stored
-     * @param string $type Type to be stored
-     * @param array  $data Data to be stored
+     * @param string $config Return File config to be stored
+     * @param string $type   Type to be stored
+     * @param array  $data   Data to be stored
      */
-    public function __construct(string $cnab, string $type, array $data)
+    public function __construct(string $config, string $type, array $data)
     {
-        $this->cnab = $cnab;
+        $this->config = $config;
         $this->data = $data;
         $this->type = $type;
     }
@@ -73,18 +73,18 @@ class Registry implements \JsonSerializable
             "Invalid field '%s' for a %s registry (CNAB%s)",
             $field,
             $this->type,
-            $this->cnab
+            $this->config
         ));
     }
 
     /**
-     * Returns the stored CNAB
+     * Returns the stored Return File config key
      *
      * @return string
      */
-    public function getCnab()
+    public function getConfig()
     {
-        return $this->cnab;
+        return $this->config;
     }
 
     /**
@@ -109,10 +109,6 @@ class Registry implements \JsonSerializable
 
     /**
      * Outputs useful data from the Registry
-     *
-     * NOTE:
-     * - It does not output $cnab because this method is intended for use with
-     *   Parser output, which already has a 'cnab' key
      *
      * @return mixed[]
      */

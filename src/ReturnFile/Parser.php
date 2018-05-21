@@ -326,7 +326,7 @@ class Parser
                     $matcher['map'],
                     array_map('trim', array_slice($matches, 1))
                 );
-                $result = new Registry($this->cnab, $type, $match);
+                $result = new Registry($this->config, $type, $match);
                 break;
             }
         }
