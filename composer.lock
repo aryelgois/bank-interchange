@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "62e6d759ef2a7602a22c972202b3ebba",
+    "content-hash": "20f6f8829a64e3bb7a91ab1c3d473613",
     "packages": [
         {
             "name": "aryelgois/databases",
-            "version": "v0.6.0",
+            "version": "v0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/databases.git",
-                "reference": "ba173591defa4c8d1251c3e5d6f42c919ffd1c38"
+                "reference": "61782ec69fb3351530d873181dfeaf9c52104025"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/databases/zipball/ba173591defa4c8d1251c3e5d6f42c919ffd1c38",
-                "reference": "ba173591defa4c8d1251c3e5d6f42c919ffd1c38",
+                "url": "https://api.github.com/repos/aryelgois/databases/zipball/61782ec69fb3351530d873181dfeaf9c52104025",
+                "reference": "61782ec69fb3351530d873181dfeaf9c52104025",
                 "shasum": ""
             },
             "require": {
-                "aryelgois/medools": "^5.0",
-                "aryelgois/yasql-php": "^0.5.0",
+                "aryelgois/medools": "^5.1",
+                "aryelgois/yasql-php": "^0.6.0",
                 "php": "^7.0",
                 "symfony/yaml": "^3.4"
             },
@@ -49,20 +49,20 @@
                 "schema",
                 "yasql"
             ],
-            "time": "2018-04-01T13:34:53+00:00"
+            "time": "2018-05-29T22:11:05+00:00"
         },
         {
             "name": "aryelgois/medools",
-            "version": "v5.0.0",
+            "version": "v5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/Medools.git",
-                "reference": "82d68bbe2c8f618d353b8221dda7cc7f0eaf2dcd"
+                "reference": "cdae1cca42e2ed518e5a62c4c34832d9afd1eb7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/Medools/zipball/82d68bbe2c8f618d353b8221dda7cc7f0eaf2dcd",
-                "reference": "82d68bbe2c8f618d353b8221dda7cc7f0eaf2dcd",
+                "url": "https://api.github.com/repos/aryelgois/Medools/zipball/cdae1cca42e2ed518e5a62c4c34832d9afd1eb7d",
+                "reference": "cdae1cca42e2ed518e5a62c4c34832d9afd1eb7d",
                 "shasum": ""
             },
             "require": {
@@ -96,7 +96,7 @@
                 "medoo",
                 "medools"
             ],
-            "time": "2018-03-29T14:42:04+00:00"
+            "time": "2018-05-28T18:17:43+00:00"
         },
         {
             "name": "aryelgois/utils",
@@ -139,16 +139,16 @@
         },
         {
             "name": "aryelgois/yasql-php",
-            "version": "v0.5.2",
+            "version": "v0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/yasql-php.git",
-                "reference": "7e01aa57aa4c949f4bd080ae56bb30defa9c31bd"
+                "reference": "f428b180d35bfc1ddf1f9b3323f9b085fbc09ac7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/yasql-php/zipball/7e01aa57aa4c949f4bd080ae56bb30defa9c31bd",
-                "reference": "7e01aa57aa4c949f4bd080ae56bb30defa9c31bd",
+                "url": "https://api.github.com/repos/aryelgois/yasql-php/zipball/f428b180d35bfc1ddf1f9b3323f9b085fbc09ac7",
+                "reference": "f428b180d35bfc1ddf1f9b3323f9b085fbc09ac7",
                 "shasum": ""
             },
             "require": {
@@ -180,7 +180,7 @@
                 "yaml",
                 "yasql"
             ],
-            "time": "2018-04-20T00:51:44+00:00"
+            "time": "2018-05-28T19:27:29+00:00"
         },
         {
             "name": "catfan/medoo",
@@ -281,21 +281,77 @@
             "time": "2016-01-01T17:47:15+00:00"
         },
         {
-            "name": "symfony/yaml",
-            "version": "v3.4.8",
+            "name": "symfony/polyfill-ctype",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "a42f9da85c7c38d59f5e53f076fe81a091f894d0"
+                "url": "https://github.com/symfony/polyfill-ctype.git",
+                "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/a42f9da85c7c38d59f5e53f076fe81a091f894d0",
-                "reference": "a42f9da85c7c38d59f5e53f076fe81a091f894d0",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
+                "reference": "7cc359f1b7b80fc25ed7796be7d96adc9b354bae",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.5.9|>=7.0.8"
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Ctype\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                },
+                {
+                    "name": "Gert de Pagter",
+                    "email": "BackEndTea@gmail.com"
+                }
+            ],
+            "description": "Symfony polyfill for ctype functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "ctype",
+                "polyfill",
+                "portable"
+            ],
+            "time": "2018-04-30T19:57:29+00:00"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v3.4.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "c5010cc1692ce1fa328b1fb666961eb3d4a85bb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/c5010cc1692ce1fa328b1fb666961eb3d4a85bb0",
+                "reference": "c5010cc1692ce1fa328b1fb666961eb3d4a85bb0",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8",
+                "symfony/polyfill-ctype": "~1.8"
             },
             "conflict": {
                 "symfony/console": "<3.4"
@@ -336,7 +392,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2018-04-03T05:14:20+00:00"
+            "time": "2018-05-03T23:18:14+00:00"
         },
         {
             "name": "vria/nodiacritic",
