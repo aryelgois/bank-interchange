@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Setup
 - Dependencies:
   - [aryelgois/databases]
+  - [aryelgois/medools-router]
   - [aryelgois/yasql-php]
   - [symfony/yaml]
   - Platform requirements:
@@ -176,6 +177,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [aryelgois/databases]: https://github.com/aryelgois/databases
 [aryelgois/Medools]: https://github.com/aryelgois/Medools
+[aryelgois/medools-router]: https://github.com/aryelgois/medools-router
 [aryelgois/utils]: https://github.com/aryelgois/utils
 [aryelgois/yasql]: https://github.com/aryelgois/yasql
 [aryelgois/yasql-php]: https://github.com/aryelgois/yasql-php
