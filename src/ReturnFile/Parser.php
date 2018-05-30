@@ -105,7 +105,7 @@ class Parser
         unset($registry);
         $this->registries = $registries;
 
-        $this->result = $this->parse();
+        $this->result = $this->parse(self::$cache[$this->config]['structure']);
 
         $last = $this->result['offset'];
         if ($last < count($registries)) {
@@ -231,12 +231,8 @@ class Parser
      *
      * @throws ParseException For invalid registry
      */
-    protected function parse(array $structure = null, int $offset = null)
+    protected function parse(array $structure, int $offset = null)
     {
-        if ($structure === null) {
-            $structure = self::$cache[$this->config]['structure'];
-        }
-
         $result = [];
         $current = $offset ?? 0;
 
