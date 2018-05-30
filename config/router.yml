@@ -1,4 +1,9 @@
 configurations:
+  authentication:
+    secret: /etc/medools-router/private/bank-interchange
+    claims:
+      aud: bank-interchange
+      sub: BankInterchange API
   extensions:
     pdf: application/pdf
     rem: text/plain
@@ -14,6 +19,7 @@ resources:
   banks:
     model: aryelgois\BankInterchange\Models\Bank
     methods: [GET, HEAD]
+    public: true
 
   clients:
     model: aryelgois\BankInterchange\Models\Client
@@ -21,14 +27,17 @@ resources:
   currencies:
     model: aryelgois\BankInterchange\Models\Currency
     methods: [GET, HEAD]
+    public: true
 
   currency_codes:
     model: aryelgois\BankInterchange\Models\CurrencyCode
     methods: [GET, HEAD]
+    public: true
 
   document_kinds:
     model: aryelgois\BankInterchange\Models\DocumentKind
     methods: [GET, HEAD]
+    public: true
 
   full_addresses:
     model: aryelgois\BankInterchange\Models\FullAddress
@@ -47,6 +56,7 @@ resources:
   shipping_file_movements:
     model: aryelgois\BankInterchange\Models\ShippingFileMovements
     methods: [GET, HEAD]
+    public: true
 
   titles:
     model: aryelgois\BankInterchange\Models\Title
@@ -59,15 +69,19 @@ resources:
   wallets:
     model: aryelgois\BankInterchange\Models\Wallet
     methods: [GET, HEAD]
+    public: true
 
   counties:
     model: aryelgois\Databases\Models\Address\County
     methods: [GET, HEAD]
+    public: true
 
   countries:
     model: aryelgois\Databases\Models\Address\Country
     methods: [GET, HEAD]
+    public: true
 
   states:
     model: aryelgois\Databases\Models\Address\State
     methods: [GET, HEAD]
+    public: true
