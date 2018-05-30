@@ -56,6 +56,18 @@ abstract class Controller
     }
 
     /**
+     * Returns generated views
+     *
+     * Useful to combine multiple FilePack objects into a single .zip
+     *
+     * @return array[]
+     */
+    public function dump()
+    {
+        return $this->views;
+    }
+
+    /**
      * Creates a new instance with models in a Resource, then outputs it
      *
      * @param Resource $resource Processed MedoolsRouter Resource
