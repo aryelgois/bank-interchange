@@ -1,4 +1,8 @@
 configurations:
+  extensions:
+    pdf: application/pdf
+    rem: text/plain
+    zip: application/zip
 
 resources:
   assignments:
