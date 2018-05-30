@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7623176ef2a6c60b18b599e3395a5f97",
+    "content-hash": "fa47b43411c54b368cb51d1eb63c7002",
     "packages": [
         {
             "name": "aryelgois/databases",
@@ -100,16 +100,16 @@
         },
         {
             "name": "aryelgois/medools-router",
-            "version": "v0.2.1",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/medools-router.git",
-                "reference": "f9f259678a93fc8dc130ee3bac330bfc1bac9837"
+                "reference": "428f9f746880f81d051984697f682ae8324e4eba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/medools-router/zipball/f9f259678a93fc8dc130ee3bac330bfc1bac9837",
-                "reference": "f9f259678a93fc8dc130ee3bac330bfc1bac9837",
+                "url": "https://api.github.com/repos/aryelgois/medools-router/zipball/428f9f746880f81d051984697f682ae8324e4eba",
+                "reference": "428f9f746880f81d051984697f682ae8324e4eba",
                 "shasum": ""
             },
             "require": {
@@ -142,7 +142,7 @@
                 "medools",
                 "restful"
             ],
-            "time": "2018-05-29T15:42:58+00:00"
+            "time": "2018-05-30T13:22:53+00:00"
         },
         {
             "name": "aryelgois/utils",
