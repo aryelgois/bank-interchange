@@ -3,10 +3,11 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 use aryelgois\MedoolsRouter;
+use Symfony\Component\Yaml\Yaml;
 
 $request = from_globals();
 
-$router_data = json_decode(file_get_contents(__DIR__ . '/router.json'), true);
+$router_data = Yaml::parseFile(APP_ROOT . '/config/router.yml');
 
 $controller = new MedoolsRouter\Controller(
     $request['url'],
