@@ -96,7 +96,7 @@ class Controller extends BankInterchange\FilePack\Controller
                     return false;
                 }
             }
-            $billets = $bankbillet->dump();
+            $billets = $bankbillet->dump() ?? [];
 
             if ($resource->kind === 'collection') {
                 $model = (static::MODEL_CLASS)::getInstance($id);
