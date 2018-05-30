@@ -10,6 +10,7 @@ namespace aryelgois\BankInterchange\FilePack;
 use aryelgois\Utils\Utils;
 use aryelgois\Medools;
 use aryelgois\BankInterchange;
+use aryelgois\MedoolsRouter\Resource;
 
 /**
  * Wrapper controller that can make one or more files
@@ -52,6 +53,45 @@ abstract class Controller
             $message = 'Invalid MODEL_CLASS in ' . static::class;
             throw new \LogicException($message);
         }
+    }
+
+    /**
+     * Creates a new instance with models in a Resource, then outputs it
+     *
+     * @param Resource $resource Processed MedoolsRouter Resource
+     *
+     * @return boolean For success or failure
+     *
+     * @throws \LogicException If $resource->model_class is invalid
+     */
+    public static function fromResource(Resource $resource)
+    {
+        if (!is_subclass_of($resource->model_class, Medools\Model::class)) {
+            $message = 'Invalid Resource model_class in ' . static::class . ': '
+                . $resource->model_class;
+            throw new \LogicException($message);
+        }
+
+        $controller = new static;
+
+        $list = $resource->getList();
+        if (empty($list)) {
+            return false;
+        }
+
+        foreach ($list as $id) {
+            if (!$controller->generate($id)) {
+                return false;
+            }
+        }
+
+        if ($resource->content_type === 'application/zip') {
+            $controller->zip();
+        } else {
+            $controller->output();
+        }
+
+        return true;
     }
 
     /**
