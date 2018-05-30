@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Column `emission` in `titles`
   - Columns for `protest` in `titles`
   - SQL Programs
+  - Authentication database
 - Namespace `aryelgois\BankInterchange\ReturnFile`
 - Utils:
   - `addExtension()`

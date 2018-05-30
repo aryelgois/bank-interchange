@@ -20,6 +20,7 @@ return [
     ],
     'databases' => [
         'default' => 'bank_interchange',
+        'authentication' => 'bank_interchange',
         'address' => 'address',
     ],
 ];

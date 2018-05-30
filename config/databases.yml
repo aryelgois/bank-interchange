@@ -3,6 +3,8 @@ databases:
     post:
       - ../data/bank_interchange_programs.sql
       - ../data/bank_interchange_populate.sql
+  - path: ../vendor/aryelgois/medools-router/data/authentication.yml
+    name: bank_interchange
 
 vendors:
   aryelgois/databases: ~
