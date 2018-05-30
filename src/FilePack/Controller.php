@@ -42,24 +42,29 @@ abstract class Controller
     protected $views;
 
     /**
+     * Creates a new FilePack Controller object
+     *
+     * @throws \LogicException If MODEL_CLASS is not subclass of Medools\Model
+     */
+    public function __construct()
+    {
+        if (!is_subclass_of(static::MODEL_CLASS, Medools\Model::class)) {
+            $message = 'Invalid MODEL_CLASS in ' . static::class;
+            throw new \LogicException($message);
+        }
+    }
+
+    /**
      * Generates the file View from data in a Medools Model
      *
      * @param mixed  $where \Medoo\Medoo $where clause for MODEL_CLASS
      * @param string $name  Name for the generated file
      *
      * @return boolean For success or failure
-     *
-     * @throws \LogicException If MODEL_CLASS is not subclass of Medools\Model
      */
     public function generate($where, string $name = null)
     {
-        $model_class = static::MODEL_CLASS;
-        if (!is_subclass_of($model_class, Medools\Model::class)) {
-            $message = 'Invalid MODEL_CLASS in ' . static::class;
-            throw new \LogicException($message);
-        }
-
-        $model = $model_class::getInstance($where);
+        $model = (static::MODEL_CLASS)::getInstance($where);
         if ($model === null) {
             return false;
         }
