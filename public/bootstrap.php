@@ -1,14 +1,16 @@
 <?php
 
+define('APP_ROOT', realpath(__DIR__ . '/..'));
+
 // debug
 ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
 
 // autoload
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once APP_ROOT . '/vendor/autoload.php';
 
 // Medools
-aryelgois\Medools\MedooConnection::loadConfig(__DIR__ . '/../config/medools.php');
+aryelgois\Medools\MedooConnection::loadConfig(APP_ROOT . '/config/medools.php');
 
 /**
  * Returns data used by MedoolsRouter from Global variables
