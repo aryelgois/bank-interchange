@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Config files:
   - Builder config for [aryelgois/yasql-php]
   - Return file parser options for Banco do Nordeste's CNAB400 schema
+  - Router config
 - Database:
   - Populate `wallets` for Banco do Nordeste
   - Column `billet` in `currency_codes`

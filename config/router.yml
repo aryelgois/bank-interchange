@@ -1,0 +1,59 @@
+configurations:
+
+resources:
+  assignments:
+    model: aryelgois\BankInterchange\Models\Assignment
+
+  assignors:
+    model: aryelgois\BankInterchange\Models\Assignor
+
+  banks:
+    model: aryelgois\BankInterchange\Models\Bank
+    methods: [GET, HEAD]
+
+  clients:
+    model: aryelgois\BankInterchange\Models\Client
+
+  currencies:
+    model: aryelgois\BankInterchange\Models\Currency
+    methods: [GET, HEAD]
+
+  currency_codes:
+    model: aryelgois\BankInterchange\Models\CurrencyCode
+    methods: [GET, HEAD]
+
+  document_kinds:
+    model: aryelgois\BankInterchange\Models\DocumentKind
+    methods: [GET, HEAD]
+
+  full_addresses:
+    model: aryelgois\BankInterchange\Models\FullAddress
+
+  people:
+    model: aryelgois\BankInterchange\Models\Person
+
+  shipping_files:
+    model: aryelgois\BankInterchange\Models\ShippingFile
+
+  shipping_file_movements:
+    model: aryelgois\BankInterchange\Models\ShippingFileMovements
+    methods: [GET, HEAD]
+
+  titles:
+    model: aryelgois\BankInterchange\Models\Title
+
+  wallets:
+    model: aryelgois\BankInterchange\Models\Wallet
+    methods: [GET, HEAD]
+
+  counties:
+    model: aryelgois\Databases\Models\Address\County
+    methods: [GET, HEAD]
+
+  countries:
+    model: aryelgois\Databases\Models\Address\Country
+    methods: [GET, HEAD]
+
+  states:
+    model: aryelgois\Databases\Models\Address\State
+    methods: [GET, HEAD]
