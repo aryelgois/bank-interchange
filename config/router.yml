@@ -34,6 +34,11 @@ resources:
 
   shipping_files:
     model: aryelgois\BankInterchange\Models\ShippingFile
+    handlers:
+      GET:
+        text/plain:
+          resource: aryelgois\BankInterchange\ShippingFile\Controller::fromResource
+        application/zip: aryelgois\BankInterchange\ShippingFile\Controller::fromResource
 
   shipping_file_movements:
     model: aryelgois\BankInterchange\Models\ShippingFileMovements
@@ -41,6 +46,11 @@ resources:
 
   titles:
     model: aryelgois\BankInterchange\Models\Title
+    handlers:
+      GET:
+        application/pdf:
+          resource: aryelgois\BankInterchange\BankBillet\Controller::fromResource
+        application/zip: aryelgois\BankInterchange\BankBillet\Controller::fromResource
 
   wallets:
     model: aryelgois\BankInterchange\Models\Wallet
