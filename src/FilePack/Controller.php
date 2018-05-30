@@ -42,15 +42,6 @@ abstract class Controller
     protected $views;
 
     /**
-     * Generates the View object from a Model
-     *
-     * @param Medools\Model $model A MODEL_CLASS instance
-     *
-     * @return ViewInterface
-     */
-    abstract protected function getView(Medools\Model $model);
-
-    /**
      * Generates the file View from data in a Medools Model
      *
      * @param mixed  $where \Medoo\Medoo $where clause for MODEL_CLASS
@@ -85,6 +76,15 @@ abstract class Controller
 
         return true;
     }
+
+    /**
+     * Generates the View object from a Model
+     *
+     * @param Medools\Model $model A MODEL_CLASS instance
+     *
+     * @return ViewInterface
+     */
+    abstract protected function getView(Medools\Model $model);
 
     /**
      * Outputs the View with appropriated headers
