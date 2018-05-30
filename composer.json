@@ -15,6 +15,7 @@
         "ext-zlib": "*",
         "aryelgois/databases": "^0.7.0",
         "aryelgois/medools": "^5.1",
+        "aryelgois/medools-router": "^0.3",
         "aryelgois/utils": "^0.5.1",
         "aryelgois/yasql-php": "^0.6.0",
         "setasign/fpdf": "^1.8",

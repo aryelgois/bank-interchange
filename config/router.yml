@@ -1,0 +1,87 @@
+configurations:
+  authentication:
+    secret: /etc/medools-router/private/bank-interchange
+    claims:
+      aud: bank-interchange
+      sub: BankInterchange API
+  extensions:
+    pdf: application/pdf
+    rem: text/plain
+    zip: application/zip
+
+resources:
+  assignments:
+    model: aryelgois\BankInterchange\Models\Assignment
+
+  assignors:
+    model: aryelgois\BankInterchange\Models\Assignor
+
+  banks:
+    model: aryelgois\BankInterchange\Models\Bank
+    methods: [GET, HEAD]
+    public: true
+
+  clients:
+    model: aryelgois\BankInterchange\Models\Client
+
+  currencies:
+    model: aryelgois\BankInterchange\Models\Currency
+    methods: [GET, HEAD]
+    public: true
+
+  currency_codes:
+    model: aryelgois\BankInterchange\Models\CurrencyCode
+    methods: [GET, HEAD]
+    public: true
+
+  document_kinds:
+    model: aryelgois\BankInterchange\Models\DocumentKind
+    methods: [GET, HEAD]
+    public: true
+
+  full_addresses:
+    model: aryelgois\BankInterchange\Models\FullAddress
+
+  people:
+    model: aryelgois\BankInterchange\Models\Person
+
+  shipping_files:
+    model: aryelgois\BankInterchange\Models\ShippingFile
+    handlers:
+      GET:
+        text/plain:
+          resource: aryelgois\BankInterchange\ShippingFile\Controller::fromResource
+        application/zip: aryelgois\BankInterchange\ShippingFile\Controller::fromResource
+
+  shipping_file_movements:
+    model: aryelgois\BankInterchange\Models\ShippingFileMovements
+    methods: [GET, HEAD]
+    public: true
+
+  titles:
+    model: aryelgois\BankInterchange\Models\Title
+    handlers:
+      GET:
+        application/pdf:
+          resource: aryelgois\BankInterchange\BankBillet\Controller::fromResource
+        application/zip: aryelgois\BankInterchange\BankBillet\Controller::fromResource
+
+  wallets:
+    model: aryelgois\BankInterchange\Models\Wallet
+    methods: [GET, HEAD]
+    public: true
+
+  counties:
+    model: aryelgois\Databases\Models\Address\County
+    methods: [GET, HEAD]
+    public: true
+
+  countries:
+    model: aryelgois\Databases\Models\Address\Country
+    methods: [GET, HEAD]
+    public: true
+
+  states:
+    model: aryelgois\Databases\Models\Address\State
+    methods: [GET, HEAD]
+    public: true
