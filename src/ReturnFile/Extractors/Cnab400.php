@@ -58,7 +58,7 @@ abstract class Cnab400 extends ReturnFile\Extractor
         $result = [];
 
         foreach ($this->registries[1] as $id => $title) {
-            $result[] = [
+            $data = [
                 'assignment' => $this->detectAssignment($title)->id ?? null,
                 'our_number' => (int) $title->our_number,
                 'value' => (float) ($title->value / 100.0),
@@ -68,6 +68,8 @@ abstract class Cnab400 extends ReturnFile\Extractor
                 'occurrence' => $this->occurrence($title) ?? $title->occurrence,
                 'occurrence_date' => static::parseDate($title->occurrence_date),
             ];
+            $data['id'] = static::detectTitle($data);
+            $result[] = $data;
         }
 
         return $result;

@@ -82,6 +82,7 @@ abstract class Cnab240 extends ReturnFile\Extractor
                             'due' => static::parseDate($registry->due),
                             'occurrence' => $this->occurrence($registry) ?? $registry->occurrence,
                         ];
+                        $data['id'] = static::detectTitle($data);
                         break;
 
                     case 'TITLE_U':

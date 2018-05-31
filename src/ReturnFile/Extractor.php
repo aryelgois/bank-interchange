@@ -8,6 +8,7 @@
 namespace aryelgois\BankInterchange\ReturnFile;
 
 use aryelgois\BankInterchange\Models;
+use aryelgois\Utils;
 
 /**
  * Extracts useful data from parsed Return Files
@@ -158,6 +159,42 @@ abstract class Extractor
             'account' => $title->assignment_account,
             'cnab' => (string) $this->cnab,
         ]);
+    }
+
+    /**
+     * Detects a Title in the database
+     *
+     * @param mixed[] $title Extracted title data
+     *
+     * @return string On success
+     * @return null   On failure
+     */
+    protected static function detectTitle(array $title)
+    {
+        $assignment = $title['assignment'];
+        if ($assignment === null) {
+            return;
+        }
+
+        $where = array_merge(
+            Utils\Utils::arrayWhitelist($title, [
+                'assignment',
+                'our_number',
+                'due',
+            ]),
+            [
+                'ORDER' => [
+                    'stamp' => 'DESC',
+                    'id' => 'DESC',
+                ],
+            ]
+        );
+
+        $ids = Models\Title::dump($where, 'id');
+        if (empty($ids)) {
+            return;
+        }
+        return $ids[0];
     }
 
     /**
