@@ -144,7 +144,7 @@ abstract class Extractor
      */
 
     /**
-     * Detects an Assignment in the database using registry's data
+     * Detects an Assignment in the database
      *
      * @param Registry $title Registry with title's data
      *
