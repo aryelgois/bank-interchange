@@ -47,15 +47,6 @@ class Router extends MedoolsRouter\Router
     ];
 
     /**
-     * List of HTTP methods implemented
-     *
-     * @var string[]
-     */
-    protected $implemented_methods = [
-        'POST',
-    ];
-
-    /**
      * When requested route is '/'
      *
      * @param array  $headers Request Headers
@@ -65,6 +56,14 @@ class Router extends MedoolsRouter\Router
      */
     protected function requestRoot(array $headers, string $body)
     {
+        if ($this->method !== 'POST') {
+            $this->sendError(
+                static::ERROR_METHOD_NOT_IMPLEMENTED,
+                "Method '$this->method' is not implemented",
+                'POST'
+            );
+        }
+
         $content_type = $headers['Content-Type'] ?? '';
         $content_type = static::parseContentType($content_type);
         $mime = $content_type['mime'] ?? $content_type;
