@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - README sections:
   - Index
   - Setup
+- Documentation file
 - Dependencies:
   - [aryelgois/databases]
   - [aryelgois/medools-router]

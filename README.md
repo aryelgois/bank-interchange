@@ -6,6 +6,7 @@ Index:
   - [pt_BR] | [en_US]
 - [Setup]
 - [TODO]
+- [Documentation]
 - [Changelog]
 
 
@@ -150,6 +151,9 @@ composer yasql-build && cat build/*.sql | mysql -u root -p
 - [ ] A nice web interface
 
 
+## [Documentation]
+
+
 ## [Changelog]
 
 
@@ -159,6 +163,7 @@ composer yasql-build && cat build/*.sql | mysql -u root -p
 [Setup]: #setup
 [TODO]: #todo
 
+[Documentation]: doc/README.md
 [Changelog]: CHANGELOG.md
 
 [aryelgois/medools]: https://github.com/aryelgois/Medools
