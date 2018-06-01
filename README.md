@@ -131,16 +131,8 @@ cat build/*.sql | mysql -u root -p
 
 # TODO
 
-The script kinda works.. It's under development.
-
-- [x] Code review
-- [ ] Real world test CNAB240 and CNAB400.
-- [x] Write the Return File interpreter for CNAB240 and CNAB400.
-  - [x] Make it interact with the Database
-  - [x] It should receive the data somehow.. fetch from the bank's site or
-    provide a user input?
-- [ ] Create hooks for Return Files.
-  - [ ] A nice interface to integrate with one's website.
+- [ ] Real world tests
+- [ ] A nice web interface
 
 
 # [Changelog]
