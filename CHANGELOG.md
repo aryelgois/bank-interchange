@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Column `notes` in `shipping_files`
   - Column `emission` in `titles`
   - Columns for `protest` in `titles`
+  - Columns for `occurrence` in `titles`
   - SQL Programs
   - Authentication database
 - Namespace `aryelgois\BankInterchange\ReturnFile`
@@ -132,6 +133,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Title `setOurNumber()`
 - Old Return file config files
 - Old ReturnFile model
+- Columns for `status` in `titles` and `shipping_files`
 
 ### Fixed
 - Shipping File counter: using `id` is inconsistent when generating shipping

@@ -119,7 +119,6 @@ tables:
     doc_number: int
     our_number: int
     accept: enum('A', 'N') DEFAULT 'N'
-    status: tinyint(1) NULLABLE
     value: money
     value_paid: money DEFAULT 0
     ioc_iof: money
@@ -144,6 +143,8 @@ tables:
     protest_code: tinyint NULLABLE
     protest_days: tinyint NULLABLE
     description: varchar(25) DEFAULT ''
+    occurrence: varchar(400) NULLABLE
+    occurrence_date: date NULLABLE
     emission: date
     due: date # Between 1997-10-07 and 2025-02-21, inclusive
     update: timestamp
@@ -153,7 +154,6 @@ tables:
     id: pk_auto
     assignment: int -> assignments.id
     counter: int
-    status: tinyint(1) NULLABLE
     notes: varchar(20) DEFAULT ''
     update: timestamp
     stamp: insertstamp

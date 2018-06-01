@@ -61,7 +61,9 @@ CREATE PROCEDURE titles_validate(
   INOUT discount2_value decimal,
   IN discount3_type int,
   INOUT discount3_date date,
-  INOUT discount3_value decimal
+  INOUT discount3_value decimal,
+  INOUT occurrence varchar(400),
+  INOUT occurrence_date date
 ) READS SQL DATA
 BEGIN
   DECLARE movement_bank, assignment_assignor, assignment_bank int;
@@ -151,6 +153,12 @@ BEGIN
     SET discount3_date = NULL;
     SET discount3_value = NULL;
   END IF;
+
+  IF occurrence IS NULL OR occurrence_date IS NULL
+  THEN
+    SET occurrence = NULL;
+    SET occurrence_date = NULL;
+  END IF;
 END//
 
 
@@ -216,7 +224,9 @@ BEGIN
     NEW.discount2_value,
     NEW.discount3_type,
     NEW.discount3_date,
-    NEW.discount3_value
+    NEW.discount3_value,
+    NEW.occurrence,
+    NEW.occurrence_date
   );
 END//
 
@@ -246,7 +256,9 @@ CALL titles_validate(
   NEW.discount2_value,
   NEW.discount3_type,
   NEW.discount3_date,
-  NEW.discount3_value
+  NEW.discount3_value,
+  NEW.occurrence,
+  NEW.occurrence_date
 )//
 
 

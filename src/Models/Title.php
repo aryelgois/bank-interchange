@@ -39,7 +39,6 @@ class Title extends Medools\Model
         'doc_number',
         'our_number',
         'accept',
-        'status',
         'value',
         'value_paid',
         'ioc_iof',
@@ -64,6 +63,8 @@ class Title extends Medools\Model
         'protest_code',
         'protest_days',
         'description',
+        'occurrence',
+        'occurrence_date',
         'emission',
         'due',
         'update',
@@ -80,7 +81,6 @@ class Title extends Medools\Model
         'movement',
         'guarantor',
         'accept',
-        'status',
         'value_paid',
         'fine_type',
         'fine_date',
@@ -100,6 +100,8 @@ class Title extends Medools\Model
         'protest_code',
         'protest_days',
         'description',
+        'occurrence',
+        'occurrence_date',
     ];
 
     const FOREIGN_KEYS = [
