@@ -42,6 +42,7 @@ INSERT INTO `document_kinds` (`bank`, `cnab`, `code`, `symbol`, `name`) VALUES
 (2, '400', '21', 'DIC', 'Duplicata impressa pelo cliente'), -- used by the
 (2, '400', '22', 'NPC', 'NP impressa pelo cliente'),        -- bank.
 (2, '400', '25', 'RIC', 'Recibo impresso pelo cliente'),    -- --
+
 (3, '400', '01', 'DM', 'Duplicata Mercantil'),
 (3, '400', '02', 'NP', 'Nota Promissória'),
 (3, '400', '03', 'CH', 'Cheque'),
