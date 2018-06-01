@@ -1,5 +1,13 @@
 # Bank Interchange
 
+Index:
+
+- [Intro]
+  - [pt_BR] | [en_US]
+- [Setup]
+- [TODO]
+- [Changelog]
+
 
 ## Intro
 
@@ -137,6 +145,12 @@ cat build/*.sql | mysql -u root -p
 
 ## [Changelog]
 
+
+[Intro]: #intro
+[pt_BR]: #pt_br
+[en_US]: #en_us
+[Setup]: #setup
+[TODO]: #todo
 
 [Changelog]: CHANGELOG.md
 

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changelog file
 - Repository title
 - README sections:
+  - Index
   - Setup
 - Dependencies:
   - [aryelgois/databases]
