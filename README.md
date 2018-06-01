@@ -1,9 +1,9 @@
 # Bank Interchange
 
 
-# Intro
+## Intro
 
-## (pt_BR)
+#### pt_BR
 
 Esse pacote implementa
 as especificações do CNAB240 e do CNAB400,
@@ -48,7 +48,7 @@ em um servidor web:
    com novos dados
 
 
-## (en_US)
+#### en_US
 
 This package implements
 CNAB240 and CNAB400 specifications,
@@ -93,7 +93,7 @@ in a web server:
    with new data
 
 
-# Setup
+## Setup
 
 1. Create a web server with PHP 7 or higher
 
@@ -129,13 +129,13 @@ cat build/*.sql | mysql -u root -p
    - Make your app ajax request from server's `/api/`
 
 
-# TODO
+## TODO
 
 - [ ] Real world tests
 - [ ] A nice web interface
 
 
-# [Changelog]
+## [Changelog]
 
 
 [Changelog]: CHANGELOG.md
