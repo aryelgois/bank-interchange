@@ -40,6 +40,6 @@ class BancoDoNordeste extends ReturnFile\Extractors\Cnab400
 
         return (empty($errors))
             ? $occurrence
-            : implode("\n", array_merge([$occurrence ?? 'Erros:'], $errors));
+            : implode("\n- ", array_merge([$occurrence ?? 'Erros:'], $errors));
     }
 }
