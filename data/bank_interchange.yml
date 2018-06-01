@@ -160,7 +160,7 @@ tables:
 
 composite:
   - PRIMARY currency_codes currency bank
-  - UNIQUE shipping_file_movements cnab code
+  - UNIQUE shipping_file_movements bank cnab code
   - UNIQUE clients assignor person
   - UNIQUE titles shipping_file assignment doc_number
   - UNIQUE titles shipping_file assignment our_number
