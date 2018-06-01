@@ -134,6 +134,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Old ReturnFile model
 - Columns for `status` in `titles` and `shipping_files`
 - ReturnFile Controller
+- Utils `padAlfa()`
 
 ### Fixed
 - Shipping File counter: using `id` is inconsistent when generating shipping

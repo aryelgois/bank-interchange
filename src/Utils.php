@@ -48,19 +48,6 @@ abstract class Utils
     }
 
     /**
-     * Adds trailing spaces to a value and trims overflow
-     *
-     * @param string  $val Value to be formatted
-     * @param integer $len Maximum characters allowed
-     *
-     * @return string
-     */
-    public static function padAlfa($val, $len)
-    {
-        return strtoupper(substr(str_pad(NoDiacritic::filter($val), $len), 0, $len));
-    }
-
-    /**
      * Adds leading zeroes to a value
      *
      * @param string  $val  Value to be formatted
