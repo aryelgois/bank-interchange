@@ -13,6 +13,8 @@ use aryelgois\MedoolsRouter;
 /**
  * A Router class to add a custom return file endpoint
  *
+ * A return file is the response sent by a Bank to a previous shipping file
+ *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
