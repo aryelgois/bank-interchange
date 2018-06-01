@@ -73,6 +73,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `public/`
 
 ### Changed
+- Update README
 - Update dependencies
 - Database:
   - Convert to [YASQL][aryelgois/yasql]
