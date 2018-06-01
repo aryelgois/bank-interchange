@@ -115,7 +115,9 @@ in a web server:
    - Set the Document Root to `public/`
 
    - If you are using HTTPS,
-     uncomment the first line in `public/api/.htaccess`
+     uncomment the line with `SSLRequireSSL` directive
+     in `public/.htaccess`.
+     It is highly recommended that you use SSL
 
 3. Build the databases
    and run the generated SQL:
