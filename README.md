@@ -57,11 +57,11 @@ ls build
 
 The script kinda works.. It's under development.
 
-- [ ] Code review
+- [x] Code review
 - [ ] Real world test CNAB240 and CNAB400.
 - [x] Write the Return File interpreter for CNAB240 and CNAB400.
   - [x] Make it interact with the Database
-  - [ ] It should receive the data somehow.. fetch from the bank's site or
+  - [x] It should receive the data somehow.. fetch from the bank's site or
     provide a user input?
 - [ ] Create hooks for Return Files.
   - [ ] A nice interface to integrate with one's website.
