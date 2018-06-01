@@ -1,6 +1,6 @@
 <?php
 /**
- * This Software is part of aryelgois\BankInterchange and is provided "as is".
+ * This Software is part of aryelgois/bank-interchange and is provided "as is".
  *
  * @see LICENSE
  */
@@ -22,52 +22,36 @@ class ShippingFile extends Medools\Model
 
     const COLUMNS = [
         'id',
-        'assignor',
+        'assignment',
         'counter',
-        'status',
-        'stamp',
+        'notes',
         'update',
+        'stamp',
+    ];
+
+    const STAMP_COLUMNS = [
+        'update' => 'auto',
+        'stamp' => 'auto',
     ];
 
     const OPTIONAL_COLUMNS = [
-        'status',
-        'stamp',
-        'update',
+        'notes',
     ];
 
     const FOREIGN_KEYS = [
-        'assignor' => [
-            __NAMESPACE__ . '\Assignor',
+        'assignment' => [
+            Assignment::class,
             'id'
         ],
     ];
 
     /**
-     * Sets the `counter` column based on current `assignor`
+     * Returns a Iterator of Title models related to this object
      *
-     * Intended to be used only when creating a new entry
-     *
-     * NOTE:
-     * - Be sure to save() soon
-     *
-     * @throws \LogicException If assignor is not set
+     * @return Medools\ModelIterator
      */
-    public function setCounter()
+    public function getTitles()
     {
-        $assignor = $this->assignor;
-        if ($assignor === null) {
-            throw new \LogicException('You MUST set `assignor` column first');
-        }
-
-        $database = self::getDatabase();
-        $counter = $database->max(
-            static::TABLE,
-            'counter',
-            [
-                'assignor' => $assignor->id
-            ]
-        );
-
-        $this->counter = ++$counter;
+        return Title::getIterator(['shipping_file' => $this->id]);
     }
 }

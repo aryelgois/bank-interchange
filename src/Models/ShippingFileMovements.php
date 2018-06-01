@@ -10,32 +10,27 @@ namespace aryelgois\BankInterchange\Models;
 use aryelgois\Medools;
 
 /**
- * It's who made a covenant with the Bank and has to emit bank billets.
+ * Creates a relation of Titles to Shipping Files
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Assignor extends Medools\Model
+class ShippingFileMovements extends Medools\Model
 {
-    const TABLE = 'assignors';
+    const TABLE = 'shipping_file_movements';
 
     const COLUMNS = [
-        'person',
-        'url',
-    ];
-
-    const PRIMARY_KEY = ['person'];
-
-    const AUTO_INCREMENT = null;
-
-    const OPTIONAL_COLUMNS = [
-        'url',
+        'id',
+        'bank',
+        'cnab',
+        'code',
+        'name',
     ];
 
     const FOREIGN_KEYS = [
-        'person' => [
-            Person::class,
+        'bank' => [
+            Bank::class,
             'id'
         ],
     ];

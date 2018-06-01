@@ -1,0 +1,167 @@
+database:
+  name: bank_interchange
+  project: aryelgois/bank-interchange
+  license: MIT
+
+definitions:
+  pk: int PRIMARY KEY
+  pk_auto: pk AUTO_INCREMENT
+  tiny_pk: tinyint PRIMARY KEY
+  tiny_pk_auto: tiny_pk AUTO_INCREMENT
+  name: varchar(60)
+  money: decimal(17,4)
+  money_small: decimal(6,4)
+  cnab: enum('240', '400')
+  insertstamp: timestamp DEFAULT CURRENT_TIMESTAMP
+
+tables:
+
+  # Helper Tables
+
+  full_addresses:
+    id: pk_auto
+    county: int # -> address counties.id
+    neighborhood: name
+    place: name
+    number: varchar(20)
+    zipcode: varchar(8)
+    detail: name DEFAULT ''
+    update: timestamp
+
+  people:
+    id: pk_auto
+    name: name
+    document: varchar(14)
+
+  currencies:
+    id: tiny_pk_auto
+    symbol: varchar(5)
+    name: varchar(30)
+    name_plural: varchar(30) NULLABLE
+    decimals: tinyint DEFAULT 2
+    thousand: char(1)
+    decimal: char(1)
+
+  currency_codes:
+    currency: tinyint -> currencies.id
+    bank: int -> banks.id
+    billet: char(1)
+    cnab240: char(2)
+    cnab400: char(1)
+
+  document_kinds:
+    id: tiny_pk_auto
+    bank: int -> banks.id
+    cnab: cnab
+    code: char(2)
+    symbol: varchar(3)
+    name: name
+
+  shipping_file_movements:
+    id: tiny_pk_auto
+    bank: int -> banks.id
+    cnab: cnab
+    code: char(2)
+    name: name
+
+  wallets:
+    id: tiny_pk_auto
+    bank: int -> banks.id
+    cnab: cnab
+    code: varchar(2)      # used in cnab
+    operation: varchar(2) # used in billet barcode
+    symbol: char(2)
+    name: name
+
+  # Main Tables
+
+  assignors:
+    person: pk -> people.id
+    url: varchar(30) NULLABLE # Embeded into assignor's logo, in the Bank Billet
+
+  assignments:
+    id: pk_auto
+    assignor: int -> assignors.person
+    address: int -> full_addresses.id
+    bank: int -> banks.id
+    document_kind: tinyint -> document_kinds.id
+    wallet: tinyint -> wallets.id
+    cnab: cnab
+    covenant: varchar(20)
+    agency: varchar(5)
+    agency_cd: varchar(2)
+    account: varchar(12)
+    account_cd: char(1)
+    agency_account_cd: char(1)
+    edi: varchar(6)
+
+  banks:
+    id: pk_auto
+    code: char(3) UNIQUE # Defined by FEBRABAN
+    name: name
+    billet_tax: money_small
+
+  clients:
+    id: pk_auto
+    assignor: int -> assignors.person
+    person: int -> people.id
+    address: int -> full_addresses.id
+
+  titles:
+    id: pk_auto
+    shipping_file: int -> shipping_files.id KEY NULLABLE
+    movement: tinyint -> shipping_file_movements.id NULLABLE
+    assignment: int -> assignments.id KEY
+    client: int -> clients.id KEY
+    guarantor: int -> clients.id NULLABLE
+    currency: tinyint -> currencies.id
+    kind: tinyint -> document_kinds.id
+    doc_number: int
+    our_number: int
+    accept: enum('A', 'N') DEFAULT 'N'
+    value: money
+    value_paid: money DEFAULT 0
+    ioc_iof: money
+    rebate: money
+    tax_value: money_small
+    tax_included: tinyint(1)
+    fine_type: tinyint DEFAULT 0
+    fine_date: date NULLABLE
+    fine_value: money NULLABLE
+    interest_type: tinyint DEFAULT 3
+    interest_date: date NULLABLE
+    interest_value: money NULLABLE
+    discount1_type: tinyint DEFAULT 0
+    discount1_date: date NULLABLE
+    discount1_value: money NULLABLE
+    discount2_type: tinyint DEFAULT 0
+    discount2_date: date NULLABLE
+    discount2_value: money NULLABLE
+    discount3_type: tinyint DEFAULT 0
+    discount3_date: date NULLABLE
+    discount3_value: money NULLABLE
+    protest_code: tinyint NULLABLE
+    protest_days: tinyint NULLABLE
+    description: varchar(25) DEFAULT ''
+    occurrence: varchar(400) NULLABLE
+    occurrence_date: date NULLABLE
+    emission: date
+    due: date # Between 1997-10-07 and 2025-02-21, inclusive
+    update: timestamp
+    stamp: insertstamp
+
+  shipping_files:
+    id: pk_auto
+    assignment: int -> assignments.id
+    counter: int
+    notes: varchar(20) DEFAULT ''
+    update: timestamp
+    stamp: insertstamp
+
+composite:
+  - PRIMARY currency_codes currency bank
+  - UNIQUE shipping_file_movements bank cnab code
+  - UNIQUE clients assignor person
+  - UNIQUE titles shipping_file assignment doc_number
+  - UNIQUE titles shipping_file assignment our_number
+  - UNIQUE shipping_files assignment counter

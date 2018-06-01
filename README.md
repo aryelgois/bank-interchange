@@ -37,25 +37,41 @@ Files, and the reading of Return Files in a webserver:
   besides other details, and would trigger some hooks in the server.
 
 
-# Example
+# Setup
 
-There is a well designed example you can explore! It shows a simple way to
-implement the package in a website.
+1. Install this package with composer:
 
-You can insert data in the Database, generate bank billets and shipping files.
-These shipping files can be viewed in both CNAB240 and CNAB400. Also, there is
-a simple Return File analyzer.
+  `composer require aryelgois/bank-interchange`
+
+2. Add the `yasql-build` script, as explained in [yasql-php] Setup
+
+3. Build the [yasql][] [databases] and run the generated SQL in your server:
+
+ ```bash
+composer yasql-build -- vendor=aryelgois/bank-interchange
+ls build
+ ```
 
 
 # TODO
 
 The script kinda works.. It's under development.
 
-- [ ] Code review
+- [x] Code review
 - [ ] Real world test CNAB240 and CNAB400.
 - [x] Write the Return File interpreter for CNAB240 and CNAB400.
   - [x] Make it interact with the Database
-  - [ ] It should receive the data somehow.. fetch from the bank's site or
+  - [x] It should receive the data somehow.. fetch from the bank's site or
     provide a user input?
 - [ ] Create hooks for Return Files.
   - [ ] A nice interface to integrate with one's website.
+
+
+# [Changelog]
+
+
+[databases]: config/databases.yml
+[Changelog]: CHANGELOG.md
+
+[yasql]: https://github.com/aryelgois/yasql
+[yasql-php]: https://github.com/aryelgois/yasql-php
