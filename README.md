@@ -95,18 +95,38 @@ in a web server:
 
 # Setup
 
-1. Install this package with composer:
+1. Create a web server with PHP 7 or higher
 
-  `composer require aryelgois/bank-interchange`
+   - Using Apache is recommended
+     because the `.htaccess` files are already created
 
-2. Add the `yasql-build` script, as explained in [yasql-php] Setup
+2. Clone with Git
 
-3. Build the [yasql][] [databases] and run the generated SQL in your server:
+   - Place the repository
+     outside of the Document Root
+
+3. Set the Document Root to `public/`
+
+4. Build the databases
+   and run the generated SQL:
+   _see [YASQL-PHP][aryelgois/yasql-php]_
 
  ```bash
-composer yasql-build -- vendor=aryelgois/bank-interchange
-ls build
+composer yasql-build
+cat build/*.sql | mysql -u root -p
  ```
+
+5. Change the database credentials in
+   `config/medools.php`
+   _see [Medools][aryelgois/Medools]_
+
+6. Configure the Authentication secret in
+   `config/router.yml`
+   _see [Medools Router][aryelgois/medools-router]_
+
+7. Now you can develop inside `public/`
+
+   - Make your app ajax request from server's `/api/`
 
 
 # TODO
@@ -126,8 +146,8 @@ The script kinda works.. It's under development.
 # [Changelog]
 
 
-[databases]: config/databases.yml
 [Changelog]: CHANGELOG.md
 
-[yasql]: https://github.com/aryelgois/yasql
-[yasql-php]: https://github.com/aryelgois/yasql-php
+[aryelgois/medools]: https://github.com/aryelgois/Medools
+[aryelgois/medools-router]: https://github.com/aryelgois/medools-router
+[aryelgois/yasql-php]: https://github.com/aryelgois/yasql-php
