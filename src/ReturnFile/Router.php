@@ -7,6 +7,7 @@
 
 namespace aryelgois\BankInterchange\ReturnFile;
 
+use aryelgois\BankInterchange\Models;
 use aryelgois\MedoolsRouter;
 
 /**
@@ -124,14 +125,32 @@ class Router extends MedoolsRouter\Router
                 );
             }
 
-            $model = $extractor;
+            $data = $extractor->output();
+
+            $authorization = $this->getAuthorizedResources('GET');
+            $assignments = (array_key_exists('assignments', $authorization))
+                ? Models\Assignment::dump($authorization['assignments'], 'id')
+                : [];
+            $titles = (array_key_exists('titles', $authorization))
+                ? Models\Title::dump($authorization['titles'], 'id')
+                : [];
+
+            foreach ($data['titles'] as &$title) {
+                if (!in_array($title['assignment'], $assignments)) {
+                    $title['assignment'] = null;
+                }
+                if (!in_array($title['id'], $titles)) {
+                    $title['id'] = null;
+                }
+            }
+            unset($title);
         } else {
-            $model = $return_file;
+            $data = $return_file->output();
         }
 
         $response = $this->prepareResponse();
         $response->headers['Content-Type'] = $accepted;
-        $response->body = $model->output();
+        $response->body = $data;
 
         return $response;
     }
