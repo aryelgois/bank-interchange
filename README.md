@@ -53,16 +53,6 @@ ls build
  ```
 
 
-# Example
-
-There is a well designed example you can explore! It shows a simple way to
-implement the package in a website.
-
-You can insert data in the Database, generate bank billets and shipping files.
-These shipping files can be viewed in both CNAB240 and CNAB400. Also, there is
-a simple Return File analyzer.
-
-
 # TODO
 
 The script kinda works.. It's under development.
