@@ -100,16 +100,16 @@
         },
         {
             "name": "aryelgois/medools-router",
-            "version": "v0.3.0",
+            "version": "v0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aryelgois/medools-router.git",
-                "reference": "428f9f746880f81d051984697f682ae8324e4eba"
+                "reference": "ee5a9d926184259367b5568c72e885b7868ebdd0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aryelgois/medools-router/zipball/428f9f746880f81d051984697f682ae8324e4eba",
-                "reference": "428f9f746880f81d051984697f682ae8324e4eba",
+                "url": "https://api.github.com/repos/aryelgois/medools-router/zipball/ee5a9d926184259367b5568c72e885b7868ebdd0",
+                "reference": "ee5a9d926184259367b5568c72e885b7868ebdd0",
                 "shasum": ""
             },
             "require": {
@@ -142,7 +142,7 @@
                 "medools",
                 "restful"
             ],
-            "time": "2018-05-30T13:22:53+00:00"
+            "time": "2018-06-01T00:29:30+00:00"
         },
         {
             "name": "aryelgois/utils",
