@@ -105,6 +105,13 @@ in a web server:
 ## Setup
 
 1. Clone with Git
+   and install Composer dependencies:
+
+ ```bash
+git clone https://github.com/aryelgois/bank-interchange
+cd bank-interchange
+composer install
+ ```
 
 2. Create a web server with PHP 7 or higher
 
