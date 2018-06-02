@@ -10,32 +10,34 @@ namespace aryelgois\BankInterchange\Models;
 use aryelgois\Medools;
 
 /**
- * It's who made a covenant with the Bank and has to emit bank billets.
+ * Someone who pays for something
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Assignor extends Medools\Model
+class Client extends Medools\Model
 {
-    const TABLE = 'assignors';
+    const TABLE = 'clients';
 
     const COLUMNS = [
+        'id',
+        'assignor',
         'person',
-        'url',
-    ];
-
-    const PRIMARY_KEY = ['person'];
-
-    const AUTO_INCREMENT = null;
-
-    const OPTIONAL_COLUMNS = [
-        'url',
+        'address',
     ];
 
     const FOREIGN_KEYS = [
+        'assignor' => [
+            Assignor::class,
+            'person'
+        ],
         'person' => [
             Person::class,
+            'id'
+        ],
+        'address' => [
+            FullAddress::class,
             'id'
         ],
     ];

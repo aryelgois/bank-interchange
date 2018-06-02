@@ -1,6 +1,6 @@
 <?php
 /**
- * This Software is part of aryelgois\BankInterchange and is provided "as is".
+ * This Software is part of aryelgois/bank-interchange and is provided "as is".
  *
  * @see LICENSE
  */
@@ -20,16 +20,31 @@ use VRia\Utils\NoDiacritic;
 abstract class Utils
 {
     /**
-     * Adds trailing spaces to a value and trims overflow
+     * Checks if there is an extension and adds it if does not
      *
-     * @param string  $val Value to be formatted
-     * @param integer $len Maximum characters allowed
+     * @param string $file      File name
+     * @param string $extension Extension (dot included)
      *
      * @return string
      */
-    public static function padAlfa($val, $len)
+    public static function addExtension(string $file, string $extension)
     {
-        return strtoupper(substr(str_pad(NoDiacritic::filter($val), $len), 0, $len));
+        if (substr($file, strlen($extension) * -1) !== $extension) {
+            $file .= $extension;
+        }
+        return $file;
+    }
+
+    /**
+     * Replaces tabs with spaces, removes repeated spaces and trims spaces
+     *
+     * @param string $val Value to be cleaned
+     *
+     * @return string
+     */
+    public static function cleanSpaces(string $val)
+    {
+        return preg_replace('/[\t ]+/', ' ', trim($val));
     }
 
     /**
@@ -37,15 +52,15 @@ abstract class Utils
      *
      * @param string  $val  Value to be formatted
      * @param integer $len  Maximum digits length allowed
-     * @param boolean $trim If left digits should be trimmed (disable throw)
+     * @param boolean $trim If left digits should be trimmed (disables throw)
      *
      * @return string
      *
      * @throws \LengthException If $val overflows
      */
-    public static function padNumber($val, $len, $trim = false)
+    public static function padNumber(int $val, int $len, bool $trim = false)
     {
-        $result = str_pad($val, $len, '0', STR_PAD_LEFT);
+        $result = sprintf("%0${len}d", $val);
         if (strlen($result) > $len) {
             if ($trim) {
                 return substr($result, - $len);
@@ -54,5 +69,21 @@ abstract class Utils
             }
         }
         return $result;
+    }
+
+    /**
+     * Converts a string to PascalCase
+     *
+     * @param string $string To be converted
+     *
+     * @return string
+     */
+    public static function toPascalCase(string $string)
+    {
+        return str_replace(
+            [' ', '_', '.', '-'],
+            '',
+            ucwords(NoDiacritic::filter($string), ' _.-')
+        );
     }
 }

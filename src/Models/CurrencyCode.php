@@ -10,27 +10,34 @@ namespace aryelgois\BankInterchange\Models;
 use aryelgois\Medools;
 
 /**
- * A billing method used by the Bank
+ * The currency code used by each Bank in the Shipping Files
+ *
+ * It was made necessary because banks have different codes, and it was
+ * invalidating the Shipping Files
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Wallet extends Medools\Model
+class CurrencyCode extends Medools\Model
 {
-    const TABLE = 'wallets';
+    const TABLE = 'currency_codes';
 
     const COLUMNS = [
-        'id',
+        'currency',
         'bank',
-        'cnab',
-        'code',
-        'operation',
-        'symbol',
-        'name',
+        'billet',
+        'cnab240',
+        'cnab400',
     ];
 
+    const PRIMARY_KEY = ['currency', 'bank'];
+
     const FOREIGN_KEYS = [
+        'currency' => [
+            Currency::class,
+            'id'
+        ],
         'bank' => [
             Bank::class,
             'id'

@@ -10,20 +10,12 @@ namespace aryelgois\BankInterchange\Models;
 use aryelgois\Medools;
 
 /**
- * A Bank has to keep our money safe!
+ * It is someone in the real world
  *
  * @author Aryel Mota Góis
  * @license MIT
  * @link https://www.github.com/aryelgois/bank-interchange
  */
-class Bank extends Medools\Model
+class Person extends Medools\Models\Person
 {
-    const TABLE = 'banks';
-
-    const COLUMNS = [
-        'id',
-        'code',
-        'name',
-        'billet_tax',
-    ];
 }

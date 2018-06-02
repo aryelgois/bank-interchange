@@ -1,61 +1,171 @@
-# Intro
+# Bank Interchange
 
-## (pt_BR)
+Index:
 
-Esse pacote implementa as especificações do CNAB240 e do CNAB400, definido pelo
-FEBRABAN, e geradores de boletos para diversos bancos, em PHP.
-
-O CNAB permite a comunicação entre empresas e bancos, organizando as informações
-em arquivos de texto com uma estrutura predefinida.
-
-O objetivo desse pacote é automatizar a criação de Boletos bancários e Arquivos
-Remessa, e a leitura de Arquivos Retorno em um servidor web:
-
-- O Boleto seria gerado quando o cliente realizasse uma compra, por exemplo.
-- O Arquivo Remessa seria gerado logo em seguida, devendo ser enviado ao banco
-  antes que o cliente efetue o pagamento.
-- O Arquivo Retorno enviado pelo banco informa se o pagamento foi efetuado, além
-  de outros detalhes, e ativaria alguns processos automáticos no servidor.
+- [Intro]
+  - [pt_BR] | [en_US]
+- [Setup]
+- [TODO]
+- [Documentation]
+- [Changelog]
 
 
-## (en_US)
+## Intro
 
-This package implements CNAB240 and CNAB400 specifications, defined by FEBRABAN
-(a Brazilian organization), and bank billet generator for various banks, in PHP.
+#### pt_BR
 
-The CNAB allows a comunication between enterprises and banks, organizing the
-information in text files with a predefined layout.
+Esse pacote implementa
+as especificações do CNAB240 e do CNAB400,
+definido pelo FEBRABAN,
+e contém geradores de boleto
+para diversos bancos,
+em PHP.
 
-This package aims to automatize the generation of Bank billets and Shipping
-Files, and the reading of Return Files in a webserver:
+> O CNAB permite a comunicação
+> entre empresas e bancos,
+> organizando as informações em arquivos de texto
+> com uma estrutura predefinida
 
-- The billet would be generated when your client buys something, for example.
-- The Shipping File would be generated soon after, and should be sent to the
-  bank before the client makes the payment.
-  billets of that day.
-- The Return File sent by the bank tells if the payment was accomplished,
-  besides other details, and would trigger some hooks in the server.
+O objetivo desse pacote é
+automatizar a criação de Boletos bancários
+e Arquivos Remessa,
+e facilitar a leitura de Arquivos Retorno
+em um servidor web:
+
+1. Quando o cliente realiza uma compra,
+   por exemplo,
+   um Título bancário é criado
+
+   - Esse Título pode ser representado
+     como um boleto,
+     em PDF
+
+2. Um Arquivo Remessa,
+   contendo um ou mais Títulos,
+   é gerado e enviado ao banco
+   antes que o cliente efetue o pagamento
+
+3. O banco envia um Arquivo Retorno
+   informando se o Título foi
+   aceito,
+   pago,
+   tem algum erro,
+   ou alguma outra ocorrência
+
+4. Após o administrador conferir o resultado,
+   o banco de dados é atualizado
+   com novos dados
 
 
-# Example
+#### en_US
 
-There is a well designed example you can explore! It shows a simple way to
-implement the package in a website.
+This package implements
+CNAB240 and CNAB400 specifications,
+defined by FEBRABAN (a Brazilian organization),
+and contains bank billet generators
+for various banks,
+in PHP.
 
-You can insert data in the Database, generate bank billets and shipping files.
-These shipping files can be viewed in both CNAB240 and CNAB400. Also, there is
-a simple Return File analyzer.
+> The CNAB allows a comunication
+> between enterprises and banks,
+> organizing the information in text files
+> with a predefined layout
+
+This package aims to
+automate the generation of bank billets
+and Shipping Files,
+and to help reading Return Files
+in a web server:
+
+1. When your client buys something,
+   for exemple,
+   a banking Title is created
+
+   - This Title can be rendered
+     as a bank billet,
+     in PDF
+
+2. A Shipping File,
+   containing one or more Titles,
+   is generated and sent to the bank
+   before the client makes the payment
+
+3. The bank sends a Return File
+   informing if the Title was
+   accepted,
+   paid,
+   has an error,
+   or some other occurrence
+
+4. After the administrator checks the result,
+   the database is updated
+   with new data
 
 
-# TODO
+## Setup
 
-The script kinda works.. It's under development.
+1. Clone with Git
 
-- [ ] Code review
-- [ ] Real world test CNAB240 and CNAB400.
-- [x] Write the Return File interpreter for CNAB240 and CNAB400.
-  - [x] Make it interact with the Database
-  - [ ] It should receive the data somehow.. fetch from the bank's site or
-    provide a user input?
-- [ ] Create hooks for Return Files.
-  - [ ] A nice interface to integrate with one's website.
+2. Create a web server with PHP 7 or higher
+
+   - Using Apache is recommended
+     because the `.htaccess` files are already created
+
+     - Enable the `AllowOverride` directive
+
+   - Set the Document Root to `public/`
+
+   - If you are using HTTPS,
+     uncomment the line with `SSLRequireSSL` directive
+     in `public/.htaccess`.
+     It is highly recommended that you use SSL
+
+3. Build the databases
+   and run the generated SQL:
+   _see [YASQL-PHP][aryelgois/yasql-php]_
+
+ ```bash
+composer yasql-build && cat build/*.sql | mysql -u root -p
+ ```
+
+4. Change the database credentials in
+   `config/medools.php`
+   _see [Medools][aryelgois/Medools]_
+
+5. Configure the Authentication secret in
+   `config/router.yml`
+   _see [Medools Router][aryelgois/medools-router]_
+
+   - You also need to register users
+     in the `authentications` table
+     and add their `authorizations`
+
+6. Now you can develop inside `public/`
+
+   - Make your app ajax request from server's `/api/`
+
+
+## TODO
+
+- [ ] Real world tests
+- [ ] A nice web interface
+
+
+## [Documentation]
+
+
+## [Changelog]
+
+
+[Intro]: #intro
+[pt_BR]: #pt_br
+[en_US]: #en_us
+[Setup]: #setup
+[TODO]: #todo
+
+[Documentation]: doc/README.md
+[Changelog]: CHANGELOG.md
+
+[aryelgois/medools]: https://github.com/aryelgois/Medools
+[aryelgois/medools-router]: https://github.com/aryelgois/medools-router
+[aryelgois/yasql-php]: https://github.com/aryelgois/yasql-php

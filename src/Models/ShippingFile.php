@@ -1,6 +1,6 @@
 <?php
 /**
- * This Software is part of aryelgois\BankInterchange and is provided "as is".
+ * This Software is part of aryelgois/bank-interchange and is provided "as is".
  *
  * @see LICENSE
  */
@@ -22,22 +22,36 @@ class ShippingFile extends Medools\Model
 
     const COLUMNS = [
         'id',
-        'assignor',
-        'status',
-        'stamp',
+        'assignment',
+        'counter',
+        'notes',
         'update',
+        'stamp',
+    ];
+
+    const STAMP_COLUMNS = [
+        'update' => 'auto',
+        'stamp' => 'auto',
     ];
 
     const OPTIONAL_COLUMNS = [
-        'status',
-        'stamp',
-        'update',
+        'notes',
     ];
 
     const FOREIGN_KEYS = [
-        'assignor' => [
-            __NAMESPACE__ . '\Assignor',
+        'assignment' => [
+            Assignment::class,
             'id'
         ],
     ];
+
+    /**
+     * Returns a Iterator of Title models related to this object
+     *
+     * @return Medools\ModelIterator
+     */
+    public function getTitles()
+    {
+        return Title::getIterator(['shipping_file' => $this->id]);
+    }
 }

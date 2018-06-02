@@ -1,6 +1,6 @@
 <?php
 /**
- * This Software is part of aryelgois\BankInterchange and is provided "as is".
+ * This Software is part of aryelgois/bank-interchange and is provided "as is".
  *
  * @see LICENSE
  */
@@ -11,12 +11,13 @@ use aryelgois\Utils;
 use aryelgois\Medools;
 
 /**
- * A Title represents something a Payer got from an Assignor.
+ * A Title represents something a Client got from its Assignor
  *
- * It might be one or products/services
+ * It might be a product or service
  *
  * NOTE:
- * - The pair `assignor` and `our_number` must be UNIQUE
+ * - `assignment` must be valid for the client's assignor
+ * - The pair `assignment` and `our_number` must be UNIQUE
  *
  * @author Aryel Mota Góis
  * @license MIT
@@ -28,60 +29,108 @@ class Title extends Medools\Model
 
     const COLUMNS = [
         'id',
-        'assignor',
-        'payer',          // Who the Title is destined
-        'guarantor',      // Someone that would be charged if the Payer could not pay
-        'specie',
-        'our_number',
-        'status',
-        'doc_type',
+        'shipping_file',
+        'movement',
+        'assignment',
+        'client',
+        'guarantor',
+        'currency',
         'kind',
-        'value',          // (float)
-        'value_paid',     // (float)
-        'iof',            // (float) A Brazilian tax
-        'rebate',         // (float)
+        'doc_number',
+        'our_number',
+        'accept',
+        'value',
+        'value_paid',
+        'ioc_iof',
+        'rebate',
+        'tax_value',
+        'tax_included',
         'fine_type',
         'fine_date',
-        'fine_value',     // (float)
-        'discount_type',
-        'discount_date',
-        'discount_value', // (float)
+        'fine_value',
+        'interest_type',
+        'interest_date',
+        'interest_value',
+        'discount1_type',
+        'discount1_date',
+        'discount1_value',
+        'discount2_type',
+        'discount2_date',
+        'discount2_value',
+        'discount3_type',
+        'discount3_date',
+        'discount3_value',
+        'protest_code',
+        'protest_days',
         'description',
-        'due',            // Must be between 1997-10-07 and 2025-02-21, inclusives; or should be empty/with a message
-        'stamp',          // When Title was generated
+        'occurrence',
+        'occurrence_date',
+        'emission',
+        'due',
         'update',
+        'stamp',
+    ];
+
+    const STAMP_COLUMNS = [
+        'update' => 'auto',
+        'stamp' => 'auto',
     ];
 
     const OPTIONAL_COLUMNS = [
+        'shipping_file',
+        'movement',
         'guarantor',
-        'status',
-        'doc_type',
+        'accept',
         'value_paid',
         'fine_type',
         'fine_date',
         'fine_value',
-        'discount_type',
-        'discount_date',
-        'discount_value',
-        'stamp',
-        'update',
+        'interest_type',
+        'interest_date',
+        'interest_value',
+        'discount1_type',
+        'discount1_date',
+        'discount1_value',
+        'discount2_type',
+        'discount2_date',
+        'discount2_value',
+        'discount3_type',
+        'discount3_date',
+        'discount3_value',
+        'protest_code',
+        'protest_days',
+        'description',
+        'occurrence',
+        'occurrence_date',
     ];
 
     const FOREIGN_KEYS = [
-        'assignor' => [
-            __NAMESPACE__ . '\Assignor',
+        'shipping_file' => [
+            ShippingFile::class,
             'id'
         ],
-        'payer' => [
-            __NAMESPACE__ . '\Payer',
+        'movement' => [
+            ShippingFileMovements::class,
+            'id'
+        ],
+        'assignment' => [
+            Assignment::class,
+            'id'
+        ],
+        'client' => [
+            Client::class,
             'id'
         ],
         'guarantor' => [
-            __NAMESPACE__ . '\Payer',
+            Client::class,
             'id'
         ],
-        'specie' => [
-            __NAMESPACE__ . '\Specie',
+        'currency' => [
+            Currency::class,
+            'id'
+        ],
+        'kind' => [
+            DocumentKind::class,
             'id'
         ],
     ];
@@ -89,57 +138,60 @@ class Title extends Medools\Model
     /**
      * Calculates this model's `our_number` check digit
      *
+     * @param integer $base @see aryelgois\Utils\Validation::mod11() $base
+     *
      * @return string
      */
-    public function checkDigitOurNumber()
+    public function checkDigitOurNumber($base = 9)
     {
-        return self::checkDigitOurNumberAlgorithm($this->our_number);
+        return self::checkDigitOurNumberAlgorithm($this->our_number, $base);
     }
 
     /**
      * Calculates Our number check digit
      *
-     * @param string $our_number Value to calculate the check digit
+     * @param string  $our_number Value to calculate the check digit
+     * @param integer $base       @see aryelgois\Utils\Validation::mod11() $base
      *
      * @return string
      */
-    public static function checkDigitOurNumberAlgorithm($our_number)
+    public static function checkDigitOurNumberAlgorithm($our_number, $base = 9)
     {
-        $digit = Utils\Validation::mod11($our_number);
+        $digit = Utils\Validation::mod11($our_number, $base);
 
         $digit = ($digit > 1)
-               ? $digit - 11
-               : 0;
+            ? $digit - 11
+            : 0;
 
         return abs($digit);
     }
 
     /**
-     * Sets the `our_number` column based on current `assignor`
+     * Returns the Title value, considering its tax
      *
-     * Intended to be used only when creating a new entry
-     *
-     * NOTE:
-     * - Be sure to save() soon
-     *
-     * @throws \LogicException If assignor is not set
+     * @return float
      */
-    public function setOurNumber()
+    public function getActualValue()
     {
-        $assignor = $this->assignor;
-        if ($assignor === null) {
-            throw new LogicException('You MUST set `assignor` column first');
+        $val = $this->value + ($this->tax_included ? 0 : $this->tax_value);
+        return (float) $val;
+    }
+
+    /**
+     * Returns the correct CurrencyCode
+     *
+     * @return CurrencyCode
+     * @return null         If foreigns aren't set
+     */
+    public function getCurrencyCode()
+    {
+        if (!isset($this->currency, $this->assignment->bank)) {
+            return null;
         }
 
-        $database = self::getDatabase();
-        $our_number = $database->max(
-            static::TABLE,
-            'our_number',
-            [
-                'assignor' => $assignor
-            ]
-        );
-
-        $this->our_number = ++$our_number;
+        return CurrencyCode::getInstance([
+            'currency' => $this->currency->id,
+            'bank' => $this->assignment->bank->id
+        ]);
     }
 }
