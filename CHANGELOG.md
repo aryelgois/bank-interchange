@@ -10,12 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Year 2018 in LICENSE
-- Changelog file
-- Repository title
-- README sections:
+- README:
+  - Repository title
   - Index
   - Setup
-- Documentation file
+- Changelog
+- Documentation
 - Dependencies:
   - [aryelgois/databases]
   - [aryelgois/medools-router]
@@ -30,48 +30,55 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Return file parser options for Banco do Nordeste's CNAB400 schema
   - Router config
 - Database:
-  - Populate `wallets` for Banco do Nordeste
-  - Column `billet` in `currency_codes`
-  - Table `document_kinds`
-  - Column `document_kind` in `assignments`
-  - Column `accept` in `titles`
-  - Column `cnab` in `assignments`
-  - Table `shipping_file_movements`
-  - Column `doc_number` in `titles`
-  - Columns for `interest` in `titles`
-  - Column `agency_account_cd` in `assignments`
-  - Column `tax_included` in `titles`
+  - Tables:
+    - `assignments`
+    - `currency_codes`
+    - `document_kinds`
+    - `shipping_file_movements`
+  - Columns:
+    - `currency_codes.billet`
+    - `assignments.document_kind`
+    - `titles.accept`
+    - `assignments.cnab`
+    - `titles.doc_number`
+    - `titles.interest_*`
+    - `assignments.agency_account_cd`
+    - `titles.tax_included`
+    - `titles.shipping_file`
+    - `titles.movement`
+    - `shipping_files.notes`
+    - `titles.emission`
+    - `titles.protest_*`
+    - `titles.occurrence_*`
   - Index keys for `assignment` and `client` in `titles`
-  - Column `shipping_file` in `titles`
-  - Column `movement` in `titles`
-  - Column `notes` in `shipping_files`
-  - Column `emission` in `titles`
-  - Columns for `protest` in `titles`
-  - Columns for `occurrence` in `titles`
+  - Populate `wallets` for Banco do Nordeste
   - SQL Programs
   - Authentication database
 - Namespace `aryelgois\BankInterchange\ReturnFile`
+- Namespace `aryelgois\BankInterchange\FilePack`
+- BankBillet:
+  - Generic table layouts
+  - Can generate a `.zip` with multiple bank billets
+  - `View::updateDictionary()`
+  - Simple template syntax
+    - Allows dynamic access to any data in the view
+    - Supported by: `demonstrative`, `instructions`, `header_info`
+- Models:
+  - `ShippingFile::getTitles()`
+  - `Title::getCurrencyCode()`
+  - Mode `nomask` in `Currency::format()`
+  - `Person` model extending `\aryelgois\Medools\Models\Person`
+  - `Title::getActualValue()`
+- ShippingFile:
+  - `View::TITLE_LIMIT`
+  - Bank specific views
+  - `View::date()`
+  - Optional 'R' segment in CNAB240
+  - Movement masks
 - Utils:
   - `addExtension()`
   - `cleanSpaces()`
   - `toPascalCase()`
-- Generic tables for BankBillet views
-- Can generate a `.zip` with multiple bank billets
-- ShippingFile `getTitles()`
-- ShippingFile View `TITLE_LIMIT`
-- Bank specific ShippingFile views
-- Title `getCurrencyCode()`
-- Mode `nomask` in Currency `format()`
-- `Person` model (extending Medools `Person`)
-- Namespace `aryelgois\BankInterchange\FilePack`
-- BankBillet View `updateDictionary()` hook
-- Simple template syntax for BankBillet
-  - Allows dynamic access to any data in the BankBillet view
-  - Supported by: `demonstrative`, `instructions`, `header_info`
-- Title `getActualValue()`
-- ShippingFile `date()`
-- Optional 'R' segment in CNAB240 ShippingFile
-- ShippingFile movement masks
 - `public/`
 
 ### Changed
@@ -84,7 +91,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Replace `assignor` column with `assignment` in `titles`
   - Split `currencies` into `currencies` and `currency_codes`
   - Rename `tax` column to `billet_tax`
-  - Rename `iof` column to `ioc_iof` in `titles`
+  - Rename `iof` column to `ioc_iof`
   - Use `document_kinds` in `titles`
   - Split `discount` columns into multiple discounts
   - Change `assignors` PRIMARY KEY to `person`
@@ -99,8 +106,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - Improve patterns
     - Rename some fields
     - Improve Parser
+  - Update [aryelgois/Medools] config file
 - Assignor and Payer names in BankBillet fields
-- Update wallets
+- Update populate wallets
 - Move BankBillet classes to its own namespace
 - Invert default parameter value for some methods in BankBillet view
 - Use bank name in PascalCase to select the BankBillet view
@@ -116,7 +124,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Move resource files to assets directory
 - Replace `SPECIE_DOC` with title's `kind`
 - Rewrite ShippingFile Cnab* views
-- Update [aryelgois/Medools] config file
 - BankBillet and ShippingFile Controllers and Views use FilePack
 - Convert billet data to [YAML]
 - Use `class` keyword in foreign classes
@@ -126,27 +133,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 - Accidentally committed lines
 - Alias 'BankI' for `aryelgois\BankInterchange`
-- BankBillet View `beforeDraw()`
+- `BankBillet\View::beforeDraw()`
 - Example of assignor logos
-- Column `doc_type` in `titles`
+- Column `titles.doc_type`
 - Table `shipping_file_titles`
-- Title `setOurNumber()`
-- Old Return file config files
+- `Title::setOurNumber()`
 - Old ReturnFile model
-- Columns for `status` in `titles` and `shipping_files`
+- Columns `titles.status` and `shipping_files.status`
 - ReturnFile Controller
-- Utils `padAlfa()`
+- `Utils::padAlfa()`
 - Old example
 
 ### Fixed
 - Shipping File counter: using `id` is inconsistent when generating shipping
   files for more than one assignor
 - Cnab240 View: wrong registry type in 'Q' segment and wrong registry count
-- Model ReturnFile `analyze()`: monetary values weren't turned into float
-- Model ReturnFile `analyze()`: CNAB240 occurrence is empty on success
 - Our Number check digit for Banco do Nordeste has a different length and base
 - Currency code for different banks and CNABs
-- Remove EOF character `0x1A` in shipping files
+- Remove EOF character `0x1A` in ShippingFile View
 - Rename `B. do Nordeste` to `Banco do Nordeste`
 - BankBillet views
 - Rename `formated` to `formatted`
