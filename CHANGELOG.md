@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+
+## [0.2.0] - 2018-06-01
+
 ### Added
 - Year 2018 in LICENSE
 - README:
@@ -128,8 +131,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Convert billet data to [YAML]
 - Use `class` keyword in foreign classes
 
-### Deprecated
-
 ### Removed
 - Accidentally committed lines
 - Alias 'BankI' for `aryelgois\BankInterchange`
@@ -157,8 +158,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Comparison operators
 - Database populate collation
 
-### Security
-
 
 ## [0.1] - 2017-11-27
 
@@ -185,7 +184,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - README
 
 
-[Unreleased]: https://github.com/aryelgois/bank-interchange/compare/v0.1...develop
+[Unreleased]: https://github.com/aryelgois/bank-interchange/compare/v0.2.0...develop
+[0.2.0]: https://github.com/aryelgois/bank-interchange/compare/v0.1...v0.2.0
 [0.1]: https://github.com/aryelgois/bank-interchange/compare/288be2a584bca48feab56f750fe8c51804f0e7ab...v0.1
 
 [aryelgois/databases]: https://github.com/aryelgois/databases
